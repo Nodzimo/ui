@@ -20,7 +20,10 @@
 	},
 	"javascript": {
 		"formatter": {
-			"quoteStyle": "double"
+			"semicolons": "asNeeded",
+			"quoteStyle": "single",
+			"jsxQuoteStyle": "single",
+			"arrowParentheses": "asNeeded"
 		}
 	},
 	"assist": {
