@@ -10,7 +10,10 @@
 		"check:format": "biome format --write",
 		"check:fix": "bun run check:lint --write",
 		"check:fix-unsafe": "bun run check:fix --unsafe",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"deps:install": "bun install",
+		"deps:outdated": "bun outdated",
+		"git:pull": "git pull"
 	},
 	"dependencies": {
 		"react": "19.2.5",
