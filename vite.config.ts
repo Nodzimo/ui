@@ -17,5 +17,13 @@ export default defineConfig({
 			entry: 'src/index',
 			formats: ['es'],
 		},
+		rolldownOptions: {
+			external: [
+				'react',
+				'react-dom',
+				'react/jsx-runtime',
+				'react/compiler-runtime',
+			],
+		},
 	},
 })
