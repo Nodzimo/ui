@@ -3,6 +3,16 @@
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
+	"files": [
+		"dist"
+	],
+	"exports": {
+		".": {
+			"import": "./dist/nodzimo-ui.js",
+			"types": "./dist/src/index.d.ts"
+		}
+	},
+
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc -b && vite build",
