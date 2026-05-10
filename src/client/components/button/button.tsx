@@ -1,5 +1,3 @@
-'use client'
-
 import type { ComponentPropsWithoutRef } from 'react'
 
 export function Button({
