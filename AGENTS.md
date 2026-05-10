@@ -41,7 +41,14 @@
   as-needed arrow parentheses.
 - Keep JSON comments disabled. Project JSON files should be strict JSON, not JSONC.
 - Do not add `files.includes` globs that duplicate `.gitignore` unless Biome needs a narrower project-specific scope.
+- Do not enable global `assist/source/useSortedKeys`; it sorts whole JSON objects such as `package.json`, `scripts`,
+  `exports`, and tsconfig sections into an unreadable order.
 - Biome does not format Markdown in this setup. Format Markdown files manually or with the editor.
+
+## Repository Text Format
+
+- Keep `.gitattributes` in place to normalize text files to LF across platforms.
+- Keep `.bat` and `.cmd` files as CRLF through `.gitattributes`.
 
 ## Public Package Shape
 
