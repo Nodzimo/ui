@@ -11,6 +11,7 @@
 		"check:fix": "bun run check:lint --write",
 		"check:fix-unsafe": "bun run check:fix --unsafe",
 		"preview": "vite preview",
+		"lib:link": "bun link",
 		"deps:install": "bun install",
 		"deps:outdated": "bun outdated",
 		"git:pull": "git pull"
