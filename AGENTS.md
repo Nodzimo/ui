@@ -27,6 +27,22 @@
 - For implementation requests, keep changes scoped and verify with the smallest relevant command.
 - Preserve project style: tabs, single quotes, no semicolons, named exports.
 
+## Biome Policy
+
+- Keep `biome.json` compact and explicit. Prefer Biome defaults unless the project intentionally needs a different
+  behavior.
+- Do not add explicit defaults such as `formatter.enabled`, `linter.enabled`, `assist.enabled`, or
+  `linter.rules.recommended` just for completeness.
+- Keep VCS integration enabled with Git ignore support. The project relies on `.gitignore` to keep generated and
+  service files such as `dist`, `node_modules`, `.idea`, and package archives out of Biome checks.
+- Keep the React lint domain enabled because this is a React UI kit. Do not add the Next domain here; Next-specific
+  rules belong in Next applications.
+- Keep JavaScript formatter preferences explicit: single quotes, no unnecessary semicolons, single JSX quotes, and
+  as-needed arrow parentheses.
+- Keep JSON comments disabled. Project JSON files should be strict JSON, not JSONC.
+- Do not add `files.includes` globs that duplicate `.gitignore` unless Biome needs a narrower project-specific scope.
+- Biome does not format Markdown in this setup. Format Markdown files manually or with the editor.
+
 ## Public Package Shape
 
 - The package is ESM-only.
