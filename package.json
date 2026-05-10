@@ -32,11 +32,13 @@
 		"deps:outdated": "bun outdated",
 		"git:pull": "git pull"
 	},
-	"dependencies": {
-		"react": "19.2.5",
-		"react-dom": "19.2.5"
+	"peerDependencies": {
+		"react": ">=19",
+		"react-dom": ">=19"
 	},
 	"devDependencies": {
+		"react": "19.2.5",
+		"react-dom": "19.2.5",
 		"@babel/core": "7.29.0",
 		"@biomejs/biome": "2.4.14",
 		"@rolldown/plugin-babel": "0.2.3",
