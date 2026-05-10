@@ -12,16 +12,18 @@
 			"types": "./dist/src/index.d.ts"
 		}
 	},
-
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc -b && vite build",
+		"build:watch": "bun run build --watch",
 		"check:lint": "biome check",
 		"check:format": "biome format --write",
 		"check:fix": "bun run check:lint --write",
 		"check:fix-unsafe": "bun run check:fix --unsafe",
 		"preview": "vite preview",
 		"lib:link": "bun link",
+		"lib:unlink": "bun unlink",
+		"lib:pack": "bun run build && bun pm pack --filename nodzimo-ui.tgz",
 		"deps:install": "bun install",
 		"deps:outdated": "bun outdated",
 		"git:pull": "git pull"
