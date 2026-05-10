@@ -18,5 +18,10 @@
 			"arrowParentheses": "asNeeded"
 		}
 	},
-	"json": { "parser": { "allowComments": false } }
+	"json": { "parser": { "allowComments": false } },
+	"assist": {
+		"actions": {
+			"source": { "useSortedAttributes": "on" }
+		}
+	}
 }
