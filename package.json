@@ -14,12 +14,19 @@
 		"./client": {
 			"import": "./dist/client.js",
 			"types": "./dist/src/client.d.ts"
-		}
+		},
+		"./styles.css": "./dist/styles.css"
 	},
 	"scripts": {
 		"dev": "vite",
-		"build": "tsc -b && vite build",
-		"build:watch": "bun run build --watch",
+		"build": "bun run build:ts && bun run build:js",
+		"build:js": "vite build",
+		"build:js-watch": "bun run build:js --watch",
+		"build:ts": "tsc --build",
+		"build:ts-watch": "bun run build:ts --watch",
+		"build:css": "tailwindcss --input src/styles.css --output dist/styles.css --minify",
+		"build:css-watch": "bun run build:css --watch",
+		"build:all": "bun run build && bun run build:css",
 		"check:lint": "biome check",
 		"check:format": "biome format --write",
 		"check:fix": "bun run check:lint --write",
@@ -27,7 +34,7 @@
 		"preview": "vite preview",
 		"lib:link": "bun link",
 		"lib:unlink": "bun unlink",
-		"lib:pack": "bun run build && bun pm pack --filename nodzimo-ui.tgz",
+		"lib:pack": "bun run build:all && bun pm pack --filename nodzimo-ui.tgz",
 		"deps:install": "bun install",
 		"deps:outdated": "bun outdated",
 		"deps:update": "bun update --interactive",
@@ -41,6 +48,7 @@
 		"@babel/core": "7.29.0",
 		"@biomejs/biome": "2.4.15",
 		"@rolldown/plugin-babel": "0.2.3",
+		"@tailwindcss/cli": "4.3.0",
 		"@tailwindcss/vite": "4.3.0",
 		"@types/babel__core": "7.20.5",
 		"@types/node": "25.6.2",

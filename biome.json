@@ -6,6 +6,11 @@
 		"useIgnoreFile": true
 	},
 	"linter": {
+		"rules": {
+			"nursery": {
+				"useSortedClasses": { "level": "error", "fix": "safe" }
+			}
+		},
 		"domains": {
 			"react": "recommended"
 		}

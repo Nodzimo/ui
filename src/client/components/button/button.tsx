@@ -5,7 +5,10 @@ export function Button({
 	...restProps
 }: ComponentPropsWithoutRef<'button'>) {
 	return (
-		<button className={'bg-lime-500'} {...restProps}>
+		<button
+			className={'rounded-full bg-indigo-500 p-20 text-orange-500'}
+			{...restProps}
+		>
 			{children} [UI kit test button]
 		</button>
 	)
