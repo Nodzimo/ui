@@ -35,8 +35,8 @@
         "vitest": "4.1.5",
       },
       "peerDependencies": {
-        "react": ">=19",
-        "react-dom": ">=19",
+        "react": "19.x",
+        "react-dom": "19.x",
       },
     },
   },

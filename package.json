@@ -1,7 +1,44 @@
 {
-	"name": "nodzimo-ui",
-	"private": true,
-	"version": "0.0.0",
+	"name": "@sefo/nodzimo-ui",
+	"description": "Sefo Nodzimo UI",
+	"keywords": [
+		"Sefo",
+		"Nodzimo",
+		"UI",
+		"React",
+		"TypeScript",
+		"Tailwind",
+		"Components"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"version": "0.0.1",
+	"author": {
+		"name": "Sefo Nodzimo",
+		"email": "Sefo@Nodzimo.com",
+		"url": "https://Nodzimo.com"
+	},
+	"license": "MIT",
+	"homepage": "https://github.com/Nodzimo/nodzimo-ui",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Nodzimo/nodzimo-ui.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Nodzimo/nodzimo-ui/issues",
+		"email": "Sefo@Nodzimo.com"
+	},
+	"funding": [
+		{
+			"type": "Individual",
+			"url": "https://Nodzimo.com/donate"
+		},
+		{
+			"type": "Boosty",
+			"url": "https://boosty.to/Nodzimo"
+		}
+	],
 	"type": "module",
 	"files": [
 		"dist"
@@ -40,11 +77,21 @@
 		"deps:update": "bun update --interactive",
 		"git:pull": "git pull",
 		"storybook": "storybook dev --port 6006",
-		"storybook:build": "storybook build"
+		"storybook:build": "storybook build",
+		"publish:npm": "npm publish",
+		"publish:who": "npm whoami",
+		"publish:login": "npm login",
+		"publish:patch": "npm version patch",
+		"publish:fund": "npm fund",
+		"publish:fix": "npm pkg fix"
+	},
+	"engines": {
+		"node": "25.x",
+		"bun": "1.3.13"
 	},
 	"peerDependencies": {
-		"react": ">=19",
-		"react-dom": ">=19"
+		"react": "19.x",
+		"react-dom": "19.x"
 	},
 	"devDependencies": {
 		"@babel/core": "7.29.0",
