@@ -27,3 +27,7 @@ dist-ssr
 !/.idea/dictionaries/
 !/.idea/dictionaries/**
 *.tgz
+
+# Storybook
+*storybook.log
+storybook-static
