@@ -81,7 +81,7 @@
 		"publish:npm": "npm publish",
 		"publish:who": "npm whoami",
 		"publish:login": "npm login",
-		"publish:patch": "npm version patch",
+		"publish:bump": "npm version patch",
 		"publish:fund": "npm fund",
 		"publish:fix": "npm pkg fix"
 	},

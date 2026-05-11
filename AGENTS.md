@@ -54,11 +54,14 @@
 
 ## Public Package Shape
 
+- The public npm package name is `@sefo/nodzimo-ui`.
+- The package is published publicly under the personal `@sefo` npm scope. Keep this as the package namespace unless the
+  project intentionally moves to a different package name with a migration plan.
 - The package is ESM-only.
 - Do not add CJS, UMD, or IIFE outputs unless a real consumer requires them.
 - The public API is split into two entrypoints:
-    - `nodzimo-ui` for core/RSC-safe exports.
-    - `nodzimo-ui/client` for client-boundary exports.
+    - `@sefo/nodzimo-ui` for core/RSC-safe exports.
+    - `@sefo/nodzimo-ui/client` for client-boundary exports.
 - Consumers should import from public package entrypoints, not from `src` or deep internal paths.
 - `files: ["dist"]` keeps packed/published contents limited to build output.
 - The package export map is intentionally minimal:
@@ -67,8 +70,12 @@
     - `exports["./client"].import` points to `dist/client.js`.
     - `exports["./client"].types` points to the generated client declaration file.
     - `exports["./styles.css"]` points to `dist/styles.css`.
-- Consumers should import the library stylesheet once at the app root, for example `import 'nodzimo-ui/styles.css'`.
+- Consumers should import the library stylesheet once at the app root, for example
+  `import '@sefo/nodzimo-ui/styles.css'`.
 - Avoid adding `main`, `module`, or `default` fallbacks unless a confirmed consumer needs them.
+- The package license is MIT. Keep a permissive open-source license unless the project direction explicitly changes.
+- Keep `publishConfig.access` set to `public` so scoped publishes do not require passing `--access public` manually.
+- Do not set `publishConfig.registry` unless publishing to a non-default registry is intentional.
 
 ## Source Layout
 
@@ -107,8 +114,10 @@
 
 - `exports` defines the package public entrypoints and the files consumers are allowed to import.
 - `external` in Vite/Rolldown keeps dependencies such as React out of the bundled library output.
-- `peerDependencies` declare dependencies that must be provided by the consuming app. React and React DOM should become
-  peer dependencies before publishing, while staying in dev dependencies for local development.
+- `peerDependencies` declare dependencies that must be provided by the consuming app. React and React DOM are peer
+  dependencies for consumers and dev dependencies for local library development.
+- Keep React peer ranges intentionally scoped to React 19 with `19.x` until compatibility with later React majors is
+  confirmed.
 - `'use client'` is a Next/React client boundary. It must be present on the built public client entry that consumers
   import.
 - Multiple entrypoints separate the RSC-safe API from the client API.
@@ -155,11 +164,26 @@
   resolution in the Next app.
 - Avoid `file:../nodzimo-ui` as a folder dependency with Bun on Windows. Bun can try to copy the whole working
   directory, including `.git`, and fail with `EPERM`.
-- Preferred local Next/Turbopack flow:
+- Preferred Next/Turbopack consumer flow after publication:
+    1. Publish a new package version from this project.
+    2. Install or update the package in the consumer with `bun add "@sefo/nodzimo-ui"` or `bun update @sefo/nodzimo-ui`.
+    3. Import from `@sefo/nodzimo-ui`, `@sefo/nodzimo-ui/client`, and `@sefo/nodzimo-ui/styles.css`.
+- Tarball testing remains useful before publishing a version:
     1. Run `bun run lib:pack` in this project.
     2. Install the generated `nodzimo-ui.tgz` in the Next consumer.
     3. Reinstall the tarball in the consumer after each library rebuild.
 - Keep generated `.tgz` archives out of git.
+
+## npm Publishing
+
+- Manual npm publishing is the current release flow.
+- Use the `sefo` npm account for the `@sefo/nodzimo-ui` package.
+- Use interactive npm authentication with 2FA for manual publishing; do not store npm access tokens in the repository.
+- For future CI/CD publishing, prefer npm Trusted Publishing/OIDC over long-lived npm tokens.
+- Before publishing, run `bun run build:all` and inspect the package with `npm pack --dry-run` or
+  `bun pm pack --dry-run`.
+- Use `npm publish` through `bun run publish:npm` after confirming the package contents.
+- Version `0.x` is acceptable while the library is early and primarily used by the author's own projects.
 
 ## Scripts
 
@@ -177,6 +201,12 @@
 - `bun run check:fix` applies safe Biome fixes, formatting, and import organization.
 - `bun run check:fix-unsafe` applies unsafe Biome fixes intentionally.
 - `bun run deps:outdated` checks dependency updates.
+- `bun run publish:npm` publishes the package to npm using the package's `publishConfig`.
+- `bun run publish:who` checks the active npm account.
+- `bun run publish:login` starts npm login.
+- `bun run publish:bump` bumps the package patch version with npm.
+- `bun run publish:fund` checks package funding metadata.
+- `bun run publish:fix` asks npm to normalize package metadata.
 
 ## Verification
 
@@ -184,7 +214,8 @@
   Compiler scope, Tailwind styles, or client/core boundaries.
 - Confirm `dist/styles.css` exists after `bun run build:all` when changing style build scripts or Tailwind setup.
 - Inspect `dist/nodzimo-ui.js` and `dist/client.js` after build changes that affect React Compiler or entrypoints.
-- For Next/Turbopack consumer checks, pack the library and reinstall the tarball in the Next app.
+- For Next/Turbopack consumer checks, install the published `@sefo/nodzimo-ui` package in the Next app. Use tarball
+  testing only when validating changes before publication.
 - If a client component fails in Next with compiler runtime errors, check whether `"use client";` is present in the
   built client entry.
 - If a core component fails in a Server Component context, check whether `react/compiler-runtime` leaked into the root
