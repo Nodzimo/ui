@@ -93,6 +93,8 @@
 		"git:status": "git status",
 		"git:pull": "git pull",
 		"git:normalize": "git add --renormalize .",
+		"git:stash": "git stash",
+		"git:stash-pop": "git stash pop",
 
 		"storybook": "storybook dev --port 6006",
 		"storybook:build": "storybook build",

@@ -82,11 +82,39 @@
 - `src/index.ts` is the root package entry and re-exports from `src/core`.
 - `src/client.ts` is the client package entry. It must start with `'use client'` and re-export from `src/client/index`.
 - `src/styles.css` is the global stylesheet source for the UI kit and builds to `dist/styles.css`.
+- `src/lib` contains internal/shared library utilities. Keep utilities small, named clearly, and exported through local
+  barrels when they are intended for cross-area source imports.
 - `src/core` contains exports that are safe to import from React Server Components and ordinary modern React apps.
 - `src/client` contains client-only exports such as interactive components and hooks.
 - `src/client.ts` and the `src/client/` directory intentionally coexist. In `src/client.ts`, import the directory barrel
   explicitly as `./client/index` to avoid self-resolution back to `src/client.ts`.
 - Keep public exports flowing through barrels, but keep the public surface intentional.
+- Component folders should own their implementation files, variants, local helpers, and stories. Example:
+  `src/client/components/button/button.tsx`, `button-variants.ts`, `button.stories.tsx`, and `index.ts`.
+- A component folder's `index.ts` is the local public surface for that component. Export only what other project code or
+  consumers should intentionally depend on.
+- Aggregate barrels such as `src/client/components/index.ts`, `src/client/index.ts`, and `src/core/index.ts` are for
+  public package flow. Avoid using large aggregate barrels as the default internal dependency path when a concrete
+  component entrypoint is clearer.
+
+## Internal Package Imports
+
+- Use `package.json#imports` for internal source imports, not Vite-only `@/*` aliases.
+- Keep the internal import map aligned with the barrel architecture:
+    - `#lib` -> `src/lib/index.ts`
+    - `#lib/*` -> `src/lib/*/index.ts`
+    - `#core` -> `src/core/index.ts`
+    - `#core/*` -> `src/core/*/index.ts`
+    - `#client` -> `src/client/index.ts`
+    - `#client/*` -> `src/client/*/index.ts`
+- Use `#lib` for shared utilities such as the class-name merge helper.
+- Use `#client` and `#core` when a story or internal integration should validate the public internal barrel.
+- Use specific imports such as `#client/components/button` for focused component work.
+- Inside one component folder, prefer relative imports such as `./button-variants`; do not route local implementation
+  details through `#client` or `#core`.
+- Do not import from the public package name (`@sefo/nodzimo-ui`) inside this package's source. Public package imports
+  are
+  for consumers.
 
 ## Core Vs Client
 
@@ -118,6 +146,10 @@
   dependencies for consumers and dev dependencies for local library development.
 - Keep React peer ranges intentionally scoped to React 19 with `19.x` until compatibility with later React majors is
   confirmed.
+- Runtime implementation dependencies used by built components belong in `dependencies`, not `devDependencies`. This
+  currently includes `@base-ui/react`, `class-variance-authority`, `clsx`, and `tailwind-merge`.
+- Do not make implementation helpers such as `clsx`, `tailwind-merge`, or `class-variance-authority` peer dependencies
+  unless they become an intentional consumer-facing contract.
 - `'use client'` is a Next/React client boundary. It must be present on the built public client entry that consumers
   import.
 - Multiple entrypoints separate the RSC-safe API from the client API.
@@ -140,6 +172,41 @@
 - Design direction: components should be styled and usable by default, but themeable through CSS variables/tokens rather
   than hard-coded project-specific colors long term.
 
+## Theme Token Contract
+
+- Use the shadcn theme architecture as the baseline model, adapted for a publishable library.
+- All library-owned semantic tokens must use the `nui` namespace. Raw variables use `--nui-*`, Tailwind color mappings
+  use `--color-nui-*`, radius mappings use `--radius-nui-*`, and spacing mappings use `--spacing-nui-*`.
+- Components must use NUI-prefixed semantic utilities such as `bg-nui-primary`, `text-nui-foreground`,
+  `border-nui-border`, `ring-nui-ring`, and `rounded-nui-lg`.
+- Do not introduce unprefixed shadcn app-level tokens such as `--primary`, `bg-primary`, `border-border`, `ring-ring`,
+  `bg-background`, or `text-foreground` in library source.
+- Preserve normal Tailwind structural utilities such as `flex`, `inline-flex`, `items-center`, `gap-2`, `px-2.5`,
+  `text-sm`, `size-8`, `transition-all`, and `disabled:opacity-50`; prefix only theme-facing design-system utilities.
+- Keep `@custom-variant dark (&:is(.dark *));` because components may use Tailwind `dark:` variants.
+- Dark mode overrides should redefine the same `--nui-*` raw variables under `.dark`; do not create separate
+  `*-dark` token names.
+- The library's broad foundation styles are opt-in through `.nui-root`, not global `body` or global `*` selectors:
+    - `.nui-root *` applies `border-nui-border` and `outline-nui-ring/50`.
+    - `.nui-root` applies `bg-nui-background` and `text-nui-foreground`.
+    - Any global-feeling restoration such as pointer cursors for buttons must also be scoped under `.nui-root`.
+- Consumers that want the full NUI foundation should add `nui-root` at the app root or a subtree root. Consumers that
+  only
+  want individual components can import the stylesheet without opting into app-wide foundation styling.
+- Use `src/styles.css` as the source of truth for available theme tokens before adapting a copied component.
+
+## Component Styling
+
+- Base interactive primitives are built on `@base-ui/react` where appropriate.
+- Use `class-variance-authority` for component variant class composition when a component has meaningful variants or
+  sizes.
+- Use the internal class-name merge helper from `#lib` for combining generated variant classes with caller `className`.
+  The helper implementation is intentionally descriptive (`mergeClassNames`) and may be re-exported as a short internal
+  alias such as `mcn`.
+- When porting components from shadcn, Radix examples, or other Tailwind sources, preserve behavior and structure but
+  adapt theme-facing classes to the NUI token namespace.
+- Use the repo skill `.codex/skills/theme-token-adapter` for repeated token-prefix adaptation and review work.
+
 ## Vite Build Notes
 
 - Library mode uses two entries:
@@ -154,6 +221,26 @@
 - `react/compiler-runtime` is required because client output compiled by React Compiler imports it.
 - `unplugin-dts` must use `tsconfigPath: 'tsconfig.app.json'`; the root `tsconfig.json` only contains project references
   from the Vite template.
+
+## Storybook
+
+- Storybook is used for component documentation, visual review, and optional testing. It is not part of the library's
+  published JS entrypoints.
+- Import the library stylesheet in `.storybook/preview.ts` with `import '../src/styles.css'` so stories render with the
+  same CSS contract consumers receive.
+- Keep Storybook TypeScript context separate from the library source TypeScript context. A `.storybook/tsconfig.json`
+  may extend the app tsconfig so Storybook config files understand Vite CSS imports without adding `.storybook` to the
+  library `tsconfig.app.json` include list.
+- Prefer colocated stories beside real components, for example `src/client/components/button/button.stories.tsx`.
+- Use kebab-case filenames for stories when that matches the component folder style; the important Storybook convention
+  is the `.stories` segment, not PascalCase.
+- Do not keep Storybook onboarding/demo components, CSS, MDX, or assets as part of the long-term component architecture.
+  The generated `src/stories` folder is disposable onboarding material unless intentionally repurposed for docs.
+- Top-level MDX documentation may live separately from component folders, but it should be project documentation, not
+  generated onboarding content.
+- CSF 3 is the stable default story format. CSF Next is not related to Next.js; it is an experimental next Component
+  Story
+  Format. Do not switch to CSF Next unless the project explicitly accepts preview API churn.
 
 ## Local Consumer Testing
 

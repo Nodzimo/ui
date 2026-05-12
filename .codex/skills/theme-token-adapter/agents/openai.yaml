@@ -1,0 +1,4 @@
+interface:
+  display_name: "Theme Token Adapter"
+  short_description: "Adapt component styles to NUI theme tokens."
+  default_prompt: "Adapt these component styles to the repository's NUI-prefixed theme-token contract."
