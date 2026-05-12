@@ -1,15 +1,21 @@
-import type { ComponentPropsWithoutRef } from 'react'
+import { Button as ButtonPrimitive } from '@base-ui/react/button'
+import type { VariantProps } from 'class-variance-authority'
+import { mcn } from '#lib'
+import { buttonVariants } from './button-variants'
+
+type Props = ButtonPrimitive.Props & VariantProps<typeof buttonVariants>
 
 export function Button({
-	children,
+	className,
+	variant = 'default',
+	size = 'default',
 	...restProps
-}: ComponentPropsWithoutRef<'button'>) {
+}: Props) {
 	return (
-		<button
-			className={'rounded-full bg-indigo-500 p-20 text-orange-500'}
+		<ButtonPrimitive
+			className={mcn(buttonVariants({ variant, size, className }))}
+			data-slot={'button'}
 			{...restProps}
-		>
-			{children} [UI kit test button]
-		</button>
+		/>
 	)
 }
