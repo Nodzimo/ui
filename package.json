@@ -65,6 +65,8 @@
 		"./styles.css": "./dist/styles.css"
 	},
 	"scripts": {
+		"project:audit": "bun run build:ts && bun run check:lint && bun run check:deps && bun run deps:outdated",
+		"project:verify": "bun run deps:install && bun run project:audit && bun run build:js && bun run build:css && bun run lib:pack",
 		"dev": "vite",
 		"preview": "vite preview",
 		"build": "bun run build:ts && bun run build:js",
@@ -83,7 +85,7 @@
 		"check:deps-graph": "depcruise src --include-only \"^src\" --output-type dot | dot -T svg > dependency-graph.svg",
 		"lib:link": "bun link",
 		"lib:unlink": "bun unlink",
-		"lib:pack": "bun run build:all && bun pm pack --filename nodzimo-ui.tgz",
+		"lib:pack": "bun pm pack --filename nodzimo-ui.tgz",
 		"deps:install": "bun install",
 		"deps:outdated": "bun outdated",
 		"deps:update": "bun update --interactive",

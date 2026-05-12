@@ -32,6 +32,7 @@ export default defineConfig({
 		tailwindcss(),
 	],
 	build: {
+		target: 'esnext',
 		lib: {
 			entry: {
 				'nodzimo-ui': 'src/index',
