@@ -51,6 +51,14 @@
 	--radius-nui-2xl: calc(var(--nui-radius) * 1.8);
 	--radius-nui-3xl: calc(var(--nui-radius) * 2.2);
 	--radius-nui-4xl: calc(var(--nui-radius) * 2.6);
+
+	--spacing-nui-2xs: --spacing(0.5); /* 2px */
+	--spacing-nui-xs: --spacing(1); /* 4px */
+	--spacing-nui-sm: --spacing(2); /* 8px */
+	--spacing-nui-md: --spacing(4); /* 16px */
+	--spacing-nui-lg: --spacing(6); /* 24px */
+	--spacing-nui-xl: --spacing(8); /* 32px */
+	--spacing-nui-2xl: --spacing(12); /* 48px */
 }
 
 :root {
@@ -141,16 +149,16 @@
 }
 
 @layer base {
-	.nui-root * {
+	.nui-boundaries * {
 		@apply border-nui-border outline-nui-ring/50;
 	}
 
-	.nui-root {
+	.nui-surface {
 		@apply bg-nui-background text-nui-foreground;
 	}
 
-	.nui-root button:not(:disabled),
-	.nui-root [role="button"]:not(:disabled) {
+	.nui-interactive button:not(:disabled),
+	.nui-interactive [role="button"]:not(:disabled) {
 		cursor: pointer;
 	}
 }

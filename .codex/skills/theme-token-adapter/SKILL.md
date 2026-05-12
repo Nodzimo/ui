@@ -19,7 +19,8 @@ tokens.
 - Component class strings use NUI-prefixed semantic utilities when they refer to design-system colors, radii, or spacing
   tokens.
 - Keep ordinary Tailwind layout/typography/state utilities unchanged.
-- Keep broad foundation styles opt-in through `.nui-root`; do not silently style the entire consumer app.
+- Keep broad foundation styles opt-in through the foundation utility classes documented in
+  `references/token-prefixing.md`; do not silently style the entire consumer app.
 
 ## Workflow
 
@@ -35,23 +36,23 @@ tokens.
 
 ## Prefixing Reference
 
-Read `references/token-prefixing.md` when adapting a component, adding tokens, or reviewing whether a utility should be
-prefixed.
+Read `references/token-prefixing.md` when adapting a component, adding tokens, reviewing whether a utility should be
+prefixed, or checking the intended meaning of a theme token.
 
 ## Import Rules
 
 Use project package imports for cross-area imports:
 
 ```ts
-import {mcn} from '#lib'
-import {Button} from '#client'
-import {Button} from '#client/components/button'
+import { mcn } from '#lib'
+import { Button } from '#client'
+import { Button } from '#client/components/button'
 ```
 
 Use relative imports inside one component folder:
 
 ```ts
-import {buttonVariants} from './button-variants'
+import { buttonVariants } from './button-variants'
 ```
 
 Do not use consumer package entrypoints inside source files.

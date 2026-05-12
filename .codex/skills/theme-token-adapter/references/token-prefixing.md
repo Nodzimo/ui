@@ -54,6 +54,63 @@ aria-invalid:border-destructive -> aria-invalid:border-nui-destructive
 focus-visible:ring-destructive/20 -> focus-visible:ring-nui-destructive/20
 ```
 
+## Theme Token Meanings
+
+Use these meanings when selecting or reviewing semantic tokens:
+
+```text
+background / foreground
+Default app background and text color. Use for page shells, page sections, and default text.
+
+card / card-foreground
+Elevated surfaces and content inside them. Use for cards, dashboard panels, and settings panels.
+
+popover / popover-foreground
+Floating surfaces and content inside them. Use for popovers, dropdown menus, context menus, and overlays.
+
+primary / primary-foreground
+High-emphasis actions and brand surfaces. Use for default buttons, selected states, badges, and active accents.
+
+secondary / secondary-foreground
+Lower-emphasis filled actions and supporting surfaces. Use for secondary buttons, secondary badges, and supporting UI.
+
+muted / muted-foreground
+Subtle surfaces and lower-emphasis content. Use for descriptions, placeholders, empty states, helper text, and subdued surfaces.
+
+accent / accent-foreground
+Interactive hover, focus, active, selected, and highlighted surfaces. Use for ghost buttons, menu highlights, hovered rows, and selected items.
+
+destructive
+Destructive actions and error emphasis. Use for destructive buttons, invalid states, and destructive menu items.
+
+border
+Default borders and separators. Use for cards, menus, tables, separators, and layout dividers.
+
+input
+Form-control borders and input surface treatment. Use for input, textarea, select, and outline-style controls.
+
+ring
+Focus rings and outlines. Use for buttons, inputs, checkboxes, menus, and other focusable controls.
+
+chart-1 ... chart-5
+Default chart palette.
+
+sidebar / sidebar-foreground
+Base sidebar surface and default sidebar text.
+
+sidebar-primary / sidebar-primary-foreground
+High-emphasis actions inside the sidebar: active items, icon tiles, badges, and sidebar CTAs.
+
+sidebar-accent / sidebar-accent-foreground
+Hover and selected states inside the sidebar: menu hover states, open items, and interactive rows.
+
+sidebar-border
+Sidebar-specific borders and separators.
+
+sidebar-ring
+Sidebar-specific focus rings.
+```
+
 ## Prefix Radius And Spacing Tokens
 
 Use NUI radius utilities when the component radius is part of the design-system shape:
@@ -64,15 +121,39 @@ var(--radius-md) -> var(--radius-nui-md)
 rounded-lg -> rounded-nui-lg
 ```
 
-Use NUI spacing utilities only when the spacing is intended as a reusable design-system rhythm:
+The radius scale follows the shadcn model:
+
+- `radius-nui-lg` is the base value from `--nui-radius`.
+- Smaller radii scale down from the base.
+- Larger radii scale up from the base.
+- Changing `--nui-radius` updates the whole radius scale.
+
+Use NUI spacing utilities only when the spacing is intended as reusable design-system rhythm:
 
 ```text
+p-nui-2xs
 p-nui-sm
 gap-nui-md
 space-y-nui-lg
 ```
 
-Do not replace incidental Tailwind spacing such as `px-2.5`, `gap-1.5`, or `size-8` unless the component contract
+The current spacing scale is:
+
+```text
+spacing-nui-2xs -> --spacing(0.5) -> 2px
+spacing-nui-xs  -> --spacing(1)   -> 4px
+spacing-nui-sm  -> --spacing(2)   -> 8px
+spacing-nui-md  -> --spacing(4)   -> 16px
+spacing-nui-lg  -> --spacing(6)   -> 24px
+spacing-nui-xl  -> --spacing(8)   -> 32px
+spacing-nui-2xl -> --spacing(12)  -> 48px
+```
+
+Use `--spacing()` in `src/styles.css`, not handwritten `calc(var(--spacing) * n)`. Tailwind compiles `--spacing()` to
+the calc form.
+
+Use NUI spacing for standard rhythm between sections, headings, cards, repeated groups, and shared layout patterns. Do
+not replace incidental Tailwind spacing such as `px-2.5`, `gap-1.5`, or `size-8` unless the component contract
 specifically calls for tokenized rhythm.
 
 ## Do Not Prefix Ordinary Tailwind Utilities
@@ -94,30 +175,28 @@ size-4
 rounded-full
 ```
 
-## Global CSS
+## Foundation Utilities
 
-The library must not silently apply app-level shadcn-style globals. Keep broad defaults scoped:
+The library must not silently apply app-level shadcn-style globals. Keep broad defaults opt-in and split by purpose:
 
 ```css
 @layer base {
-    .nui-root * {
-        @apply border-nui-border outline-nui-ring/50;
-    }
+	.nui-boundaries * {
+		@apply border-nui-border outline-nui-ring/50;
+	}
 
-    .nui-root {
-        @apply bg-nui-background text-nui-foreground;
-    }
+	.nui-surface {
+		@apply bg-nui-background text-nui-foreground;
+	}
+
+	.nui-interactive button:not(:disabled),
+	.nui-interactive [role="button"]:not(:disabled) {
+		cursor: pointer;
+	}
 }
 ```
 
-If restoring pointer cursors for buttons, scope it:
-
-```css
-.nui-root button:not(:disabled),
-.nui-root [role="button"]:not(:disabled) {
-    cursor: pointer;
-}
-```
+Consumers can apply all three classes at an app root for a shadcn-like app foundation, or apply any subset to a subtree.
 
 ## Checks
 
