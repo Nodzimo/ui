@@ -175,6 +175,10 @@ module.exports = {
 			from: {},
 			to: {
 				dependencyTypes: ['npm-peer'],
+				pathNot: [
+					'^node_modules/react(?:/|$)',
+					'^node_modules/react-dom(?:/|$)',
+				],
 			},
 		},
 	],
