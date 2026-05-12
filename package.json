@@ -43,6 +43,16 @@
 	"files": [
 		"dist"
 	],
+	"imports": {
+		"#lib": "./src/lib/index.ts",
+		"#lib/*": "./src/lib/*/index.ts",
+
+		"#core": "./src/core/index.ts",
+		"#core/*": "./src/core/*/index.ts",
+
+		"#client": "./src/client/index.ts",
+		"#client/*": "./src/client/*/index.ts"
+	},
 	"exports": {
 		".": {
 			"import": "./dist/nodzimo-ui.js",
@@ -56,6 +66,8 @@
 	},
 	"scripts": {
 		"dev": "vite",
+		"preview": "vite preview",
+
 		"build": "bun run build:ts && bun run build:js",
 		"build:js": "vite build",
 		"build:js-watch": "bun run build:js --watch",
@@ -64,20 +76,27 @@
 		"build:css": "tailwindcss --input src/styles.css --output dist/styles.css --minify",
 		"build:css-watch": "bun run build:css --watch",
 		"build:all": "bun run build && bun run build:css",
+
 		"check:lint": "biome check",
 		"check:format": "biome format --write",
 		"check:fix": "bun run check:lint --write",
 		"check:fix-unsafe": "bun run check:fix --unsafe",
-		"preview": "vite preview",
+
 		"lib:link": "bun link",
 		"lib:unlink": "bun unlink",
 		"lib:pack": "bun run build:all && bun pm pack --filename nodzimo-ui.tgz",
+
 		"deps:install": "bun install",
 		"deps:outdated": "bun outdated",
 		"deps:update": "bun update --interactive",
+
+		"git:status": "git status",
 		"git:pull": "git pull",
+		"git:normalize": "git add --renormalize .",
+
 		"storybook": "storybook dev --port 6006",
 		"storybook:build": "storybook build",
+
 		"publish:npm": "npm publish",
 		"publish:who": "npm whoami",
 		"publish:login": "npm login",
