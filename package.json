@@ -48,10 +48,8 @@
 	"imports": {
 		"#lib": "./src/lib/index.ts",
 		"#lib/*": "./src/lib/*/index.ts",
-
 		"#core": "./src/core/index.ts",
 		"#core/*": "./src/core/*/index.ts",
-
 		"#client": "./src/client/index.ts",
 		"#client/*": "./src/client/*/index.ts"
 	},
@@ -69,7 +67,6 @@
 	"scripts": {
 		"dev": "vite",
 		"preview": "vite preview",
-
 		"build": "bun run build:ts && bun run build:js",
 		"build:js": "vite build",
 		"build:js-watch": "bun run build:js --watch",
@@ -78,29 +75,23 @@
 		"build:css": "tailwindcss --input src/styles.css --output dist/styles.css --minify",
 		"build:css-watch": "bun run build:css --watch",
 		"build:all": "bun run build && bun run build:css",
-
 		"check:lint": "biome check",
 		"check:format": "biome format --write",
 		"check:fix": "bun run check:lint --write",
 		"check:fix-unsafe": "bun run check:fix --unsafe",
-
 		"lib:link": "bun link",
 		"lib:unlink": "bun unlink",
 		"lib:pack": "bun run build:all && bun pm pack --filename nodzimo-ui.tgz",
-
 		"deps:install": "bun install",
 		"deps:outdated": "bun outdated",
 		"deps:update": "bun update --interactive",
-
 		"git:status": "git status",
 		"git:pull": "git pull",
 		"git:normalize": "git add --renormalize .",
 		"git:stash": "git stash",
 		"git:stash-pop": "git stash pop",
-
 		"storybook": "storybook dev --port 6006",
 		"storybook:build": "storybook build",
-
 		"publish:npm": "npm publish",
 		"publish:who": "npm whoami",
 		"publish:login": "npm login",
@@ -129,7 +120,7 @@
 		"@tailwindcss/cli": "4.3.0",
 		"@tailwindcss/vite": "4.3.0",
 		"@types/babel__core": "7.20.5",
-		"@types/node": "25.6.2",
+		"@types/node": "25.7.0",
 		"@types/react": "19.2.14",
 		"@types/react-dom": "19.2.3",
 		"@vitejs/plugin-react": "6.0.1",
@@ -148,7 +139,7 @@
 		"@storybook/addon-docs": "10.3.6",
 		"@storybook/addon-onboarding": "10.3.6",
 		"vitest": "4.1.6",
-		"playwright": "1.59.1",
+		"playwright": "1.60.0",
 		"@vitest/browser-playwright": "4.1.6",
 		"@vitest/coverage-v8": "4.1.6"
 	}
