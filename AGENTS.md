@@ -112,6 +112,9 @@
 - Use specific imports such as `#client/components/button` for focused component work.
 - Inside one component folder, prefer relative imports such as `./button-variants`; do not route local implementation
   details through `#client` or `#core`.
+- Colocated stories and tests that sit beside a component folder `index.ts` may import the component through the local
+  folder surface with `import { Button } from '.'`. This validates the component's local public API, avoids importing
+  implementation files directly, and prevents IDE "import can be shortened" noise without suppressions.
 - Do not import from the public package name (`@sefo/nodzimo-ui`) inside this package's source. Public package imports
   are
   for consumers.
@@ -154,6 +157,18 @@
   import.
 - Multiple entrypoints separate the RSC-safe API from the client API.
 - React Compiler scope controls which source files get compiler runtime output.
+
+## Dependency Graph Checks
+
+- Dependency graph checks use `dependency-cruiser`; do not replace these deterministic checks with an agent skill.
+- `check:deps` cruises `src` and is the regular import/dependency graph check.
+- `check:deps-graph` generates `dependency-graph.svg` for manual inspection and requires Graphviz `dot` to be
+  installed and available on `PATH`.
+- The dependency-cruiser config is intentionally project-specific. Keep rules focused on real architectural constraints
+  and avoid broad suppressions.
+- React and React DOM are expected peer dependencies for this UI library. Imports from React in library source are not a
+  dependency violation; consumers provide React at runtime, while the project keeps React in dev dependencies for local
+  development.
 
 ## Tailwind And Styles
 
@@ -242,6 +257,9 @@
     - `nodzimo-ui: 'src/index'`
     - `client: 'src/client'`
 - Only `formats: ['es']` is needed for the modern target.
+- The package intentionally targets the latest JavaScript surface: TypeScript app and Node configs use `target`, `lib`,
+  and `module` set to `ESNext`, and Vite uses `build.target: 'esnext'` to keep library output modern with minimal
+  transpilation. Keep this modern-only contract unless a real consumer needs a lower target.
 - Keep these externals:
     - `react`
     - `react-dom`
@@ -261,6 +279,9 @@
   may extend the app tsconfig so Storybook config files understand Vite CSS imports without adding `.storybook` to the
   library `tsconfig.app.json` include list.
 - Prefer colocated stories beside real components, for example `src/client/components/button/button.stories.tsx`.
+- In colocated stories, prefer importing the component from the local folder surface with `import { Button } from '.'`
+  when `index.ts` exports the component. Implementation files inside the same folder should still use direct relative
+  imports for local details such as `./button-variants`.
 - Use kebab-case filenames for stories when that matches the component folder style; the important Storybook convention
   is the `.stories` segment, not PascalCase.
 - Do not keep Storybook onboarding/demo components, CSS, MDX, or assets as part of the long-term component architecture.
@@ -285,7 +306,7 @@
     2. Install or update the package in the consumer with `bun add "@sefo/nodzimo-ui"` or `bun update @sefo/nodzimo-ui`.
     3. Import from `@sefo/nodzimo-ui`, `@sefo/nodzimo-ui/client`, and `@sefo/nodzimo-ui/styles.css`.
 - Tarball testing remains useful before publishing a version:
-    1. Run `bun run lib:pack` in this project.
+    1. Run `bun run project:verify` in this project, or run `bun run lib:pack` after a fresh library build.
     2. Install the generated `nodzimo-ui.tgz` in the Next consumer.
     3. Reinstall the tarball in the consumer after each library rebuild.
 - Keep generated `.tgz` archives out of git.
@@ -296,13 +317,17 @@
 - Use the `sefo` npm account for the `@sefo/nodzimo-ui` package.
 - Use interactive npm authentication with 2FA for manual publishing; do not store npm access tokens in the repository.
 - For future CI/CD publishing, prefer npm Trusted Publishing/OIDC over long-lived npm tokens.
-- Before publishing, run `bun run build:all` and inspect the package with `npm pack --dry-run` or
+- Before publishing, run `bun run project:verify` and inspect the package with `npm pack --dry-run` or
   `bun pm pack --dry-run`.
 - Use `npm publish` through `bun run publish:npm` after confirming the package contents.
 - Version `0.x` is acceptable while the library is early and primarily used by the author's own projects.
 
 ## Scripts
 
+- `bun run project:audit` is the main audit button. It runs TypeScript checks, Biome checks, dependency graph checks,
+  and dependency update visibility checks.
+- `bun run project:verify` is the main full verification button. It installs dependencies, runs `project:audit`, builds
+  JS/types, builds CSS, and packs `nodzimo-ui.tgz`.
 - `bun run build` runs TypeScript project checks and Vite library build.
 - `bun run build:ts` runs TypeScript project checks via `tsc --build`.
 - `bun run build:ts-watch` watches TypeScript project checks.
@@ -311,8 +336,12 @@
 - `bun run build:css` builds `src/styles.css` to minified `dist/styles.css`.
 - `bun run build:css-watch` watches and rebuilds the CSS output.
 - `bun run build:all` runs the JS/type build and then the CSS build. Keep this order because Vite clears `dist`.
-- `bun run lib:pack` runs `build:all` and packs the package as `nodzimo-ui.tgz`.
+- `bun run lib:pack` only packs the current build output as `nodzimo-ui.tgz`; it intentionally does not build. Use it
+  after `build:all` or through `project:verify`.
 - `bun run check:lint` runs Biome checks.
+- `bun run check:deps` runs dependency-cruiser against `src`.
+- `bun run check:deps-graph` generates `dependency-graph.svg` from dependency-cruiser output and requires Graphviz
+  `dot`.
 - `bun run check:format` runs only Biome formatting.
 - `bun run check:fix` applies safe Biome fixes, formatting, and import organization.
 - `bun run check:fix-unsafe` applies unsafe Biome fixes intentionally.
@@ -326,6 +355,9 @@
 
 ## Verification
 
+- Prefer `bun run project:audit` for the regular full check pass.
+- Prefer `bun run project:verify` before publishing, tarball consumer testing, or any change that should prove the full
+  package artifact still builds and packs.
 - Use `bun run build:all` after changing Vite config, package exports, type generation, source entrypoints, React
   Compiler scope, Tailwind styles, or client/core boundaries.
 - Confirm `dist/styles.css` exists after `bun run build:all` when changing style build scripts or Tailwind setup.
