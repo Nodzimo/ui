@@ -29,6 +29,14 @@
 - For implementation requests, keep changes scoped and verify with the smallest relevant command.
 - Preserve project style: tabs, single quotes, no semicolons, named exports.
 
+## Skills
+
+- For pre-update dependency research from `bun outdated`, post-update changelog review, breaking-change triage, or
+  deciding whether upgraded packages need local code/config/package metadata changes, use the project-local
+  `dependency-update-reviewer` skill at `.codex/skills/dependency-update-reviewer`.
+- For repeated token-prefix adaptation and review work, use the project-local `theme-token-adapter` skill at
+  `.codex/skills/theme-token-adapter`.
+
 ## Biome Policy
 
 - Keep `biome.json` compact and explicit. Prefer Biome defaults unless the project intentionally needs a different

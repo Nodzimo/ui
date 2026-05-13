@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dependency Update Reviewer"
+  short_description: "Review dependency updates for risk"
+  default_prompt: "Use $dependency-update-reviewer to review available or installed dependency updates, research official release notes, compare upstream changes to local usage, and summarize required actions."
