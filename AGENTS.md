@@ -52,6 +52,18 @@
 - Keep `.gitattributes` in place to normalize text files to LF across platforms.
 - Keep `.bat` and `.cmd` files as CRLF through `.gitattributes`.
 
+## WebStorm Project Settings
+
+- The project intentionally shares selected WebStorm settings under `.idea`: dictionaries, inspection profiles, and
+  scopes. Keep `.idea` sharing narrow and do not commit workspace state, shelves, local run history, or user-specific
+  IDE files.
+- Use shared inspection scopes for repeatable WebStorm false positives in generated, tooling, or convention files.
+  Prefer disabling a specific inspection for a narrow scope over adding `// noinspection` comments to source files or
+  disabling an inspection globally.
+- When extending WebStorm inspection exclusions, add the affected files to `.idea/scopes` and adjust the project profile
+  in `.idea/inspectionProfiles`. Keep the scope name and profile entry descriptive enough that another developer can see
+  which IDE warning is being silenced and where.
+
 ## Public Package Shape
 
 - The public npm package name is `@sefo/nodzimo-ui`.

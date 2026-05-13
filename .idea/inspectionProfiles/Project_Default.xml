@@ -1,0 +1,8 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="JSAnnotator" enabled="true" level="ERROR" enabled_by_default="true">
+      <scope name="IDE Tooling And Generated Files" level="ERROR" enabled="false" />
+    </inspection_tool>
+  </profile>
+</component>

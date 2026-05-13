@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="IDE Tooling And Generated Files" pattern="file:vite.config.ts||file:vitest.shims.d.ts" />
+</component>
