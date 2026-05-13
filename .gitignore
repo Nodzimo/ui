@@ -26,7 +26,9 @@ dist-ssr
 /.idea/*
 !/.idea/dictionaries/
 !/.idea/dictionaries/**
+
 *.tgz
+/dependency-graph.svg
 
 # Storybook
 *storybook.log
