@@ -311,6 +311,15 @@
     3. Reinstall the tarball in the consumer after each library rebuild.
 - Keep generated `.tgz` archives out of git.
 
+## Cleanup Scripts
+
+- Keep generated distribution artifacts under `clean:dist`, including `dist`, generated package archives, and the
+  Dependency Cruiser SVG graph. Treat small generated project files as part of this target unless they clearly belong to
+  a more specific cleanup target.
+- Keep dependency installs under `clean:modules`.
+- Keep generated Storybook output under `clean:storybook`; `clean:all` should include Storybook output along with the
+  distribution artifacts and dependency install.
+
 ## npm Publishing
 
 - Manual npm publishing is the current release flow.
@@ -345,6 +354,10 @@
 - `bun run check:format` runs only Biome formatting.
 - `bun run check:fix` applies safe Biome fixes, formatting, and import organization.
 - `bun run check:fix-unsafe` applies unsafe Biome fixes intentionally.
+- `bun run clean:dist` removes generated distribution artifacts and small generated project files.
+- `bun run clean:modules` removes dependency installs.
+- `bun run clean:storybook` removes generated Storybook output.
+- `bun run clean:all` removes distribution artifacts, generated Storybook output, and dependency installs.
 - `bun run deps:outdated` checks dependency updates.
 - `bun run publish:npm` publishes the package to npm using the package's `publishConfig`.
 - `bun run publish:who` checks the active npm account.

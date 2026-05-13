@@ -96,12 +96,16 @@
 		"git:stash-pop": "git stash pop",
 		"storybook": "storybook dev --port 6006",
 		"storybook:build": "storybook build",
-		"publish:npm": "npm publish",
+		"clean:dist": "bun scripts/clean dist",
+		"clean:modules": "bun scripts/clean modules",
+		"clean:storybook": "bun scripts/clean storybook",
+		"clean:all": "bun scripts/clean dist storybook modules",
 		"publish:who": "npm whoami",
 		"publish:login": "npm login",
-		"publish:bump": "npm version patch",
 		"publish:fund": "npm fund",
-		"publish:fix": "npm pkg fix"
+		"publish:fix": "npm pkg fix",
+		"publish:bump": "npm version patch",
+		"publish:npm": "npm publish"
 	},
 	"engines": {
 		"node": "25.x",
