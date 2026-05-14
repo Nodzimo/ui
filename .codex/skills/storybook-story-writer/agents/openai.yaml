@@ -1,0 +1,4 @@
+interface:
+  display_name: "Storybook Story Writer"
+  short_description: "Write focused Nodzimo UI Storybook stories."
+  default_prompt: "Use $storybook-story-writer to add focused Storybook stories for this Nodzimo UI component."
