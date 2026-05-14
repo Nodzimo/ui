@@ -1,4 +1,5 @@
 import type { Preview } from '@storybook/react-vite'
+import '../src/styles.css'
 
 const preview: Preview = {
 	parameters: {
@@ -16,6 +17,16 @@ const preview: Preview = {
 			test: 'todo',
 		},
 	},
+	tags: ['autodocs'],
+	decorators: [
+		Story => {
+			return (
+				<div className={'nui-boundaries nui-surface nui-interactive'}>
+					<Story />
+				</div>
+			)
+		},
+	],
 }
 
 // noinspection JSUnusedGlobalSymbols

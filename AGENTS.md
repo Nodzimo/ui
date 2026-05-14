@@ -293,7 +293,7 @@
 
 - Storybook is used for component documentation, visual review, and optional testing. It is not part of the library's
   published JS entrypoints.
-- Import the library stylesheet in `.storybook/preview.ts` with `import '../src/styles.css'` so stories render with the
+- Import the library stylesheet in `.storybook/preview.tsx` with `import '../src/styles.css'` so stories render with the
   same CSS contract consumers receive.
 - Keep Storybook TypeScript context separate from the library source TypeScript context. A `.storybook/tsconfig.json`
   may extend the app tsconfig so Storybook config files understand Vite CSS imports without adding `.storybook` to the
