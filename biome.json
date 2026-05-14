@@ -9,6 +9,9 @@
 		"rules": {
 			"nursery": {
 				"useSortedClasses": { "level": "error", "fix": "safe" }
+			},
+			"style": {
+				"noUnusedTemplateLiteral": "error"
 			}
 		},
 		"domains": {
