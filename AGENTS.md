@@ -28,6 +28,9 @@
 - For questions, answer first and do not edit files unless asked.
 - For implementation requests, keep changes scoped and verify with the smallest relevant command.
 - Preserve project style: tabs, single quotes, no semicolons, named exports.
+- Name things according to their lifespan and scope. Broad, exported, cross-file, or public-facing entities need precise
+  descriptive names. Short-lived local helpers may stay simple and generic when their surrounding context makes their
+  purpose obvious.
 
 ## Skills
 
@@ -295,15 +298,54 @@
   published JS entrypoints.
 - Import the library stylesheet in `.storybook/preview.tsx` with `import '../src/styles.css'` so stories render with the
   same CSS contract consumers receive.
+- Use a global decorator in `.storybook/preview.tsx` to wrap all stories in the library foundation classes
+  `nui-boundaries nui-surface nui-interactive`. This is the project Storybook equivalent of a consumer applying the NUI
+  opt-in foundation classes at the app root. Keep this as a decorator rather than duplicating the foundation effects in
+  Storybook-only CSS.
+- Keep `tags: ['autodocs']` in the global Storybook preview unless the project intentionally changes its documentation
+  strategy.
 - Keep Storybook TypeScript context separate from the library source TypeScript context. A `.storybook/tsconfig.json`
   may extend the app tsconfig so Storybook config files understand Vite CSS imports without adding `.storybook` to the
-  library `tsconfig.app.json` include list.
+  library `tsconfig.app.json` include list. Include both `./*.ts` and `./*.tsx` so `main.ts` and JSX-bearing preview
+  files are checked together.
 - Prefer colocated stories beside real components, for example `src/client/components/button/button.stories.tsx`.
 - In colocated stories, prefer importing the component from the local folder surface with `import { Button } from '.'`
   when `index.ts` exports the component. Implementation files inside the same folder should still use direct relative
   imports for local details such as `./button-variants`.
 - Use kebab-case filenames for stories when that matches the component folder style; the important Storybook convention
   is the `.stories` segment, not PascalCase.
+- Do not write stories for the sake of exhausting every prop permutation. A story should answer a meaningful interface
+  question: what role, intent, state, or usage pattern does this component have?
+- Prefer separate focused stories for semantic roles and materially different behavior, such as a button's primary,
+  outline, secondary, ghost, destructive, link, disabled, icon-only, or loading states. Do not include the component
+  name
+  in each story name when the Storybook title already scopes the file to that component.
+- Prefer comparison stories for visual scales and repetitive styling variations, such as component sizes or icon sizes.
+  Show comparable variants side by side so rhythm, spacing, and scale can be inspected in one canvas instead of clicking
+  through many near-identical sidebar entries.
+- Treat `src/client/components/button/button.stories.tsx` as the current reference pattern for client component stories:
+  focused semantic stories first, then comparison stories such as `Sizes` and `Icon sizes`.
+- Use `meta.args` for shared baseline args such as generic `children` and `onClick: fn()`. Focused stories should only
+  override the args that make that story meaningful. Use specific children only when the label clarifies semantics, such
+  as `Delete` for destructive actions or `Visit` for link-style actions.
+- Keep story export names short and stable because they form technical story ids. Use `name` only when the display name
+  needs human-facing clarification or sentence casing, such as `Primary (default)` or `Icon sizes`.
+- In comparison, story render functions, spread `args` before pinned props that define the comparison item, for example
+  `<Button {...args} size='xs' />`. This lets controls adjust shared args while preventing controls from collapsing the
+  whole comparison into one size or variant.
+- Local story-only helpers may use simple names when the surrounding story file makes their purpose obvious. Give them
+  more precise names when they become broader, exported, reused across files, or responsible for more than local layout.
+- Storybook Controls need runtime `options` arrays for select/radio controls. TypeScript may know CVA-derived unions in
+  the editor, but those type unions are not available as runtime values for Storybook controls.
+- `class-variance-authority` currently does not expose a stable runtime introspection API for variant keys. CVA
+  discussion https://github.com/joe-bell/cva/discussions/146 tracks requests for exposing variants; until CVA provides
+  this, do not introduce a custom CVA fork, wrapper, or large metadata layer only to satisfy Storybook controls.
+- For CVA-backed component variants, it is acceptable to duplicate small `argTypes.options` arrays in stories as the
+  lowest-cost workaround for working controls. Use `table.type.summary: 'union'` when Autodocs would otherwise show
+  unclear types such as `unknown`. Revisit this only if CVA or Storybook gains reliable variant introspection.
+- Do not rely on `react-docgen-typescript` configuration as the primary solution for CVA variant controls. In this
+  project, attempts to switch Storybook to `react-docgen-typescript` did not produce reliable controls and made prop
+  extraction worse in the running Storybook.
 - Do not keep Storybook onboarding/demo components, CSS, MDX, or assets as part of the long-term component architecture.
   The generated `src/stories` folder is disposable onboarding material unless intentionally repurposed for docs.
 - Top-level MDX documentation may live separately from component folders, but it should be project documentation, not
