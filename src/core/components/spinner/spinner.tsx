@@ -5,9 +5,9 @@ import { mcn } from '#lib'
 export function Spinner({ className, ...props }: ComponentProps<'svg'>) {
 	return (
 		<Loader2Icon
-			aria-label='Loading'
+			aria-label={'Loading'}
 			className={mcn('size-4 animate-spin', className)}
-			role='status'
+			role={'status'}
 			{...props}
 		/>
 	)

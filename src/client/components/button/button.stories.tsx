@@ -1,9 +1,64 @@
 // noinspection JSUnusedGlobalSymbols
 
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import type { PropsWithChildren } from 'react'
+import {
+	ArrowUpRightIcon,
+	FolderOpen,
+	Heart,
+	KeyRound,
+	Star,
+	Trash2,
+	X,
+} from 'lucide-react'
+import type { ComponentProps } from 'react'
 import { fn } from 'storybook/test'
+import { Spinner } from '#core'
+import { mcn } from '#lib'
 import { Button } from '.'
+
+const buttonVariantOptions: readonly string[] = [
+	'default',
+	'outline',
+	'secondary',
+	'ghost',
+	'destructive',
+	'link',
+]
+
+const buttonSizeOptions: readonly string[] = [
+	'default',
+	'xs',
+	'sm',
+	'lg',
+	'icon',
+	'icon-xs',
+	'icon-sm',
+	'icon-lg',
+]
+
+const buttonStoryIcons = {
+	ArrowUpRightIcon,
+	FolderOpen,
+	Heart,
+	KeyRound,
+	Star,
+	Trash2,
+	X,
+} as const
+
+const buttonStoryIconOptions: readonly string[] = Object.keys(buttonStoryIcons)
+const stringUnionSummary = 'string union'
+const unionSeparator = ' | '
+
+function ButtonPreviewRow({ className, ...restProps }: ComponentProps<'div'>) {
+	return <div className={mcn('flex gap-5', className)} {...restProps} />
+}
+
+type ButtonStoryIcon = (typeof buttonStoryIcons)[keyof typeof buttonStoryIcons]
+
+type ButtonStoryArgs = ComponentProps<typeof Button> & {
+	Icon?: ButtonStoryIcon
+}
 
 const meta = {
 	title: 'Client/Components/Button',
@@ -14,63 +69,88 @@ const meta = {
 	argTypes: {
 		variant: {
 			table: {
-				type: { summary: 'union' },
+				type: {
+					summary: stringUnionSummary,
+					detail: buttonVariantOptions.join(unionSeparator),
+				},
 			},
-			control: 'inline-radio',
-			options: [
-				'default',
-				'outline',
-				'secondary',
-				'ghost',
-				'destructive',
-				'link',
-			],
+			control: 'select',
+			options: buttonVariantOptions,
 		},
 		size: {
 			table: {
-				type: { summary: 'union' },
+				type: {
+					summary: stringUnionSummary,
+					detail: buttonSizeOptions.join(unionSeparator),
+				},
 			},
-			control: 'inline-radio',
-			options: [
-				'default',
-				'xs',
-				'sm',
-				'lg',
-				'icon',
-				'icon-xs',
-				'icon-sm',
-				'icon-lg',
-			],
+			control: 'select',
+			options: buttonSizeOptions,
+		},
+		Icon: {
+			description: 'Story-only icon picker (this is not a Button prop!)',
+			table: {
+				type: {
+					summary: 'component union',
+					detail: buttonStoryIconOptions.join(unionSeparator),
+				},
+			},
+			control: 'select',
+			options: buttonStoryIconOptions,
+			mapping: buttonStoryIcons,
 		},
 	},
 	args: {
 		children: 'Button',
 		onClick: fn(),
 	},
-} satisfies Meta<typeof Button>
+	render: ({ children, Icon = Heart, ...restArgs }) => {
+		return (
+			<ButtonPreviewRow>
+				<Button {...restArgs}>
+					<Icon data-icon={'inline-start'} /> {children}
+				</Button>
+				<Button {...restArgs}>{children}</Button>
+				<Button {...restArgs} size={'icon'}>
+					<Icon />
+				</Button>
+				<Button {...restArgs}>
+					{children} <Icon data-icon={'inline-end'} />
+				</Button>
+			</ButtonPreviewRow>
+		)
+	},
+} satisfies Meta<ButtonStoryArgs>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 export const Primary: Story = {
 	name: 'Primary (default)',
+	args: { children: 'Like' },
 }
 
 export const Outline: Story = {
 	args: {
 		variant: 'outline',
+		children: 'Open',
+		Icon: FolderOpen,
 	},
 }
 
 export const Secondary: Story = {
 	args: {
 		variant: 'secondary',
+		children: 'Close',
+		Icon: X,
 	},
 }
 
 export const Ghost: Story = {
 	args: {
 		variant: 'ghost',
+		children: 'Login',
+		Icon: KeyRound,
 	},
 }
 
@@ -78,6 +158,7 @@ export const Destructive: Story = {
 	args: {
 		children: 'Delete',
 		variant: 'destructive',
+		Icon: Trash2,
 	},
 }
 
@@ -85,46 +166,58 @@ export const Link: Story = {
 	args: {
 		children: 'Visit',
 		variant: 'link',
+		Icon: ArrowUpRightIcon,
 	},
 }
 
-function ButtonScalePreview({ children }: PropsWithChildren) {
-	return (
-		<div className={'flex flex-col items-center gap-5'}>
-			<p className={'text-nui-muted-foreground'}>
-				Extra small, Small, Default, Large
-			</p>
-			<div className={'flex items-center gap-5'}>{children}</div>
-		</div>
-	)
-}
-
 export const Sizes: Story = {
-	render: args => {
+	render: ({ Icon: _Icon, ...restArgs }) => {
 		return (
-			<ButtonScalePreview>
-				<Button {...args} size={'xs'} />
-				<Button {...args} size={'sm'} />
-				<Button {...args} size={'default'} />
-				<Button {...args} size={'lg'} />
-			</ButtonScalePreview>
+			<ButtonPreviewRow className={'items-center'}>
+				<Button {...restArgs} size={'xs'} />
+				<Button {...restArgs} size={'sm'} />
+				<Button {...restArgs} size={'default'} />
+				<Button {...restArgs} size={'lg'} />
+			</ButtonPreviewRow>
 		)
 	},
 }
 
 export const IconSizes: Story = {
 	name: 'Icon sizes',
-	args: {
-		children: '☭',
-	},
-	render: args => {
+	render: ({ children: _children, Icon = Star, ...restArgs }) => {
 		return (
-			<ButtonScalePreview>
-				<Button {...args} size={'icon-xs'} />
-				<Button {...args} size={'icon-sm'} />
-				<Button {...args} size={'icon'} />
-				<Button {...args} size={'icon-lg'} />
-			</ButtonScalePreview>
+			<ButtonPreviewRow className={'items-center'}>
+				<Button {...restArgs} size={'icon-xs'}>
+					<Icon />
+				</Button>
+				<Button {...restArgs} size={'icon-sm'}>
+					<Icon />
+				</Button>
+				<Button {...restArgs} size={'icon'}>
+					<Icon />
+				</Button>
+				<Button {...restArgs} size={'icon-lg'}>
+					<Icon />
+				</Button>
+			</ButtonPreviewRow>
+		)
+	},
+}
+
+export const Loading: Story = {
+	render: ({ children: _children, Icon: _Icon, ...restArgs }) => {
+		return (
+			<ButtonPreviewRow>
+				<Button {...restArgs}>
+					<Spinner data-icon={'inline-start'} />
+					Processing...
+				</Button>
+				<Button {...restArgs}>
+					Please wait
+					<Spinner data-icon={'inline-end'} />
+				</Button>
+			</ButtonPreviewRow>
 		)
 	},
 }
