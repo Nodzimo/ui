@@ -105,6 +105,22 @@ const meta = {
 Use `select` when the set is larger or when the row should stay visually quiet in Docs. Do not add a custom CVA metadata
 layer only for Storybook controls.
 
+Global preview-only controls belong in `.storybook/preview.tsx`, not individual component stories. The current global
+preview control is `wrapperBackground`:
+
+- display name: `Wrapper background`
+- controls category: `Story canvas`
+- default arg value: `transparent`
+- purpose: color the decorator wrapper around the rendered story
+
+Keep this arg out of component props by destructuring it from `storyContext.args` before rendering `<Story />`. It is
+intentionally not called `Canvas background` because it does not control the entire Storybook canvas.
+
+Do not use stale third-party Storybook color/background addons as the default answer for a free full-canvas color
+picker. The official backgrounds addon is useful for presets only. If the project later needs a real global color
+picker for the whole canvas, build or adopt a maintained toolbar/global addon deliberately instead of changing every
+story layout or using preview `document.body` effects.
+
 For icon-like story controls, never put React components directly in `options`. Use serializable string options plus
 Storybook `mapping`:
 

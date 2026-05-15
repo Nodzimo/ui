@@ -324,10 +324,20 @@
   published JS entrypoints.
 - Import the library stylesheet in `.storybook/preview.tsx` with `import '../src/styles.css'` so stories render with the
   same CSS contract consumers receive.
-- Use a global decorator in `.storybook/preview.tsx` to wrap all stories in the library foundation classes
-  `nui-boundaries nui-surface nui-interactive`. This is the project Storybook equivalent of a consumer applying the NUI
-  opt-in foundation classes at the app root. Keep this as a decorator rather than duplicating the foundation effects in
-  Storybook-only CSS.
+- Use a global decorator in `.storybook/preview.tsx` to wrap all stories in the preview foundation classes
+  `nui-boundaries nui-interactive`. Do not add `nui-surface` to the Storybook preview wrapper by default: Storybook's
+  own canvas/theme/background tooling should remain in control of the preview surface, and `nui-surface` can override
+  that surface with library theme colors. This is a Storybook-specific exception only; consumers that want the full NUI
+  foundation can still apply `nui-boundaries nui-surface nui-interactive` at their app root.
+- Keep the global Storybook preview `wrapperBackground` arg as a preview-only design aid. It should live under the
+  `Story canvas` controls category, use the display name `Wrapper background`, default to `transparent`, and apply only
+  to the decorator wrapper. Filter it out before rendering the story so it never leaks into component props or DOM.
+- Treat `wrapperBackground` as an honest wrapper background, not a full Storybook canvas background. Do not rename it to
+  `Canvas background` unless the implementation really controls the whole Storybook canvas.
+- Storybook's official backgrounds addon supports preset backgrounds, not a free global color picker. Avoid adding
+  stale third-party background/color-picker addons only for this feature; many are not maintained for current Storybook
+  versions. If a real full-canvas color picker is needed later, prefer a small project-owned Storybook toolbar/global
+  addon over layout hacks, `document.body` effects, or unsupported addons.
 - Keep `tags: ['autodocs']` in the global Storybook preview unless the project intentionally changes its documentation
   strategy.
 - Keep Storybook TypeScript context separate from the library source TypeScript context. A `.storybook/tsconfig.json`

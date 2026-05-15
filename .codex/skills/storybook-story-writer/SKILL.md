@@ -100,6 +100,17 @@ contract.
 - Use `@storybook/react-vite` types and `fn` from `storybook/test` for event handlers in shared args.
 - Keep stories colocated beside components.
 - Do not import from `@sefo/nodzimo-ui` inside this package.
+- Keep the global `.storybook/preview.tsx` decorator aligned with the project preview contract:
+  `nui-boundaries nui-interactive` around all stories, without `nui-surface` by default. Storybook controls the preview
+  surface/theme; `nui-surface` remains part of the consumer foundation recommendation, not the Storybook wrapper.
+- Preserve the global preview-only `wrapperBackground` arg when editing Storybook preview configuration. It belongs in
+  the `Story canvas` controls category, uses the display name `Wrapper background`, defaults to `transparent`, and is
+  filtered out before rendering `<Story />`. It colors the decorator wrapper only, so do not call it
+  `Canvas background`.
+- Do not add Storybook background/color-picker addons only to get a free full-canvas color picker unless they are
+  verified compatible with the current Storybook version. The official backgrounds addon is preset-based, and stale
+  third-party addons are not a project convention. A real full-canvas picker should be a deliberate local toolbar/global
+  addon, not layout hacks or `document.body` effects in preview.
 - For local story-only helpers, keep simple names when they stay local; choose precise names if responsibility grows.
 - For story-only preview controls such as selectable icons, use a typed mapping object plus string options:
   `const componentStoryIcons = { ... } as const`, `Object.keys(componentStoryIcons)`, and
