@@ -27,6 +27,9 @@
 - Do not invent compatibility requirements. If a setting is a fallback or legacy convenience, say that clearly.
 - For questions, answer first and do not edit files unless asked.
 - For implementation requests, keep changes scoped and verify with the smallest relevant command.
+- For review and design feedback, be direct and rigorous: lead with concrete issues, explain the technical or UX reason
+  behind each recommendation, challenge weak naming or architecture, and treat disagreement as a way to clarify the
+  better solution rather than as a reason to soften the critique.
 - Preserve project style: tabs, single quotes, no semicolons, named exports.
 - Name things according to their lifespan and scope. Broad, exported, cross-file, or public-facing entities need precise
   descriptive names. Short-lived local helpers may stay simple and generic when their surrounding context makes their
