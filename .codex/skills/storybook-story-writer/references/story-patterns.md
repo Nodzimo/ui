@@ -147,6 +147,34 @@ Use this order unless the component suggests a clearer domain-specific sequence:
 4. structural usage patterns such as with icon, icon-only, nested content, or as child/slot behavior
 5. comparison stories for sizes, densities, alignments, or grouped variants
 
+Before applying this order, decide whether the component has enough owned surface area to justify it. Do not stretch a
+small component to fill the whole sequence.
+
+## Story Budget
+
+Plan stories by public role, not by visual possibility:
+
+- `Default` is enough when the component has one behavior and no owned variants or states.
+- Add a usage/composition story only when the composition is a pattern consumers should recognize or copy.
+- Add comparison stories only for values owned by the component or design-system contract.
+- Do not create stories for arbitrary `className`, native props, wrapper layout, or Tailwind mutations.
+
+For each planned story, write the interface question it answers. Good answers sound like "How does this destructive
+action read?", "How does icon-only affordance scale?", or "How does the loading state compose with label and icon?" Bad
+answers sound like "Can this SVG be red?", "Can this element be bigger?", or "Can className change the look?"
+
+### Spinner Anti-Example
+
+A plain spinner is a leaf primitive with one owned role: indicate loading/status. It may accept `className`, but that is
+a styling escape hatch, not a component variant API. Do not write `Sizes`, `Tones`, `Colors`, or visual matrix stories
+for a spinner unless the spinner component explicitly defines those variants.
+
+Reasonable spinner coverage is usually:
+
+- `Default`, showing the canonical loading indicator and accessibility role.
+- Optionally one composition story such as `Inline` or `WithLabel` if the project wants to document spinner plus loading
+  text as a reusable interface pattern.
+
 ## Comparison Stories
 
 Use comparison render functions for visual scales and repeated styling variations. Keep the preview layout modest,

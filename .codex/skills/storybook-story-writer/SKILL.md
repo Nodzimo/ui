@@ -17,6 +17,13 @@ composition patterns in one canvas instead of isolated one-control examples.
 - Inspect the component folder before writing stories:
     - implementation file, local `index.ts`, variant files, types, and existing stories if present.
     - aggregate barrels only if export flow is unclear.
+- Classify the component before planning stories:
+    - Does it have owned semantic variants, sizes, states, or interaction modes?
+    - Does it have official composition patterns that are part of how consumers should use it?
+    - Are differences only possible through arbitrary `className`, native attributes, or wrapper layout?
+- Write a short story plan before editing. For each planned story, be able to answer: "What interface question does this
+  story answer about this component's public role?" If the honest answer is only "it shows that CSS/className/native
+  props can change the element", do not write that story.
 - Confirm whether the component is client or core:
     - client components usually live under `src/client/components/<component>`.
     - core components should keep stories colocated with their component folder if/when story coverage is added there.
@@ -40,10 +47,13 @@ import { Button } from '.'
 
 - Prefer stories that answer a real interface question: role, intent, state, interaction mode, size scale, icon use,
   disabled/loading/error state, or structural composition.
+- Treat the component's own API and design-system contract as the story boundary. A prop passthrough such as
+  `className`, native DOM props, or wrapper layout is not a reason to create visual variation stories by itself.
 - Do not create stories just to exhaust every prop. If several props are technical plumbing or mirror native HTML
   attributes, let Controls cover them.
-- Prefer comparison stories when the user needs side-by-side inspection of rhythm, sizing, alignment, or repeated visual
-  variants.
+- Prefer comparison stories only when the compared values are owned by the component or an explicit design-system
+  contract, such as CVA variants, component-defined sizes, icon-only forms, or documented composition forms. Do not use
+  comparison stories to demonstrate arbitrary Tailwind classes.
 - For composable controls such as buttons, prefer high-signal story canvases that show the real usage family together:
   label-only, leading icon, icon-only, and trailing icon. Avoid one-button canvases when they hide important usage
   patterns.
@@ -51,8 +61,24 @@ import { Button } from '.'
   clarification such as `Primary (default)` or `Icon sizes`.
 - Use concrete semantic labels when they clarify intent, such as `Like`, `Open`, `Close`, `Login`, `Delete`, or `Visit`.
   Avoid generic `Button` labels in stories where the role or intent should be visible.
-- If the component has no meaningful variant/state surface, write one strong default story plus the smallest useful
-  usage example.
+- If the component has no meaningful variant/state surface, write one strong default story. Add at most one usage or
+  composition story only when it documents a real interface role consumers should copy.
+- For leaf primitives with one behavior, a very short story file is a correct outcome. Do not compensate for a small API
+  by inventing visual matrices.
+
+## Story Budget Gate
+
+Use this gate before writing or reviewing a story file:
+
+- Owned variants or states exist: stories may cover those meaningful roles, keeping repetitive cases grouped.
+- Official composition patterns exist: one compact composition canvas may document the expected usage family.
+- Only arbitrary styling differs: do not add size, tone, color, spacing, or layout stories.
+- Component has one role and no owned variants: prefer `Default`; optionally add one honest composition story.
+
+Spinner is the project anti-example for this gate: a spinner can be restyled with Tailwind classes, but that does not
+give it owned tones, sizes, or visual variants. Stories such as `Sizes` or `Tones` for a plain spinner document CSS
+capability rather than component behavior and should not be written unless those scales become part of the component
+contract.
 
 ## Review Standard
 

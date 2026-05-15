@@ -42,6 +42,8 @@
   `dependency-update-reviewer` skill at `.codex/skills/dependency-update-reviewer`.
 - For repeated token-prefix adaptation and review work, use the project-local `theme-token-adapter` skill at
   `.codex/skills/theme-token-adapter`.
+- For writing, reviewing, or updating component stories, use the project-local `storybook-story-writer` skill at
+  `.codex/skills/storybook-story-writer`.
 
 ## Biome Policy
 
@@ -352,6 +354,17 @@
   is the `.stories` segment, not PascalCase.
 - Do not write stories for the sake of exhausting every prop permutation. A story should answer a meaningful interface
   question: what role, intent, state, or usage pattern does this component have?
+- Before writing stories, classify the component's owned surface area: semantic variants, sizes, states, interaction
+  modes, and official composition patterns. If differences are only possible through arbitrary `className`, native DOM
+  props, or wrapper layout, they are not story-worthy by themselves.
+- Keep a story budget. Components with one behavior and no owned variants may need only `Default`; add at most one usage
+  or composition story when it documents a real interface pattern consumers should copy.
+- Do not create comparison stories for visual mutations that are not part of the component or design-system contract.
+  Showing that an SVG or element can be recolored, resized, or rearranged with Tailwind documents CSS, not component
+  behavior.
+- Treat `Spinner` as the anti-example for story bloat: unless the component gains explicit variants, stories such as
+  `Sizes`, `Tones`, or `Colors` are noise. Reasonable coverage is usually `Default`, plus optionally one honest
+  `Inline`/`WithLabel` composition if that pattern is worth documenting.
 - Prefer separate focused stories for semantic roles and materially different behavior, such as a button's primary,
   outline, secondary, ghost, destructive, link, disabled, icon-only, or loading states. Do not include the component
   name
