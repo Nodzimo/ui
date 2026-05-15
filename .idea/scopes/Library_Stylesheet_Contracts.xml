@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Library Stylesheet Contracts" pattern="file:src/styles.css" />
+</component>
