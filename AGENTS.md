@@ -79,6 +79,9 @@
 - When extending WebStorm inspection exclusions, add the affected files to `.idea/scopes` and adjust the project profile
   in `.idea/inspectionProfiles`. Keep the scope name and profile entry descriptive enough that another developer can see
   which IDE warning is being silenced and where.
+- Keep the `Library Stylesheet Contracts` scope for `src/styles.css` with WebStorm's `CssUnusedSymbol` inspection
+  disabled. Public stylesheet hooks such as `.dark`, `.nui-surface`, and foundation classes are consumer-facing
+  contracts and do not need local source references to be valid.
 
 ## Public Package Shape
 
@@ -198,6 +201,8 @@
   installed and available on `PATH`.
 - The dependency-cruiser config is intentionally project-specific. Keep rules focused on real architectural constraints
   and avoid broad suppressions.
+- Colocated `.stories.*` files under `src` are development-only Storybook files. Keep them excluded from the
+  `not-to-dev-dep` production rule so imports such as `storybook/test` can remain in `devDependencies`.
 - React and React DOM are expected peer dependencies for this UI library. Imports from React in library source are not a
   dependency violation; consumers provide React at runtime, while the project keeps React in dev dependencies for local
   development.
@@ -217,8 +222,8 @@
 - `build:css` should use `--minify` for the publishable CSS artifact. Use the CSS watch script for iterative rebuilds.
 - `src/styles.css` should exclude Storybook story files from Tailwind v4 source detection with
   `@source not "./**/*.stories.*";` so story-only preview classes do not inflate `dist/styles.css`.
-- If the generated Storybook onboarding folder `src/stories` still exists, exclude it separately from Tailwind source
-  detection; once the folder is deleted, the colocated story-file exclusion is enough.
+- Do not restore Storybook's generated `src/stories` onboarding folder. The colocated story-file exclusion is the
+  intended long-term source filter.
 - Vite cleans `dist` during `vite build`, so full builds must run JS/type build first and CSS build afterward.
 - Design direction: components should be styled and usable by default, but themeable through CSS variables/tokens rather
   than hard-coded project-specific colors long term.
@@ -305,8 +310,7 @@
 - `unplugin-dts` must use `tsconfigPath: 'tsconfig.app.json'`; the root `tsconfig.json` only contains project references
   from the Vite template.
 - `unplugin-dts` should exclude Storybook story files from public declarations, for example
-  `exclude: ['**/*.stories.*']`. If `src/stories` exists, exclude `src/stories/**` too until that disposable folder is
-  removed.
+  `exclude: ['**/*.stories.*']`.
 - Keep Storybook/Vitest test configuration out of `vite.config.ts`. Use `vite.config.ts` for the publishable library
   build and a separate `vitest.config.ts` for Storybook browser tests.
 - In `vite.config.ts`, import `defineConfig` from `vite`. In `vitest.config.ts`, import Vitest test config helpers from
@@ -322,6 +326,8 @@
 
 - Storybook is used for component documentation, visual review, and optional testing. It is not part of the library's
   published JS entrypoints.
+- Keep `.storybook/main.ts` focused on maintained project addons. Do not add `@storybook/addon-onboarding` or restore
+  generated onboarding demo files; component docs should be real colocated stories or intentional project MDX.
 - Import the library stylesheet in `.storybook/preview.tsx` with `import '../src/styles.css'` so stories render with the
   same CSS contract consumers receive.
 - Use a global decorator in `.storybook/preview.tsx` to wrap all stories in the preview foundation classes
@@ -411,8 +417,9 @@
 - Do not rely on `react-docgen-typescript` configuration as the primary solution for CVA variant controls. In this
   project, attempts to switch Storybook to `react-docgen-typescript` did not produce reliable controls and made prop
   extraction worse in the running Storybook.
-- Do not keep Storybook onboarding/demo components, CSS, MDX, or assets as part of the long-term component architecture.
-  The generated `src/stories` folder is disposable onboarding material unless intentionally repurposed for docs.
+- Do not keep Storybook onboarding/demo components, CSS, MDX, assets, or addon dependencies as part of the long-term
+  component architecture. The generated `src/stories` folder should stay deleted unless the project explicitly creates
+  real documentation there.
 - Top-level MDX documentation may live separately from component folders, but it should be project documentation, not
   generated onboarding content.
 - CSF 3 is the stable default story format. CSF Next is not related to Next.js; it is an experimental next Component

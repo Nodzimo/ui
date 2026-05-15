@@ -252,4 +252,5 @@ render: ({Icon: _Icon, ...restArgs}) => {
 - Do not let story-only args such as `Icon` leak into rendered DOM or primitive components through `{...args}`.
 - Do not add canvas text that explains obvious visual matrices; it adds noise and duplicates story/control context.
 - Do not switch to CSF Next unless the project intentionally accepts preview API churn.
-- Do not add onboarding/demo Storybook files or unrelated MDX while adding component stories.
+- Do not add onboarding/demo Storybook files, `@storybook/addon-onboarding`, or unrelated MDX while adding component
+  stories.

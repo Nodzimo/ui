@@ -41,6 +41,9 @@ import { Button } from '.'
 - Add runtime `argTypes.options` for meaningful variant controls because CVA unions are not runtime values.
 - Write focused semantic stories first, then comparison stories for scales, sizes, layouts, or icon-only forms. When a
   component has common composition patterns, prefer a shared `meta.render` that displays the practical set together.
+- Keep colocated `.stories.*` imports development-only. They may import Storybook utilities such as `storybook/test`;
+  dependency-cruiser's `not-to-dev-dep` rule should exclude story files rather than forcing Storybook packages into
+  runtime dependencies.
 - Run the smallest relevant verification, normally `bun run build:ts` and `bun run check:lint`.
 
 ## Story Selection
@@ -100,6 +103,8 @@ contract.
 - Use `@storybook/react-vite` types and `fn` from `storybook/test` for event handlers in shared args.
 - Keep stories colocated beside components.
 - Do not import from `@sefo/nodzimo-ui` inside this package.
+- Do not restore Storybook onboarding/demo files or `@storybook/addon-onboarding`. Generated examples are not part of
+  the project documentation model.
 - Keep the global `.storybook/preview.tsx` decorator aligned with the project preview contract:
   `nui-boundaries nui-interactive` around all stories, without `nui-surface` by default. Storybook controls the preview
   surface/theme; `nui-surface` remains part of the consumer foundation recommendation, not the Storybook wrapper.
