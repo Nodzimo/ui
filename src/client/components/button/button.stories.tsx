@@ -63,9 +63,7 @@ type ButtonStoryArgs = ComponentProps<typeof Button> & {
 const meta = {
 	title: 'Client/Components/Button',
 	component: Button,
-	parameters: {
-		layout: 'centered',
-	},
+	parameters: { layout: 'fullscreen' },
 	argTypes: {
 		variant: {
 			table: {

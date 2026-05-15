@@ -35,7 +35,7 @@ const preview: Preview = {
 
 			return (
 				<div
-					className={'nui-boundaries nui-interactive'}
+					className={'nui-boundaries nui-interactive flex justify-center p-8'}
 					style={{
 						backgroundColor: wrapperBackground,
 					}}

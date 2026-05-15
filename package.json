@@ -95,6 +95,7 @@
 		"git:stash": "git stash",
 		"git:stash-pop": "git stash pop",
 		"storybook": "storybook dev --port 6006",
+		"storybook:test": "vitest --project=storybook",
 		"storybook:build": "storybook build",
 		"storybook:upgrade": "bunx storybook@latest upgrade",
 		"clean:dist": "bun scripts/clean dist",
