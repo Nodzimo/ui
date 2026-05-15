@@ -63,7 +63,13 @@ type ButtonStoryArgs = ComponentProps<typeof Button> & {
 const meta = {
 	title: 'Client/Components/Button',
 	component: Button,
-	parameters: { layout: 'fullscreen' },
+	parameters: {
+		layout: 'fullscreen',
+		pseudo: {
+			hover: '[data-preview="hover"]',
+			active: '[data-preview="active"]',
+		},
+	},
 	argTypes: {
 		variant: {
 			table: {
@@ -101,6 +107,7 @@ const meta = {
 	args: {
 		children: 'Button',
 		onClick: fn(),
+		disabled: false,
 	},
 	render: ({ children, Icon = Heart, ...restArgs }) => {
 		return (
@@ -114,6 +121,15 @@ const meta = {
 				</Button>
 				<Button {...restArgs}>
 					{children} <Icon data-icon={'inline-end'} />
+				</Button>
+				<Button {...restArgs} disabled>
+					Disabled
+				</Button>
+				<Button {...restArgs} data-preview={'hover'}>
+					Hover
+				</Button>
+				<Button {...restArgs} data-preview={'active'}>
+					Active
 				</Button>
 			</ButtonPreviewRow>
 		)

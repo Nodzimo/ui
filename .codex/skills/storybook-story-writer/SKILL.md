@@ -39,6 +39,8 @@ import { Button } from '.'
   `satisfies Meta<ComponentStoryArgs>`.
 - Put shared baseline args in `meta.args`; override only story-specific args in each story.
 - Add runtime `argTypes.options` for meaningful variant controls because CVA unions are not runtime values.
+- Add explicit baseline `meta.args` for native or passthrough props when Storybook would otherwise omit useful Controls,
+  for example `disabled: false`.
 - Write focused semantic stories first, then comparison stories for scales, sizes, layouts, or icon-only forms. When a
   component has common composition patterns, prefer a shared `meta.render` that displays the practical set together.
 - Keep colocated `.stories.*` imports development-only. They may import Storybook utilities such as `storybook/test`;
@@ -116,6 +118,14 @@ contract.
   verified compatible with the current Storybook version. The official backgrounds addon is preset-based, and stale
   third-party addons are not a project convention. A real full-canvas picker should be a deliberate local toolbar/global
   addon, not layout hacks or `document.body` effects in preview.
+- Use `storybook-addon-pseudo-states` for fixed CSS pseudo-class previews such as `hover` and `active`; do not use it
+  for real component states such as `disabled`, `checked`, `selected`, `open`, or `loading`.
+- Put shared pseudo-state defaults in `meta.parameters.pseudo` when a story file uses the same preview targets across
+  stories. Use story-level `parameters.pseudo` only for exceptions.
+- Target forced pseudo states with story-only `data-*` selectors such as `[data-preview="hover"]`, not repeated `id`
+  selectors. Storybook Docs can render multiple canvases on one page, so repeated IDs are brittle.
+- Inline simple pseudo-state selectors when they are used once. Extract selector constants only for reuse or when the
+  name adds real clarity.
 - For local story-only helpers, keep simple names when they stay local; choose precise names if responsibility grows.
 - For story-only preview controls such as selectable icons, use a typed mapping object plus string options:
   `const componentStoryIcons = { ... } as const`, `Object.keys(componentStoryIcons)`, and
