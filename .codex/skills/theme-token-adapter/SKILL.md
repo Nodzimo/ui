@@ -21,6 +21,8 @@ tokens.
 - Keep ordinary Tailwind layout/typography/state utilities unchanged.
 - Keep broad foundation styles opt-in through the foundation utility classes documented in
   `references/token-prefixing.md`; do not silently style the entire consumer app.
+- Keep Storybook story-only classes out of the publishable CSS artifact. `src/styles.css` should use Tailwind v4 source
+  exclusion such as `@source not "./**/*.stories.*";` so colocated stories do not inflate `dist/styles.css`.
 
 ## Workflow
 
@@ -30,7 +32,9 @@ tokens.
 4. Preserve modifiers, state variants, opacity suffixes, and arbitrary selectors.
 5. Keep local implementation imports relative inside the component folder.
 6. Search changed files for unprefixed theme tokens.
-7. Run the smallest relevant verification:
+7. If changing story files, Storybook-only preview classes, or Tailwind source detection, consider whether
+   `dist/styles.css` should change. Story-only classes should not be part of the library CSS contract.
+8. Run the smallest relevant verification:
     - `bun run build:ts` for component-only TypeScript changes.
     - `bun run build:all` after changing `src/styles.css` or Tailwind theme tokens.
 
@@ -44,15 +48,15 @@ prefixed, or checking the intended meaning of a theme token.
 Use project package imports for cross-area imports:
 
 ```ts
-import { mcn } from '#lib'
-import { Button } from '#client'
-import { Button } from '#client/components/button'
+import {mcn} from '#lib'
+import {Button} from '#client'
+import {Button} from '#client/components/button'
 ```
 
 Use relative imports inside one component folder:
 
 ```ts
-import { buttonVariants } from './button-variants'
+import {buttonVariants} from './button-variants'
 ```
 
 Do not use consumer package entrypoints inside source files.

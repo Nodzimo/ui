@@ -16,6 +16,7 @@ export default defineConfig({
 		}),
 		dts({
 			tsconfigPath: 'tsconfig.app.json',
+			exclude: '**/*.stories.*',
 		}),
 		tailwindcss(),
 	],
@@ -29,6 +30,9 @@ export default defineConfig({
 			formats: ['es'],
 		},
 		rolldownOptions: {
+			output: {
+				chunkFileNames: 'internal/[name]-[hash].js',
+			},
 			external: [
 				'react',
 				'react-dom',

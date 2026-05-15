@@ -155,5 +155,20 @@ This repository is a Bun-powered React UI library built with Vite library mode, 
 Tailwind CSS, Storybook, Vitest, and Dependency Cruiser. Read root `AGENTS.md` before interpreting build, package, peer
 dependency, styling, or publishing changes.
 
+Post-update triage should pay special attention to Vite/Vitest/Storybook package alignment:
+
+- If Vite config typings reject a `test` key after an update, check whether root `vite` and Vitest's resolved/nested
+  `vite` copy differ. In a shared config, `defineConfig` from `vitest/config` may be needed for the test config type
+  augmentation, but this project should keep publish build config and Storybook/Vitest config separated.
+- For the publishable `vite.config.ts`, `defineConfig` should come from `vite` and the file should not contain the
+  Vitest `test` section.
+- For Storybook browser tests, verify the separate `vitest.config.ts`, Playwright browser installation, and the Vitest
+  browser API host. On this Windows setup, `api.host: '127.0.0.1'` avoids `localhost` connection-refused failures in
+  Playwright-driven Storybook tests.
+- If Storybook test UI logs `vitest.init()` deprecation warnings, first check whether the warning originates inside
+  `@storybook/addon-vitest` before recommending local config rewrites.
+- After build-tool or Storybook updates, include package artifact inspection in the recommendation when declarations,
+  CSS output, or private chunks might have changed: `bun run build:all` followed by `bun pm pack --dry-run`.
+
 Keep the skill portable: put reusable workflow rules here, and keep this repo's current dependency source map in
 `references/dependency-sources.md`.
