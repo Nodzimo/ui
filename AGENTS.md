@@ -17,7 +17,7 @@
 - Formatter/linter/assist: Biome.
 - React optimization: React Compiler via `@vitejs/plugin-react`, `@rolldown/plugin-babel`, and
   `babel-plugin-react-compiler`.
-- Declaration generation: `unplugin-dts`.
+- Declaration generation: `unplugin-dts` with API Extractor declaration bundling.
 - CSS generation: Tailwind CLI via `@tailwindcss/cli`.
 
 ## Collaboration
@@ -97,16 +97,21 @@
 - `files: ["dist"]` keeps packed/published contents limited to build output.
 - The package export map is intentionally minimal:
     - `exports["."].import` points to `dist/nodzimo-ui.js`.
-    - `exports["."].types` points to the generated root declaration file.
+    - `exports["."].types` points to `dist/nodzimo-ui.d.ts`.
     - `exports["./client"].import` points to `dist/client.js`.
-    - `exports["./client"].types` points to the generated client declaration file.
+    - `exports["./client"].types` points to `dist/client.d.ts`.
     - `exports["./styles.css"]` points to `dist/styles.css`.
+- Public declaration files are bundled per public entrypoint. Keep `dist/nodzimo-ui.d.ts` for the root/RSC-safe entry
+  and `dist/client.d.ts` for the client-boundary entry. Do not publish a mirrored `dist/src` declaration tree unless a
+  real tooling need appears.
 - Consumers should import the library stylesheet once at the app root, for example
   `import '@sefo/nodzimo-ui/styles.css'`.
 - Vite/Rolldown may emit private shared chunks used by the public entrypoints. Keep those chunks inside `dist/internal`
   with a pattern such as `internal/[name]-[hash].js`; do not add them to `exports` or treat them as public entrypoints.
 - Private chunks in `dist/internal` are still required package files because `dist/nodzimo-ui.js` and `dist/client.js`
   may import them through relative ESM imports.
+- Avoid adding declaration files under `dist/internal` as part of the public type contract. Shared type shapes may be
+  duplicated across bundled entrypoint declarations; that is preferable to exposing internal type topology.
 - Avoid adding `main`, `module`, or `default` fallbacks unless a confirmed consumer needs them.
 - The package license is MIT. Keep a permissive open-source license unless the project direction explicitly changes.
 - Keep `publishConfig.access` set to `public` so scoped publishes do not require passing `--access public` manually.
@@ -311,6 +316,13 @@
   from the Vite template.
 - `unplugin-dts` should exclude Storybook story files from public declarations, for example
   `exclude: ['**/*.stories.*']`.
+- `unplugin-dts` should keep `bundleTypes: true` so API Extractor emits declaration rollups for the public package
+  entrypoints instead of a `dist/src` tree.
+- Keep `@microsoft/api-extractor` in `devDependencies`; it is build-time tooling for bundled declarations, not a
+  runtime or peer dependency.
+- API Extractor may warn when its bundled TypeScript compiler is older than this project's TypeScript version. Treat
+  that as a tooling-version warning, not a package blocker, when declaration output is correct and the latest API
+  Extractor still bundles the older compiler.
 - Keep Storybook/Vitest test configuration out of `vite.config.ts`. Use `vite.config.ts` for the publishable library
   build and a separate `vitest.config.ts` for Storybook browser tests.
 - In `vite.config.ts`, import `defineConfig` from `vite`. In `vitest.config.ts`, import Vitest test config helpers from
@@ -522,6 +534,8 @@
   Compiler scope, Tailwind styles, or client/core boundaries.
 - After changing declaration excludes, Tailwind source detection, or package output names, inspect `bun pm pack
   --dry-run` and confirm Storybook-only files are not in the package unless intentionally kept.
+- After changing declaration bundling or package type exports, confirm `dist` contains `nodzimo-ui.d.ts` and
+  `client.d.ts`, does not contain `dist/src`, and that `package.json` `exports.types` points at the bundled files.
 - Confirm `dist/styles.css` exists after `bun run build:all` when changing style build scripts or Tailwind setup.
 - Inspect `dist/nodzimo-ui.js` and `dist/client.js` after build changes that affect React Compiler or entrypoints.
 - For Next/Turbopack consumer checks, install the published `@sefo/nodzimo-ui` package in the Next app. Use tarball

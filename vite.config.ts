@@ -17,6 +17,7 @@ export default defineConfig({
 		dts({
 			tsconfigPath: 'tsconfig.app.json',
 			exclude: '**/*.stories.*',
+			bundleTypes: true,
 		}),
 		tailwindcss(),
 	],
