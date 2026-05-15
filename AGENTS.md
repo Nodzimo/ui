@@ -324,10 +324,15 @@
   Show comparable variants side by side so rhythm, spacing, and scale can be inspected in one canvas instead of clicking
   through many near-identical sidebar entries.
 - Treat `src/client/components/button/button.stories.tsx` as the current reference pattern for client component stories:
-  focused semantic stories first, then comparison stories such as `Sizes` and `Icon sizes`.
+  typed control option constants, story-only icon mapping controls, a shared high-signal `meta.render` for common button
+  compositions, focused semantic stories first, then comparison stories such as `Sizes` and `Icon sizes`.
 - Use `meta.args` for shared baseline args such as generic `children` and `onClick: fn()`. Focused stories should only
   override the args that make that story meaningful. Use specific children only when the label clarifies semantics, such
   as `Delete` for destructive actions or `Visit` for link-style actions.
+- For story-only args such as preview icons, extend the story args type with `ComponentProps<typeof Component>`. Expose
+  a
+  clearly described control such as `Story-only icon picker (this is not a Button prop!)`, and destructure unused
+  story-only args out of custom renders so they do not leak into the rendered component or DOM.
 - Keep story export names short and stable because they form technical story ids. Use `name` only when the display name
   needs human-facing clarification or sentence casing, such as `Primary (default)` or `Icon sizes`.
 - In comparison, story render functions, spread `args` before pinned props that define the comparison item, for example
@@ -341,8 +346,9 @@
   discussion https://github.com/joe-bell/cva/discussions/146 tracks requests for exposing variants; until CVA provides
   this, do not introduce a custom CVA fork, wrapper, or large metadata layer only to satisfy Storybook controls.
 - For CVA-backed component variants, it is acceptable to duplicate small `argTypes.options` arrays in stories as the
-  lowest-cost workaround for working controls. Use `table.type.summary: 'union'` when Autodocs would otherwise show
-  unclear types such as `unknown`. Revisit this only if CVA or Storybook gains reliable variant introspection.
+  lowest-cost workaround for working controls. Use explicit Storybook table summaries such as `string union` or
+  `component union` when Autodocs would otherwise show unclear types such as `unknown`, and put the concrete option list
+  in `table.type.detail`. Revisit this only if CVA or Storybook gains reliable variant introspection.
 - Do not rely on `react-docgen-typescript` configuration as the primary solution for CVA variant controls. In this
   project, attempts to switch Storybook to `react-docgen-typescript` did not produce reliable controls and made prop
   extraction worse in the running Storybook.
