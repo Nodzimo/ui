@@ -27,6 +27,11 @@ composition patterns in one canvas instead of isolated one-control examples.
 - Confirm whether the component is client or core:
     - client components usually live under `src/client/components/<component>`.
     - core components should keep stories colocated with their component folder if/when story coverage is added there.
+- Story-only visual helpers may import packages such as `lucide-react` when they help demonstrate composition. Keep
+  those imports inside `*.stories.*` files and do not copy them into a core component implementation only because the
+  story uses them.
+- If a core component needs an icon at runtime, remember that stories are not proof of RSC safety. The runtime component
+  still needs a core-safe implementation or a documented package-boundary review.
 - Create or update a colocated kebab-case `*.stories.tsx` file.
 - Import the component from the local folder surface when `index.ts` exports it:
 

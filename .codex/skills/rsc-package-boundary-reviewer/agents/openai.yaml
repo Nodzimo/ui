@@ -1,0 +1,3 @@
+display_name: RSC Package Boundary Reviewer
+short_description: Review UI-kit core/client boundaries, externals, and Next RSC package output.
+default_prompt: Review the Nodzimo UI package boundary for RSC safety and inspect the built output for leaks.

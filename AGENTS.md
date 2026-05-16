@@ -44,6 +44,9 @@
   `.codex/skills/theme-token-adapter`.
 - For writing, reviewing, or updating component stories, use the project-local `storybook-story-writer` skill at
   `.codex/skills/storybook-story-writer`.
+- For changes that affect `src/core`, `src/client`, public entrypoints, Vite externals, package dependency metadata,
+  build output, or Next/RSC consumer compatibility, use the project-local `rsc-package-boundary-reviewer` skill at
+  `.codex/skills/rsc-package-boundary-reviewer`.
 
 ## Biome Policy
 
@@ -161,12 +164,48 @@
 
 ## Core Vs Client
 
-- `core` does not mean server-only. It means no client boundary is required.
-- `core` code must not depend on browser-only APIs, React state/effect hooks, event-driven behavior, or React Compiler
-  runtime.
+- `core` does not mean server-only. It means no client boundary is required and the root entry must stay safe for
+  React Server Component import graphs.
+- Treat `@sefo/nodzimo-ui` as the RSC-safe entrypoint. It should be more restrictive than "works during SSR".
+- React Server Components (RSC) use React's `react-server` condition. In that graph, React deliberately does not expose
+  APIs such as `createContext` or `useContext`; top-level code that calls those APIs can fail before a component is
+  even rendered.
+- Server-side rendering (SSR) is different from RSC. SSR runs server code with the ordinary React server renderer, where
+  APIs such as `createContext`, `forwardRef`, `createElement`, and `useContext` can exist. A component can be SSR-safe
+  and still not be RSC-pure.
+- `'use client'` marks a client boundary for Next/React. Server Components may render Client Components, and Next can
+  keep the route SSG when no dynamic request-time APIs or uncached runtime data are used.
+- Static Site Generation (SSG) means the route can be computed at build time. SSG is not proof that a dependency is
+  RSC-pure; it only proves the route did not require dynamic runtime rendering in that build.
+- `core` code must not depend on browser-only APIs, React state/effect hooks, event-driven behavior, React Compiler
+  runtime, or third-party modules that execute RSC-incompatible React APIs at module top level.
 - `client` code may use state, effects, refs, browser APIs, interactive behavior, and React Compiler.
 - A Server Component may render a Client Component. That does not automatically make a Next route dynamic;
   static/dynamic rendering depends on Next dynamic APIs and data access, not merely on client components.
+- Icons and small SVG primitives in `core` should prefer inline SVG or project-owned RSC-safe wrappers when the icon is
+  part of a fundamental core component such as `Spinner`.
+- Third-party React component libraries that use context, providers, hooks, or `"use client"` belong in `src/client`
+  unless their RSC behavior has been inspected in the built package and verified in the Next consumer.
+
+## RSC Boundary Incident: Lucide Spinner
+
+- Incident summary: `Spinner` in `src/core` imported `Loader2Icon` from `lucide-react`. Before `lucide-react` was marked
+  external in Vite/Rolldown, the library build inlined Lucide's implementation into `dist/nodzimo-ui.js`.
+- The inlined Lucide code included top-level React context setup, including `createContext`, plus icon helpers such as
+  `forwardRef`, `createElement`, and `useContext`.
+- The Next consumer imported only `Card` from `@sefo/nodzimo-ui`, but the root barrel also exported `Spinner`. Because
+  Lucide had been inlined into the same root entry, the RSC graph evaluated code that called `createContext` under
+  React's `react-server` condition and the consumer build failed with `TypeError: createContext is not a function`.
+- The immediate workaround is to keep `lucide-react` external in Vite/Rolldown. This keeps `import { Loader2Icon } from
+  'lucide-react'` in the published root entry instead of copying Lucide internals into `dist/nodzimo-ui.js`.
+- The workaround restores the package boundary so the consumer's Next/Turbopack build can resolve `lucide-react` as its
+  own npm package with its own package metadata, ESM graph, and side effect information.
+- This workaround is not the ideal long-term core contract. The preferred long-term direction is for `src/core` and
+  `dist/nodzimo-ui.js` to avoid runtime imports from RSC-incompatible third-party React component packages.
+- If `Spinner` remains a fundamental core component, the safest implementation is a local inline SVG or generated
+  project-owned icon component that does not import `lucide-react` at runtime.
+- `lucide-react` remains acceptable in stories, demos, and `src/client` components when the package boundary and
+  consumer behavior are verified.
 
 ## React Compiler Boundary
 
@@ -184,15 +223,25 @@
 ## Dependency Concepts
 
 - `exports` defines the package public entrypoints and the files consumers are allowed to import.
-- `external` in Vite/Rolldown keeps dependencies such as React out of the bundled library output.
+- `external` in Vite/Rolldown keeps dependencies such as React out of the bundled library output. It does not remove the
+  dependency from runtime; it leaves an import in `dist` for the consumer's bundler/package manager to resolve.
+- `external` is a bundler contract. `dependencies` and `peerDependencies` are package-manager contracts.
+- Runtime dependencies listed in `dependencies` are installed automatically when a consumer installs this package. If a
+  compatible copy already exists in the consumer dependency tree, the package manager may dedupe it; if not, it may
+  install a nested copy.
+- Runtime dependencies listed in `peerDependencies` are required from the consumer. React and React DOM must be peers so
+  the consumer app owns the React instance.
 - `peerDependencies` declare dependencies that must be provided by the consuming app. React and React DOM are peer
   dependencies for consumers and dev dependencies for local library development.
 - Keep React peer ranges intentionally scoped to React 19 with `19.x` until compatibility with later React majors is
   confirmed.
 - Runtime implementation dependencies used by built components belong in `dependencies`, not `devDependencies`. This
-  currently includes `@base-ui/react`, `class-variance-authority`, `clsx`, and `tailwind-merge`.
+  currently includes `@base-ui/react`, `class-variance-authority`, `clsx`, `lucide-react`, and `tailwind-merge`.
 - Do not make implementation helpers such as `clsx`, `tailwind-merge`, or `class-variance-authority` peer dependencies
   unless they become an intentional consumer-facing contract.
+- Do not move a runtime import from `dependencies` to `devDependencies` merely because it is externalized. Externalized
+  runtime imports still need to be installable by consumers.
+- Packages used only in Storybook stories, examples, tests, or docs belong in `devDependencies`.
 - `'use client'` is a Next/React client boundary. It must be present on the built public client entry that consumers
   import.
 - Multiple entrypoints separate the RSC-safe API from the client API.
@@ -311,7 +360,15 @@
     - `react-dom`
     - `react/jsx-runtime`
     - `react/compiler-runtime`
+    - `lucide-react`
 - `react/compiler-runtime` is required because client output compiled by React Compiler imports it.
+- `lucide-react` is currently externalized as an RSC-boundary workaround. Do not remove it from externals while any
+  runtime core export imports Lucide; otherwise Lucide internals can be inlined into `dist/nodzimo-ui.js` and break
+  Next/RSC consumers.
+- Adding a package to externals is not enough by itself. If built runtime code still imports that package, keep it in
+  `dependencies` or `peerDependencies` according to the package contract.
+- Before adding any third-party React package to `src/core`, inspect whether it calls `createContext`, hooks, providers,
+  browser APIs, or `"use client"` at module top level. Prefer `src/client` or a local RSC-safe wrapper if it does.
 - `unplugin-dts` must use `tsconfigPath: 'tsconfig.app.json'`; the root `tsconfig.json` only contains project references
   from the Vite template.
 - `unplugin-dts` should exclude Storybook story files from public declarations, for example
@@ -538,9 +595,19 @@
   `client.d.ts`, does not contain `dist/src`, and that `package.json` `exports.types` points at the bundled files.
 - Confirm `dist/styles.css` exists after `bun run build:all` when changing style build scripts or Tailwind setup.
 - Inspect `dist/nodzimo-ui.js` and `dist/client.js` after build changes that affect React Compiler or entrypoints.
+- For root/RSC-safe output, inspect `dist/nodzimo-ui.js` for accidental client or third-party leaks:
+  `rg -n "createContext|useContext|useState|useEffect|react/compiler-runtime|@base-ui/react|lucide-react|node_modules/lucide" dist/nodzimo-ui.js`.
+- Expected root output may import `react/jsx-runtime`, but must not import `react/compiler-runtime` or inline React
+  component-library internals that call context/hooks.
+- If `lucide-react` appears in `dist/nodzimo-ui.js`, confirm this is the intentional external import workaround and not
+  inlined Lucide implementation code. Inlined Lucide output often contains `createContext`, `Icon`, `createLucideIcon`,
+  `forwardRef`, or `useContext`.
 - For Next/Turbopack consumer checks, install the published `@sefo/nodzimo-ui` package in the Next app. Use tarball
   testing only when validating changes before publication.
 - If a client component fails in Next with compiler runtime errors, check whether `"use client";` is present in the
   built client entry.
-- If a core component fails in a Server Component context, check whether `react/compiler-runtime` leaked into the root
-  bundle.
+- If a core component fails in a Server Component context, check whether `react/compiler-runtime`, `createContext`,
+  `useContext`, `@base-ui/react`, or inlined third-party React component code leaked into the root bundle.
+- When a dependency/config change affects root exports, verify both the library build and a Next/Turbopack consumer
+  build
+  that imports at least one core component and one affected component from the built package or tarball.
