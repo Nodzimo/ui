@@ -56,7 +56,11 @@ the full review checklist.
 - Keep `lucide-react` external while any runtime core export imports Lucide. This is the current workaround that
   prevents
   Lucide internals from being copied into `dist/nodzimo-ui.js`.
+- Treat this external as boundary containment, not proof that the affected core component is RSC-pure. If a fundamental
+  core primitive still depends on `lucide-react`, call out the remaining contract tradeoff.
 - Do not treat the Lucide external as the ideal long-term core architecture. For fundamental core primitives such as
   `Spinner`, prefer inline SVG or generated project-owned RSC-safe icon components.
+- When comparing against shadcn-style examples, distinguish source-in-app usage from this package's prebuilt library
+  output. Next can analyze client boundaries in an app source graph, while Vite/Rolldown can erase that boundary by
+  inlining dependency internals into `dist/nodzimo-ui.js`.
 - Put interactive primitives, Base UI components, hooks, browser APIs, and React Compiler output in the client entry.
-

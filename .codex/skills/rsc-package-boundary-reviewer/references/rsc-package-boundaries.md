@@ -4,6 +4,7 @@
 
 - Terminology
 - Package Boundary Contracts
+- App Source Vs Prebuilt Library
 - Lucide Spinner Incident
 - External Mechanics
 - Core Rules
@@ -39,6 +40,25 @@ React Compiler output belong here.
 
 `core` does not mean server-only. It means no client boundary is needed and the code is suitable for the RSC import
 graph. This is stricter than "it can render on the server".
+
+## App Source Vs Prebuilt Library
+
+Do not assume an example copied from an app-source component library has the same boundary behavior after this package
+bundles it.
+
+In a shadcn-style app-source setup, a component can import `lucide-react` directly and still omit `'use client'` in that
+local wrapper. Next sees the app source graph and can continue into `lucide-react` as a separate package. If Lucide
+marks
+its own modules as client boundaries, Next can classify that dependency at the package/module boundary.
+
+In this UI kit, Vite/Rolldown produces a prebuilt package entry. If a third-party React package is not externalized, its
+internals can be copied into `dist/nodzimo-ui.js`. After that, Next no longer sees "a clean root entry that imports a
+separate package with its own directives"; it sees `@sefo/nodzimo-ui` itself executing the copied code. If that copied
+code calls `createContext` or hooks under the `react-server` condition, the root entry is no longer RSC-safe.
+
+This distinction is why "shadcn does it" and "the dependency is tree-shakable" are not sufficient arguments for putting
+the same runtime import in `src/core`. Tree-shaking can reduce the amount of copied code while still copying the exact
+client/context helper that breaks the RSC graph.
 
 ## Lucide Spinner Incident
 
@@ -105,7 +125,12 @@ Externalizing `lucide-react` restored its package boundary. The Next consumer ca
 package with its own `package.json`, ESM graph, and `sideEffects` metadata instead of seeing Lucide internals as part of
 `@sefo/nodzimo-ui`.
 
-This is the current workaround. It is not a guarantee that every future third-party React package is safe in `src/core`.
+This is the current workaround. It is boundary containment, not proof that the component is RSC-pure. If a fundamental
+core primitive still renders an externalized third-party Client Component, the consumer may be able to build, but the
+root API is carrying a hidden client-boundary dependency. Prefer removing that runtime dependency for high-use static
+core primitives such as `Spinner`.
+
+The workaround is also not a guarantee that every future third-party React package is safe in `src/core`.
 
 ## Core Rules
 
@@ -183,4 +208,3 @@ Verify at least:
 - The consumer build succeeds.
 - The Next route table remains static/SSG where expected.
 - The package `dist` was inspected for root-entry leaks; SSG success alone is not enough.
-
