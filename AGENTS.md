@@ -25,6 +25,8 @@
 - Keep explanations concise, practical, and human-readable.
 - When discussing architecture or config, explain what each setting is responsible for.
 - Do not invent compatibility requirements. If a setting is a fallback or legacy convenience, say that clearly.
+- Keep configs minimal: do not restate explicit defaults. A config option should appear only when it intentionally
+  changes default behavior or documents a project decision.
 - For questions, answer first and do not edit files unless asked.
 - For implementation requests, keep changes scoped and verify with the smallest relevant command.
 - For review and design feedback, be direct and rigorous: lead with concrete issues, explain the technical or UX reason
@@ -125,6 +127,12 @@
 - `src/index.ts` is the root package entry and re-exports from `src/core`.
 - `src/client.ts` is the client package entry. It must start with `'use client'` and re-export from `src/client/index`.
 - `src/styles.css` is the global stylesheet source for the UI kit and builds to `dist/styles.css`.
+- Raw icon SVG inputs live under `assets/icons`, grouped by source or category such as `lucide`, `brand`, or `custom`.
+- Generated icon components live under `src/core/icons/generated`. Treat this directory as generator-owned output:
+  delete and regenerate it instead of hand-editing component implementation details. Small IDE-only suppressions in
+  generated barrels are an accepted workaround when WebStorm cannot understand generated re-export usage.
+- `src/core/icons/index.ts` is the hand-authored icon public surface inside core and should re-export generated icon
+  groups intentionally.
 - `src/lib` contains internal/shared library utilities. Keep utilities small, named clearly, and exported through local
   barrels when they are intended for cross-area source imports.
 - `src/core` contains exports that are safe to import from React Server Components and ordinary modern React apps.
@@ -153,6 +161,8 @@
 - Use `#lib` for shared utilities such as the class-name merge helper.
 - Use `#client` and `#core` when a story or internal integration should validate the public internal barrel.
 - Use specific imports such as `#client/components/button` for focused component work.
+- Use `#core/icons` when core components need generated project-owned icons from another core area. Avoid importing
+  icons through `#core`, because the aggregate barrel can create dependency cycles.
 - Inside one component folder, prefer relative imports such as `./button-variants`; do not route local implementation
   details through `#client` or `#core`.
 - Colocated stories and tests that sit beside a component folder `index.ts` may import the component through the local
@@ -199,17 +209,14 @@
 - Do not treat shadcn-style app-source examples as proof that the same import is safe after this package prebuilds a
   public entrypoint. Next can inspect client boundaries in an app source graph, while Vite/Rolldown can erase that
   boundary by copying dependency internals into `dist/nodzimo-ui.js`.
-- The immediate workaround is to keep `lucide-react` external in Vite/Rolldown. This keeps `import { Loader2Icon } from
-  'lucide-react'` in the published root entry instead of copying Lucide internals into `dist/nodzimo-ui.js`.
-- The workaround restores the package boundary so the consumer's Next/Turbopack build can resolve `lucide-react` as its
-  own npm package with its own package metadata, ESM graph, and side effect information.
-- Treat the external as boundary containment, not proof that `Spinner` is an ideal RSC-pure core primitive.
-- This workaround is not the ideal long-term core contract. The preferred long-term direction is for `src/core` and
-  `dist/nodzimo-ui.js` to avoid runtime imports from RSC-incompatible third-party React component packages.
-- If `Spinner` remains a fundamental core component, the safest implementation is a local inline SVG or generated
-  project-owned icon component that does not import `lucide-react` at runtime.
-- `lucide-react` remains acceptable in stories, demos, and `src/client` components when the package boundary and
-  consumer behavior are verified.
+- The old workaround was to keep `lucide-react` external in Vite/Rolldown, which kept an external `lucide-react` import
+  in the root entry instead of copying Lucide internals into `dist/nodzimo-ui.js`.
+- The long-term fix is now preferred: `Spinner` uses a generated project-owned SVG icon from `#core/icons`, so the root
+  entry no longer imports `lucide-react` at runtime.
+- Keep `lucide-react` in `devDependencies` while it is used only by stories or development examples. Do not add it back
+  to `dependencies` or Vite externals unless publishable runtime code imports it again.
+- `lucide-react` remains acceptable in stories and demos because Storybook files are excluded from the published
+  entrypoints.
 
 ## React Compiler Boundary
 
@@ -240,7 +247,7 @@
 - Keep React peer ranges intentionally scoped to React 19 with `19.x` until compatibility with later React majors is
   confirmed.
 - Runtime implementation dependencies used by built components belong in `dependencies`, not `devDependencies`. This
-  currently includes `@base-ui/react`, `class-variance-authority`, `clsx`, `lucide-react`, and `tailwind-merge`.
+  currently includes `@base-ui/react`, `class-variance-authority`, `clsx`, and `tailwind-merge`.
 - Do not make implementation helpers such as `clsx`, `tailwind-merge`, or `class-variance-authority` peer dependencies
   unless they become an intentional consumer-facing contract.
 - Do not move a runtime import from `dependencies` to `devDependencies` merely because it is externalized. Externalized
@@ -350,6 +357,29 @@
   adapt theme-facing classes to the NUI token namespace.
 - Use the repo skill `.codex/skills/theme-token-adapter` for repeated token-prefix adaptation and review work.
 
+## Icon Generation
+
+- Generate project-owned icon components with SVGR CLI. SVGR is a dev-only generator here, not a runtime dependency and
+  not a Vite plugin.
+- Keep `svgr.config.cjs` compact. Do not add explicit SVGR defaults; keep only options that change this project's
+  output, such as `outDir`, `filenameCase`, `jsxRuntime`, `icon`, `typescript`, `prettier`, and decorative
+  `aria-hidden` SVG props.
+- `bun run build:icons` reads raw SVG files from `assets/icons`, writes generated TSX under
+  `src/core/icons/generated`, and then runs the project's Biome fix flow so generated output follows local formatting.
+- Raw Lucide SVG files should be downloaded as SVG source only. Remove source `class` attributes such as `lucide` before
+  generation; they are HTML/CSS hooks for raw SVG usage and become noisy generated `className` values.
+- Preserve raw SVG `viewBox`, `stroke='currentColor'`, and `fill='none'` for Lucide outline icons. `icon: true` changes
+  generated `width` and `height` to `1em`, while `viewBox` keeps scaling correct.
+- Do not create separate filled variants when the same outline SVG can be filled by the consumer. For fillable icons
+  such as hearts or stars, keep the outline source and let usage pass `fill='currentColor'` and, when needed,
+  `strokeWidth={0}` or equivalent classes.
+- Keep brand or multicolor SVG colors intact when those colors are part of the asset. Use `currentColor` for themeable
+  monochrome icons.
+- Generated icon components belong in `src/core` and are RSC-safe only when they remain plain SVG components: no hooks,
+  no `'use client'`, no `memo`, no `forwardRef`, and no runtime icon package imports.
+- Public icon names should use the `SomethingIcon` suffix, such as `HeartIcon` or `GithubIcon`. Keep source grouping in
+  folders, not in public component names.
+
 ## Vite Build Notes
 
 - Library mode uses two entries:
@@ -364,11 +394,7 @@
     - `react-dom`
     - `react/jsx-runtime`
     - `react/compiler-runtime`
-    - `lucide-react`
 - `react/compiler-runtime` is required because client output compiled by React Compiler imports it.
-- `lucide-react` is currently externalized as an RSC-boundary workaround. Do not remove it from externals while any
-  runtime core export imports Lucide; otherwise Lucide internals can be inlined into `dist/nodzimo-ui.js` and break
-  Next/RSC consumers.
 - Adding a package to externals is not enough by itself. If built runtime code still imports that package, keep it in
   `dependencies` or `peerDependencies` according to the package contract.
 - Before adding any third-party React package to `src/core`, inspect whether it calls `createContext`, hooks, providers,
@@ -556,7 +582,9 @@
 - `bun run project:audit` is the main audit button. It runs TypeScript checks, Biome checks, dependency graph checks,
   and dependency update visibility checks.
 - `bun run project:verify` is the main full verification button. It installs dependencies, runs `project:audit`, builds
-  JS/types, builds CSS, and packs `nodzimo-ui.tgz`.
+  icons, builds JS/types, builds CSS, and packs `nodzimo-ui.tgz`.
+- `bun run build:icons` regenerates icon components from `assets/icons` through SVGR and applies the project's Biome
+  fix flow to the generated output.
 - `bun run build` runs TypeScript project checks and Vite library build.
 - `bun run build:ts` runs TypeScript project checks via `tsc --build`.
 - `bun run build:ts-watch` watches TypeScript project checks.
@@ -564,7 +592,8 @@
 - `bun run build:js-watch` watches the Vite library build.
 - `bun run build:css` builds `src/styles.css` to minified `dist/styles.css`.
 - `bun run build:css-watch` watches and rebuilds the CSS output.
-- `bun run build:all` runs the JS/type build and then the CSS build. Keep this order because Vite clears `dist`.
+- `bun run build:all` regenerates icons, runs the JS/type build, and then builds CSS. Keep CSS after Vite because Vite
+  clears `dist`.
 - `bun run lib:pack` only packs the current build output as `nodzimo-ui.tgz`; it intentionally does not build. Use it
   after `build:all` or through `project:verify`.
 - `bun run check:lint` runs Biome checks.
@@ -592,7 +621,7 @@
 - Prefer `bun run project:verify` before publishing, tarball consumer testing, or any change that should prove the full
   package artifact still builds and packs.
 - Use `bun run build:all` after changing Vite config, package exports, type generation, source entrypoints, React
-  Compiler scope, Tailwind styles, or client/core boundaries.
+  Compiler scope, Tailwind styles, generated icons, or client/core boundaries.
 - After changing declaration excludes, Tailwind source detection, or package output names, inspect `bun pm pack
   --dry-run` and confirm Storybook-only files are not in the package unless intentionally kept.
 - After changing declaration bundling or package type exports, confirm `dist` contains `nodzimo-ui.d.ts` and
@@ -603,9 +632,8 @@
   `rg -n "createContext|useContext|useState|useEffect|react/compiler-runtime|@base-ui/react|lucide-react|node_modules/lucide" dist/nodzimo-ui.js`.
 - Expected root output may import `react/jsx-runtime`, but must not import `react/compiler-runtime` or inline React
   component-library internals that call context/hooks.
-- If `lucide-react` appears in `dist/nodzimo-ui.js`, confirm this is the intentional external import workaround and not
-  inlined Lucide implementation code. Inlined Lucide output often contains `createContext`, `Icon`, `createLucideIcon`,
-  `forwardRef`, or `useContext`.
+- `lucide-react` should not appear in `dist/nodzimo-ui.js` while it is story-only. If it appears there, either a runtime
+  source import leaked back into the root entry or package dependency/external decisions need to be revisited.
 - For Next/Turbopack consumer checks, install the published `@sefo/nodzimo-ui` package in the Next app. Use tarball
   testing only when validating changes before publication.
 - If a client component fails in Next with compiler runtime errors, check whether `"use client";` is present in the

@@ -1,6 +1,6 @@
 ---
 name: rsc-package-boundary-reviewer
-description: Review and document Nodzimo UI package boundaries for React Server Component safety. Use when changing src/core, src/client, public entrypoints, Vite externals, package dependencies, React Compiler scope, built dist output, icon/runtime dependencies such as lucide-react, or investigating Next/Turbopack consumer build failures involving RSC, SSR, SSG, createContext, use client, or bundled dependency leaks.
+description: Review and document Nodzimo UI package boundaries for React Server Component safety. Use when changing src/core, src/client, public entrypoints, Vite externals, package dependencies, React Compiler scope, generated icons/SVGR config, built dist output, icon/runtime dependencies such as lucide-react, or investigating Next/Turbopack consumer build failures involving RSC, SSR, SSG, createContext, use client, or bundled dependency leaks.
 ---
 
 # RSC Package Boundary Reviewer
@@ -28,6 +28,8 @@ the full review checklist.
     - For client changes, confirm the code is reachable through `src/client.ts` and not accidentally through
       `src/index.ts`.
     - For dependency changes, inspect both `package.json` and `vite.config.ts`.
+    - For generated icon changes, inspect `assets/icons`, `svgr.config.cjs`, `src/core/icons`, and any core component
+      importing icons.
 
 2. Build before judging the package artifact.
     - Use `bun run build:all` for source, Vite, CSS, or entrypoint changes.
@@ -38,7 +40,7 @@ the full review checklist.
       `rg -n "createContext|useContext|useState|useEffect|react/compiler-runtime|@base-ui/react|lucide-react|node_modules/lucide" dist/nodzimo-ui.js`
     - Client entry:
       confirm `dist/client.js` starts with `"use client";` and may import `react/compiler-runtime`.
-    - If `lucide-react` appears in the root entry, distinguish an intentional external import from inlined Lucide code.
+    - `lucide-react` should not appear in the root entry while it is story-only.
 
 4. Check dependency contracts.
     - Externalized runtime imports must still be installable through `dependencies` or required through
@@ -53,13 +55,12 @@ the full review checklist.
 
 ## Decisions
 
-- Keep `lucide-react` external while any runtime core export imports Lucide. This is the current workaround that
-  prevents
-  Lucide internals from being copied into `dist/nodzimo-ui.js`.
-- Treat this external as boundary containment, not proof that the affected core component is RSC-pure. If a fundamental
-  core primitive still depends on `lucide-react`, call out the remaining contract tradeoff.
-- Do not treat the Lucide external as the ideal long-term core architecture. For fundamental core primitives such as
-  `Spinner`, prefer inline SVG or generated project-owned RSC-safe icon components.
+- Keep `lucide-react` story-only unless publishable runtime source imports it again. If it becomes runtime code again,
+  revisit both `dependencies` and Vite externals before building.
+- For fundamental core primitives such as `Spinner`, prefer inline SVG or generated project-owned RSC-safe icon
+  components over third-party React icon packages.
+- Generated icons in `src/core/icons/generated` must stay plain SVG components: no hooks, no `'use client'`, no `memo`,
+  no `forwardRef`, and no runtime icon package imports.
 - When comparing against shadcn-style examples, distinguish source-in-app usage from this package's prebuilt library
   output. Next can analyze client boundaries in an app source graph, while Vite/Rolldown can erase that boundary by
   inlining dependency internals into `dist/nodzimo-ui.js`.

@@ -8,6 +8,7 @@
 - Lucide Spinner Incident
 - External Mechanics
 - Core Rules
+- Generated Icon Rules
 - Dist Inspection Checklist
 - Consumer Verification
 
@@ -26,7 +27,7 @@ RSC-pure.
 APIs, context providers, and interactive libraries. A Server Component may render a Client Component; Next records the
 boundary and sends a reference to the client.
 
-**Static Site Generation (SSG)** means the route can be prerendered at build time. SSG depends on dynamic data access,
+**Static Site Generation (SSG)** means the route can be pre-rendered at build time. SSG depends on dynamic data access,
 request-time APIs, and cache behavior. SSG does not prove that every dependency in the source tree is RSC-pure.
 
 ## Package Boundary Contracts
@@ -114,8 +115,8 @@ import {Loader2Icon} from 'lucide-react'
 - `devDependencies`: used only for local development, tests, stories, and build tooling.
 
 If `dist/nodzimo-ui.js` imports an externalized runtime dependency, that package must be available to the consumer
-through `dependencies` or `peerDependencies`. For `lucide-react`, the current runtime contract is `dependencies` while
-runtime core/client code imports it. If Lucide becomes story-only, move it to `devDependencies`.
+through `dependencies` or `peerDependencies`. `lucide-react` is currently story-only, so it belongs in
+`devDependencies`; if publishable runtime code imports it again, revisit both dependency metadata and Vite externals.
 
 Package managers may dedupe compatible dependency versions. If the consumer already has a compatible `lucide-react`,
 there may be one shared copy. If versions conflict, the package manager may install a nested copy under the dependency
@@ -125,9 +126,10 @@ Externalizing `lucide-react` restored its package boundary. The Next consumer ca
 package with its own `package.json`, ESM graph, and `sideEffects` metadata instead of seeing Lucide internals as part of
 `@sefo/nodzimo-ui`.
 
-This is the current workaround. It is boundary containment, not proof that the component is RSC-pure. If a fundamental
-core primitive still renders an externalized third-party Client Component, the consumer may be able to build, but the
-root API is carrying a hidden client-boundary dependency. Prefer removing that runtime dependency for high-use static
+This was the temporary workaround. It is boundary containment, not proof that the component is RSC-pure. If a
+fundamental core primitive renders an externalized third-party Client Component, the consumer may be able to build, but
+the root API is carrying a hidden client-boundary dependency. Prefer removing that runtime dependency for high-use
+static
 core primitives such as `Spinner`.
 
 The workaround is also not a guarantee that every future third-party React package is safe in `src/core`.
@@ -141,9 +143,28 @@ The workaround is also not a guarantee that every future third-party React packa
 - Avoid third-party React component packages in `src/core` if they call `createContext`, hooks, providers, or browser
   APIs at module top level.
 - Prefer inline SVG or generated project-owned RSC-safe icon components for fundamental core primitives.
-- Keep `lucide-react` in `src/client`, stories, or demo-only code unless a core use has been inspected in the built
-  output and verified in the Next consumer.
+- Keep `lucide-react` in stories or demo-only code unless a runtime use has been inspected in the built output and
+  verified in the Next consumer. While Lucide is story-only, it belongs in `devDependencies` and must not appear in
+  `dist/nodzimo-ui.js` or `dist/client.js`.
 - Do not rely on SSG success alone as proof of root-entry safety.
+
+## Generated Icon Rules
+
+Generated project-owned icons are the preferred solution for RSC-safe core icons.
+
+- Raw SVG inputs live under `assets/icons`, grouped by source or category such as `lucide`, `brand`, or `custom`.
+- SVGR CLI is the generator. It is a dev-only build tool, not a Vite plugin and not a runtime dependency.
+- Generated TSX output lives under `src/core/icons/generated`; treat it as generator-owned. Delete and regenerate it
+  instead of editing component implementation details by hand.
+- Keep `svgr.config.cjs` compact. Do not restate explicit defaults; each option should change project output.
+- Raw Lucide SVG files should be cleaned before generation. Remove source `class` attributes because they are raw SVG
+  styling hooks and become noisy generated `className` values.
+- Preserve `viewBox`, `stroke='currentColor'`, and outline `fill='none'` unless the asset is intentionally solid,
+  brand-colored, or multicolor.
+- For fillable outline icons such as hearts or stars, keep one outline source and let usage pass `fill='currentColor'`
+  plus `strokeWidth={0}` or equivalent classes when the active state should be filled.
+- Generated icon output should contain only plain SVG components and type-only React imports. It must not contain hooks,
+  `'use client'`, `memo`, `forwardRef`, `lucide-react`, `@iconify/react`, or other icon runtime imports.
 
 ## Dist Inspection Checklist
 
@@ -165,7 +186,7 @@ Interpretation:
 - `@base-ui/react` in `dist/nodzimo-ui.js` is a root-entry failure unless a deliberate RSC compatibility decision has
   been documented and consumer-tested.
 - `createContext` or `useContext` in `dist/nodzimo-ui.js` is a likely RSC failure.
-- `lucide-react` as an import may be the current workaround.
+- `lucide-react` in `dist/nodzimo-ui.js` is no longer expected while it is story-only.
 - Inlined Lucide code is not acceptable in the root entry. Look for `createLucideIcon`, `Icon`, `LucideContext`,
   `forwardRef`, `useContext`, or comments/regions mentioning `node_modules/lucide-react`.
 
