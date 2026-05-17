@@ -62,6 +62,9 @@
   rules belong in Next applications.
 - Keep JavaScript formatter preferences explicit: single quotes, no unnecessary semicolons, single JSX quotes, and
   as-needed arrow parentheses.
+- Keep the HTML formatter enabled only because Storybook head snippets are real project files. Biome's HTML formatter is
+  experimental and does not currently expose an HTML attribute quote-style option, so double-quoted HTML attributes are
+  acceptable even though JavaScript and JSX use single quotes.
 - Keep JSON comments disabled. Project JSON files should be strict JSON, not JSONC.
 - Do not add `files.includes` globs that duplicate `.gitignore` unless Biome needs a narrower project-specific scope.
 - Do not enable global `assist/source/useSortedKeys`; it sorts whole JSON objects such as `package.json`, `scripts`,
@@ -131,6 +134,10 @@
 - Generated icon components live under `src/core/icons/generated`. Treat this directory as generator-owned output:
   delete and regenerate it instead of hand-editing component implementation details. Small IDE-only suppressions in
   generated barrels are an accepted workaround when WebStorm cannot understand generated re-export usage.
+- Hand-authored special icons that need a custom React API, such as the two-color `NodzimoSymbolIcon`, belong outside
+  `src/core/icons/generated` and should not keep their source SVG under `assets/icons`, because `build:icons` treats
+  that
+  folder as SVGR input.
 - `src/core/icons/index.ts` is the hand-authored icon public surface inside core and should re-export generated icon
   groups intentionally.
 - `src/lib` contains internal/shared library utilities. Keep utilities small, named clearly, and exported through local
@@ -375,6 +382,9 @@
   `strokeWidth={0}` or equivalent classes.
 - Keep brand or multicolor SVG colors intact when those colors are part of the asset. Use `currentColor` for themeable
   monochrome icons.
+- For custom symbols that need independent color control per shape, keep a hand-authored component with separate SVG
+  paths and explicit props. Do not rely on SVGR/SVGO to preserve same-colored sibling paths; optimization may merge
+  them.
 - Generated icon components belong in `src/core` and are RSC-safe only when they remain plain SVG components: no hooks,
   no `'use client'`, no `memo`, no `forwardRef`, and no runtime icon package imports.
 - Public icon names should use the `SomethingIcon` suffix, such as `HeartIcon` or `GithubIcon`. Keep source grouping in
@@ -427,6 +437,12 @@
   published JS entrypoints.
 - Keep `.storybook/main.ts` focused on maintained project addons. Do not add `@storybook/addon-onboarding` or restore
   generated onboarding demo files; component docs should be real colocated stories or intentional project MDX.
+- Keep Storybook's manager branding on supported APIs: `storybook/theming` for title/link/theme and
+  `.storybook/manager-head.html` for head tags such as favicon. Avoid CSS or DOM hacks against Storybook's internal
+  sidebar markup for simple branding.
+- Static Storybook-only assets live under `assets/storybook` and are exposed with
+  `staticDirs: ['../assets/storybook']`. This copies the directory contents to the root of `storybook-static`, so
+  favicon links should use a relative path such as `href="nodzimo-symbol-icon.svg"` for subpath-friendly deploys.
 - Import the library stylesheet in `.storybook/preview.tsx` with `import '../src/styles.css'` so stories render with the
   same CSS contract consumers receive.
 - Use a global decorator in `.storybook/preview.tsx` to wrap all stories in the preview foundation classes

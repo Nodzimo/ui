@@ -26,6 +26,9 @@
 			"arrowParentheses": "asNeeded"
 		}
 	},
+	"html": {
+		"formatter": { "enabled": true }
+	},
 	"css": { "parser": { "tailwindDirectives": true } },
 	"json": { "parser": { "allowComments": false } },
 	"assist": {

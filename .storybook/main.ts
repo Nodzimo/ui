@@ -10,6 +10,7 @@ const config: StorybookConfig = {
 		'storybook-addon-pseudo-states',
 	],
 	framework: '@storybook/react-vite',
+	staticDirs: ['../assets/storybook'],
 }
 
 // noinspection JSUnusedGlobalSymbols

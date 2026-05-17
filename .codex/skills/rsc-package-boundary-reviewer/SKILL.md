@@ -61,6 +61,9 @@ the full review checklist.
   components over third-party React icon packages.
 - Generated icons in `src/core/icons/generated` must stay plain SVG components: no hooks, no `'use client'`, no `memo`,
   no `forwardRef`, and no runtime icon package imports.
+- Hand-authored core icon wrappers, such as custom brand symbols with per-path color props, must follow the same
+  RSC-safe
+  SVG-only constraints and stay outside generator-owned `src/core/icons/generated`.
 - When comparing against shadcn-style examples, distinguish source-in-app usage from this package's prebuilt library
   output. Next can analyze client boundaries in an app source graph, while Vite/Rolldown can erase that boundary by
   inlining dependency internals into `dist/nodzimo-ui.js`.

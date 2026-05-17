@@ -1,6 +1,6 @@
 ---
 name: theme-token-adapter
-description: Review, adapt, or validate Tailwind/React component styles against this repository's NUI-prefixed theme-token contract. Use when Codex is asked to add or port UI components from shadcn, Radix, Base UI, examples, or custom code; prefix semantic classes; inspect CSS variables; or check that component styles use the local design-system tokens correctly.
+description: Review, adapt, or validate Tailwind/React component styles against this repository's NUI-prefixed theme-token contract. Use when Codex is asked to add or port UI components from shadcn, Radix, Base UI, examples, or storybook code; prefix semantic classes; inspect CSS variables; or check that component styles use the local design-system tokens correctly.
 ---
 
 # Theme Token Adapter
