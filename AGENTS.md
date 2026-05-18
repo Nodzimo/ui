@@ -368,9 +368,18 @@
     - Dark theme: `Nodzimo Night`, with neon emerald, Tokyo-night, electric, technical, youthfully sharp energy.
 - Do not timidly torture one color until it barely works in both themes. Keep the green brand DNA, but allow each theme
   to express it differently when that produces a stronger and more readable system.
+- Respect the shadcn semantic structure, but do not inherit shadcn blandness as a design goal. shadcn is a conservative
+  white-label baseline that is hard to ruin; Nodzimo should keep its architecture while adding deliberate character and
+  clearer active/passive/disabled distinction.
 - Current primary direction:
     - Light primary candidate: `oklch(0.55 0.19 151)` with light foreground.
     - Dark primary candidate: `oklch(0.82 0.26 145)` with dark foreground.
+- Use the NUI alpha rhythm for recurring color-intensity modifiers:
+    - `--nui-alpha-subtle: 20%`
+    - `--nui-alpha-half: 50%`
+    - `--nui-alpha-strong: 80%`
+- Alpha rhythm names describe intensity, not events. Do not introduce `hover`, `active`, or `pressed` tokens when a
+  semantic color plus `subtle`, `half`, or `strong` expresses the treatment.
 - Button variants are semantic hierarchy, not random visual costumes:
     - `primary`: brand speaks loudly; main action.
     - `secondary`: brand speaks quietly; lower-emphasis filled action.

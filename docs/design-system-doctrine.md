@@ -48,6 +48,24 @@ Use the existing semantic roles harder before adding new semantic roles.
 Adding a new token can still be valid, but it requires proof that the existing shadcn-like roles cannot express the
 decision cleanly.
 
+The current design stance is:
+
+```text
+Respect shadcn structure.
+Reject shadcn blandness.
+```
+
+shadcn's default and generated styles are valuable because they are conservative, predictable, and hard to ruin. They
+are a white-label foundation that can look acceptable in many projects, including projects built by engineers with
+little design judgment. That is a strength.
+
+It is also a limitation. Nodzimo UI is not trying to stay white-label. It should keep the semantic architecture, but it
+does not need to inherit the most cautious visual choices when they reduce clarity or character. If `secondary`,
+`accent`, `input`, disabled states, and ordinary surfaces all collapse into the same gray mass, the user experience
+suffers: active actions, passive fields, and disabled controls become harder to distinguish.
+
+Use shadcn as the structural baseline, not as a ceiling for personality.
+
 ## Day And Night Are Not A Technical Toggle
 
 The important Nodzimo discovery is that light and dark themes should not be treated as a reluctant technical duty.
@@ -441,6 +459,65 @@ Before adding a new token, ask:
 4. Will future components understand it without reading one component's implementation?
 
 If the answer is no, do not add the token.
+
+## NUI Alpha Rhythm
+
+Nodzimo uses a tiny alpha rhythm for recurring color-intensity modifiers.
+
+This is not a replacement for semantic colors. It is a controlled way to modify an existing semantic role without
+inventing a separate one-off color. The rhythm is intentionally event-agnostic: the names do not mention hover, active,
+disabled, pressed, or mobile interaction because these values describe color intensity, not a specific browser event.
+
+Current alpha rhythm:
+
+```text
+--nui-alpha-subtle: 20%;
+--nui-alpha-half: 50%;
+--nui-alpha-strong: 80%;
+```
+
+Meaning:
+
+```text
+subtle
+Light presence. Useful for subtle surfaces, destructive soft fills, quiet highlights, and low-weight state layers.
+
+half
+Middle presence. Useful when a color should visibly tint a surface without becoming the main filled action.
+
+strong
+High presence. Useful when a color should remain almost itself while giving room for hover/active/state treatment.
+```
+
+Preferred mental model:
+
+```text
+semantic color + alpha rhythm = state or surface treatment
+```
+
+Examples:
+
+```text
+primary / strong
+input / half
+destructive / subtle
+ring / half
+```
+
+This layer exists for rhythm and future maintainability, similar to the NUI spacing rhythm. It should not become a
+backdoor for state-token sprawl. Do not add `primary-hover`, `ghost-hover`, or `link-active` when a semantic color plus
+`subtle`, `half`, or `strong` expresses the treatment.
+
+The alpha rhythm may be used in Tailwind arbitrary opacity values, for example:
+
+```text
+hover:bg-nui-primary/[var(--nui-alpha-strong)]
+hover:bg-nui-input/[var(--nui-alpha-half)]
+bg-nui-destructive/[var(--nui-alpha-subtle)]
+```
+
+Keep ordinary shadcn-style opacity suffixes acceptable when porting a component quickly, but prefer the named alpha
+rhythm when the value is part of the Nodzimo component contract or appears repeatedly across components.
 
 ## Theme Character Guardrails
 

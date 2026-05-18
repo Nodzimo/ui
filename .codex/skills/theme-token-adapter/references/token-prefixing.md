@@ -71,6 +71,26 @@ Light theme should express Living Emerald: natural, alive, confident, trustworth
 Night: neon emerald, Tokyo-night, electric, technical, and intentionally bold. Preserve this duality when adapting
 component colors.
 
+Respect shadcn structure, but reject shadcn blandness. The default shadcn look is a conservative white-label baseline;
+Nodzimo should keep the semantic roles while making active, passive, disabled, and structural surfaces easier to
+distinguish.
+
+Use the NUI alpha rhythm for recurring color-intensity modifiers:
+
+```text
+--nui-alpha-subtle: 20%
+--nui-alpha-half: 50%
+--nui-alpha-strong: 80%
+```
+
+These are intensity values, not event tokens. Prefer semantic color plus alpha rhythm over one-off state colors:
+
+```text
+bg-nui-primary/[var(--nui-alpha-strong)]
+bg-nui-input/[var(--nui-alpha-half)]
+bg-nui-destructive/[var(--nui-alpha-subtle)]
+```
+
 Use these meanings when selecting or reviewing semantic tokens:
 
 ```text

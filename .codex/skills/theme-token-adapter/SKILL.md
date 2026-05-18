@@ -19,6 +19,8 @@ tokens.
   or `ring`.
 - Raw CSS variables use `--nui-*`.
 - Tailwind theme tokens use `--color-nui-*`, `--radius-nui-*`, and `--spacing-nui-*`.
+- Reusable alpha intensity tokens use `--nui-alpha-subtle`, `--nui-alpha-half`, and `--nui-alpha-strong`. Treat these as
+  color-intensity rhythm values, not hover/active/pressed event tokens.
 - Component class strings use NUI-prefixed semantic utilities when they refer to design-system colors, radii, or spacing
   tokens.
 - Keep ordinary Tailwind layout/typography/state utilities unchanged.
