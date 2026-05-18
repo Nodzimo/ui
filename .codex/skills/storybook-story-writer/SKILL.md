@@ -112,6 +112,9 @@ contract.
 - Do not import from `@sefo/nodzimo-ui` inside this package.
 - Do not restore Storybook onboarding/demo files or `@storybook/addon-onboarding`. Generated examples are not part of
   the project documentation model.
+- Keep Storybook's Vite config separate from the library package build config. If story or preview work needs Vite
+  changes, use `.storybook/vite.config.ts` for Storybook preview plugins such as Tailwind, and use `.storybook/main.ts`
+  `viteFinal` only for final Storybook-specific Vite overrides.
 - Keep the global `.storybook/preview.tsx` decorator aligned with the project preview contract:
   `nui-boundaries nui-interactive` around all stories, without `nui-surface` by default. Storybook controls the preview
   surface/theme; `nui-surface` remains part of the consumer foundation recommendation, not the Storybook wrapper.

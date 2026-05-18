@@ -162,6 +162,12 @@ Post-update triage should pay special attention to Vite/Vitest/Storybook package
   augmentation, but this project should keep publish build config and Storybook/Vitest config separated.
 - For the publishable `vite.config.ts`, `defineConfig` should come from `vite` and the file should not contain the
   Vitest `test` section.
+- Storybook uses its own `.storybook/vite.config.ts` through `@storybook/react-vite` framework builder options. Keep it
+  separate from the publishable library `vite.config.ts`; Storybook builds should not inherit `unplugin-dts`,
+  `build.lib`, package externals, or declaration bundling.
+- For Storybook build warnings that need final Vite build overrides, prefer `.storybook/main.ts` `viteFinal`.
+  Storybook's Vite builder may ignore most `build` options loaded from `viteConfigPath` except selected fields such as
+  `build.target`.
 - For Storybook browser tests, verify the separate `vitest.config.ts`, Playwright browser installation, and the Vitest
   browser API host. On this Windows setup, `api.host: '127.0.0.1'` avoids `localhost` connection-refused failures in
   Playwright-driven Storybook tests.
