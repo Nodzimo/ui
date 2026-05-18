@@ -1,0 +1,35 @@
+# Coolify/Nixpacks can install the regular Bun Linux x64 binary, which may
+# require CPU instructions that are unavailable in the build container and fail
+# with exit code 132 / Illegal instruction. Use Bun's baseline binary instead.
+
+[variables]
+NODE_VERSION = '25'
+BUN_VERSION = '1.3.13'
+
+[phases.setup]
+nixpkgsArchive = 'f69ae4816bc1b501460ad2c0c63ed0cc4a9b876e'
+aptPkgs = ['curl', 'unzip']
+
+[phases.install]
+cmds = [
+    'echo "[Nixpacks] CPU compatibility flags:"',
+    'grep -m1 -o "avx2\\|avx\\|sse4_2" /proc/cpuinfo || true',
+    'echo "[Nixpacks] Installing Bun ${BUN_VERSION} baseline to /app/.bun..."',
+    'mkdir -p /app/.bun/bin',
+    'curl -fsSL "https://github.com/oven-sh/bun/releases/download/bun-v${BUN_VERSION}/bun-linux-x64-baseline.zip" -o /tmp/bun.zip',
+    'unzip -o /tmp/bun.zip -d /tmp',
+    'cp /tmp/bun-linux-x64-baseline/bun /app/.bun/bin/bun',
+    'chmod +x /app/.bun/bin/bun',
+    'echo "[Nixpacks] Node version:"',
+    'node -v || true',
+    'echo "[Nixpacks] Bun version:"',
+    '/app/.bun/bin/bun --version',
+    'echo "[Nixpacks] Installing dependencies..."',
+    '/app/.bun/bin/bun install --frozen-lockfile'
+]
+
+[phases.build]
+cmds = [
+    'echo "[Nixpacks] Building Storybook static site..."',
+    '/app/.bun/bin/bun run storybook:build'
+]
