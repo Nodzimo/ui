@@ -10,6 +10,7 @@
       <w>chromaticui</w>
       <w>depcruise</w>
       <w>entrypoints</w>
+      <w>oklch</w>
       <w>pathlib</w>
       <w>returncode</w>
       <w>rollups</w>

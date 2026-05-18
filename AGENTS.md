@@ -356,6 +356,33 @@
   and repeated UI groups. Do not replace incidental component tuning such as `px-2.5`, `gap-1.5`, `size-8`, or
   one-off layout nudges unless the spacing is intentionally part of the shared rhythm contract.
 
+## Design System Doctrine
+
+- Read `docs/design-system-doctrine.md` before changing theme colors, button variants, interactive-state styling, or the
+  meaning of theme tokens. It records the current Nodzimo design direction and the reasoning behind it.
+- Preserve the shadcn-style semantic token architecture. Do not add one-off state tokens such as `primaryTextHover`,
+  `primaryLinkActive`, or `primaryBackgroundPressed` unless the existing semantic roles have clearly failed across
+  multiple components.
+- Treat light and dark themes as two intentional expressions of the same brand, not as a technical inversion:
+    - Light theme: `Living Emerald`, with natural, confident, trustworthy, growth-oriented emerald energy.
+    - Dark theme: `Nodzimo Night`, with neon emerald, Tokyo-night, electric, technical, youthfully sharp energy.
+- Do not timidly torture one color until it barely works in both themes. Keep the green brand DNA, but allow each theme
+  to express it differently when that produces a stronger and more readable system.
+- Current primary direction:
+    - Light primary candidate: `oklch(0.55 0.19 151)` with light foreground.
+    - Dark primary candidate: `oklch(0.82 0.26 145)` with dark foreground.
+- Button variants are semantic hierarchy, not random visual costumes:
+    - `primary`: brand speaks loudly; main action.
+    - `secondary`: brand speaks quietly; lower-emphasis filled action.
+    - `outline`: structural action; ordinary text, visible system border, subtle branded hover.
+    - `ghost`: quiet dense-UI action; ordinary text at rest, subtle hover surface.
+    - `link`: branded text signal; primary-colored text is acceptable here.
+    - `destructive`: dangerous action; danger overrides brand.
+- Do not make default `outline` or `ghost` primary-colored text just to make them look branded. Let them carry Nodzimo
+  through border tone, hover tint, focus ring, spacing, radius, and context.
+- Keep `ghost` hover softer than `secondary` rest. If ghost hover becomes visually identical to secondary, the action
+  hierarchy is too compressed.
+
 ## Component Styling
 
 - Base interactive primitives are built on `@base-ui/react` where appropriate.

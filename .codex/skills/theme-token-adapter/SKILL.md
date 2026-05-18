@@ -14,6 +14,9 @@ tokens.
 ## Core Contract
 
 - Treat `src/styles.css` as the source of truth for available theme tokens.
+- Read `docs/design-system-doctrine.md` before changing color token values, button variants, interactive-state styling,
+  or the semantic meaning of `primary`, `secondary`, `outline`, `ghost`, `link`, `muted`, `accent`, `border`, `input`,
+  or `ring`.
 - Raw CSS variables use `--nui-*`.
 - Tailwind theme tokens use `--color-nui-*`, `--radius-nui-*`, and `--spacing-nui-*`.
 - Component class strings use NUI-prefixed semantic utilities when they refer to design-system colors, radii, or spacing
@@ -27,14 +30,21 @@ tokens.
 ## Workflow
 
 1. Inspect the new or changed component files and `src/styles.css`.
-2. Identify semantic theme classes or variables from the source component.
-3. Convert only theme-facing styles to NUI-prefixed equivalents.
-4. Preserve modifiers, state variants, opacity suffixes, and arbitrary selectors.
-5. Keep local implementation imports relative inside the component folder.
-6. Search changed files for unprefixed theme tokens.
-7. If changing story files, Storybook-only preview classes, or Tailwind source detection, consider whether
+2. If the work affects color meaning, button variants, or interactive states, inspect `docs/design-system-doctrine.md`
+   and preserve the Nodzimo hierarchy:
+    - primary speaks loudly.
+    - secondary speaks quietly.
+    - outline is structural.
+    - ghost stays quiet until interaction.
+    - link is the branded text signal.
+3. Identify semantic theme classes or variables from the source component.
+4. Convert only theme-facing styles to NUI-prefixed equivalents.
+5. Preserve modifiers, state variants, opacity suffixes, and arbitrary selectors.
+6. Keep local implementation imports relative inside the component folder.
+7. Search changed files for unprefixed theme tokens.
+8. If changing story files, Storybook-only preview classes, or Tailwind source detection, consider whether
    `dist/styles.css` should change. Story-only classes should not be part of the library CSS contract.
-8. Run the smallest relevant verification:
+9. Run the smallest relevant verification:
     - `bun run build:ts` for component-only TypeScript changes.
     - `bun run build:all` after changing `src/styles.css` or Tailwind theme tokens.
 

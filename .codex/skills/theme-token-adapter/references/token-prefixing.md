@@ -56,6 +56,21 @@ focus-visible:ring-destructive/20 -> focus-visible:ring-nui-destructive/20
 
 ## Theme Token Meanings
 
+Read `docs/design-system-doctrine.md` for the full design rationale. The short Nodzimo hierarchy is:
+
+```text
+primary: brand speaks loudly.
+secondary: brand speaks quietly.
+outline: structure supports the task.
+ghost: action stays quiet until touched.
+link: brand speaks as text.
+destructive: danger overrides brand.
+```
+
+Light theme should express Living Emerald: natural, alive, confident, trustworthy. Dark theme should express Nodzimo
+Night: neon emerald, Tokyo-night, electric, technical, and intentionally bold. Preserve this duality when adapting
+component colors.
+
 Use these meanings when selecting or reviewing semantic tokens:
 
 ```text
@@ -181,18 +196,18 @@ The library must not silently apply app-level shadcn-style globals. Keep broad d
 
 ```css
 @layer base {
-	.nui-boundaries * {
-		@apply border-nui-border outline-nui-ring/50;
-	}
+    .nui-boundaries * {
+        @apply border-nui-border outline-nui-ring/50;
+    }
 
-	.nui-surface {
-		@apply bg-nui-background text-nui-foreground;
-	}
+    .nui-surface {
+        @apply bg-nui-background text-nui-foreground;
+    }
 
-	.nui-interactive button:not(:disabled),
-	.nui-interactive [role="button"]:not(:disabled) {
-		cursor: pointer;
-	}
+    .nui-interactive button:not(:disabled),
+    .nui-interactive [role="button"]:not(:disabled) {
+        cursor: pointer;
+    }
 }
 ```
 
