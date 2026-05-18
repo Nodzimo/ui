@@ -9,7 +9,23 @@ const config: StorybookConfig = {
 		'@storybook/addon-docs',
 		'storybook-addon-pseudo-states',
 	],
-	framework: '@storybook/react-vite',
+	framework: {
+		name: '@storybook/react-vite',
+		options: {
+			builder: {
+				viteConfigPath: '.storybook/vite.config',
+			},
+		},
+	},
+	viteFinal: config => {
+		return {
+			...config,
+			build: {
+				...config.build,
+				chunkSizeWarningLimit: 1_100,
+			},
+		}
+	},
 	staticDirs: ['../assets/storybook'],
 }
 

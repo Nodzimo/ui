@@ -98,6 +98,7 @@
 		"storybook": "storybook dev --port 6006",
 		"storybook:test": "vitest --project=storybook",
 		"storybook:build": "storybook build",
+		"storybook:build-test": "storybook build --test",
 		"storybook:upgrade": "bunx storybook@latest upgrade",
 		"clean:dist": "bun scripts/clean dist",
 		"clean:modules": "bun scripts/clean modules",
