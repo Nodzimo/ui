@@ -376,7 +376,10 @@
   clearer active/passive/disabled distinction.
 - Current primary direction:
     - Light primary: `Living Emerald`, internally nicknamed `Liverald`, `oklch(0.55 0.19 151)` with light foreground.
-    - Dark primary candidate: `oklch(0.82 0.26 145)` with dark foreground.
+    - Dark primary: `Night Emerald`, internally nicknamed `Nimerald`, `oklch(0.82 0.26 145)` with dark
+      foreground.
+- Use the paired brand line: `Living Emerald` is the brand in daylight; `Night Emerald` is the brand after dark. Design
+  mantra: "In the day, it feels alive. At night, it glows."
 - Use the NUI intensity rhythm as a naming/review convention for recurring color and opacity modifiers:
     - `subtle = 20`, written as Tailwind slash opacity such as `bg-nui-destructive/20`.
     - `half = 50`, written as slash opacity such as `hover:bg-nui-input/50`.

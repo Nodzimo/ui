@@ -160,10 +160,28 @@ The dark-theme brand green emerged around:
 oklch(0.82 0.26 145)
 ```
 
-This is the current Nodzimo Night primary candidate.
+This is the dark-theme primary color. Its formal name is `Night Emerald`; its internal Nodzimo nickname is `Nimerald`.
 
-It is intentionally not a timid dark-mode emerald. It is neon. It is allowed to use dark text on the primary surface
-because that is how high-luminance neon surfaces work.
+`Nimerald` means night emerald: the same living green impulse under city-night lighting. It is intentionally not a timid
+dark-mode emerald. It is neon. It is allowed to use dark text on the primary surface because that is how high-luminance
+neon surfaces work.
+
+Use this paired brand line:
+
+```text
+Living Emerald
+The brand in daylight.
+
+Night Emerald
+The brand after dark.
+```
+
+And the design mantra:
+
+```text
+In the day, it feels alive.
+At night, it glows.
+```
 
 This is the current primary pairing concept:
 
@@ -182,8 +200,8 @@ This is the current primary pairing concept:
 The inversion is not an accident:
 
 ```text
-Light primary: white text on living emerald.
-Dark primary: near-black text on neon emerald.
+Light primary: white text on Living Emerald / Liverald.
+Dark primary: near-black text on Night Emerald / Nimerald.
 ```
 
 This is one brand with two lighting conditions.
