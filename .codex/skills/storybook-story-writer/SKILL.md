@@ -108,6 +108,9 @@ contract.
 - Use tabs, single quotes, no semicolons, and named exports.
 - Add `// noinspection JSUnusedGlobalSymbols` at the top of story files when matching the existing story pattern.
 - Use `@storybook/react-vite` types and `fn` from `storybook/test` for event handlers in shared args.
+- Use `UPPER_SNAKE_CASE` for intentional module-scope immutable story tables, mappings, options, and literal constants,
+  such as variant option arrays, story-only icon maps, and string union separators. Keep Storybook convention objects
+  such as `meta` in `camelCase`.
 - Keep stories colocated beside components.
 - Do not import from `@sefo/nodzimo-ui` inside this package.
 - Do not restore Storybook onboarding/demo files or `@storybook/addon-onboarding`. Generated examples are not part of

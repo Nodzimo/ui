@@ -77,26 +77,26 @@ Storybook Controls need runtime options arrays. For CVA-backed variants, duplica
 constants in `argTypes`:
 
 ```ts
-const buttonVariantOptions: readonly string[] = [
+const BUTTON_VARIANT_OPTIONS: readonly string[] = [
     'default',
     'outline',
     'secondary',
 ]
 
-const stringUnionSummary = 'string union'
-const unionSeparator = ' | '
+const STRING_UNION_SUMMARY = 'string union'
+const UNION_SEPARATOR = ' | '
 
 const meta = {
     argTypes: {
         variant: {
             table: {
                 type: {
-                    summary: stringUnionSummary,
-                    detail: buttonVariantOptions.join(unionSeparator),
+                    summary: STRING_UNION_SUMMARY,
+                    detail: BUTTON_VARIANT_OPTIONS.join(UNION_SEPARATOR),
                 },
             },
             control: 'select',
-            options: buttonVariantOptions,
+            options: BUTTON_VARIANT_OPTIONS,
         },
     },
 }
@@ -135,15 +135,17 @@ For icon-like story controls, never put React components directly in `options`. 
 Storybook `mapping`:
 
 ```ts
-const buttonStoryIcons = {
+const BUTTON_STORY_ICONS = {
     Heart,
     Trash2,
     X,
 } as const
 
-const buttonStoryIconOptions: readonly string[] = Object.keys(buttonStoryIcons)
+const BUTTON_STORY_ICON_OPTIONS: readonly string[] = Object.keys(BUTTON_STORY_ICONS)
+const UNION_SEPARATOR = ' | '
 
-type ButtonStoryIcon = (typeof buttonStoryIcons)[keyof typeof buttonStoryIcons]
+type ButtonStoryIcon =
+    (typeof BUTTON_STORY_ICONS)[keyof typeof BUTTON_STORY_ICONS]
 
 const meta = {
     argTypes: {
@@ -152,16 +154,19 @@ const meta = {
             table: {
                 type: {
                     summary: 'component union',
-                    detail: buttonStoryIconOptions.join(unionSeparator),
+                    detail: BUTTON_STORY_ICON_OPTIONS.join(UNION_SEPARATOR),
                 },
             },
             control: 'select',
-            options: buttonStoryIconOptions,
-            mapping: buttonStoryIcons,
+            options: BUTTON_STORY_ICON_OPTIONS,
+            mapping: BUTTON_STORY_ICONS,
         },
     },
 }
 ```
+
+Intentional module-scope immutable story tables, mappings, options, and literal constants use `UPPER_SNAKE_CASE`.
+Storybook convention objects such as `meta`, plus render-scope values and computed local bindings, stay `camelCase`.
 
 ## Story Order
 

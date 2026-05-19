@@ -36,6 +36,9 @@
 - Name things according to their lifespan and scope. Broad, exported, cross-file, or public-facing entities need precise
   descriptive names. Short-lived local helpers may stay simple and generic when their surrounding context makes their
   purpose obvious.
+- Use `UPPER_SNAKE_CASE` for intentional module-scope immutable tables, mappings, defaults, and literal constants, such
+  as Storybook option arrays or global preview defaults. Keep framework convention objects such as `meta`, `config`, and
+  `preview`, plus computed local bindings and render-scope values, in `camelCase`.
 
 ## Skills
 

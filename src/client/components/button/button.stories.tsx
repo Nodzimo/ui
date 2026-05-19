@@ -16,7 +16,7 @@ import { Spinner } from '#core'
 import { mcn } from '#lib'
 import { Button } from '.'
 
-const buttonVariantOptions: readonly string[] = [
+const BUTTON_VARIANT_OPTIONS: readonly string[] = [
 	'default',
 	'outline',
 	'secondary',
@@ -25,7 +25,7 @@ const buttonVariantOptions: readonly string[] = [
 	'link',
 ]
 
-const buttonSizeOptions: readonly string[] = [
+const BUTTON_SIZE_OPTIONS: readonly string[] = [
 	'default',
 	'xs',
 	'sm',
@@ -36,7 +36,7 @@ const buttonSizeOptions: readonly string[] = [
 	'icon-lg',
 ]
 
-const buttonStoryIcons = {
+const BUTTON_STORY_ICONS = {
 	ArrowUpRightIcon,
 	FolderOpen,
 	Heart,
@@ -46,15 +46,18 @@ const buttonStoryIcons = {
 	X,
 } as const
 
-const buttonStoryIconOptions: readonly string[] = Object.keys(buttonStoryIcons)
-const stringUnionSummary = 'string union'
-const unionSeparator = ' | '
+const BUTTON_STORY_ICON_OPTIONS: readonly string[] =
+	Object.keys(BUTTON_STORY_ICONS)
+
+const STRING_UNION_SUMMARY = 'string union'
+const UNION_SEPARATOR = ' | '
 
 function ButtonPreviewRow({ className, ...restProps }: ComponentProps<'div'>) {
 	return <div className={mcn('flex gap-5', className)} {...restProps} />
 }
 
-type ButtonStoryIcon = (typeof buttonStoryIcons)[keyof typeof buttonStoryIcons]
+type ButtonStoryIcon =
+	(typeof BUTTON_STORY_ICONS)[keyof typeof BUTTON_STORY_ICONS]
 
 type ButtonStoryArgs = ComponentProps<typeof Button> & {
 	Icon?: ButtonStoryIcon
@@ -74,34 +77,34 @@ const meta = {
 		variant: {
 			table: {
 				type: {
-					summary: stringUnionSummary,
-					detail: buttonVariantOptions.join(unionSeparator),
+					summary: STRING_UNION_SUMMARY,
+					detail: BUTTON_VARIANT_OPTIONS.join(UNION_SEPARATOR),
 				},
 			},
 			control: 'select',
-			options: buttonVariantOptions,
+			options: BUTTON_VARIANT_OPTIONS,
 		},
 		size: {
 			table: {
 				type: {
-					summary: stringUnionSummary,
-					detail: buttonSizeOptions.join(unionSeparator),
+					summary: STRING_UNION_SUMMARY,
+					detail: BUTTON_SIZE_OPTIONS.join(UNION_SEPARATOR),
 				},
 			},
 			control: 'select',
-			options: buttonSizeOptions,
+			options: BUTTON_SIZE_OPTIONS,
 		},
 		Icon: {
 			description: 'Story-only icon picker (this is not a Button prop!)',
 			table: {
 				type: {
 					summary: 'component union',
-					detail: buttonStoryIconOptions.join(unionSeparator),
+					detail: BUTTON_STORY_ICON_OPTIONS.join(UNION_SEPARATOR),
 				},
 			},
 			control: 'select',
-			options: buttonStoryIconOptions,
-			mapping: buttonStoryIcons,
+			options: BUTTON_STORY_ICON_OPTIONS,
+			mapping: BUTTON_STORY_ICONS,
 		},
 	},
 	args: {
