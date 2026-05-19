@@ -86,7 +86,7 @@ pretend they are the same emotional scene.
 
 ```text
 Light theme: Living Emerald
-Dark theme: Nodzimo Night
+Dark theme: Night Emerald
 ```
 
 The light theme is the brand in daylight:
@@ -218,7 +218,7 @@ Client/Components/Button/Recommended emerald pair
 Important named iterations:
 
 ```text
-Iteration 6: Nodzimo Night (primary x3)
+Iteration 6: Night Emerald breakthrough (primary x3)
 The point where the dark theme stopped being a compromise and became a real theme.
 
 Iteration 8: bolder supporting roles (primary x3)
@@ -230,6 +230,33 @@ The current art-director candidate: character retained, hierarchy disciplined.
 
 Do not delete this exploration casually. It is useful design history. If it becomes too large later, archive it into a
 dedicated story or design-lab story rather than losing the trail.
+
+## Storybook Theme Review Contract
+
+Storybook has two separate theme surfaces, and they should not be treated as one switch.
+
+Preview theme is for the component canvas. Use `@storybook/addon-themes` with `withThemeByClassName` so the toolbar
+adds the same `dark` class that the library stylesheet expects. This is the source of truth for reviewing light and dark
+component behavior.
+
+Manager theme is Storybook's own chrome: sidebar, toolbar, bottom panels, and branding. Configure it through
+`storybook/theming` and `.storybook/manager.ts` `addons.setConfig({ theme })`. Storybook's `create({ base })` only
+accepts `light` or `dark`; use `getPreferredColorScheme()` when the branded manager should follow the user's system
+preference at load time.
+
+Docs pages have their own rendering surface. Use `parameters.docs.theme = themes.normal` so Docs follow the preferred
+Storybook theme instead of leaving documentation pages visually disconnected from the manager.
+
+The global preview wrapper should include:
+
+```text
+nui-surface nui-boundaries nui-interactive
+```
+
+`nui-surface` is required in Storybook because the wrapper must receive `bg-nui-background text-nui-foreground` after
+the preview theme changes. Without it, transparent stories can show dark-theme tokens on a light Storybook canvas, or
+light-theme tokens on a dark canvas. The wrapper-level `wrapperBackground` control remains useful as a preview-only
+override, but it does not replace the required themed wrapper classes.
 
 ## Button Variant Semantics
 
@@ -264,7 +291,7 @@ Nodzimo primary behavior:
 
 ```text
 Light: filled Living Emerald, white foreground.
-Dark: filled neon Nodzimo Night, near-black foreground.
+Dark: filled Night Emerald, near-black foreground.
 ```
 
 Primary should not appear many times in a dense area. If everything is primary, nothing is primary.
@@ -327,7 +354,7 @@ Outline does not carry the brand by becoming green text.
 Outline carries the brand through the system: border tone, radius, hover tint, focus ring, and context.
 ```
 
-The border may be slightly emerald-tinted, especially in Nodzimo Night, but it should still read as a structural border,
+The border may be slightly emerald-tinted, especially in Night Emerald, but it should still read as a structural border,
 not as a primary-colored mini CTA.
 
 ### Ghost
@@ -457,7 +484,7 @@ Do not:
 - make secondary as loud as primary
 - use black text on colored surfaces unless the color is truly luminous enough to justify it
 - add private state tokens for every awkward component state
-- flatten Nodzimo Night back into timid dark emerald
+- flatten Night Emerald back into timid dark emerald
 
 ## Token Discipline
 
@@ -645,7 +672,7 @@ Reject light-theme greens that feel:
 - too yellow
 - too weak to carry links
 
-### Dark Theme: Nodzimo Night
+### Dark Theme: Night Emerald
 
 Use this language when evaluating dark-theme decisions:
 
@@ -684,14 +711,13 @@ When reviewing a component against this doctrine, ask:
 4. Are dense actions using ghost without stealing attention?
 5. Does link look like a branded text signal?
 6. Does hover reveal interactivity without changing the component's semantic role?
-7. Does dark mode feel like Nodzimo Night, not merely inverted daylight?
+7. Does dark mode feel like Night Emerald, not merely inverted daylight?
 8. Did we solve the problem with existing semantic tokens before inventing a new one?
 
-## Current Candidate Values
+## Current Theme Anchor Values
 
-These values are design candidates from the Storybook exploration, not yet a full `src/styles.css` migration by
-themselves. When applying them to the real stylesheet, adapt the complete token set coherently rather than replacing
-only `primary`.
+These values are the current theme anchors. When changing them later, adapt the complete token set coherently rather
+than replacing only `primary`.
 
 ```text
 :root {
@@ -731,7 +757,7 @@ The final design should not feel like a child poured green paint over every inte
 It should feel like a disciplined interface where:
 
 - the light theme has living emerald confidence
-- the dark theme has Nodzimo Night electricity
+- the dark theme has Night Emerald electricity
 - primary is unmistakable
 - secondary has character without shouting
 - outline gives structure

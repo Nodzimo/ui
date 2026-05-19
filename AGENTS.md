@@ -364,8 +364,10 @@
   `primaryLinkActive`, or `primaryBackgroundPressed` unless the existing semantic roles have clearly failed across
   multiple components.
 - Treat light and dark themes as two intentional expressions of the same brand, not as a technical inversion:
-    - Light theme: `Living Emerald`, with natural, confident, trustworthy, growth-oriented emerald energy.
-    - Dark theme: `Nodzimo Night`, with neon emerald, Tokyo-night, electric, technical, youthfully sharp energy.
+    - Light theme: `Living Emerald`, internally nicknamed `Liverald`, with natural, confident, trustworthy,
+      growth-oriented emerald energy.
+    - Dark theme: `Night Emerald`, internally nicknamed `Nimerald`, with neon emerald, Tokyo-night, electric,
+      technical, youthfully sharp energy.
 - Neutral base colors also follow this split: use an Olive-derived neutral base for light theme and a Stone-derived
   neutral base for dark theme. Olive supports the organic light direction; Stone avoids the heavy/military feel olive
   can take on in dark mode.
@@ -513,16 +515,25 @@
   test-optimized output.
 - Import the library stylesheet in `.storybook/preview.tsx` with `import '../src/styles.css'` so stories render with the
   same CSS contract consumers receive.
+- Use `@storybook/addon-themes` with `withThemeByClassName` in `.storybook/preview.tsx` for the component-preview theme
+  toggle. The light option should apply no extra class, and the dark option should apply `dark`, matching the
+  `@custom-variant dark (&:is(.dark *))` contract in `src/styles.css`.
 - Use a global decorator in `.storybook/preview.tsx` to wrap all stories in the preview foundation classes
-  `nui-boundaries nui-interactive`. Do not add `nui-surface` to the Storybook preview wrapper by default: Storybook's
-  own canvas/theme/background tooling should remain in control of the preview surface, and `nui-surface` can override
-  that surface with library theme colors. This is a Storybook-specific exception only; consumers that want the full NUI
-  foundation can still apply `nui-boundaries nui-surface nui-interactive` at their app root.
+  `nui-surface nui-boundaries nui-interactive`. `nui-surface` is required here so the wrapper itself receives
+  `bg-nui-background text-nui-foreground` after the addon toggles `.dark`; otherwise transparent stories can show dark
+  tokens on a light Storybook canvas or vice versa.
 - Keep the global Storybook preview `wrapperBackground` arg as a preview-only design aid. It should live under the
   `Story canvas` controls category, use the display name `Wrapper background`, default to `transparent`, and apply only
   to the decorator wrapper. Filter it out before rendering the story so it never leaks into component props or DOM.
 - Treat `wrapperBackground` as an honest wrapper background, not a full Storybook canvas background. Do not rename it to
-  `Canvas background` unless the implementation really controls the whole Storybook canvas.
+  `Canvas background` unless the implementation really controls the whole Storybook canvas. Keep the default arg value
+  explicit so Storybook exposes a useful control; do not over-engineer the arg extraction with heavy generic typing
+  unless Storybook's own types make it straightforward.
+- Storybook manager UI theming is separate from component preview theming. Use `storybook/theming` and
+  `.storybook/manager.ts` `addons.setConfig({ theme })` for manager branding. `create({ base })` only accepts
+  `'light' | 'dark'`; use `getPreferredColorScheme()` when the branded manager theme should follow the user's system
+  preference at load time. Use `parameters.docs.theme = themes.normal` in `.storybook/preview.tsx` so Storybook Docs
+  also follow the preferred color scheme. This is not a live manager-theme toggle.
 - Storybook's official backgrounds addon supports preset backgrounds, not a free global color picker. Avoid adding
   stale third-party background/color-picker addons only for this feature; many are not maintained for current Storybook
   versions. If a real full-canvas color picker is needed later, prefer a small project-owned Storybook toolbar/global

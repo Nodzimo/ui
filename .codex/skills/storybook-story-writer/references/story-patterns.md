@@ -116,6 +116,16 @@ preview control is `wrapperBackground`:
 Keep this arg out of component props by destructuring it from `storyContext.args` before rendering `<Story />`. It is
 intentionally not called `Canvas background` because it does not control the entire Storybook canvas.
 
+The global Storybook preview wrapper should carry `nui-surface nui-boundaries nui-interactive`. `nui-surface` is not a
+decorative extra here: it applies the theme-aware preview background and foreground after `@storybook/addon-themes`
+switches the root `dark` class. Without it, transparent stories can inherit mismatched Storybook canvas colors.
+
+Use `@storybook/addon-themes` with `withThemeByClassName` for component-preview theme switching. This is separate from
+the Storybook manager UI. Manager branding/theme should use `storybook/theming` plus `.storybook/manager.ts`
+`addons.setConfig({ theme })`; `create({ base })` only accepts `'light' | 'dark'`, so use
+`getPreferredColorScheme()` when the branded manager theme should follow the user's system preference at load time.
+For Docs pages, use `parameters.docs.theme = themes.normal` rather than forcing a separate hard-coded theme.
+
 Do not use stale third-party Storybook color/background addons as the default answer for a free full-canvas color
 picker. The official backgrounds addon is useful for presets only. If the project later needs a real global color
 picker for the whole canvas, build or adopt a maintained toolbar/global addon deliberately instead of changing every

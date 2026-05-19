@@ -116,12 +116,17 @@ contract.
   changes, use `.storybook/vite.config.ts` for Storybook preview plugins such as Tailwind, and use `.storybook/main.ts`
   `viteFinal` only for final Storybook-specific Vite overrides.
 - Keep the global `.storybook/preview.tsx` decorator aligned with the project preview contract:
-  `nui-boundaries nui-interactive` around all stories, without `nui-surface` by default. Storybook controls the preview
-  surface/theme; `nui-surface` remains part of the consumer foundation recommendation, not the Storybook wrapper.
+  `nui-surface nui-boundaries nui-interactive` around all stories. `nui-surface` is intentional in Storybook because
+  the theme addon toggles `.dark`, and the wrapper must receive `bg-nui-background text-nui-foreground` for transparent
+  story canvases to stay readable in both themes.
 - Preserve the global preview-only `wrapperBackground` arg when editing Storybook preview configuration. It belongs in
   the `Story canvas` controls category, uses the display name `Wrapper background`, defaults to `transparent`, and is
   filtered out before rendering `<Story />`. It colors the decorator wrapper only, so do not call it
   `Canvas background`.
+- Use `@storybook/addon-themes` and `withThemeByClassName` for the preview light/dark toggle. Manager UI theming is a
+  separate Storybook surface: use `storybook/theming`, `.storybook/manager.ts`, and `addons.setConfig({ theme })`.
+  `create({ base })` only accepts `'light' | 'dark'`; use `getPreferredColorScheme()` for branded manager themes that
+  follow the user's system preference at load time, and `parameters.docs.theme = themes.normal` for Docs theme parity.
 - Do not add Storybook background/color-picker addons only to get a free full-canvas color picker unless they are
   verified compatible with the current Storybook version. The official backgrounds addon is preset-based, and stale
   third-party addons are not a project convention. A real full-canvas picker should be a deliberate local toolbar/global

@@ -68,7 +68,7 @@ destructive: danger overrides brand.
 ```
 
 Light theme should express Living Emerald, internally nicknamed Liverald: natural, alive, confident, trustworthy. Dark
-theme should express Nodzimo Night Emerald, internally nicknamed Nimerald: neon emerald, Tokyo-night, electric,
+theme should express Night Emerald, internally nicknamed Nimerald: neon emerald, Tokyo-night, electric,
 technical, and intentionally bold. Preserve this duality when adapting component colors.
 
 Respect shadcn structure, but reject shadcn blandness. The default shadcn look is a conservative white-label baseline;
@@ -254,6 +254,12 @@ The library must not silently apply app-level shadcn-style globals. Keep broad d
 ```
 
 Consumers can apply all three classes at an app root for a shadcn-like app foundation, or apply any subset to a subtree.
+
+Storybook's global preview decorator intentionally applies all three foundation classes. The `@storybook/addon-themes`
+preview toggle adds or removes the `dark` class, while `.nui-surface` makes the wrapper itself consume
+`bg-nui-background text-nui-foreground`. Do not remove `.nui-surface` from the Storybook wrapper only to let Storybook's
+canvas background show through; transparent stories then become unreadable when preview theme tokens and canvas colors
+disagree.
 
 ## Checks
 

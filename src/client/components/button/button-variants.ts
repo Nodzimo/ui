@@ -15,7 +15,7 @@ export const buttonVariants = cva(
 					'hover:bg-nui-muted hover:text-nui-foreground aria-expanded:bg-nui-muted aria-expanded:text-nui-foreground dark:hover:bg-nui-muted/50',
 				destructive:
 					'bg-nui-destructive/10 text-nui-destructive hover:bg-nui-destructive/20 focus-visible:border-nui-destructive/40 focus-visible:ring-nui-destructive/20 dark:bg-nui-destructive/20 dark:hover:bg-nui-destructive/30 dark:focus-visible:ring-nui-destructive/40',
-				link: 'text-nui-foreground underline decoration-nui-primary underline-offset-4 hover:text-nui-primary hover:decoration-2',
+				link: 'text-nui-foreground underline decoration-2 decoration-nui-primary underline-offset-4 hover:text-nui-primary active:decoration-1',
 			},
 			size: {
 				default:

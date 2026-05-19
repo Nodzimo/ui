@@ -1,7 +1,7 @@
-import { create } from 'storybook/theming'
+import { create, getPreferredColorScheme } from 'storybook/theming'
 
 export default create({
-	base: 'dark',
+	base: getPreferredColorScheme(),
 	brandTitle: 'Sefo Nodzimo UI',
 	brandUrl: 'https://Nodzimo.com',
 })
