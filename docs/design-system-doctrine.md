@@ -134,7 +134,12 @@ The light-theme brand green emerged around:
 oklch(0.55 0.19 151)
 ```
 
-This is the current Living Emerald prime candidate.
+This is the light-theme primary color. Its formal name is `Living Emerald`; its internal Nodzimo nickname is
+`Liverald`.
+
+`Liverald` means living, blooming emerald: green as nature, growth, and energy, not green as a dead corporate swatch.
+Use this name when discussing the light-theme brand color so future work remembers that the color is supposed to feel
+alive.
 
 It is not random green. It sits in the intended zone:
 

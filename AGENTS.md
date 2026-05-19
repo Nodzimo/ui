@@ -375,7 +375,7 @@
   white-label baseline that is hard to ruin; Nodzimo should keep its architecture while adding deliberate character and
   clearer active/passive/disabled distinction.
 - Current primary direction:
-    - Light primary candidate: `oklch(0.55 0.19 151)` with light foreground.
+    - Light primary: `Living Emerald`, internally nicknamed `Liverald`, `oklch(0.55 0.19 151)` with light foreground.
     - Dark primary candidate: `oklch(0.82 0.26 145)` with dark foreground.
 - Use the NUI intensity rhythm as a naming/review convention for recurring color and opacity modifiers:
     - `subtle = 20`, written as Tailwind slash opacity such as `bg-nui-destructive/20`.

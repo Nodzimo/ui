@@ -67,9 +67,9 @@ link: brand speaks as underlined text.
 destructive: danger overrides brand.
 ```
 
-Light theme should express Living Emerald: natural, alive, confident, trustworthy. Dark theme should express Nodzimo
-Night: neon emerald, Tokyo-night, electric, technical, and intentionally bold. Preserve this duality when adapting
-component colors.
+Light theme should express Living Emerald, internally nicknamed Liverald: natural, alive, confident, trustworthy. Dark
+theme should express Nodzimo Night: neon emerald, Tokyo-night, electric, technical, and intentionally bold. Preserve
+this duality when adapting component colors.
 
 Respect shadcn structure, but reject shadcn blandness. The default shadcn look is a conservative white-label baseline;
 Nodzimo should keep the semantic roles while making active, passive, disabled, and structural surfaces easier to
