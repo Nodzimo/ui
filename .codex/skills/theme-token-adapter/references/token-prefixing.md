@@ -63,7 +63,7 @@ primary: brand speaks loudly.
 secondary: brand speaks quietly.
 outline: structure supports the task.
 ghost: action stays quiet until touched.
-link: brand speaks as text.
+link: brand speaks as underlined text.
 destructive: danger overrides brand.
 ```
 
@@ -75,20 +75,21 @@ Respect shadcn structure, but reject shadcn blandness. The default shadcn look i
 Nodzimo should keep the semantic roles while making active, passive, disabled, and structural surfaces easier to
 distinguish.
 
-Use the NUI alpha rhythm for recurring color-intensity modifiers:
+Use the NUI intensity rhythm for recurring color and opacity modifiers:
 
 ```text
---nui-alpha-subtle: 20%
---nui-alpha-half: 50%
---nui-alpha-strong: 80%
+subtle = 20
+half = 50
+strong = 80
 ```
 
-These are intensity values, not event tokens. Prefer semantic color plus alpha rhythm over one-off state colors:
+These are intensity values, not event tokens or CSS variables. Prefer semantic color plus slash opacity over one-off
+state colors:
 
 ```text
-bg-nui-primary/[var(--nui-alpha-strong)]
-bg-nui-input/[var(--nui-alpha-half)]
-bg-nui-destructive/[var(--nui-alpha-subtle)]
+bg-nui-primary/80
+bg-nui-input/50
+bg-nui-destructive/20
 ```
 
 Use these meanings when selecting or reviewing semantic tokens:
@@ -190,6 +191,27 @@ the calc form.
 Use NUI spacing for standard rhythm between sections, headings, cards, repeated groups, and shared layout patterns. Do
 not replace incidental Tailwind spacing such as `px-2.5`, `gap-1.5`, or `size-8` unless the component contract
 specifically calls for tokenized rhythm.
+
+## Prefer Logical Direction Utilities
+
+Nodzimo UI supports RTL consumers. When adapting components, use logical direction utilities for inline-axis behavior:
+
+```text
+pl-* -> ps-*
+pr-* -> pe-*
+ml-* -> ms-*
+mr-* -> me-*
+left-* -> start-*
+right-* -> end-*
+border-l-* -> border-s-*
+border-r-* -> border-e-*
+rounded-l-* -> rounded-s-*
+rounded-r-* -> rounded-e-*
+```
+
+Only keep physical left/right utilities when the design intentionally targets a physical side regardless of document
+direction. Symmetric utilities such as `px-*`, `mx-*`, `inset-x-*`, `border-x-*`, and `rounded-*` are already
+direction-neutral.
 
 ## Do Not Prefix Ordinary Tailwind Utilities
 

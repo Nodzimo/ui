@@ -356,13 +356,33 @@ Use it for text-like actions and navigation where a button surface would be too 
 - Inline action
 - A compact navigation action
 
-Link may use `text-nui-primary` because its role is text-level brand emphasis. This is the quiet role where primary
-text is expected.
+Text links must be underlined by default. This is not a nostalgic web habit; it is a clarity and accessibility rule.
+Color can mean brand, heading emphasis, status, or decoration. Underline is the durable signal that text is
+interactive.
+
+Preferred Nodzimo inline-link pattern:
+
+```text
+Rest:
+text = foreground
+underline = primary
+
+Hover:
+text = primary
+underline = primary
+```
+
+This gives links permanent recognizability without turning long-form content into a field of bright green words. The
+brand appears first through the underline, then the full link lights up on interaction.
+
+Button `variant='link'` is related but not identical. It is a command/action button styled like a link, not the global
+typographic rule for every hyperlink. It may use primary text when the command needs stronger action emphasis, but it
+should still be underlined by default unless a specific navigation context makes the link role obvious without it.
 
 Do not confuse link and ghost:
 
 ```text
-Link = text/navigation signal, often underlined.
+Link = text/navigation signal, underlined by default.
 Ghost = button action with hit area and hover surface.
 ```
 
@@ -460,20 +480,49 @@ Before adding a new token, ask:
 
 If the answer is no, do not add the token.
 
-## NUI Alpha Rhythm
+## Directionality And RTL
 
-Nodzimo uses a tiny alpha rhythm for recurring color-intensity modifiers.
+Nodzimo UI supports right-to-left consumers. Components must be written with logical direction in mind, not as
+left-to-right-only layouts.
+
+Use logical Tailwind utilities for inline-axis spacing and positioning:
+
+```text
+ps-* instead of pl-*
+pe-* instead of pr-*
+ms-* instead of ml-*
+me-* instead of mr-*
+start-* instead of left-*
+end-* instead of right-*
+border-s-* instead of border-l-*
+border-e-* instead of border-r-*
+rounded-s-* / rounded-e-* instead of rounded-l-* / rounded-r-*
+```
+
+Use physical `left`, `right`, `pl`, `pr`, `ml`, or `mr` only when the design truly means a physical side regardless of
+text direction. That should be rare and deliberate.
+
+Symmetric utilities such as `px-*`, `mx-*`, `inset-x-*`, `rounded-*`, and `border-x-*` are fine because they do not
+encode a directional preference.
+
+This matters for button icon compensation, navigation, menus, form adornments, and any component where "leading" and
+"trailing" content should mirror between LTR and RTL. Prefer naming component slots as `start`/`end` or
+`leading`/`trailing`, not `left`/`right`, unless the side is physically fixed.
+
+## NUI Intensity Rhythm
+
+Nodzimo uses a tiny intensity rhythm for recurring color and opacity modifiers.
 
 This is not a replacement for semantic colors. It is a controlled way to modify an existing semantic role without
 inventing a separate one-off color. The rhythm is intentionally event-agnostic: the names do not mention hover, active,
-disabled, pressed, or mobile interaction because these values describe color intensity, not a specific browser event.
+disabled, pressed, or mobile interaction because these values describe intensity, not a specific browser event.
 
-Current alpha rhythm:
+Current intensity rhythm:
 
 ```text
---nui-alpha-subtle: 20%;
---nui-alpha-half: 50%;
---nui-alpha-strong: 80%;
+subtle = 20
+half = 50
+strong = 80
 ```
 
 Meaning:
@@ -492,32 +541,38 @@ High presence. Useful when a color should remain almost itself while giving room
 Preferred mental model:
 
 ```text
-semantic color + alpha rhythm = state or surface treatment
+semantic color + intensity suffix = state or surface treatment
 ```
 
 Examples:
 
 ```text
-primary / strong
-input / half
-destructive / subtle
-ring / half
+primary/80 = primary + strong
+input/50 = input + half
+destructive/20 = destructive + subtle
+ring/50 = ring + half
 ```
 
-This layer exists for rhythm and future maintainability, similar to the NUI spacing rhythm. It should not become a
-backdoor for state-token sprawl. Do not add `primary-hover`, `ghost-hover`, or `link-active` when a semantic color plus
-`subtle`, `half`, or `strong` expresses the treatment.
+This layer exists as a naming and review convention, not as CSS variables. Tailwind's slash opacity syntax is the clean
+authoring API here. Do not replace readable classes such as `bg-nui-primary/80` with noisy arbitrary values such as
+`bg-nui-primary/[var(--nui-alpha-strong)]`.
 
-The alpha rhythm may be used in Tailwind arbitrary opacity values, for example:
+Preferred Tailwind forms:
 
 ```text
-hover:bg-nui-primary/[var(--nui-alpha-strong)]
-hover:bg-nui-input/[var(--nui-alpha-half)]
-bg-nui-destructive/[var(--nui-alpha-subtle)]
+hover:bg-nui-primary/80
+hover:bg-nui-input/50
+bg-nui-destructive/20
+ring-nui-ring/50
 ```
 
-Keep ordinary shadcn-style opacity suffixes acceptable when porting a component quickly, but prefer the named alpha
-rhythm when the value is part of the Nodzimo component contract or appears repeatedly across components.
+Whole-element opacity is different from color alpha. `bg-nui-primary/80` only changes the background color alpha;
+`opacity-80` fades the entire element, including text, icons, borders, and children. Use whole-element opacity only when
+the whole element should fade, such as disabled treatment. Use color slash opacity when only a surface, border, ring, or
+text color should be softened.
+
+Do not add `primary-hover`, `ghost-hover`, or `link-active` when a semantic color plus `20`, `50`, or `80` expresses the
+treatment.
 
 ## Theme Character Guardrails
 

@@ -104,10 +104,6 @@
 	--nui-sidebar-accent-foreground: oklch(0.205 0 0);
 	--nui-sidebar-border: oklch(0.922 0 0);
 	--nui-sidebar-ring: oklch(0.708 0 0);
-
-	--nui-alpha-subtle: 20%;
-	--nui-alpha-half: 50%;
-	--nui-alpha-strong: 80%;
 }
 
 .dark {

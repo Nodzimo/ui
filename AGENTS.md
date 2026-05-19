@@ -374,23 +374,32 @@
 - Current primary direction:
     - Light primary candidate: `oklch(0.55 0.19 151)` with light foreground.
     - Dark primary candidate: `oklch(0.82 0.26 145)` with dark foreground.
-- Use the NUI alpha rhythm for recurring color-intensity modifiers:
-    - `--nui-alpha-subtle: 20%`
-    - `--nui-alpha-half: 50%`
-    - `--nui-alpha-strong: 80%`
-- Alpha rhythm names describe intensity, not events. Do not introduce `hover`, `active`, or `pressed` tokens when a
-  semantic color plus `subtle`, `half`, or `strong` expresses the treatment.
+- Use the NUI intensity rhythm as a naming/review convention for recurring color and opacity modifiers:
+    - `subtle = 20`, written as Tailwind slash opacity such as `bg-nui-destructive/20`.
+    - `half = 50`, written as slash opacity such as `hover:bg-nui-input/50`.
+    - `strong = 80`, written as slash opacity such as `hover:bg-nui-primary/80`.
+- Intensity rhythm names describe strength, not events. Do not introduce `hover`, `active`, or `pressed` tokens when a
+  semantic color plus `/20`, `/50`, or `/80` expresses the treatment. Do not create CSS variables for these values
+  unless
+  Tailwind gains a clean named opacity API or repeated real usage proves a better implementation.
 - Button variants are semantic hierarchy, not random visual costumes:
     - `primary`: brand speaks loudly; main action.
     - `secondary`: brand speaks quietly; lower-emphasis filled action.
     - `outline`: structural action; ordinary text, visible system border, subtle branded hover.
     - `ghost`: quiet dense-UI action; ordinary text at rest, subtle hover surface.
-    - `link`: branded text signal; primary-colored text is acceptable here.
+    - `link`: branded text signal; underlined by default.
     - `destructive`: dangerous action; danger overrides brand.
+- Text links should be underlined in their resting state. Preferred inline-link pattern: foreground text with a
+  primary-colored underline at rest, then primary text plus primary underline on hover. Do not rely on color alone to
+  communicate that text is a hyperlink.
 - Do not make default `outline` or `ghost` primary-colored text just to make them look branded. Let them carry Nodzimo
   through border tone, hover tint, focus ring, spacing, radius, and context.
 - Keep `ghost` hover softer than `secondary` rest. If ghost hover becomes visually identical to secondary, the action
   hierarchy is too compressed.
+- Nodzimo UI supports RTL consumers. For directional inline-axis layout, use logical Tailwind utilities such as `ps-*`,
+  `pe-*`, `ms-*`, `me-*`, `start-*`, `end-*`, `border-s-*`, and `border-e-*` instead of physical `pl-*`, `pr-*`,
+  `ml-*`, `mr-*`, `left-*`, `right-*`, `border-l-*`, or `border-r-*`. Symmetric utilities such as `px-*`, `mx-*`,
+  `inset-x-*`, and `border-x-*` are fine.
 
 ## Component Styling
 

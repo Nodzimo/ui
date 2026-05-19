@@ -19,8 +19,13 @@ tokens.
   or `ring`.
 - Raw CSS variables use `--nui-*`.
 - Tailwind theme tokens use `--color-nui-*`, `--radius-nui-*`, and `--spacing-nui-*`.
-- Reusable alpha intensity tokens use `--nui-alpha-subtle`, `--nui-alpha-half`, and `--nui-alpha-strong`. Treat these as
-  color-intensity rhythm values, not hover/active/pressed event tokens.
+- Reusable color-intensity rhythm uses Tailwind slash opacity values `/20`, `/50`, and `/80`, described as `subtle`,
+  `half`, and `strong`. Treat these as naming/review conventions, not CSS variables or hover/active/pressed event
+  tokens.
+- Directional spacing, positioning, borders, and radii should use logical utilities for RTL support: `ps-*`, `pe-*`,
+  `ms-*`, `me-*`, `start-*`, `end-*`, `border-s-*`, `border-e-*`, `rounded-s-*`, and `rounded-e-*`. Avoid physical
+  `pl-*`, `pr-*`, `ml-*`, `mr-*`, `left-*`, `right-*`, `border-l-*`, and `border-r-*` unless the design truly means a
+  physical side.
 - Component class strings use NUI-prefixed semantic utilities when they refer to design-system colors, radii, or spacing
   tokens.
 - Keep ordinary Tailwind layout/typography/state utilities unchanged.
@@ -42,11 +47,12 @@ tokens.
 3. Identify semantic theme classes or variables from the source component.
 4. Convert only theme-facing styles to NUI-prefixed equivalents.
 5. Preserve modifiers, state variants, opacity suffixes, and arbitrary selectors.
-6. Keep local implementation imports relative inside the component folder.
-7. Search changed files for unprefixed theme tokens.
-8. If changing story files, Storybook-only preview classes, or Tailwind source detection, consider whether
+6. Convert directional physical utilities to logical utilities when they represent inline start/end behavior.
+7. Keep local implementation imports relative inside the component folder.
+8. Search changed files for unprefixed theme tokens.
+9. If changing story files, Storybook-only preview classes, or Tailwind source detection, consider whether
    `dist/styles.css` should change. Story-only classes should not be part of the library CSS contract.
-9. Run the smallest relevant verification:
+10. Run the smallest relevant verification:
     - `bun run build:ts` for component-only TypeScript changes.
     - `bun run build:all` after changing `src/styles.css` or Tailwind theme tokens.
 

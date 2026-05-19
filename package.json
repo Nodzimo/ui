@@ -5,12 +5,14 @@
 		"Sefo",
 		"Nodzimo",
 		"UI",
+		"NUI",
 		"React",
 		"TypeScript",
 		"Tailwind",
 		"Components",
 		"ShadCN",
-		"NUI"
+		"Storybook",
+		"RTL"
 	],
 	"publishConfig": {
 		"access": "public"
