@@ -576,6 +576,24 @@ treatment.
 
 ## Theme Character Guardrails
 
+## Neutral Base Direction
+
+Nodzimo's neutral foundation intentionally mixes shadcn Studio base-color directions:
+
+```text
+Light neutral base: Olive
+Dark neutral base: Stone
+```
+
+The reason is optical, not theoretical purity. Olive gives the light theme a warmer, more organic surface that supports
+the Living Emerald direction. In dark mode, the same olive direction becomes too heavy and militarized beside green
+brand accents. Stone works better as the dark neutral base: warmer than cold neutral, but less muddy and less military
+than dark olive.
+
+Do not assume light and dark must use the same base-color family. This follows the same day/night doctrine as the brand
+color: the two themes should preserve Nodzimo's identity while using the base that works best in that lighting
+condition.
+
 ### Light Theme: Living Emerald
 
 Use this language when evaluating light-theme decisions:

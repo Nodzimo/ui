@@ -366,6 +366,9 @@
 - Treat light and dark themes as two intentional expressions of the same brand, not as a technical inversion:
     - Light theme: `Living Emerald`, with natural, confident, trustworthy, growth-oriented emerald energy.
     - Dark theme: `Nodzimo Night`, with neon emerald, Tokyo-night, electric, technical, youthfully sharp energy.
+- Neutral base colors also follow this split: use an Olive-derived neutral base for light theme and a Stone-derived
+  neutral base for dark theme. Olive supports the organic light direction; Stone avoids the heavy/military feel olive
+  can take on in dark mode.
 - Do not timidly torture one color until it barely works in both themes. Keep the green brand DNA, but allow each theme
   to express it differently when that produces a stronger and more readable system.
 - Respect the shadcn semantic structure, but do not inherit shadcn blandness as a design goal. shadcn is a conservative
