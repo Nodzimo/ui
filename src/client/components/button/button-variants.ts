@@ -6,7 +6,7 @@ export const buttonVariants = cva(
 		variants: {
 			variant: {
 				default:
-					'bg-nui-primary text-nui-primary-foreground [a]:hover:bg-nui-primary/80',
+					'bg-nui-primary text-nui-primary-foreground hover:bg-nui-primary/80',
 				outline:
 					'border-nui-border bg-nui-background hover:bg-nui-muted hover:text-nui-foreground aria-expanded:bg-nui-muted aria-expanded:text-nui-foreground dark:border-nui-input dark:bg-nui-input/30 dark:hover:bg-nui-input/50',
 				secondary:
@@ -15,7 +15,7 @@ export const buttonVariants = cva(
 					'hover:bg-nui-muted hover:text-nui-foreground aria-expanded:bg-nui-muted aria-expanded:text-nui-foreground dark:hover:bg-nui-muted/50',
 				destructive:
 					'bg-nui-destructive/10 text-nui-destructive hover:bg-nui-destructive/20 focus-visible:border-nui-destructive/40 focus-visible:ring-nui-destructive/20 dark:bg-nui-destructive/20 dark:hover:bg-nui-destructive/30 dark:focus-visible:ring-nui-destructive/40',
-				link: 'text-nui-primary underline-offset-4 hover:underline',
+				link: 'text-nui-foreground underline decoration-nui-primary underline-offset-4 hover:text-nui-primary hover:decoration-2',
 			},
 			size: {
 				default:
