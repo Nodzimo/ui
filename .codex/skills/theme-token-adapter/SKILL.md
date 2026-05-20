@@ -22,6 +22,11 @@ tokens.
 - Reusable color-intensity rhythm uses Tailwind slash opacity values `/20`, `/50`, and `/80`, described as `subtle`,
   `half`, and `strong`. Treat these as naming/review conventions, not CSS variables or hover/active/pressed event
   tokens.
+- Treat expressive color as design cost. Before adding or intensifying a color role, identify the exact problem,
+  whether it is role-level or component-specific, whether the element controls its foreground/background pair, and which
+  future components will inherit the token.
+- Prefer stable semantic tokens with theme-specific values over case-specific workaround tokens. Do not add
+  `linkPrimary`, `headingPrimary`, `sliderPrimary`, or similar private roles to patch one weak surface.
 - Directional spacing, positioning, borders, and radii should use logical utilities for RTL support: `ps-*`, `pe-*`,
   `ms-*`, `me-*`, `start-*`, `end-*`, `border-s-*`, `border-e-*`, `rounded-s-*`, and `rounded-e-*`. Avoid physical
   `pl-*`, `pr-*`, `ml-*`, `mr-*`, `left-*`, `right-*`, `border-l-*`, and `border-r-*` unless the design truly means a

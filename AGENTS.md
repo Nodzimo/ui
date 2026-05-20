@@ -387,6 +387,12 @@
   reward for being clickable; brand energy is a tool for making interaction legible.
 - Use this review line when judging affordance: if the user cannot tell what can be touched, the interface is not
   elegant; it is unfinished.
+- Treat expressive color as design cost. Before adding or intensifying a color role, identify the exact problem, whether
+  it is role-level or component-specific, whether the element controls its foreground/background pair, and which future
+  components will inherit the token. Do not pay design complexity unless it buys quality, clarity, or accessibility.
+- Prefer stable semantic tokens with theme-specific values over case-specific workaround tokens. Do not add
+  `linkPrimary`, `headingPrimary`, `sliderPrimary`, or similar private roles to patch one weak surface. Use the same
+  semantic token and assign values appropriate to each theme when full light/dark quality control is worth the cost.
 - When adapting shadcn-style components, do not paint the component by hand. Tune the semantic tokens until the existing
   semantic classes become alive. If private button-only color classes are needed just to make a standard variant
   readable, first suspect `secondary`, `accent`, `border`, `input`, `ring`, or related theme tokens.

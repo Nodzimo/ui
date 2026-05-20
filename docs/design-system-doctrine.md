@@ -115,6 +115,120 @@ Keep hierarchy intact.
 Let the brand clarify, not decorate.
 ```
 
+## Design Economics
+
+Every expressive decision has a maintenance cost.
+
+The cost is not only the color value itself. It is the full support matrix:
+
+```text
+theme
+surface
+state
+component
+density
+contrast
+future reuse
+```
+
+A color that looks good on one button can fail on a link, a slider track, a radio border, a selected row, a dense
+toolbar, or a dark card. A color that works on one surface can become a muddy spot or a weak whisper on another.
+
+This is why shadcn's default restraint is powerful. It is not merely "safe for beginners." It is an economic decision:
+fewer expressive tokens create fewer failure points. The result is extremely scalable and hard to ruin, but it accepts
+some compromises, especially for thin expressive elements on uncontrolled surfaces.
+
+The Nodzimo decision is not to add complexity for self-expression alone. Complexity must buy something specific.
+
+Use this diagnostic before adding or intensifying any expressive token:
+
+1. What exact problem are we solving?
+2. Is the problem role-level or component-specific?
+3. Can an existing semantic role solve it?
+4. Does the element control its foreground/background pair?
+5. Does the value need to work on both light and dark surfaces?
+6. What future components will inherit this token?
+7. Is the added cost worth the quality gained?
+
+The rule:
+
+```text
+Do not pay design complexity unless it buys quality, clarity, or accessibility.
+```
+
+## Theme-Specific Values
+
+One physical color cannot always perform the same semantic role equally well in light and dark conditions.
+
+This is most visible when an expressive element does not control its own foreground/background pair. A filled primary
+button controls the pair:
+
+```text
+background = primary
+foreground = primary-foreground
+```
+
+That pair can be tuned for contrast.
+
+A link, underline, slider track, radio border, focus mark, or selected indicator often controls only one expressive
+stroke or text color while sitting on an external surface:
+
+```text
+color = primary
+surface = current background, card, popover, muted surface, or something else
+```
+
+That is the weak spot of a minimal one-value-per-role system. The same physical color may be rich and readable in the
+light theme but too dark in the dark theme, or luminous in the dark theme but too loud or thin in the light theme.
+
+There are two valid strategies:
+
+```text
+Acceptable strategy:
+Use conservative values that work "well enough" across many contexts.
+This keeps the system cheaper, more portable, and harder to break.
+
+Quality-control strategy:
+Use the same semantic token with theme-specific values.
+This costs more, but gives full control in each lighting condition.
+```
+
+Nodzimo prefers the second strategy only when the quality gain is real and worth the cost.
+
+The important distinction:
+
+```text
+Wrong:
+Add case-specific tokens such as linkPrimary, headingPrimary, sliderPrimary, radioPrimary.
+
+Right:
+Keep the semantic token stable and assign theme-specific values to that role.
+```
+
+Or:
+
+```text
+Same semantic token.
+Theme-specific value.
+```
+
+This is not a workaround. It is what theme variables are for.
+
+The exact names and story are local art direction:
+
+```text
+Living Emerald in the light.
+Night Emerald in the dark.
+```
+
+The underlying reason is practical:
+
+```text
+The cost is not paid for self-expression.
+The cost is paid for quality control.
+Self-expression is the upside of paying that cost.
+```
+
 ## Day And Night Are Not A Technical Toggle
 
 The important Nodzimo discovery is that light and dark themes should not be treated as a reluctant technical duty.

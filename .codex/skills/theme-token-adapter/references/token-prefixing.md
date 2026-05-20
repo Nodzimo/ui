@@ -75,6 +75,12 @@ Respect shadcn structure, but reject shadcn blandness. The default shadcn look i
 Nodzimo should keep the semantic roles while making active, passive, disabled, and structural surfaces easier to
 distinguish.
 
+Expressive color is design cost. Before adding or intensifying a role, identify the exact problem, whether it is
+role-level or component-specific, whether the element controls its foreground/background pair, and which future
+components will inherit the token. Do not add case-specific workaround roles such as `linkPrimary`, `headingPrimary`,
+`sliderPrimary`, or `radioPrimary`; prefer the same semantic token with theme-specific values when full light/dark
+quality control is worth the cost.
+
 Use the NUI intensity rhythm for recurring color and opacity modifiers:
 
 ```text
