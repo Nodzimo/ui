@@ -10,10 +10,9 @@ import {
 	Trash2,
 	X,
 } from 'lucide-react'
-import type { ComponentProps } from 'react'
+import type { ComponentProps, PropsWithChildren } from 'react'
 import { fn } from 'storybook/test'
 import { Spinner } from '#core'
-import { mcn } from '#lib'
 import { Button } from '.'
 
 const BUTTON_VARIANT_OPTIONS: readonly string[] = [
@@ -52,8 +51,8 @@ const BUTTON_STORY_ICON_OPTIONS: readonly string[] =
 const STRING_UNION_SUMMARY = 'string union'
 const UNION_SEPARATOR = ' | '
 
-function ButtonPreviewRow({ className, ...restProps }: ComponentProps<'div'>) {
-	return <div className={mcn('flex gap-5', className)} {...restProps} />
+function ButtonPreviewRow(props: PropsWithChildren) {
+	return <div {...props} className={'flex items-end gap-5'} />
 }
 
 type ButtonStoryIcon =
@@ -67,7 +66,6 @@ const meta = {
 	title: 'Client/Components/Button',
 	component: Button,
 	parameters: {
-		layout: 'fullscreen',
 		pseudo: {
 			hover: '[data-preview="hover"]',
 			active: '[data-preview="active"]',
@@ -112,6 +110,15 @@ const meta = {
 		onClick: fn(),
 		disabled: false,
 	},
+	decorators: [
+		Story => {
+			return (
+				<div className={'p-10'}>
+					<Story />
+				</div>
+			)
+		},
+	],
 	render: ({ children, Icon = Heart, ...restArgs }) => {
 		return (
 			<ButtonPreviewRow>
@@ -188,36 +195,66 @@ export const Link: Story = {
 }
 
 export const Sizes: Story = {
-	render: ({ Icon: _Icon, ...restArgs }) => {
+	render: ({ children, Icon = ArrowUpRightIcon, ...restArgs }) => {
 		return (
-			<ButtonPreviewRow className={'items-center'}>
-				<Button {...restArgs} size={'xs'} />
-				<Button {...restArgs} size={'sm'} />
-				<Button {...restArgs} size={'default'} />
-				<Button {...restArgs} size={'lg'} />
-			</ButtonPreviewRow>
-		)
-	},
-}
-
-export const IconSizes: Story = {
-	name: 'Icon sizes',
-	render: ({ children: _children, Icon = Star, ...restArgs }) => {
-		return (
-			<ButtonPreviewRow className={'items-center'}>
-				<Button {...restArgs} size={'icon-xs'}>
-					<Icon />
-				</Button>
-				<Button {...restArgs} size={'icon-sm'}>
-					<Icon />
-				</Button>
-				<Button {...restArgs} size={'icon'}>
-					<Icon />
-				</Button>
-				<Button {...restArgs} size={'icon-lg'}>
-					<Icon />
-				</Button>
-			</ButtonPreviewRow>
+			<div className={'flex flex-col gap-10'}>
+				<ButtonPreviewRow>
+					<Button {...restArgs} size={'xs'}>
+						<Icon data-icon={'inline-start'} /> {children}
+					</Button>
+					<Button {...restArgs} size={'sm'}>
+						<Icon data-icon={'inline-start'} /> {children}
+					</Button>
+					<Button {...restArgs} size={'default'}>
+						<Icon data-icon={'inline-start'} /> {children}
+					</Button>
+					<Button {...restArgs} size={'lg'}>
+						<Icon data-icon={'inline-start'} /> {children}
+					</Button>
+				</ButtonPreviewRow>
+				<ButtonPreviewRow>
+					<Button {...restArgs} size={'xs'}>
+						{children} <Icon data-icon={'inline-end'} />
+					</Button>
+					<Button {...restArgs} size={'sm'}>
+						{children} <Icon data-icon={'inline-end'} />
+					</Button>
+					<Button {...restArgs} size={'default'}>
+						{children} <Icon data-icon={'inline-end'} />
+					</Button>
+					<Button {...restArgs} size={'lg'}>
+						{children} <Icon data-icon={'inline-end'} />
+					</Button>
+				</ButtonPreviewRow>
+				<ButtonPreviewRow>
+					<Button {...restArgs} size={'xs'}>
+						{children}
+					</Button>
+					<Button {...restArgs} size={'sm'}>
+						{children}
+					</Button>
+					<Button {...restArgs} size={'default'}>
+						{children}
+					</Button>
+					<Button {...restArgs} size={'lg'}>
+						{children}
+					</Button>
+				</ButtonPreviewRow>
+				<ButtonPreviewRow>
+					<Button {...restArgs} size={'icon-xs'}>
+						<Icon />
+					</Button>
+					<Button {...restArgs} size={'icon-sm'}>
+						<Icon />
+					</Button>
+					<Button {...restArgs} size={'icon'}>
+						<Icon />
+					</Button>
+					<Button {...restArgs} size={'icon-lg'}>
+						<Icon />
+					</Button>
+				</ButtonPreviewRow>
+			</div>
 		)
 	},
 }

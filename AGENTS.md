@@ -90,9 +90,10 @@
 - When extending WebStorm inspection exclusions, add the affected files to `.idea/scopes` and adjust the project profile
   in `.idea/inspectionProfiles`. Keep the scope name and profile entry descriptive enough that another developer can see
   which IDE warning is being silenced and where.
-- Keep the `Library Stylesheet Contracts` scope for `src/styles.css` and `src/library.css` with WebStorm's
-  `CssUnusedSymbol` inspection disabled. Public stylesheet hooks such as `.dark`, `.nui-surface`, and foundation
-  classes are consumer-facing contracts and do not need local source references to be valid.
+- Keep the `Library Stylesheet Contracts` scope for `src/styles.css`, `src/library.css`, and `.storybook/preview.css`
+  with WebStorm's `CssUnusedSymbol` inspection disabled. Public stylesheet hooks such as `.dark`, `.nui-surface`,
+  foundation classes, and Storybook-owned selectors such as `.docs-story` are external contracts and do not need local
+  source references to be valid.
 
 ## Public Package Shape
 
@@ -587,10 +588,19 @@
 - Use `@storybook/addon-themes` with `withThemeByClassName` in `.storybook/preview.tsx` for the component-preview theme
   toggle. The light option should apply no extra class, and the dark option should apply `dark`, matching the
   `@custom-variant dark (&:is(.dark *))` contract in `src/library.css`.
+- Keep global Storybook story layout on `parameters.layout = 'centered'` unless a specific story needs a different
+  layout. This is Storybook's native centering path; do not replace it with wrapper `min-height` or full-screen flex
+  hacks just to center a normal component story.
 - Use a global decorator in `.storybook/preview.tsx` to wrap all stories in the preview foundation classes
   `nui-surface nui-boundaries nui-interactive`. `nui-surface` is required here so the wrapper itself receives
   `bg-nui-background text-nui-foreground` after the addon toggles `.dark`; otherwise transparent stories can show dark
   tokens on a light Storybook canvas or vice versa.
+- Storybook does not currently provide a clean built-in bridge between `@storybook/addon-themes` and the full preview
+  canvas background. The project workaround belongs in `.storybook/preview.css`, after the Tailwind imports and
+  `@source` directives: set `background-color: var(--nui-background)` on `html` for single-story centered canvas mode
+  and on `.docs-story` for Storybook Docs story canvases. Use `background-color`, not the `background` shorthand, so the
+  override changes only the surface color. This follows the practical workaround discussed in
+  https://github.com/storybookjs/storybook/discussions/25183 and is intentionally local to Storybook.
 - Keep the global Storybook preview `wrapperBackground` arg as a preview-only design aid. It should live under the
   `Story canvas` controls category, use the display name `Wrapper background`, default to `transparent`, and apply only
   to the decorator wrapper. Filter it out before rendering the story so it never leaks into component props or DOM.

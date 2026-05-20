@@ -126,6 +126,23 @@ the Storybook manager UI. Manager branding/theme should use `storybook/theming` 
 `getPreferredColorScheme()` when the branded manager theme should follow the user's system preference at load time.
 For Docs pages, use `parameters.docs.theme = themes.normal` rather than forcing a separate hard-coded theme.
 
+Use Storybook's native `layout: 'centered'` for ordinary centered component stories. If the theme toggle changes tokens
+but the full canvas remains on the wrong background, fix the Storybook preview surface in `.storybook/preview.css`, not
+with story wrappers:
+
+```css
+html,
+.docs-story {
+    background-color: var(--nui-background);
+}
+```
+
+The `html` selector covers the full centered single-story preview iframe; `.docs-story` covers the separate Docs story
+surface. This is a Storybook-specific workaround for the missing bridge between `@storybook/addon-themes` and canvas
+backgrounds, discussed at https://github.com/storybookjs/storybook/discussions/25183. Keep the rule after Tailwind
+imports and `@source` directives, use `background-color`, and do not add a separate `.storybook/preview-head.html` style
+block while `preview.css` is already the active CSS entrypoint.
+
 Do not use stale third-party Storybook color/background addons as the default answer for a free full-canvas color
 picker. The official backgrounds addon is useful for presets only. If the project later needs a real global color
 picker for the whole canvas, build or adopt a maintained toolbar/global addon deliberately instead of changing every

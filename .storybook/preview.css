@@ -3,3 +3,8 @@
 
 @source "../src";
 @source ".";
+
+html,
+.docs-story {
+	background-color: var(--nui-background);
+}

@@ -132,6 +132,25 @@ contract.
   `nui-surface nui-boundaries nui-interactive` around all stories. `nui-surface` is intentional in Storybook because
   the theme addon toggles `.dark`, and the wrapper must receive `bg-nui-background text-nui-foreground` for transparent
   story canvases to stay readable in both themes.
+- Use global `parameters.layout = 'centered'` for normal centered component stories. Storybook already centers the
+  single-story canvas; do not add wrapper `min-height`, `viewMode`, or full-screen flex decorators only for centering.
+- Keep the Storybook theme-canvas background workaround in `.storybook/preview.css`, after Tailwind imports and
+  `@source` directives:
+
+```css
+html,
+.docs-story {
+    background-color: var(--nui-background);
+}
+```
+
+`html` covers the full single-story preview iframe when `layout: 'centered'` is active. `.docs-story` covers the
+separate Docs story canvas surface. This is a targeted workaround for Storybook's long-running gap where
+`@storybook/addon-themes` toggles classes but does not automatically repaint all preview/Docs canvas backgrounds.
+Track the discussion at https://github.com/storybookjs/storybook/discussions/25183. Use `background-color`, not the
+`background` shorthand, and do not move this to `.storybook/preview-head.html` while `.storybook/preview.css` is the
+active Storybook CSS entrypoint.
+
 - Preserve the global preview-only `wrapperBackground` arg when editing Storybook preview configuration. It belongs in
   the `Story canvas` controls category, uses the display name `Wrapper background`, defaults to `transparent`, and is
   filtered out before rendering `<Story />`. It colors the decorator wrapper only, so do not call it

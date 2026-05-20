@@ -7,8 +7,12 @@ import './preview.css'
 const DEFAULT_WRAPPER_BACKGROUND = 'transparent'
 
 const preview: Preview = {
+	tags: ['autodocs'],
 	parameters: {
+		layout: 'centered',
+		docs: { theme: themes.normal },
 		controls: {
+			expanded: true,
 			matchers: {
 				color: /(background|color)$/i,
 				date: /Date$/i,
@@ -20,12 +24,6 @@ const preview: Preview = {
 			// 'off' - skip a11y checks entirely
 			test: 'todo',
 		},
-		docs: {
-			theme: themes.normal,
-		},
-	},
-	args: {
-		wrapperBackground: DEFAULT_WRAPPER_BACKGROUND,
 	},
 	argTypes: {
 		wrapperBackground: {
@@ -36,7 +34,7 @@ const preview: Preview = {
 			name: 'Wrapper background',
 		},
 	},
-	tags: ['autodocs'],
+	args: { wrapperBackground: DEFAULT_WRAPPER_BACKGROUND },
 	decorators: [
 		withThemeByClassName({
 			defaultTheme: 'light',
@@ -45,8 +43,8 @@ const preview: Preview = {
 				dark: 'dark',
 			},
 		}),
-		(Story, storyContext) => {
-			const { wrapperBackground, ...storyArgs } = storyContext.args
+		(Story, { args }) => {
+			const { wrapperBackground, ...storyArgs } = args
 
 			const wrapperStyle: CSSProperties | undefined =
 				wrapperBackground === DEFAULT_WRAPPER_BACKGROUND
@@ -55,9 +53,7 @@ const preview: Preview = {
 
 			return (
 				<div
-					className={
-						'nui-surface nui-boundaries nui-interactive flex justify-center p-8'
-					}
+					className={'nui-surface nui-boundaries nui-interactive'}
 					style={wrapperStyle}
 				>
 					<Story args={storyArgs} />

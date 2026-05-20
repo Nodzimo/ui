@@ -48,6 +48,10 @@ tokens.
 - Treat the two Tailwind imports as separate compiler entrypoints for separate artifacts, not duplicate runtime Tailwind
   instances. This follows Tailwind v4's documented `source(none)` plus explicit `@source` pattern for stylesheets with
   different source sets.
+- Storybook's theme toggle changes the `dark` class and NUI variables, but Storybook does not automatically repaint all
+  preview and Docs canvas surfaces. Keep the project workaround in `.storybook/preview.css`: apply
+  `background-color: var(--nui-background)` to `html` and `.docs-story`. This is Storybook-only theme surface glue, not
+  a library token or consumer stylesheet rule.
 
 ## Workflow
 
