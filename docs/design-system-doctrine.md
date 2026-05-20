@@ -66,6 +66,55 @@ suffers: active actions, passive fields, and disabled controls become harder to 
 
 Use shadcn as the structural baseline, not as a ceiling for personality.
 
+## Living Interface Principle
+
+The goal is not to color the interface because green is beloved. The goal is to make interaction legible.
+
+Nodzimo should use brand energy to clarify what can be acted on, not to flatten every action into the same level of
+importance. The user should be able to scan a screen and understand:
+
+- this is the main action
+- this is a secondary action
+- this is a quiet local tool
+- this is an input
+- this is disabled
+- this is static content
+
+If a user cannot visually separate an active button, an input, a disabled control, and a plain content block without
+hovering around the page, the design is too muddy. Neutrality has failed the product.
+
+This is the practical reason Nodzimo rejects bland shadcn defaults. The problem is not that gray is ugly. The problem is
+when gray-on-gray treatment hides affordance and turns interaction into guesswork.
+
+Nodzimo's design should revive the interface, not decorate it. A living interface separates clickable from static,
+available from disabled, primary from secondary, and local tool from page-level action. It should feel clear,
+predictable, and deliberate before the user touches anything.
+
+This does not mean every interactive element becomes loud. It means every interactive element has an understandable
+place in the hierarchy. Primary, secondary, outline, ghost, link, forms, focus rings, inputs, disabled controls, and
+static content must each do their actual job.
+
+Use the brand language to make the system readable and memorable. Do not turn the product into a sterile government
+form. Do not turn it into a green fireworks show either. The target is elegant clarity: alive enough to be understood,
+disciplined enough to be trusted.
+
+Use these lines as review standards:
+
+```text
+If the user cannot tell what can be touched, the interface is not elegant. It is unfinished.
+
+Brand color is not a reward for being clickable.
+Brand energy is a tool for making interaction legible.
+```
+
+The correction is not "make everything green." The correction is:
+
+```text
+Make interaction detectable.
+Keep hierarchy intact.
+Let the brand clarify, not decorate.
+```
+
 ## Day And Night Are Not A Technical Toggle
 
 The important Nodzimo discovery is that light and dark themes should not be treated as a reluctant technical duty.
@@ -270,6 +319,435 @@ The designer mistake to avoid:
 
 That sounds branded and produces noise. Brand color is not a reward for being clickable. Color is a hierarchy tool.
 
+Use these two hard review lines when the hierarchy gets blurry:
+
+```text
+If the user cannot tell where the action is, the design has failed.
+Hierarchy is more important than love for the brand color.
+```
+
+Use this implementation line when adapting shadcn-style components:
+
+```text
+Do not paint the component by hand. Tune the tokens until the existing semantic classes become alive.
+```
+
+If a button needs private color classes to look clickable, first suspect the theme tokens. The preferred fix is to make
+`secondary`, `accent`, `border`, `input`, `ring`, and related semantic tokens carry enough Nodzimo character that
+standard shadcn-like component classes become readable without breaking their roles.
+
+## Token Action Hierarchy
+
+The hardest lesson in this design system is that "interactive" is not one color. Interaction has hierarchy.
+
+Nodzimo uses four brand-derived semantic levels:
+
+```text
+primary
+Main action. Permanent on the screen. Highest emphasis.
+
+secondary
+Secondary action. Permanent on the screen. Lower than primary, still clearly active.
+
+accent
+Interaction feedback layer. Usually temporary or contextual: hover, selected, highlighted, active item.
+
+ring
+Focus signal. Temporary accessibility and location signal. It can be close to primary because it appears only while
+focus needs to be communicated.
+```
+
+And three neutral/structural levels:
+
+```text
+muted
+Passive support. Descriptions, placeholders, empty states, subdued panels, quiet content.
+
+border
+Structure. Separators, card edges, layout dividers, menu boundaries.
+
+input
+Form/control structure. Input borders and control surfaces.
+```
+
+Do not collapse these roles.
+
+### Permanent Action Colors
+
+`primary` and `secondary` are persistent action surfaces. They can sit on the screen before the user touches anything.
+
+`primary` is the main action:
+
+- Buy
+- Pay
+- Create
+- Publish
+- Continue
+- Confirm
+
+`secondary` is the second meaningful action:
+
+- Buy in installments
+- Save draft
+- Export
+- Duplicate
+- Add another
+- Apply optional setting
+
+`secondary` is not muted, disabled, or decorative. It must look clickable. It should feel like a softened relative of
+`primary`, not like a random gray chip. But it must never become a second primary.
+
+Mental emphasis scale:
+
+```text
+primary   = 100%
+secondary = 55-70%
+```
+
+### Interaction Feedback Color
+
+`accent` is not another CTA color. It is the interaction layer.
+
+Use `accent` for:
+
+- `ghost:hover`
+- `outline:hover`
+- menu item hover
+- select option hover
+- command item hover
+- active navigation item
+- selected item
+- hovered clickable row
+
+`ghost:hover` and `outline:hover` may share the same `accent` background. That is correct because both are local
+interaction feedback. They must not share `secondary` as their hover background. If ghost hover becomes visually equal
+to secondary rest, the hierarchy is compressed and the interface starts lying about action importance.
+
+Mental emphasis scale:
+
+```text
+accent = 20-40%
+```
+
+`accent` should be stronger than passive `muted`, but quieter than `secondary`.
+
+### Focus Signal Color
+
+`ring` is not an action surface. It is a signal:
+
+```text
+You are here.
+```
+
+Because focus is temporary, `ring` can be much closer to `primary` than a permanent surface would be. A strong focus
+ring does not compete with primary because it appears only when the interface needs to communicate keyboard/focus
+location. This is especially important for accessibility.
+
+The current component pattern often applies ring with opacity:
+
+```text
+ring-nui-ring/50
+```
+
+That means the raw `ring` token may be vivid and brand-derived while the rendered ring remains controlled.
+
+### Passive And Structural Tokens
+
+`muted`, `border`, and `input` are not action tokens.
+
+Do not make `muted` green just to make a ghost hover look alive. That poisons passive descriptions, helper text,
+placeholders, empty states, and quiet panels.
+
+Do not make `border` or `input` brand-colored just to make outline buttons look exciting. That turns structural edges
+and form controls into fake actions.
+
+These tokens may be warm, readable, and harmonious with the theme base. They should not carry the brand action signal.
+
+### Button Token Mapping
+
+Use this mapping when implementing or reviewing button variants:
+
+```text
+Primary rest:
+background = primary
+foreground = primary-foreground
+
+Primary hover:
+background = primary/80
+
+Secondary rest:
+background = secondary
+foreground = secondary-foreground
+
+Secondary hover:
+background = secondary/80
+
+Outline rest:
+background = background
+foreground = foreground
+border = border or input
+
+Outline hover / expanded:
+background = accent
+foreground = accent-foreground or foreground
+
+Ghost rest:
+background = transparent
+foreground = foreground
+border = none
+
+Ghost hover / expanded:
+background = accent
+foreground = accent-foreground or foreground
+
+Focus:
+ring = ring/50 or the component's documented focus intensity
+```
+
+The important sharing rule:
+
+```text
+ghost:hover and outline:hover may share accent.
+secondary rest must not share accent if it makes secondary and local hover feedback equal.
+muted must not be used as the interaction layer.
+```
+
+Base semantic tokens should be resolved colors. State treatment may use slash opacity.
+
+```text
+Resolved token:
+--nui-secondary
+--nui-accent
+--nui-ring
+
+State modifier:
+bg-nui-primary/80
+bg-nui-secondary/80
+ring-nui-ring/50
+```
+
+Do not invent independent colors for every state. Invent relationships:
+
+```text
+primary   -> main brand action
+secondary -> softened brand action
+accent    -> softer brand-derived interaction feedback
+ring      -> brand-derived focus signal
+```
+
+## Action Mass Decision Framework
+
+The most reliable way to choose a button variant is not to ask "which one looks nice?" It is to ask:
+
+```text
+Does this action deserve mass?
+```
+
+Mass means persistent visual weight: a filled surface, a visible boundary, or a permanent hit-area signal. The more an
+action participates in the current task, the more mass it can justify. The more it merely supports, exits, configures,
+or decorates the task, the less mass it should carry.
+
+This resolves the common confusion between `secondary`, `outline`, and `ghost`.
+
+### Primary: The Task's Main Commitment
+
+Primary answers:
+
+```text
+What is the main thing the user is expected to do here?
+```
+
+Use primary for the principal action of the current screen, section, dialog, or flow:
+
+- Pay now
+- Buy
+- Create
+- Publish
+- Save
+- Continue
+- Confirm
+- Play / pause when the player is the whole interface
+
+Primary deserves the strongest filled surface because it is the interface's main commitment. It should usually be rare:
+one per screen, one per section, or one per local decision context. If several actions all look primary, the interface
+has stopped making a decision.
+
+### Secondary: Important Action With Surface
+
+Secondary answers:
+
+```text
+What important action also participates in the current task, but is not the main commitment?
+```
+
+Secondary is not merely "the gray button". It is an important action that deserves a persistent filled surface, but not
+the primary spotlight.
+
+Use secondary for actions such as:
+
+- Pay in installments beside `Pay now`
+- Save draft beside `Publish`
+- Export selected beside `Create item`
+- Add another after `Create`
+- Duplicate when duplication is a core workflow action
+- Apply filters when filtering is a main task in the current panel
+- Previous / next / fullscreen in a media player when playback control is the current task
+
+Secondary does not have to "sell" something. It has to matter operationally. It participates in the task.
+
+The key phrase:
+
+```text
+Secondary = important action, not the main action.
+```
+
+Or:
+
+```text
+Secondary participates in the task.
+```
+
+This is why Nodzimo lets `secondary` speak with a softened brand-derived surface. If secondary is important enough to
+be a filled button, it must not look like disabled chrome, a passive field, or random gray furniture.
+
+### Outline: Available Structural Action
+
+Outline answers:
+
+```text
+What action should be available and recognizable, but should not carry filled-surface weight?
+```
+
+Outline has form, but not mass. It is a real button shape without a persistent filled surface.
+
+Use outline for actions such as:
+
+- Back
+- Cancel
+- Learn more
+- View details
+- Preview
+- Reset filters
+- Open settings
+- Open queue
+- Choose an alternate path beside a stronger action
+
+Outline is not "unimportant". It is lower-commitment. It supports navigation, structure, alternatives, inspection, and
+reversibility around the task.
+
+The key phrase:
+
+```text
+Outline = available structural action, lower commitment.
+```
+
+Or:
+
+```text
+Outline supports the task.
+```
+
+Outline should not carry primary-colored text at rest. It already has form. Its interaction feedback should arrive on
+hover/focus through `accent` and `ring`, not by pretending to be a primary or secondary action.
+
+### Ghost: Local Tool Without Permanent Form
+
+Ghost answers:
+
+```text
+What action should exist as a hit area, but permanent form would create noise?
+```
+
+Ghost has a hit area and accessible behavior, but no persistent surface and no persistent border. It becomes visually
+button-like when touched, hovered, focused, selected, or otherwise activated.
+
+Use ghost for:
+
+- close `X` in dialogs, sheets, popovers, and panels
+- row actions in a data table
+- card header tools
+- toolbar icon buttons
+- collapse / expand controls
+- more menus
+- edit actions inside dense lists
+- local sort/filter/toggle controls inside a dense control strip
+
+The key phrase:
+
+```text
+Ghost = local tool action, quiet until touched.
+```
+
+Or:
+
+```text
+Ghost supports the interface around the task.
+```
+
+Ghost does not deserve a filled surface at rest because the surrounding layout already provides context. Adding a
+permanent button surface would make the interface busier without making the task clearer.
+
+### Secondary Vs Outline
+
+This is the most important distinction:
+
+```text
+Secondary:
+I am important enough to deserve a persistent filled surface.
+
+Outline:
+I should be available and shaped like a button, but I do not deserve filled-surface weight.
+```
+
+Another way to say it:
+
+```text
+Secondary participates in the task.
+Outline supports navigation, structure, inspection, alternatives, or reversal around the task.
+```
+
+Examples:
+
+```text
+Checkout:
+Primary   = Pay now
+Secondary = Pay in installments
+Outline   = Back to cart
+Ghost     = Close promo banner
+
+Editor:
+Primary   = Publish
+Secondary = Save draft
+Outline   = Preview
+Ghost     = More formatting tools / close panel
+
+Data table:
+Primary   = Create item
+Secondary = Export selected
+Outline   = Reset filters
+Ghost     = Row actions such as Edit, Duplicate, More
+
+Media player:
+Primary   = Play / pause
+Secondary = Previous, Next, Fullscreen, Shuffle when playback control is central
+Outline   = Open queue, Settings, Lyrics when supporting the playback task
+Ghost     = Close player, collapse player, more menu
+```
+
+Use this question when uncertain:
+
+```text
+Does this action deserve surface, shape, or only a quiet hit area?
+```
+
+Answer it as:
+
+```text
+Surface = secondary or primary.
+Shape without surface = outline.
+Quiet hit area = ghost.
+```
+
 ### Primary
 
 Primary is where the brand speaks loudly.
@@ -342,7 +820,7 @@ text = foreground
 border = neutral system border/input with a slight Nodzimo tint
 
 Hover:
-background = subtle emerald/neon-tinted muted or accent surface
+background = accent
 text = foreground
 border = same or slightly stronger system boundary
 ```
@@ -372,7 +850,27 @@ Use it for dense UI and low-weight actions:
 - "Edit" in a dense list
 - "Sort" or "Filter" controls where the surrounding UI already provides structure
 
+Concrete examples:
+
+- A table row with `Edit`, `Duplicate`, and `More` actions at the end of each row. If every row action has a filled
+  button surface, the table stops being scannable.
+- A card header with small `Refresh`, `Collapse`, or `Open menu` actions. The card content is the object; the actions
+  are tools around it.
+- A dialog, sheet, popover, or panel close control: the `X` in the corner is still a real button with a hit area and
+  accessible label, but it should not look like a filled or outlined call to action. It becomes visibly button-like on
+  hover/focus.
+- A toolbar inside an editor, filter bar, data grid, or settings panel. The user needs many controls nearby, but none
+  of them should look like the page's main call to action.
+- A navigation or menu item where the surrounding layout already proves the element is interactive. Adding a full
+  button shape would be visual noise.
+
 Ghost in rest state should be almost just text with button spacing and hit area.
+
+The mental model:
+
+```text
+Ghost says: I am an action, but I will not interrupt dense UI until you touch me.
+```
 
 Nodzimo ghost direction:
 
@@ -383,7 +881,7 @@ background = transparent
 border = none
 
 Hover:
-background = subtle muted/accent surface
+background = accent
 text = foreground
 ```
 
@@ -749,6 +1247,196 @@ than replacing only `primary`.
 
 The real theme also includes `card`, `popover`, `accent`, `ring`, `chart-*`, and `sidebar-*`. These must be adapted with
 the same doctrine, not left as unrelated defaults.
+
+## References And Evidence
+
+This doctrine is not built on "we like green." The Nodzimo names, day/night story, and exact OKLCH values are local art
+direction. The underlying principles are standard design-system practice: action hierarchy, semantic color roles,
+interaction states, focus visibility, disabled/passive distinction, and tokenized theming.
+
+Use these references as the evidence trail when reviewing or challenging this doctrine.
+
+### Microsoft Fluent 2
+
+Reference:
+
+```text
+https://fluent2.microsoft.design/components/web/react/core/button/usage
+https://fluent2.microsoft.design/color-tokens/
+```
+
+Why it matters:
+
+- Fluent treats buttons as actions and explicitly separates button types, layout priority, behavior, and accessibility.
+- Fluent recommends one primary button in a layout for the most important action.
+- Fluent recommends outline, subtle, or transparent appearances for many minor actions to avoid a busy layout.
+- Fluent warns against giving secondary actions the same visual weight as primary actions.
+- Fluent color tokens separate neutral, brand, status, and generic groups. Brand tokens reinforce identity; neutral
+  tokens support base surfaces and text.
+
+How it maps to Nodzimo:
+
+```text
+primary = main action
+secondary / outline / ghost = lower emphasis actions
+accent = interaction feedback layer
+neutral tokens = passive and structural base
+brand tokens = identity and action energy
+```
+
+### IBM Carbon
+
+Reference:
+
+```text
+https://carbondesignsystem.com/components/button/usage/
+https://carbondesignsystem.com/components/button/style/
+https://carbondesignsystem.com/elements/color/overview/
+```
+
+Why it matters:
+
+- Carbon says each page should have only one primary button, with remaining calls to action represented as lower
+  emphasis buttons.
+- Carbon describes primary as the principal call to action and ghost as the least pronounced action.
+- Carbon gives concrete ghost use cases: data table actions, productive cards, side panels, and cancel actions in
+  progressive flows.
+- Carbon's button style documentation assigns distinct tokens to primary, secondary, tertiary, ghost, hover, active,
+  focus, disabled, and danger states.
+- Carbon's color documentation frames tokens as reusable, scalable abstractions that allow design-language changes at
+  scale and support theming.
+
+How it maps to Nodzimo:
+
+```text
+primary = principal CTA
+secondary = lower-emphasis persistent action
+ghost = least pronounced local/supplementary action
+focus = separate tokenized signal
+tokens = semantic abstraction, not hard-coded component paint
+```
+
+Carbon is stricter than Nodzimo in some examples, especially around secondary as a negative paired action. That does
+not invalidate Nodzimo's secondary direction; it shows that button hierarchy is a serious system-level topic, not a
+random styling preference.
+
+### Google Material / Material Web
+
+Reference:
+
+```text
+https://material-web.dev/components/button/
+```
+
+Why it matters:
+
+- Material Web documents multiple button types: elevated, filled, filled tonal, outlined, and text.
+- This supports the core idea that buttons are not just one component with random styles. Button treatment encodes
+  visual emphasis and role.
+
+How it maps to Nodzimo:
+
+```text
+primary filled action = primary
+tonal/lower-emphasis filled action = secondary
+outlined/text-like action = outline / ghost / link family
+```
+
+### Material UI Palette
+
+Reference:
+
+```text
+https://mui.com/material-ui/customization/palette/
+```
+
+Why it matters:
+
+- MUI's palette customization exists specifically so component colors can be modified to suit a brand.
+- MUI exposes `primary` and `secondary` palette roles instead of limiting brand expression to one button color.
+
+How it maps to Nodzimo:
+
+```text
+brand theming is expected
+secondary can be a real palette role
+component color should be systematic, not hard-coded per component
+```
+
+### Apple Human Interface Guidelines
+
+Reference:
+
+```text
+https://developer.apple.com/design/human-interface-guidelines/buttons
+```
+
+Why it matters:
+
+- Apple treats button styling, content, and role as part of communicating what an action does and how important it is.
+- Apple is useful here as a role-and-hierarchy reference, not as a direct token model for Nodzimo's Tailwind/shadcn
+  implementation.
+
+How it maps to Nodzimo:
+
+```text
+button role matters
+visual treatment should communicate action importance
+danger/destructive roles are separate from ordinary brand actions
+```
+
+### W3C WCAG / WAI
+
+Reference:
+
+```text
+https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/
+```
+
+Why it matters:
+
+- WCAG 2.2 highlights focus visibility through focus-related criteria, including Focus Appearance.
+- WAI describes focus indicators as needing sufficient size and contrast because many users cannot perceive small
+  visual changes.
+
+How it maps to Nodzimo:
+
+```text
+ring = focus signal
+focus must be visible
+ring may be vivid and brand-derived because it is temporary and accessibility-critical
+```
+
+### Final Evidence Summary
+
+The exact Nodzimo palette is local. The doctrine behind it is not.
+
+Supported by the references above:
+
+```text
+Actions need hierarchy.
+Primary should be rare and prominent.
+Secondary actions need lower emphasis, not equal weight.
+Ghost/subtle/transparent actions are valid for dense or supplementary UI.
+Interaction states need visible feedback.
+Focus needs an explicit visible signal.
+Danger/destructive states need separate semantics.
+Tokens should encode roles so values can change without repainting components by hand.
+Brand theming is expected, but it must not erase role distinctions.
+```
+
+Nodzimo's contribution is the art direction and the exact mapping:
+
+```text
+Living Emerald / Night Emerald
+primary = main brand action
+secondary = softened brand action
+accent = brand-derived interaction feedback
+ring = brand-derived focus signal
+muted / border / input = passive and structural
+```
+
+That is a product-specific synthesis of established design-system principles, not a private fantasy.
 
 ## Final Reminder
 

@@ -379,6 +379,17 @@
 - Respect the shadcn semantic structure, but do not inherit shadcn blandness as a design goal. shadcn is a conservative
   white-label baseline that is hard to ruin; Nodzimo should keep its architecture while adding deliberate character and
   clearer active/passive/disabled distinction.
+- Use brand energy to make interaction legible, not to decorate everything. A user should be able to visually separate
+  active actions, secondary actions, quiet local tools, inputs, disabled controls, and static content without hovering
+  around the page. If those roles collapse into the same gray mass, neutrality has failed the product.
+- Treat Nodzimo's design direction as a living interface principle: clickable vs. static, enabled vs. disabled, primary
+  vs. secondary, and local tool vs. page action must be visually predictable before interaction. Brand color is not a
+  reward for being clickable; brand energy is a tool for making interaction legible.
+- Use this review line when judging affordance: if the user cannot tell what can be touched, the interface is not
+  elegant; it is unfinished.
+- When adapting shadcn-style components, do not paint the component by hand. Tune the semantic tokens until the existing
+  semantic classes become alive. If private button-only color classes are needed just to make a standard variant
+  readable, first suspect `secondary`, `accent`, `border`, `input`, `ring`, or related theme tokens.
 - Current primary direction:
     - Light primary: `Living Emerald`, internally nicknamed `Liverald`, `oklch(0.55 0.19 151)` with light foreground.
     - Dark primary: `Night Emerald`, internally nicknamed `Nimerald`, `oklch(0.82 0.26 145)` with dark
@@ -400,6 +411,27 @@
     - `ghost`: quiet dense-UI action; ordinary text at rest, subtle hover surface.
     - `link`: branded text signal; underlined by default.
     - `destructive`: dangerous action; danger overrides brand.
+- Preserve the token action hierarchy:
+    - `primary` is the persistent main action surface.
+    - `secondary` is the persistent secondary action surface and should be a softened brand-derived action color.
+    - `accent` is the interaction feedback layer for hover, selected, highlighted, active local items, and may be shared
+      by `ghost:hover` and `outline:hover`.
+    - `ring` is a temporary focus signal and may be vivid/brand-derived because it appears only to communicate focus.
+    - `muted`, `border`, and `input` are passive/structural tokens, not brand action tokens.
+- Do not use `muted` as an interaction layer. If `ghost` or `outline` needs hover feedback, prefer `accent`; if a
+  variant needs a persistent secondary action surface, use `secondary`.
+- Choose button variants by action mass:
+    - `primary` is the task's main commitment.
+    - `secondary` is an important action that participates in the current task and deserves a persistent filled surface.
+    - `outline` is an available structural/lower-commitment action that needs button shape but not filled-surface
+      weight.
+    - `ghost` is a local tool action that needs a hit area but no permanent form.
+      Ask whether the action deserves surface, shape, or only a quiet hit area.
+- Use these hierarchy review lines when judging button color and emphasis: if the user cannot tell where the action is,
+  the design has failed; hierarchy is more important than love for the brand color.
+- Use `ghost` for dense local tools such as table row actions, card header controls, dialog/sheet close `X` buttons,
+  editor/data-grid toolbars, and menu-like controls where the surrounding layout already proves interactivity and a full
+  button surface would add noise.
 - Text links should be underlined in their resting state. Preferred inline-link pattern: foreground text with a
   primary-colored underline at rest, then primary text plus primary underline on hover. Do not rely on color alone to
   communicate that text is a hyperlink.

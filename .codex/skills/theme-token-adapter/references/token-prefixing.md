@@ -108,13 +108,16 @@ primary / primary-foreground
 High-emphasis actions and brand surfaces. Use for default buttons, selected states, badges, and active accents.
 
 secondary / secondary-foreground
-Lower-emphasis filled actions and supporting surfaces. Use for secondary buttons, secondary badges, and supporting UI.
+Lower-emphasis persistent action surfaces. Use for secondary buttons, secondary badges, and supporting UI that should
+still read as active. Secondary should be a softened brand-derived action color, not a passive gray surface.
 
 muted / muted-foreground
 Subtle surfaces and lower-emphasis content. Use for descriptions, placeholders, empty states, helper text, and subdued surfaces.
 
 accent / accent-foreground
-Interactive hover, focus, active, selected, and highlighted surfaces. Use for ghost buttons, menu highlights, hovered rows, and selected items.
+Interactive hover, selected, active, and highlighted surfaces. Use for ghost hover, outline hover, menu highlights,
+select/command option hover, hovered clickable rows, and selected items. Accent is the interaction feedback layer; it
+should be stronger than muted but quieter than secondary.
 
 destructive
 Destructive actions and error emphasis. Use for destructive buttons, invalid states, and destructive menu items.
@@ -126,7 +129,9 @@ input
 Form-control borders and input surface treatment. Use for input, textarea, select, and outline-style controls.
 
 ring
-Focus rings and outlines. Use for buttons, inputs, checkboxes, menus, and other focusable controls.
+Focus rings and outlines. Use for buttons, inputs, checkboxes, menus, and other focusable controls. Ring is a temporary
+focus signal, so it may be vivid and brand-derived; components often render it through slash opacity such as
+`ring-nui-ring/50`.
 
 chart-1 ... chart-5
 Default chart palette.
@@ -146,6 +151,33 @@ Sidebar-specific borders and separators.
 sidebar-ring
 Sidebar-specific focus rings.
 ```
+
+Button token mapping:
+
+```text
+primary rest = primary
+primary hover = primary/80
+secondary rest = secondary
+secondary hover = secondary/80
+outline rest = background + foreground + border/input
+outline hover = accent
+ghost rest = transparent + foreground
+ghost hover = accent
+focus = ring/50 or documented focus intensity
+```
+
+Do not use `muted` as the interaction layer. `muted` is passive support; `accent` is interaction feedback.
+
+Button variant selection is about action mass:
+
+```text
+primary = main commitment
+secondary = important action that participates in the current task and deserves persistent filled surface
+outline = available structural/lower-commitment action that needs shape but not filled surface
+ghost = local tool action that needs a hit area but no permanent form
+```
+
+Ask whether the action deserves surface, shape, or only a quiet hit area before changing colors.
 
 ## Prefix Radius And Spacing Tokens
 
