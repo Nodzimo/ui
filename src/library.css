@@ -1,0 +1,162 @@
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+	--color-nui-background: var(--nui-background);
+	--color-nui-foreground: var(--nui-foreground);
+
+	--color-nui-card: var(--nui-card);
+	--color-nui-card-foreground: var(--nui-card-foreground);
+
+	--color-nui-popover: var(--nui-popover);
+	--color-nui-popover-foreground: var(--nui-popover-foreground);
+
+	--color-nui-primary: var(--nui-primary);
+	--color-nui-primary-foreground: var(--nui-primary-foreground);
+
+	--color-nui-secondary: var(--nui-secondary);
+	--color-nui-secondary-foreground: var(--nui-secondary-foreground);
+
+	--color-nui-muted: var(--nui-muted);
+	--color-nui-muted-foreground: var(--nui-muted-foreground);
+
+	--color-nui-accent: var(--nui-accent);
+	--color-nui-accent-foreground: var(--nui-accent-foreground);
+
+	--color-nui-destructive: var(--nui-destructive);
+	--color-nui-border: var(--nui-border);
+	--color-nui-input: var(--nui-input);
+	--color-nui-ring: var(--nui-ring);
+
+	--color-nui-chart-1: var(--nui-chart-1);
+	--color-nui-chart-2: var(--nui-chart-2);
+	--color-nui-chart-3: var(--nui-chart-3);
+	--color-nui-chart-4: var(--nui-chart-4);
+	--color-nui-chart-5: var(--nui-chart-5);
+
+	--color-nui-sidebar: var(--nui-sidebar);
+	--color-nui-sidebar-foreground: var(--nui-sidebar-foreground);
+	--color-nui-sidebar-primary: var(--nui-sidebar-primary);
+	--color-nui-sidebar-primary-foreground: var(--nui-sidebar-primary-foreground);
+	--color-nui-sidebar-accent: var(--nui-sidebar-accent);
+	--color-nui-sidebar-accent-foreground: var(--nui-sidebar-accent-foreground);
+	--color-nui-sidebar-border: var(--nui-sidebar-border);
+	--color-nui-sidebar-ring: var(--nui-sidebar-ring);
+
+	--radius-nui-sm: calc(var(--nui-radius) * 0.6);
+	--radius-nui-md: calc(var(--nui-radius) * 0.8);
+	--radius-nui-lg: var(--nui-radius);
+	--radius-nui-xl: calc(var(--nui-radius) * 1.4);
+	--radius-nui-2xl: calc(var(--nui-radius) * 1.8);
+	--radius-nui-3xl: calc(var(--nui-radius) * 2.2);
+	--radius-nui-4xl: calc(var(--nui-radius) * 2.6);
+
+	--spacing-nui-2xs: --spacing(0.5); /* 2px */
+	--spacing-nui-xs: --spacing(1); /* 4px */
+	--spacing-nui-sm: --spacing(2); /* 8px */
+	--spacing-nui-md: --spacing(4); /* 16px */
+	--spacing-nui-lg: --spacing(6); /* 24px */
+	--spacing-nui-xl: --spacing(8); /* 32px */
+	--spacing-nui-2xl: --spacing(12); /* 48px */
+}
+
+:root {
+	--nui-radius: 0.625rem;
+	--nui-background: oklch(1 0 0);
+	--nui-foreground: oklch(0.153 0.006 107.1);
+
+	--nui-card: oklch(1 0 0);
+	--nui-card-foreground: oklch(0.153 0.006 107.1);
+
+	--nui-popover: oklch(1 0 0);
+	--nui-popover-foreground: oklch(0.153 0.006 107.1);
+
+	--nui-primary: oklch(0.55 0.19 151);
+	--nui-primary-foreground: oklch(0.98 0.02 151);
+
+	--nui-secondary: oklch(0.967 0.001 286.375);
+	--nui-secondary-foreground: oklch(0.21 0.006 285.885);
+
+	--nui-muted: oklch(0.966 0.005 106.5);
+	--nui-muted-foreground: oklch(0.58 0.031 107.3);
+
+	--nui-accent: oklch(0.966 0.005 106.5);
+	--nui-accent-foreground: oklch(0.228 0.013 107.4);
+
+	--nui-destructive: oklch(0.577 0.245 27.325);
+	--nui-border: oklch(0.93 0.007 106.5);
+	--nui-input: oklch(0.93 0.007 106.5);
+	--nui-ring: oklch(0.737 0.021 106.9);
+
+	--nui-chart-1: oklch(0.88 0.011 106.6);
+	--nui-chart-2: oklch(0.58 0.031 107.3);
+	--nui-chart-3: oklch(0.466 0.025 107.3);
+	--nui-chart-4: oklch(0.394 0.023 107.4);
+	--nui-chart-5: oklch(0.286 0.016 107.4);
+
+	--nui-sidebar: oklch(0.988 0.003 106.5);
+	--nui-sidebar-foreground: oklch(0.153 0.006 107.1);
+	--nui-sidebar-primary: oklch(0.55 0.19 151);
+	--nui-sidebar-primary-foreground: oklch(0.98 0.02 151);
+	--nui-sidebar-accent: oklch(0.966 0.005 106.5);
+	--nui-sidebar-accent-foreground: oklch(0.228 0.013 107.4);
+	--nui-sidebar-border: oklch(0.93 0.007 106.5);
+	--nui-sidebar-ring: oklch(0.737 0.021 106.9);
+}
+
+.dark {
+	--nui-background: oklch(0.147 0.004 49.25);
+	--nui-foreground: oklch(0.985 0.001 106.423);
+
+	--nui-card: oklch(0.216 0.006 56.043);
+	--nui-card-foreground: oklch(0.985 0.001 106.423);
+
+	--nui-popover: oklch(0.216 0.006 56.043);
+	--nui-popover-foreground: oklch(0.985 0.001 106.423);
+
+	--nui-primary: oklch(0.82 0.26 145);
+	--nui-primary-foreground: oklch(0.08 0.02 145);
+
+	--nui-secondary: oklch(0.274 0.006 286.033);
+	--nui-secondary-foreground: oklch(0.985 0 0);
+
+	--nui-muted: oklch(0.268 0.007 34.298);
+	--nui-muted-foreground: oklch(0.709 0.01 56.259);
+
+	--nui-accent: oklch(0.268 0.007 34.298);
+	--nui-accent-foreground: oklch(0.985 0.001 106.423);
+
+	--nui-destructive: oklch(0.704 0.191 22.216);
+	--nui-border: oklch(1 0 0 / 10%);
+	--nui-input: oklch(1 0 0 / 15%);
+	--nui-ring: oklch(0.553 0.013 58.071);
+
+	--nui-chart-1: oklch(0.869 0.005 56.366);
+	--nui-chart-2: oklch(0.553 0.013 58.071);
+	--nui-chart-3: oklch(0.444 0.011 73.639);
+	--nui-chart-4: oklch(0.374 0.01 67.558);
+	--nui-chart-5: oklch(0.268 0.007 34.298);
+
+	--nui-sidebar: oklch(0.216 0.006 56.043);
+	--nui-sidebar-foreground: oklch(0.985 0.001 106.423);
+	--nui-sidebar-primary: oklch(0.82 0.26 145);
+	--nui-sidebar-primary-foreground: oklch(0.08 0.02 145);
+	--nui-sidebar-accent: oklch(0.268 0.007 34.298);
+	--nui-sidebar-accent-foreground: oklch(0.985 0.001 106.423);
+	--nui-sidebar-border: oklch(1 0 0 / 10%);
+	--nui-sidebar-ring: oklch(0.553 0.013 58.071);
+}
+
+@layer base {
+	.nui-boundaries * {
+		@apply border-nui-border outline-nui-ring/50;
+	}
+
+	.nui-surface {
+		@apply bg-nui-background text-nui-foreground;
+	}
+
+	.nui-interactive button:not(:disabled),
+	.nui-interactive [role="button"]:not(:disabled) {
+		cursor: pointer;
+	}
+}

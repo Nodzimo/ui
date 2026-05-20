@@ -2,8 +2,9 @@
 
 ## Source Of Truth
 
-Use `src/styles.css` as the contract. Do not invent token names if no matching `nui-*` token exists; either map to an
-existing token or flag the missing token.
+Use `src/library.css` as the token and foundation contract. `src/styles.css` is the package Tailwind entrypoint that
+imports `src/library.css` and applies the package source policy. Do not invent token names if no matching `nui-*` token
+exists; either map to an existing token or flag the missing token.
 
 ## Prefix Semantic Color Utilities
 
@@ -223,7 +224,7 @@ spacing-nui-xl  -> --spacing(8)   -> 32px
 spacing-nui-2xl -> --spacing(12)  -> 48px
 ```
 
-Use `--spacing()` in `src/styles.css`, not handwritten `calc(var(--spacing) * n)`. Tailwind compiles `--spacing()` to
+Use `--spacing()` in `src/library.css`, not handwritten `calc(var(--spacing) * n)`. Tailwind compiles `--spacing()` to
 the calc form.
 
 Use NUI spacing for standard rhythm between sections, headings, cards, repeated groups, and shared layout patterns. Do

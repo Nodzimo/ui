@@ -51,7 +51,9 @@ import { Button } from '.'
 - Keep colocated `.stories.*` imports development-only. They may import Storybook utilities such as `storybook/test`;
   dependency-cruiser's `not-to-dev-dep` rule should exclude story files rather than forcing Storybook packages into
   runtime dependencies.
-- Run the smallest relevant verification, normally `bun run build:ts` and `bun run check:lint`.
+- Run the smallest relevant verification, normally `bun run build:ts` and `bun run check:lint`. When story layout or
+  Storybook CSS imports change, also run `bun run storybook:build` and confirm the static Storybook CSS contains the
+  needed story-only utilities while `bun run build:css` keeps `dist/styles.css` free of those story-only classes.
 
 ## Story Selection
 
@@ -118,6 +120,14 @@ contract.
 - Keep Storybook's Vite config separate from the library package build config. If story or preview work needs Vite
   changes, use `.storybook/vite.config.ts` for Storybook preview plugins such as Tailwind, and use `.storybook/main.ts`
   `viteFinal` only for final Storybook-specific Vite overrides.
+- Storybook preview imports `./preview.css`, not `../src/styles.css`. `.storybook/preview.css` is the Storybook
+  Tailwind entrypoint: it imports Tailwind with `source(none)`, imports `../src/library.css`, and explicitly scans
+  `../src` plus `.` so story-only preview utilities can be generated. `src/styles.css` is the package CSS entrypoint and
+  excludes `*.stories.*` from Tailwind source detection.
+- If a Tailwind utility works in component source but disappears in Storybook, or a story-only class such as `gap-10`,
+  `items-end`, or `min-h-screen` has no effect, first inspect the Storybook CSS import and Tailwind source policy. The
+  usual failure mode is importing the package entrypoint instead of `.storybook/preview.css`, or forgetting to include
+  the relevant Storybook/source directory in `.storybook/preview.css` `@source` directives.
 - Keep the global `.storybook/preview.tsx` decorator aligned with the project preview contract:
   `nui-surface nui-boundaries nui-interactive` around all stories. `nui-surface` is intentional in Storybook because
   the theme addon toggles `.dark`, and the wrapper must receive `bg-nui-background text-nui-foreground` for transparent

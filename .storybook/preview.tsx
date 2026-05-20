@@ -1,8 +1,8 @@
-import type { Preview } from '@storybook/react-vite'
-import '../src/styles.css'
 import { withThemeByClassName } from '@storybook/addon-themes'
+import type { Preview } from '@storybook/react-vite'
 import type { CSSProperties } from 'react'
 import { themes } from 'storybook/theming'
+import './preview.css'
 
 const DEFAULT_WRAPPER_BACKGROUND = 'transparent'
 

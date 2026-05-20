@@ -13,7 +13,8 @@ tokens.
 
 ## Core Contract
 
-- Treat `src/styles.css` as the source of truth for available theme tokens.
+- Treat `src/library.css` as the source of truth for available theme tokens and foundation classes. `src/styles.css` is
+  only the publishable package stylesheet entrypoint.
 - Read `docs/design-system-doctrine.md` before changing color token values, button variants, interactive-state styling,
   or the semantic meaning of `primary`, `secondary`, `outline`, `ghost`, `link`, `muted`, `accent`, `border`, `input`,
   or `ring`.
@@ -36,12 +37,22 @@ tokens.
 - Keep ordinary Tailwind layout/typography/state utilities unchanged.
 - Keep broad foundation styles opt-in through the foundation utility classes documented in
   `references/token-prefixing.md`; do not silently style the entire consumer app.
-- Keep Storybook story-only classes out of the publishable CSS artifact. `src/styles.css` should use Tailwind v4 source
-  exclusion such as `@source not "./**/*.stories.*";` so colocated stories do not inflate `dist/styles.css`.
+- Keep Storybook story-only classes out of the publishable CSS artifact. `src/styles.css` is the package Tailwind
+  entrypoint: import Tailwind with `source(none)`, import `./library.css`, scan `./**/*`, and exclude
+  `./**/*.stories.*`.
+- Do not put Tailwind imports or Storybook source exclusions in `src/library.css`. Storybook uses its own stylesheet
+  entrypoint, `.storybook/preview.css`, to import Tailwind with `source(none)`, import `../src/library.css`, and scan
+  `../src` plus `.`.
+- Use relative CSS imports for this local stylesheet pipeline: `src/styles.css` imports `./library.css`, and
+  `.storybook/preview.css` imports `../src/library.css`.
+- Treat the two Tailwind imports as separate compiler entrypoints for separate artifacts, not duplicate runtime Tailwind
+  instances. This follows Tailwind v4's documented `source(none)` plus explicit `@source` pattern for stylesheets with
+  different source sets.
 
 ## Workflow
 
-1. Inspect the new or changed component files and `src/styles.css`.
+1. Inspect the new or changed component files and `src/library.css`. Inspect `src/styles.css` and
+   `.storybook/preview.css` too when Tailwind entrypoints or source policy change.
 2. If the work affects color meaning, button variants, or interactive states, inspect `docs/design-system-doctrine.md`
    and preserve the Nodzimo hierarchy:
     - primary speaks loudly.
@@ -55,11 +66,16 @@ tokens.
 6. Convert directional physical utilities to logical utilities when they represent inline start/end behavior.
 7. Keep local implementation imports relative inside the component folder.
 8. Search changed files for unprefixed theme tokens.
-9. If changing story files, Storybook-only preview classes, or Tailwind source detection, consider whether
-   `dist/styles.css` should change. Story-only classes should not be part of the library CSS contract.
+9. If changing story files, Storybook-only preview classes, or Tailwind source detection, verify both CSS surfaces:
+   package CSS should not contain story-only utilities, while static Storybook CSS should contain the utilities needed
+   by
+   stories and preview decorators. Check concrete class names in the built CSS artifacts instead of trusting that the
+   build passed.
 10. Run the smallest relevant verification:
     - `bun run build:ts` for component-only TypeScript changes.
-    - `bun run build:all` after changing `src/styles.css` or Tailwind theme tokens.
+    - `bun run build:css` after changing `src/library.css`, `src/styles.css`, or Tailwind theme tokens.
+    - `bun run storybook:build` after changing Storybook CSS imports, `.storybook` configuration, or story-only layout
+      utilities.
 
 ## Prefixing Reference
 
