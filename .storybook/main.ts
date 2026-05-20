@@ -8,6 +8,7 @@ const config: StorybookConfig = {
 		'@storybook/addon-a11y',
 		'@storybook/addon-docs',
 		'@storybook/addon-themes',
+		'storybook-dark-mode',
 		'storybook-addon-pseudo-states',
 	],
 	framework: {
@@ -23,7 +24,7 @@ const config: StorybookConfig = {
 			...config,
 			build: {
 				...config.build,
-				chunkSizeWarningLimit: 1_300,
+				chunkSizeWarningLimit: 2_000,
 			},
 		}
 	},

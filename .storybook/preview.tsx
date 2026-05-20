@@ -1,8 +1,21 @@
 import { withThemeByClassName } from '@storybook/addon-themes'
 import type { Preview } from '@storybook/react-vite'
 import type { CSSProperties } from 'react'
-import { themes } from 'storybook/theming'
 import './preview.css'
+import {
+	DocsContainer,
+	type DocsContainerProps,
+} from '@storybook/addon-docs/blocks'
+import { themes } from 'storybook/theming'
+import { useDarkMode } from 'storybook-dark-mode'
+
+function ThemedDocsContainer(props: DocsContainerProps) {
+	const isDark = useDarkMode()
+
+	return (
+		<DocsContainer {...props} theme={isDark ? themes.dark : themes.normal} />
+	)
+}
 
 const DEFAULT_WRAPPER_BACKGROUND = 'transparent'
 
@@ -10,7 +23,7 @@ const preview: Preview = {
 	tags: ['autodocs'],
 	parameters: {
 		layout: 'centered',
-		docs: { theme: themes.normal },
+		docs: { container: ThemedDocsContainer },
 		controls: {
 			expanded: true,
 			matchers: {

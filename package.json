@@ -157,6 +157,7 @@
 		"react-dom": "19.2.6",
 		"storybook": "10.4.0",
 		"storybook-addon-pseudo-states": "10.4.0",
+		"storybook-dark-mode": "5.0.0",
 		"tailwindcss": "4.3.0",
 		"typescript": "6.0.3",
 		"unplugin-dts": "1.0.0",

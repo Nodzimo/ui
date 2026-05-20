@@ -611,8 +611,14 @@
 - Storybook manager UI theming is separate from component preview theming. Use `storybook/theming` and
   `.storybook/manager.ts` `addons.setConfig({ theme })` for manager branding. `create({ base })` only accepts
   `'light' | 'dark'`; use `getPreferredColorScheme()` when the branded manager theme should follow the user's system
-  preference at load time. Use `parameters.docs.theme = themes.normal` in `.storybook/preview.tsx` so Storybook Docs
-  also follow the preferred color scheme. This is not a live manager-theme toggle.
+  preference at load time. Use `storybook-dark-mode` for the live manager light/dark toggle.
+- Storybook Docs theming is a third surface, separate from both manager UI and component canvas theming. Do not pin
+  `parameters.docs.theme = themes.normal` once `storybook-dark-mode` is enabled; that leaves Docs white while the
+  manager is dark. Instead, keep a typed custom Docs container in `.storybook/preview.tsx`: import `DocsContainer` and
+  `DocsContainerProps` from `@storybook/addon-docs/blocks`, read `useDarkMode()` from `storybook-dark-mode`, and render
+  `<DocsContainer {...props} theme={isDark ? themes.dark : themes.normal} />`. Keep `theme` after `{...props}` so the
+  dark-mode state intentionally wins over any theme carried in the props. This uses public APIs from Storybook Docs and
+  `storybook-dark-mode`; avoid channel-event plumbing unless a future docs-only toggle is intentionally needed.
 - Storybook's official backgrounds addon supports preset backgrounds, not a free global color picker. Avoid adding
   stale third-party background/color-picker addons only for this feature; many are not maintained for current Storybook
   versions. If a real full-canvas color picker is needed later, prefer a small project-owned Storybook toolbar/global

@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Storybook Documentation CSS Examples" pattern="file:.codex/skills/storybook-story-writer/SKILL.md||file:.codex/skills/storybook-story-writer/references/story-patterns.md" />
+</component>

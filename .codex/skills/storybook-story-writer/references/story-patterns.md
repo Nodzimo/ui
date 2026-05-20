@@ -124,7 +124,25 @@ Use `@storybook/addon-themes` with `withThemeByClassName` for component-preview 
 the Storybook manager UI. Manager branding/theme should use `storybook/theming` plus `.storybook/manager.ts`
 `addons.setConfig({ theme })`; `create({ base })` only accepts `'light' | 'dark'`, so use
 `getPreferredColorScheme()` when the branded manager theme should follow the user's system preference at load time.
-For Docs pages, use `parameters.docs.theme = themes.normal` rather than forcing a separate hard-coded theme.
+Use `storybook-dark-mode` when the Storybook manager itself needs a live light/dark toggle.
+
+Docs pages are a separate Storybook surface. Do not pin `parameters.docs.theme = themes.normal` when
+`storybook-dark-mode` is enabled, because that leaves the Docs renderer light while the manager is dark. Bridge the
+manager dark-mode state into Docs through a typed custom container:
+
+```tsx
+function ThemedDocsContainer(props: DocsContainerProps) {
+    const isDark = useDarkMode()
+
+    return (
+        <DocsContainer {...props} theme={isDark ? themes.dark : themes.normal}/>
+    )
+}
+```
+
+Set `parameters.docs.container = ThemedDocsContainer`. Keep `theme` after `{...props}` so the hook-derived theme wins.
+This uses Storybook's public Docs container API plus `storybook-dark-mode`'s public `useDarkMode()` hook; avoid the
+lower-level dark-mode channel events unless a custom docs-only toggle is deliberately needed.
 
 Use Storybook's native `layout: 'centered'` for ordinary centered component stories. If the theme toggle changes tokens
 but the full canvas remains on the wrong background, fix the Storybook preview surface in `.storybook/preview.css`, not
