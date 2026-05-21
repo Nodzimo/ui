@@ -782,6 +782,10 @@
 - Keep dependency installs under `clean:modules`.
 - Keep generated Storybook output under `clean:storybook`; `clean:all` should include Storybook output along with the
   distribution artifacts and dependency install.
+- Keep `clean:ports` as the local development port cleanup helper. It uses `fkill-cli` from `devDependencies` and must
+  passports with the `:port` syntax, for example `:6006`; a bare number is treated as a process id by `fkill`.
+  Explicitly list known project ports instead of trying to kill arbitrary ranges. The current project ports are Vite dev
+  `5173`, Vite preview `4173`, Storybook dev `6006`, and static Storybook preview `6007`.
 
 ## npm Publishing
 
@@ -836,6 +840,8 @@
 - `bun run clean:modules` removes dependency installs.
 - `bun run clean:storybook` removes generated Storybook output.
 - `bun run clean:all` removes distribution artifacts, generated Storybook output, and dependency installs.
+- `bun run clean:ports` uses `fkill-cli` to free the known local development ports: `5173`, `4173`, `6006`, and `6007`.
+  Ports must stay prefixed with `:` in the script because bare numbers are process ids for `fkill`.
 - `bun run deps:outdated` checks dependency updates.
 - `bun run publish:npm` publishes the package to npm using the package's `publishConfig`.
 - `bun run publish:who` checks the active npm account.
