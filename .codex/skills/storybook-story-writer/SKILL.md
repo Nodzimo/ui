@@ -159,11 +159,15 @@ active Storybook CSS entrypoint.
   the `Story canvas` controls category, uses the display name `Wrapper background`, defaults to `transparent`, and is
   filtered out before rendering `<Story />`. It colors the decorator wrapper only, so do not call it
   `Canvas background`.
-- Use `@storybook/addon-themes` and `withThemeByClassName` for the preview light/dark toggle. Manager UI theming is a
-  separate Storybook surface: use `storybook/theming`, `.storybook/manager.ts`, and `addons.setConfig({ theme })`.
-  `create({ base })` only accepts `'light' | 'dark'`; use `getPreferredColorScheme()` for branded manager themes that
-  follow the user's system preference at load time. Use `storybook-dark-mode` when the manager itself needs a live
-  light/dark toggle.
+- Use `@storybook/addon-themes` and `withThemeByClassName` for the component preview light/dark toggle. Manager UI
+  theming is a separate Storybook surface: use `storybook/theming`, `.storybook/manager.ts`, and
+  `addons.setConfig({ theme })`. `create({ base })` only accepts `'light' | 'dark'`; use
+  `getPreferredColorScheme()` for branded manager themes that follow the user's system preference at load time. Use
+  `storybook-dark-mode` when the manager itself needs a live light/dark toggle.
+- Keep the two Storybook theme addons separated by responsibility. `@storybook/addon-themes` owns component tokens,
+  story canvases, and design-system MDX token docs. `storybook-dark-mode` owns the Storybook manager/Docs chrome. Do
+  not enable `storybook-dark-mode` `stylePreview` in this project; it makes the manager dark-mode addon also mutate the
+  preview iframe and conflicts with the component-theme addon.
 - Storybook Docs theming must be wired separately from both the manager and the component preview canvas. With
   `storybook-dark-mode`, do not hard-code `parameters.docs.theme = themes.normal`; it freezes Docs in light mode. Use a
   typed custom Docs container in `.storybook/preview.tsx`:
@@ -182,6 +186,29 @@ Then set `parameters.docs.container = ThemedDocsContainer`. Import `DocsContaine
 `@storybook/addon-docs/blocks`, and `useDarkMode` from `storybook-dark-mode`. Keep `theme` after `{...props}` so the
 dark-mode state wins intentionally. Prefer this hook-based bridge over manual `DARK_MODE_EVENT_NAME` channel plumbing
 unless the project needs a custom docs-only toggle.
+
+- Keep the local unattached-MDX theme bridge in `.storybook/preview.tsx`. Standalone MDX pages such as design-system
+  color/token docs do not behave like ordinary story canvases: when the `@storybook/addon-themes` toolbar is toggled
+  while already on the MDX page, the story decorator does not re-run, so the root `light` / `dark` class can stay stale.
+  The accepted workaround reads `props.context.store?.userGlobals?.globals?.theme` inside the custom Docs container and
+  toggles the explicit `light` and `dark` classes on `document.documentElement`. This uses a private Storybook Docs
+  context shape, so keep it narrow, optional-chained, and documented. Do not replace it with `useGlobals()` inside the
+  Docs container; Storybook preview hooks are only valid inside decorators and story functions. Track the upstream
+  discussion at https://github.com/storybookjs/storybook/discussions/28495.
+- Keep `withThemeByClassName` configured with explicit class names:
+
+```tsx
+withThemeByClassName({
+    defaultTheme: LIGHT_THEME,
+    themes: {
+        light: LIGHT_THEME,
+        dark: DARK_THEME,
+    },
+})
+```
+
+The light class is currently a state marker, not a CSS override. It exists so unattached MDX theme synchronization can
+toggle two explicit states instead of treating light as an invisible absence of class.
 
 - Keep `parameters.docs.toc` enabled when component Autodocs pages benefit from a table of contents.
 - Be aware of the current Storybook 10.4 production Docs workaround. In this project, a custom Docs container plus

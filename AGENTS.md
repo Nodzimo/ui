@@ -586,8 +586,9 @@
   excludes `*.stories.*` from Tailwind source detection. Importing it can make story-only utilities such as `gap-10`,
   `items-end`, `min-h-screen`, or comparison-grid classes silently disappear from the Storybook canvas.
 - Use `@storybook/addon-themes` with `withThemeByClassName` in `.storybook/preview.tsx` for the component-preview theme
-  toggle. The light option should apply no extra class, and the dark option should apply `dark`, matching the
-  `@custom-variant dark (&:is(.dark *))` contract in `src/library.css`.
+  toggle. This is the source of truth for component tokens and canvases. Keep the light and dark class names explicit
+  (`light` and `dark`) even though the light class currently has no CSS rules. The explicit light marker keeps
+  standalone MDX Docs theme synchronization debuggable and aligned with the same class contract as the preview canvas.
 - Keep global Storybook story layout on `parameters.layout = 'centered'` unless a specific story needs a different
   layout. This is Storybook's native centering path; do not replace it with wrapper `min-height` or full-screen flex
   hacks just to center a normal component story.
@@ -612,6 +613,20 @@
   `.storybook/manager.ts` `addons.setConfig({ theme })` for manager branding. `create({ base })` only accepts
   `'light' | 'dark'`; use `getPreferredColorScheme()` when the branded manager theme should follow the user's system
   preference at load time. Use `storybook-dark-mode` for the live manager light/dark toggle.
+- Keep the two Storybook theme addons separated by responsibility:
+    - `storybook-dark-mode` owns Storybook chrome and Docs UI theme.
+    - `@storybook/addon-themes` owns component-preview theme, NUI token values, story canvases, and design-system MDX
+      token documentation.
+      Do not enable `storybook-dark-mode` `stylePreview` for this project. It can make one toolbar button appear to
+      theme
+      everything, but it gives `storybook-dark-mode` a second ownership role over the preview iframe and can conflict
+      with
+      `@storybook/addon-themes`, including manager runtime failures such as
+      `Failed to execute 'add'/'remove' on 'DOMTokenList': The token provided must not be empty` when an empty class
+      token
+      is supplied. This project intentionally keeps two controls because they describe two different surfaces: the tool
+      UI
+      and the product/component theme inside the tool.
 - Storybook Docs theming is a third surface, separate from both manager UI and component canvas theming. Do not pin
   `parameters.docs.theme = themes.normal` once `storybook-dark-mode` is enabled; that leaves Docs white while the
   manager is dark. Instead, keep a typed custom Docs container in `.storybook/preview.tsx`: import `DocsContainer` and
@@ -619,6 +634,20 @@
   `<DocsContainer {...props} theme={isDark ? themes.dark : themes.normal} />`. Keep `theme` after `{...props}` so the
   dark-mode state intentionally wins over any theme carried in the props. This uses public APIs from Storybook Docs and
   `storybook-dark-mode`; avoid channel-event plumbing unless a future docs-only toggle is intentionally needed.
+- Standalone MDX Docs pages are not ordinary story canvases, so `@storybook/addon-themes` does not reliably re-run the
+  story decorator when the theme toolbar changes while the user is already on an unattached MDX page such as a token
+  palette. The observed behavior is that switching the component theme on a normal story updates the root class, and
+  returning to MDX then shows the right token values; switching directly on the MDX page changes the toolbar state but
+  does not update the MDX surface. Keep the local Docs-container bridge that reads
+  `props.context.store?.userGlobals?.globals?.theme` and toggles the explicit `light` / `dark` classes on
+  `document.documentElement`. This relies on Storybook internal Docs context shape, so keep it small, optional-chained,
+  and isolated in `.storybook/preview.tsx`.
+- Do not use Storybook preview hooks such as `useGlobals()` inside `DocsContainer`. Storybook throws
+  `Storybook preview hooks can only be called inside decorators and story functions`; Docs containers are not that hook
+  zone. The accepted workaround is based on the public `DocsContainer` hook for Docs UI theme plus the narrow internal
+  `context.store.userGlobals.globals.theme` read for unattached MDX component-theme synchronization. Track the upstream
+  discussion at https://github.com/storybookjs/storybook/discussions/28495. It matches this project failure mode:
+  unattached MDX docs do not render/update theme until a regular story has applied the theme decorator.
 - Keep Storybook Docs table of contents enabled through `parameters.docs.toc` when it helps longer Autodocs pages. This
   is a Docs feature, not a story layout workaround.
 - Storybook 10.4 with React 19, Vite/Rolldown, `@storybook/addon-docs`, and the custom dark-mode Docs container has a

@@ -52,6 +52,12 @@ tokens.
   preview and Docs canvas surfaces. Keep the project workaround in `.storybook/preview.css`: apply
   `background-color: var(--nui-background)` to `html` and `.docs-story`. This is Storybook-only theme surface glue, not
   a library token or consumer stylesheet rule.
+- Standalone Storybook MDX token docs need the same component-theme class contract as stories. Keep
+  `@storybook/addon-themes` as the owner of component `light` / `dark` classes, and keep `storybook-dark-mode` as the
+  owner of Storybook chrome theme only. The custom Docs container in `.storybook/preview.tsx` contains a narrow
+  workaround for unattached MDX pages: it reads the current addon-themes global from Storybook's internal Docs context
+  store and toggles explicit `light` / `dark` classes on `document.documentElement` so `var(--nui-*)` palette docs read
+  the same token values as ordinary stories.
 
 ## Workflow
 

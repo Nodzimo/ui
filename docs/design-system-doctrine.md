@@ -396,19 +396,23 @@ dedicated story or design-lab story rather than losing the trail.
 
 ## Storybook Theme Review Contract
 
-Storybook has two separate theme surfaces, and they should not be treated as one switch.
+Storybook has separate theme surfaces, and they should not be treated as one switch.
 
 Preview theme is for the component canvas. Use `@storybook/addon-themes` with `withThemeByClassName` so the toolbar
-adds the same `dark` class that the library stylesheet expects. This is the source of truth for reviewing light and dark
-component behavior.
+adds the same `light` / `dark` class contract that the library stylesheet expects. This is the source of truth for
+reviewing light and dark component behavior, including design-system token documentation.
 
 Manager theme is Storybook's own chrome: sidebar, toolbar, bottom panels, and branding. Configure it through
 `storybook/theming` and `.storybook/manager.ts` `addons.setConfig({ theme })`. Storybook's `create({ base })` only
 accepts `light` or `dark`; use `getPreferredColorScheme()` when the branded manager should follow the user's system
-preference at load time.
+preference at load time. Use `storybook-dark-mode` for the live manager light/dark toggle. Do not let
+`storybook-dark-mode` own the component preview iframe; that collapses the tool theme and product theme into one switch
+and conflicts with `@storybook/addon-themes`.
 
-Docs pages have their own rendering surface. Use `parameters.docs.theme = themes.normal` so Docs follow the preferred
-Storybook theme instead of leaving documentation pages visually disconnected from the manager.
+Docs pages have their own rendering surface. Use the custom Docs container in `.storybook/preview.tsx` so Docs chrome
+follows `storybook-dark-mode`, while standalone MDX token pages still follow the component theme from
+`@storybook/addon-themes`. This is necessary because unattached MDX pages do not reliably re-run story decorators when
+the component-theme toolbar changes while the user is already on that MDX page.
 
 The global preview wrapper should include:
 

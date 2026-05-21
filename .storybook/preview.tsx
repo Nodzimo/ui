@@ -9,14 +9,38 @@ import {
 import { themes } from 'storybook/theming'
 import { useDarkMode } from 'storybook-dark-mode'
 
+const DEFAULT_WRAPPER_BACKGROUND = 'transparent'
+const LIGHT_THEME = 'light'
+const DARK_THEME = 'dark'
+
+type DocsContextWithStore = DocsContainerProps['context'] & {
+	store?: {
+		userGlobals?: {
+			globals?: {
+				theme?: typeof LIGHT_THEME | typeof DARK_THEME
+			}
+		}
+	}
+}
+
 function ThemedDocsContainer(props: DocsContainerProps) {
 	const isDark = useDarkMode()
 	const theme = isDark ? themes.dark : themes.normal
+	const context = props.context as DocsContextWithStore
+	const componentTheme = context.store?.userGlobals?.globals?.theme
+
+	document.documentElement.classList.toggle(
+		LIGHT_THEME,
+		componentTheme === LIGHT_THEME,
+	)
+
+	document.documentElement.classList.toggle(
+		DARK_THEME,
+		componentTheme === DARK_THEME,
+	)
 
 	return <DocsContainer {...props} theme={theme} />
 }
-
-const DEFAULT_WRAPPER_BACKGROUND = 'transparent'
 
 const preview: Preview = {
 	tags: ['autodocs'],
@@ -52,10 +76,10 @@ const preview: Preview = {
 	args: { wrapperBackground: DEFAULT_WRAPPER_BACKGROUND },
 	decorators: [
 		withThemeByClassName({
-			defaultTheme: 'light',
+			defaultTheme: LIGHT_THEME,
 			themes: {
-				light: '',
-				dark: 'dark',
+				light: LIGHT_THEME,
+				dark: DARK_THEME,
 			},
 		}),
 		(Story, { args }) => {

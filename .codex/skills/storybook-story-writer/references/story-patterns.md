@@ -126,6 +126,12 @@ the Storybook manager UI. Manager branding/theme should use `storybook/theming` 
 `getPreferredColorScheme()` when the branded manager theme should follow the user's system preference at load time.
 Use `storybook-dark-mode` when the Storybook manager itself needs a live light/dark toggle.
 
+Do not collapse those two addons into one control. `storybook-dark-mode` is for Storybook chrome and Docs UI theme;
+`@storybook/addon-themes` is for component tokens, story canvases, and design-system MDX pages. The
+`storybook-dark-mode` `stylePreview` option can make one toggle affect the preview iframe, but that gives the manager
+theme addon ownership over the same `light` / `dark` classes that `@storybook/addon-themes` already owns. In this
+project that produced confusing double-toggle behavior and DOMTokenList failures when empty class names were passed.
+
 Docs pages are a separate Storybook surface. Do not pin `parameters.docs.theme = themes.normal` when
 `storybook-dark-mode` is enabled, because that leaves the Docs renderer light while the manager is dark. Bridge the
 manager dark-mode state into Docs through a typed custom container:
@@ -143,6 +149,39 @@ function ThemedDocsContainer(props: DocsContainerProps) {
 Set `parameters.docs.container = ThemedDocsContainer`. Keep `theme` after `{...props}` so the hook-derived theme wins.
 This uses Storybook's public Docs container API plus `storybook-dark-mode`'s public `useDarkMode()` hook; avoid the
 lower-level dark-mode channel events unless a custom docs-only toggle is deliberately needed.
+
+Standalone MDX docs need one extra bridge. Storybook issue/discussion history shows that unattached MDX pages do not
+always re-render or re-run story decorators when the `@storybook/addon-themes` toolbar changes. The project hit this
+with the color palette: switching the component theme on a normal story updated `html.dark`, and returning to the MDX
+page showed the right token colors; switching directly on the MDX page changed the toolbar state but left the MDX token
+values stale. The matching upstream discussion is
+https://github.com/storybookjs/storybook/discussions/28495.
+
+Keep the workaround inside the custom Docs container:
+
+- read the component theme from `props.context.store?.userGlobals?.globals?.theme`.
+- treat that `store` path as Storybook internal shape, not a public `DocsContainerProps` field.
+- cast locally with a narrow optional type.
+- toggle explicit `light` and `dark` classes on `document.documentElement`.
+- do not call `useGlobals()` there; Storybook preview hooks are valid only inside decorators and story functions.
+
+Use explicit class names in `withThemeByClassName`:
+
+```tsx
+const LIGHT_THEME = 'light'
+const DARK_THEME = 'dark'
+
+withThemeByClassName({
+    defaultTheme: LIGHT_THEME,
+    themes: {
+        light: LIGHT_THEME,
+        dark: DARK_THEME,
+    },
+})
+```
+
+The light class is a marker for docs synchronization. The light token values still come from `:root`; `.light` does not
+need CSS rules unless the design later chooses explicit light overrides.
 
 Enable `parameters.docs.toc` when Autodocs pages are long enough to benefit from a table of contents.
 
