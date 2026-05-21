@@ -54,6 +54,10 @@ import { Button } from '.'
 - Run the smallest relevant verification, normally `bun run build:ts` and `bun run check:lint`. When story layout or
   Storybook CSS imports change, also run `bun run storybook:build` and confirm the static Storybook CSS contains the
   needed story-only utilities while `bun run build:css` keeps `dist/styles.css` free of those story-only classes.
+- When changing Storybook preview, Docs, Vite plugins, or theme addons, verify the production static output, not only
+  the dev server. Use `bun run storybook:preview` to build and serve `storybook-static`, then open at least one ordinary
+  story and one Docs page. Storybook dev mode can hide production-only Docs renderer failures, and
+  `storybook:build-test` is not equivalent because it can omit Docs pages.
 
 ## Story Selection
 
@@ -178,6 +182,23 @@ Then set `parameters.docs.container = ThemedDocsContainer`. Import `DocsContaine
 `@storybook/addon-docs/blocks`, and `useDarkMode` from `storybook-dark-mode`. Keep `theme` after `{...props}` so the
 dark-mode state wins intentionally. Prefer this hook-based bridge over manual `DARK_MODE_EVENT_NAME` channel plumbing
 unless the project needs a custom docs-only toggle.
+
+- Keep `parameters.docs.toc` enabled when component Autodocs pages benefit from a table of contents.
+- Be aware of the current Storybook 10.4 production Docs workaround. In this project, a custom Docs container plus
+  addon-docs triggered a production-only React #130 crash because Storybook's `DocsRenderer` dynamically imported
+  `@mdx-js/react`, but the static Vite/Rolldown output resolved that import to a chunk without a usable named
+  `MDXProvider` export. The local fix is `.storybook/mdx-react-proxy-plugin.ts`, registered in
+  `.storybook/vite.config.ts`, which rewrites the dynamic `import("@mdx-js/react")` from addon-docs to
+  `.storybook/mdx-react-proxy.ts`. That proxy re-exports `MDXProvider` and `useMDXComponents` from the real
+  `@mdx-js/react` package.
+- Treat the MDX React proxy as Storybook-only build plumbing. Do not copy it into component stories, do not add MDX
+  files only to "force" the provider, do not patch `node_modules`, and do not remove Docs or the custom Docs container
+  to make the build smaller. Revisit and remove the workaround only after a Storybook/Vite/Rolldown upgrade proves the
+  production static Docs pages work without it.
+- If Docs crash only after deploy or `storybook:build`, debug the static output first: serve `storybook-static`, inspect
+  the console, and check whether `MDXProvider` is undefined in the built `DocsRenderer` path. Related but not exact
+  upstream signals include https://github.com/storybookjs/storybook/issues/32604 and
+  https://github.com/storybookjs/storybook/issues/24792.
 
 - Do not add Storybook background/color-picker addons only to get a free full-canvas color picker unless they are
   verified compatible with the current Storybook version. The official backgrounds addon is preset-based, and stale

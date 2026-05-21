@@ -619,6 +619,27 @@
   `<DocsContainer {...props} theme={isDark ? themes.dark : themes.normal} />`. Keep `theme` after `{...props}` so the
   dark-mode state intentionally wins over any theme carried in the props. This uses public APIs from Storybook Docs and
   `storybook-dark-mode`; avoid channel-event plumbing unless a future docs-only toggle is intentionally needed.
+- Keep Storybook Docs table of contents enabled through `parameters.docs.toc` when it helps longer Autodocs pages. This
+  is a Docs feature, not a story layout workaround.
+- Storybook 10.4 with React 19, Vite/Rolldown, `@storybook/addon-docs`, and the custom dark-mode Docs container has a
+  production-only Docs bundling incident in this project. The development Storybook can work while the static
+  `storybook build` output fails only on Docs pages with React minified error #130. The confirmed local failure mode was
+  Storybook's `DocsRenderer` dynamically importing `@mdx-js/react`, Vite/Rolldown rewriting that dynamic import to the
+  main iframe chunk, and the expected named `MDXProvider` export not being available from that chunk. Story pages kept
+  working because the crash was inside the Docs renderer path.
+- Keep the workaround isolated in `.storybook/mdx-react-proxy-plugin.ts` plus `.storybook/mdx-react-proxy.ts`, and
+  register it from `.storybook/vite.config.ts` as a normal Vite plugin next to `tailwindcss()`. The plugin narrowly
+  rewrites the dynamic `import("@mdx-js/react")` from Storybook addon-docs to a local proxy module that re-exports
+  `MDXProvider` and `useMDXComponents` from `@mdx-js/react`. This is intentionally Storybook-only, should not affect the
+  publishable library build, and is preferable to patching `node_modules`, disabling Docs, removing the custom Docs
+  container, or adding runtime monkey patches.
+- Treat the MDX React proxy plugin as a temporary production-build workaround. Re-check it after Storybook, Vite, or
+  Rolldown upgrades: build the public Storybook, serve the static output, open at least one Button Docs page and one
+  Spinner Docs page, and confirm there are no runtime console errors. If Storybook later fixes the `@mdx-js/react`
+  dynamic import path, remove the plugin and proxy together. Related public signals are Storybook issue
+  https://github.com/storybookjs/storybook/issues/32604 and older addon-docs/MDX export issues such as
+  https://github.com/storybookjs/storybook/issues/24792; neither is a perfect one-to-one match, so keep the local
+  diagnosis documented.
 - Storybook's official backgrounds addon supports preset backgrounds, not a free global color picker. Avoid adding
   stale third-party background/color-picker addons only for this feature; many are not maintained for current Storybook
   versions. If a real full-canvas color picker is needed later, prefer a small project-owned Storybook toolbar/global
@@ -790,9 +811,18 @@
 - `bun run build:css-watch` watches and rebuilds the CSS output.
 - `bun run build:all` regenerates icons, runs the JS/type build, and then builds CSS. Keep CSS after Vite because Vite
   clears `dist`.
+- `bun run storybook` starts the regular Storybook dev server.
+- `bun run storybook:docs` starts Storybook in docs-focused dev mode.
 - `bun run storybook:build` builds the full public static Storybook into `storybook-static`.
 - `bun run storybook:build-test` is a test-optimized Storybook build script. Do not use it for the public deployment
   unless the project intentionally switches the deployed Storybook to test-mode output.
+- `bun run storybook:build-docs` builds the docs-focused static Storybook output.
+- `bun run storybook:serve` serves the already-built `storybook-static` directory through `bunx http-server` for
+  production-like local runtime checks. `http-server` is intentionally invoked through `bunx` instead of being pinned in
+  `devDependencies` while the published package is stale; revisit this if the package is actively maintained again.
+  Keep `-c-1` because `http-server` does not support a long `--cache -1` flag in the tested version.
+- `bun run storybook:preview` runs the public static Storybook build and then serves `storybook-static`. Use this when a
+  bug appears only after deployment or production build; the dev server is not enough for those incidents.
 - `bun run lib:pack` only packs the current build output as `nodzimo-ui.tgz`; it intentionally does not build. Use it
   after `build:all` or through `project:verify`.
 - `bun run check:lint` runs Biome checks.
@@ -823,6 +853,15 @@
   Compiler scope, Tailwind styles, generated icons, or client/core boundaries.
 - Use `bun run storybook:build` after changing `.storybook/main.ts`, `.storybook/vite.config.ts`, Storybook addons,
   `assets/storybook`, or deploy-facing Storybook metadata.
+- For Storybook runtime issues, do not rely on the dev server alone. Run `bun run storybook:preview`, open the static
+  build in the browser, and check both story pages and Docs pages. Production-only Docs failures can be hidden by
+  `storybook dev`, and `storybook build --test` may omit Docs output, so it is not a substitute for deployed-docs
+  verification.
+- After changing `.storybook/preview.tsx` Docs configuration, `storybook-dark-mode`, `.storybook/vite.config.ts`, or the
+  MDX React proxy workaround, confirm the production static Storybook has:
+    - a separate `mdx-react-proxy-*.js` chunk or another verified fixed path for `MDXProvider`.
+    - working Button Docs and Spinner Docs pages with no React #130 runtime error.
+    - working ordinary story pages, because Docs-only fixes should not break canvas stories.
 - After changing declaration excludes, Tailwind source detection, or package output names, inspect `bun pm pack
   --dry-run` and confirm Storybook-only files are not in the package unless intentionally kept.
 - After changing declaration bundling or package type exports, confirm `dist` contains `nodzimo-ui.d.ts` and

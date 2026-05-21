@@ -11,10 +11,9 @@ import { useDarkMode } from 'storybook-dark-mode'
 
 function ThemedDocsContainer(props: DocsContainerProps) {
 	const isDark = useDarkMode()
+	const theme = isDark ? themes.dark : themes.normal
 
-	return (
-		<DocsContainer {...props} theme={isDark ? themes.dark : themes.normal} />
-	)
+	return <DocsContainer {...props} theme={theme} />
 }
 
 const DEFAULT_WRAPPER_BACKGROUND = 'transparent'
@@ -23,7 +22,10 @@ const preview: Preview = {
 	tags: ['autodocs'],
 	parameters: {
 		layout: 'centered',
-		docs: { container: ThemedDocsContainer },
+		docs: {
+			toc: true, // Enables the table of contents
+			container: ThemedDocsContainer,
+		},
 		controls: {
 			expanded: true,
 			matchers: {

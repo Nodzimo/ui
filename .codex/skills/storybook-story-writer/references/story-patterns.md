@@ -144,6 +144,31 @@ Set `parameters.docs.container = ThemedDocsContainer`. Keep `theme` after `{...p
 This uses Storybook's public Docs container API plus `storybook-dark-mode`'s public `useDarkMode()` hook; avoid the
 lower-level dark-mode channel events unless a custom docs-only toggle is deliberately needed.
 
+Enable `parameters.docs.toc` when Autodocs pages are long enough to benefit from a table of contents.
+
+Production Docs must be tested as production Docs. The project has a known Storybook 10.4 / React 19 / Vite-Rolldown
+incident where the dev server worked, ordinary story pages worked, but static Docs pages failed with React minified
+error #130. The local diagnosis was:
+
+- a custom Docs container activates the Storybook Docs renderer path.
+- Storybook addon-docs dynamically imports `@mdx-js/react` and expects a named `MDXProvider` export.
+- the production build rewrote that dynamic import to a chunk that did not expose `MDXProvider` as expected.
+- React then tried to render `undefined` as a component inside `DocsRenderer`.
+
+The current fix is intentionally isolated in Storybook build plumbing:
+
+- `.storybook/mdx-react-proxy.ts` re-exports `MDXProvider` and `useMDXComponents` from `@mdx-js/react`.
+- `.storybook/mdx-react-proxy-plugin.ts` rewrites the dynamic `import("@mdx-js/react")` from addon-docs to that proxy
+  module.
+- `.storybook/vite.config.ts` registers the plugin next to the Tailwind Vite plugin.
+
+This is the narrowest accepted workaround found so far: it keeps Docs, keeps the typed dark-mode Docs container, avoids
+runtime monkey patches, avoids patching `node_modules`, and stays out of the published library bundle. Treat it as
+temporary. After Storybook, Vite, or Rolldown upgrades, try removing the proxy plugin and verify the production static
+Docs pages. Related but not exact upstream signals: Storybook issue
+https://github.com/storybookjs/storybook/issues/32604 and addon-docs/MDX export issue
+https://github.com/storybookjs/storybook/issues/24792.
+
 Use Storybook's native `layout: 'centered'` for ordinary centered component stories. If the theme toggle changes tokens
 but the full canvas remains on the wrong background, fix the Storybook preview surface in `.storybook/preview.css`, not
 with story wrappers:
