@@ -60,7 +60,27 @@ const preview: Preview = {
 		options: {
 			storySort: {
 				method: 'alphabetical',
-				order: ['Design System', 'Core', 'Client', '*'],
+				order: [
+					'Design System',
+					[
+						'Colors',
+						'Doctrine',
+						[
+							'Overview',
+							'Core Position',
+							'Theme-Specific Values',
+							'Storybook Theme Review',
+							'Button Action Hierarchy',
+							'Token Discipline',
+							'Theme Character Guardrails',
+							'References And Evidence',
+							'Final Reminder',
+						],
+					],
+					'Core',
+					'Client',
+					'*',
+				],
 			},
 		},
 		a11y: {

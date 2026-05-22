@@ -57,7 +57,8 @@ focus-visible:ring-destructive/20 -> focus-visible:ring-nui-destructive/20
 
 ## Theme Token Meanings
 
-Read `docs/design-system-doctrine.md` for the full design rationale. The short Nodzimo hierarchy is:
+Read `docs/design-system-doctrine/README.md` and the relevant chapter files for the full design rationale. The short
+Nodzimo hierarchy is:
 
 ```text
 primary: brand speaks loudly.

@@ -127,6 +127,13 @@ contract.
 - Put Storybook-only showcase pages and tools under `.storybook/showcase`. Use that area for design-system pages such
   as colors, tokens, spacing, icons, and other documentation UI that exists only inside Storybook. Keep actual component
   stories colocated in `src` beside the component they document.
+- Keep long project doctrine content source-of-truth under `docs`, not embedded directly in Storybook. The current
+  design-system doctrine lives in `docs/design-system-doctrine/README.md` plus numbered chapter files. Storybook should
+  mirror those chapters through `.storybook/showcase` MDX wrappers that import the chapter Markdown with `?raw`.
+- When a Storybook-only MDX overview links to other Storybook Docs pages, use ordinary Markdown links with
+  `./?path=/docs/<id>--docs`. A bare `?path=/docs/...` can resolve inside the preview iframe as
+  `iframe.html?path=...`; `./?path=...` targets the Storybook manager entrypoint while keeping the page readable as
+  simple MDX. Do not switch to JSX `<a target>` links unless Markdown links fail for a confirmed deployment case.
 - When adding showcase content, make sure `.storybook/main.ts` includes `.storybook/showcase` MDX/stories globs and
   `.storybook/tsconfig.json` includes `.storybook` recursively. Do not add a third Tailwind entrypoint; `.storybook`
   preview CSS already scans showcase through `@source "."`.

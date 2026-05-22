@@ -15,9 +15,9 @@ tokens.
 
 - Treat `src/library.css` as the source of truth for available theme tokens and foundation classes. `src/styles.css` is
   only the publishable package stylesheet entrypoint.
-- Read `docs/design-system-doctrine.md` before changing color token values, button variants, interactive-state styling,
-  or the semantic meaning of `primary`, `secondary`, `outline`, `ghost`, `link`, `muted`, `accent`, `border`, `input`,
-  or `ring`.
+- Read `docs/design-system-doctrine/README.md` and the relevant chapter files before changing color token values,
+  button variants, interactive-state styling, or the semantic meaning of `primary`, `secondary`, `outline`, `ghost`,
+  `link`, `muted`, `accent`, `border`, `input`, or `ring`.
 - Raw CSS variables use `--nui-*`.
 - Tailwind theme tokens use `--color-nui-*`, `--radius-nui-*`, and `--spacing-nui-*`.
 - Reusable color-intensity rhythm uses Tailwind slash opacity values `/20`, `/50`, and `/80`, described as `subtle`,
@@ -63,8 +63,8 @@ tokens.
 
 1. Inspect the new or changed component files and `src/library.css`. Inspect `src/styles.css` and
    `.storybook/preview.css` too when Tailwind entrypoints or source policy change.
-2. If the work affects color meaning, button variants, or interactive states, inspect `docs/design-system-doctrine.md`
-   and preserve the Nodzimo hierarchy:
+2. If the work affects color meaning, button variants, or interactive states, inspect
+   `docs/design-system-doctrine/README.md` and the relevant chapter files and preserve the Nodzimo hierarchy:
     - primary speaks loudly.
     - secondary speaks quietly.
     - outline is structural.
