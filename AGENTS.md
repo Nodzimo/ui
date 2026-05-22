@@ -134,8 +134,8 @@
 - `src/index.ts` is the root package entry and re-exports from `src/core`.
 - `src/client.ts` is the client package entry. It must start with `'use client'` and re-export from `src/client/index`.
 - `src/styles.css` is the global stylesheet source for the UI kit and builds to `dist/styles.css`.
-- `docs/design-system-doctrine/README.md` is the GitHub-readable doctrine overview, and the numbered Markdown files in
-  that directory are the source-of-truth doctrine chapters. Storybook mirrors those chapters through MDX wrappers under
+- `docs/design-system-doctrine/README.md` is the GitHub-readable doctrine overview, and that directory's Markdown
+  chapter files are the source-of-truth doctrine chapters. Storybook mirrors those chapters through MDX wrappers under
   `.storybook/showcase`; do not collapse the doctrine back into one giant Markdown file.
 - Raw icon SVG inputs live under `assets/icons`, grouped by source or category such as `lucide`, `brand`, or `custom`.
 - Generated icon components live under `src/core/icons/generated`. Treat this directory as generator-owned output:
@@ -394,6 +394,8 @@
   Storybook uses `.storybook/showcase/doctrine.mdx` plus chapter MDX wrappers. Keep GitHub links as relative `.md`
   links, but use Storybook `./?path=/docs/...` links inside Storybook-only MDX overviews so navigation targets the
   Storybook manager instead of `iframe.html`.
+- Keep doctrine chapter file names based on chapter identity, not position. Do not prefix chapter files with `01-`,
+  `02-`, and so on; order belongs in `README.md`, Storybook overview links, and `storySort`.
 - Preserve the shadcn-style semantic token architecture. Do not add one-off state tokens such as `primaryTextHover`,
   `primaryLinkActive`, or `primaryBackgroundPressed` unless the existing semantic roles have clearly failed across
   multiple components.

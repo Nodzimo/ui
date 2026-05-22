@@ -128,8 +128,10 @@ contract.
   as colors, tokens, spacing, icons, and other documentation UI that exists only inside Storybook. Keep actual component
   stories colocated in `src` beside the component they document.
 - Keep long project doctrine content source-of-truth under `docs`, not embedded directly in Storybook. The current
-  design-system doctrine lives in `docs/design-system-doctrine/README.md` plus numbered chapter files. Storybook should
-  mirror those chapters through `.storybook/showcase` MDX wrappers that import the chapter Markdown with `?raw`.
+  design-system doctrine lives in `docs/design-system-doctrine/README.md` plus identity-named chapter files. Storybook
+  should mirror those chapters through `.storybook/showcase` MDX wrappers that import the chapter Markdown with `?raw`.
+  Do not prefix doctrine chapter files with numeric order; order belongs in the README, Storybook overview, and
+  `storySort`.
 - When a Storybook-only MDX overview links to other Storybook Docs pages, use ordinary Markdown links with
   `./?path=/docs/<id>--docs`. A bare `?path=/docs/...` can resolve inside the preview iframe as
   `iframe.html?path=...`; `./?path=...` targets the Storybook manager entrypoint while keeping the page readable as
