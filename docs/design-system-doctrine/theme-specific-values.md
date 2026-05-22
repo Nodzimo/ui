@@ -1,4 +1,4 @@
-## Theme-Specific Values
+### Theme-Specific Values
 
 One physical color cannot always perform the same semantic role equally well in light and dark conditions.
 
@@ -71,7 +71,7 @@ The cost is paid for quality control.
 Self-expression is the upside of paying that cost.
 ```
 
-## Day And Night Are Not A Technical Toggle
+### Day And Night Are Not A Technical Toggle
 
 The important Nodzimo discovery is that light and dark themes should not be treated as a reluctant technical duty.
 
@@ -131,7 +131,7 @@ Night: neon energy cutting through the dark.
 
 Do not be afraid of this contrast. The mistake would be doing it halfway.
 
-## Brand Green Direction
+### Brand Green Direction
 
 The light-theme brand green emerged around:
 

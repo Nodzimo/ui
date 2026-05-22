@@ -1,4 +1,4 @@
-## Do Not Break Hierarchy For Flavor
+### Do Not Break Hierarchy For Flavor
 
 Nodzimo can have character without coloring every object.
 
@@ -22,7 +22,7 @@ Do not:
 - add private state tokens for every awkward component state
 - flatten Night Emerald back into timid dark emerald
 
-## Token Discipline
+### Token Discipline
 
 Nodzimo uses the existing shadcn-style roles:
 
@@ -66,7 +66,7 @@ Before adding a new token, ask:
 
 If the answer is no, do not add the token.
 
-## Directionality And RTL
+### Directionality And RTL
 
 Nodzimo UI supports right-to-left consumers. Components must be written with logical direction in mind, not as
 left-to-right-only layouts.
@@ -95,7 +95,7 @@ This matters for button icon compensation, navigation, menus, form adornments, a
 "trailing" content should mirror between LTR and RTL. Prefer naming component slots as `start`/`end` or
 `leading`/`trailing`, not `left`/`right`, unless the side is physically fixed.
 
-## NUI Intensity Rhythm
+### NUI Intensity Rhythm
 
 Nodzimo uses a tiny intensity rhythm for recurring color and opacity modifiers.
 

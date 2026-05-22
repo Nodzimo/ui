@@ -136,6 +136,9 @@ contract.
   `./?path=/docs/<id>--docs`. A bare `?path=/docs/...` can resolve inside the preview iframe as
   `iframe.html?path=...`; `./?path=...` targets the Storybook manager entrypoint while keeping the page readable as
   simple MDX. Do not switch to JSX `<a target>` links unless Markdown links fail for a confirmed deployment case.
+- For Storybook showcase MDX and raw-imported Markdown chapters, use `###` for section headings that should appear in
+  the right-side Docs table of contents. In the current Storybook Docs renderer, `##` headings can render as page
+  structure without appearing in that TOC, while `###` gives the expected chapter-section navigation.
 - When adding showcase content, make sure `.storybook/main.ts` includes `.storybook/showcase` MDX/stories globs and
   `.storybook/tsconfig.json` includes `.storybook` recursively. Do not add a third Tailwind entrypoint; `.storybook`
   preview CSS already scans showcase through `@source "."`.

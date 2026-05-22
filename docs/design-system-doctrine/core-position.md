@@ -6,7 +6,7 @@ the decision log, and the guardrail for future component work.
 The point is simple: future work should not rediscover these decisions from scratch, flatten the palette back into
 default shadcn neutrality, or add a pile of one-off tokens because one state looked awkward in one component.
 
-## Core Position
+### Core Position
 
 Nodzimo UI uses the shadcn semantic token architecture as its baseline, adapted into the `nui` namespace for a
 publishable library.
@@ -66,7 +66,7 @@ suffers: active actions, passive fields, and disabled controls become harder to 
 
 Use shadcn as the structural baseline, not as a ceiling for personality.
 
-## Living Interface Principle
+### Living Interface Principle
 
 The goal is not to color the interface because green is beloved. The goal is to make interaction legible.
 
@@ -115,7 +115,7 @@ Keep hierarchy intact.
 Let the brand clarify, not decorate.
 ```
 
-## Design Economics
+### Design Economics
 
 Every expressive decision has a maintenance cost.
 

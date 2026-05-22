@@ -1,6 +1,6 @@
 ## Theme Character Guardrails
 
-## Neutral Base Direction
+### Neutral Base Direction
 
 Nodzimo's neutral foundation intentionally mixes shadcn Studio base-color directions:
 
@@ -75,7 +75,7 @@ Reject dark-theme greens that feel:
 
 The dark theme should look like the night version has a reason to exist.
 
-## Practical Component Review Questions
+### Practical Component Review Questions
 
 When reviewing a component against this doctrine, ask:
 
@@ -88,7 +88,7 @@ When reviewing a component against this doctrine, ask:
 7. Does dark mode feel like Night Emerald, not merely inverted daylight?
 8. Did we solve the problem with existing semantic tokens before inventing a new one?
 
-## Current Theme Anchor Values
+### Current Theme Anchor Values
 
 These values are the current theme anchors. When changing them later, adapt the complete token set coherently rather
 than replacing only `primary`.
