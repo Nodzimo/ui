@@ -1,12 +1,16 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
-    <inspection_tool class="JSAnnotator" enabled="true" level="ERROR" enabled_by_default="true">
-      <scope name="IDE Tooling And Generated Files" level="ERROR" enabled="false" />
+    <inspection_tool class="BadExpressionStatementJS" enabled="true" level="WARNING" enabled_by_default="true">
+      <scope name="Storybook MDX Documentation" level="WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="CssUnusedSymbol" enabled="true" level="WARNING" enabled_by_default="true">
       <scope name="Library Stylesheet Contracts" level="WARNING" enabled="false" />
       <scope name="Storybook Documentation CSS Examples" level="WARNING" enabled="false" />
+    </inspection_tool>
+    <inspection_tool class="JSAnnotator" enabled="true" level="ERROR" enabled_by_default="true">
+      <scope name="IDE Tooling And Generated Files" level="ERROR" enabled="false" />
+      <scope name="Storybook MDX Documentation" level="ERROR" enabled="false" />
     </inspection_tool>
   </profile>
 </component>

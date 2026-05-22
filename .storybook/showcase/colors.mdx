@@ -1,0 +1,67 @@
+import {ColorItem, ColorPalette, Meta} from '@storybook/addon-docs/blocks'
+
+<Meta title='Design System/Colors'/>
+
+<ColorPalette>
+    <ColorItem
+        title={'Surface'}
+        subtitle={'Application, panel, and floating surfaces with their foreground pairs'}
+        colors={{
+            Background: 'var(--nui-background)',
+            Foreground: 'var(--nui-foreground)',
+            Card: 'var(--nui-card)',
+            'Card foreground': 'var(--nui-card-foreground)',
+            Popover: 'var(--nui-popover)',
+            'Popover foreground': 'var(--nui-popover-foreground)',
+        }}
+    />
+    <ColorItem
+        title={'Action'}
+        subtitle={'Action, interaction, selection, and destructive emphasis'}
+        colors={{
+            Primary: 'var(--nui-primary)',
+            'Primary foreground': 'var(--nui-primary-foreground)',
+            Secondary: 'var(--nui-secondary)',
+            'Secondary foreground': 'var(--nui-secondary-foreground)',
+            Accent: 'var(--nui-accent)',
+            'Accent foreground': 'var(--nui-accent-foreground)',
+            Destructive: 'var(--nui-destructive)',
+        }}
+    />
+    <ColorItem
+        title={'Support'}
+        subtitle={'Supporting content, boundaries, controls, and focus signal'}
+        colors={{
+            Muted: 'var(--nui-muted)',
+            'Muted foreground': 'var(--nui-muted-foreground)',
+            Border: 'var(--nui-border)',
+            Input: 'var(--nui-input)',
+            Ring: 'var(--nui-ring)',
+        }}
+    />
+    <ColorItem
+        title={'Chart'}
+        subtitle={'Default data visualization palette'}
+        colors={{
+            'Chart 1': 'var(--nui-chart-1)',
+            'Chart 2': 'var(--nui-chart-2)',
+            'Chart 3': 'var(--nui-chart-3)',
+            'Chart 4': 'var(--nui-chart-4)',
+            'Chart 5': 'var(--nui-chart-5)',
+        }}
+    />
+    <ColorItem
+        title={'Sidebar'}
+        subtitle={'Sidebar-specific surfaces, actions, accents, boundaries, and focus signal'}
+        colors={{
+            Sidebar: 'var(--nui-sidebar)',
+            'Sidebar foreground': 'var(--nui-sidebar-foreground)',
+            'Sidebar primary': 'var(--nui-sidebar-primary)',
+            'Sidebar primary foreground': 'var(--nui-sidebar-primary-foreground)',
+            'Sidebar accent': 'var(--nui-sidebar-accent)',
+            'Sidebar accent foreground': 'var(--nui-sidebar-accent-foreground)',
+            'Sidebar border': 'var(--nui-sidebar-border)',
+            'Sidebar ring': 'var(--nui-sidebar-ring)',
+        }}
+    />
+</ColorPalette>

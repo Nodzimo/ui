@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Storybook MDX Documentation" pattern="file:.storybook/showcase//*.mdx" />
+</component>

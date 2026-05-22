@@ -574,6 +574,18 @@
   externals, or declaration bundling.
 - Storybook builder may ignore most `build` options loaded from `viteConfigPath`. Use `.storybook/main.ts` `viteFinal`
   for final Storybook-only Vite overrides such as `build.chunkSizeWarningLimit`.
+- Storybook-only display pages and tools that are not package components belong under `.storybook/showcase`. Use this
+  for design-system pages such as color palettes, token previews, spacing previews, icon galleries, or other
+  Storybook-only UI. Keep colocated component stories beside their components in `src`, but do not put Storybook-only
+  showcase components under `src/core` or `src/client`; they are not part of the publishable library source.
+- Keep `.storybook/showcase/**/*.mdx` and `.storybook/showcase/**/*.stories.*` in Storybook's story globs when showcase
+  content exists. `.storybook/preview.css` already scans `.storybook` through `@source "."`, so no separate Tailwind
+  entrypoint or extra `@source` is needed for showcase files. `.storybook/tsconfig.json` should include `.storybook`
+  recursively so showcase TS/TSX helpers are visible to the IDE and Storybook type checks.
+- Sort top-level Storybook sections explicitly with `parameters.options.storySort` in `.storybook/preview.tsx`; do not
+  encode sidebar order with `01-` / `02-` prefixes in titles. The preferred top-level order is
+  `Design System`, `Core`, `Client`, then `*`, with `method: 'alphabetical'` when children should sort
+  alphabetically.
 - Use `storybook build` for the public Storybook static site. Keep `storybook build --test` only as an optional testing
   or diagnostics build; do not use it for the deployed docs site unless the project intentionally accepts its
   test-optimized output.
@@ -650,6 +662,15 @@
   unattached MDX docs do not render/update theme until a regular story has applied the theme decorator.
 - Keep Storybook Docs table of contents enabled through `parameters.docs.toc` when it helps longer Autodocs pages. This
   is a Docs feature, not a story layout workaround.
+- The `Design System/Colors` page currently uses Storybook's official MDX `ColorPalette` / `ColorItem` doc blocks.
+  Pass CSS variables such as `var(--nui-primary)`, not copied color literals, so swatches follow the component theme.
+  Storybook's built-in `ColorPalette` does not resolve or display computed CSS variable values and does not provide copy
+  buttons; accept that limitation for the simple MDX palette until the project intentionally builds a custom token
+  explorer.
+- Biome 2.4 does not parse or format MDX files in this project. Format `.mdx` manually, and keep WebStorm MDX false
+  positives scoped through project inspection settings rather than adding suppression comments inside MDX. The shared
+  `Storybook MDX Documentation` scope covers `.storybook/showcase/**/*.mdx` for WebStorm inspections that cannot parse
+  Storybook MDX correctly.
 - Storybook 10.4 with React 19, Vite/Rolldown, `@storybook/addon-docs`, and the custom dark-mode Docs container has a
   production-only Docs bundling incident in this project. The development Storybook can work while the static
   `storybook build` output fails only on Docs pages with React minified error #130. The confirmed local failure mode was

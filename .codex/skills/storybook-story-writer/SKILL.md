@@ -124,6 +124,15 @@ contract.
 - Keep Storybook's Vite config separate from the library package build config. If story or preview work needs Vite
   changes, use `.storybook/vite.config.ts` for Storybook preview plugins such as Tailwind, and use `.storybook/main.ts`
   `viteFinal` only for final Storybook-specific Vite overrides.
+- Put Storybook-only showcase pages and tools under `.storybook/showcase`. Use that area for design-system pages such
+  as colors, tokens, spacing, icons, and other documentation UI that exists only inside Storybook. Keep actual component
+  stories colocated in `src` beside the component they document.
+- When adding showcase content, make sure `.storybook/main.ts` includes `.storybook/showcase` MDX/stories globs and
+  `.storybook/tsconfig.json` includes `.storybook` recursively. Do not add a third Tailwind entrypoint; `.storybook`
+  preview CSS already scans showcase through `@source "."`.
+- Use `parameters.options.storySort` in `.storybook/preview.tsx` for top-level sidebar ordering. Prefer explicit
+  top-level order such as `Design System`, `Core`, `Client`, `*` and `method: 'alphabetical'` for child ordering. Do
+  not rely on numeric title prefixes for permanent ordering.
 - Storybook preview imports `./preview.css`, not `../src/styles.css`. `.storybook/preview.css` is the Storybook
   Tailwind entrypoint: it imports Tailwind with `source(none)`, imports `../src/library.css`, and explicitly scans
   `../src` plus `.` so story-only preview utilities can be generated. `src/styles.css` is the package CSS entrypoint and
@@ -211,6 +220,12 @@ The light class is currently a state marker, not a CSS override. It exists so un
 toggle two explicit states instead of treating light as an invisible absence of class.
 
 - Keep `parameters.docs.toc` enabled when component Autodocs pages benefit from a table of contents.
+- Use official MDX doc blocks for simple showcase docs when they are enough. The current color palette intentionally
+  uses `ColorPalette` / `ColorItem` with `var(--nui-*)` values so swatches react to theme changes without duplicating
+  light/dark color literals. Do not expect this block to display computed values or provide copy buttons; that requires
+  a deliberate custom token explorer.
+- Biome does not process MDX in this setup. Format Storybook MDX manually and keep IDE parser false positives scoped
+  through the shared WebStorm inspection settings, not inline MDX suppression comments.
 - Be aware of the current Storybook 10.4 production Docs workaround. In this project, a custom Docs container plus
   addon-docs triggered a production-only React #130 crash because Storybook's `DocsRenderer` dynamically imported
   `@mdx-js/react`, but the static Vite/Rolldown output resolved that import to a chunk without a usable named

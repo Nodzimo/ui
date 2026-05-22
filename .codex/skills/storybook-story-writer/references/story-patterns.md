@@ -25,6 +25,23 @@ const title = 'Client/Components/Button'
 For new client components, use `Client/Components/<ComponentName>` unless the repository has already established a
 more specific grouping for that component category.
 
+Use `.storybook/showcase` for Storybook-only design-system pages and tools that are not package components. These pages
+may use titles such as `Design System/Colors`, `Design System/Tokens`, or `Design System/Spacing`. Do not put those
+showcase-only helpers under `src/core` or `src/client`; `src` remains the publishable library source plus colocated
+stories for real components.
+
+Keep top-level sidebar order in `.storybook/preview.tsx` through `parameters.options.storySort`, not by prefixing
+titles with numbers. Preferred order:
+
+```text
+Design System
+Core
+Client
+*
+```
+
+Use `method: 'alphabetical'` when children inside those roots should sort alphabetically.
+
 ## Args
 
 Put generic defaults in `meta.args`:
@@ -184,6 +201,15 @@ The light class is a marker for docs synchronization. The light token values sti
 need CSS rules unless the design later chooses explicit light overrides.
 
 Enable `parameters.docs.toc` when Autodocs pages are long enough to benefit from a table of contents.
+
+For simple token showcase pages, official MDX doc blocks are acceptable. The colors page uses `ColorPalette` /
+`ColorItem` with CSS variable values such as `var(--nui-primary)`, which keeps swatches theme-aware without copying
+literal light/dark values. The tradeoff is explicit: Storybook's built-in `ColorPalette` displays the variable string,
+not the computed `oklch(...)` value, and it does not provide copy buttons. Do not add a custom TSX token explorer until
+the project intentionally accepts that extra runtime/tooling complexity.
+
+Biome does not process MDX in this project. Format `.storybook/showcase/**/*.mdx` manually. WebStorm inspection false
+positives for Storybook MDX should be handled through the shared `Storybook MDX Documentation` inspection scope.
 
 Production Docs must be tested as production Docs. The project has a known Storybook 10.4 / React 19 / Vite-Rolldown
 incident where the dev server worked, ordinary story pages worked, but static Docs pages failed with React minified
