@@ -12,5 +12,11 @@
       <scope name="IDE Tooling And Generated Files" level="ERROR" enabled="false" />
       <scope name="Storybook MDX Documentation" level="ERROR" enabled="false" />
     </inspection_tool>
+    <inspection_tool class="JSValidateTypes" enabled="true" level="WARNING" enabled_by_default="true">
+      <scope name="Storybook MDX Documentation" level="WARNING" enabled="false" />
+    </inspection_tool>
+    <inspection_tool class="TypeScriptValidateTypes" enabled="true" level="WARNING" enabled_by_default="true">
+      <scope name="Storybook MDX Documentation" level="WARNING" enabled="false" />
+    </inspection_tool>
   </profile>
 </component>

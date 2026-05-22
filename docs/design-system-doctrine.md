@@ -1,4 +1,4 @@
-# Nodzimo UI Design System Doctrine
+# Sefo Nodzimo UI Design System Doctrine
 
 This document records the current Nodzimo UI design direction. It is not a generic color note. It is the design brief,
 the decision log, and the guardrail for future component work.
