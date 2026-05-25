@@ -1,6 +1,10 @@
-// noinspection JSUnusedGlobalSymbols
-
+export { default as ArrowUpRightIcon } from './arrow-up-right-icon'
+export { default as FolderOpenIcon } from './folder-open-icon'
 export { default as HeartIcon } from './heart-icon'
+export { default as KeyRoundIcon } from './key-round-icon'
 export { default as LoaderCircleIcon } from './loader-circle-icon'
 export { default as LoaderIcon } from './loader-icon'
 export { default as LoaderPinwheelIcon } from './loader-pinwheel-icon'
+export { default as StarIcon } from './star-icon'
+export { default as Trash2Icon } from './trash-2-icon'
+export { default as XIcon } from './x-icon'

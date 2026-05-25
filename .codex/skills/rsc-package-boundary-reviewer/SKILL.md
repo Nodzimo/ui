@@ -1,6 +1,6 @@
 ---
 name: rsc-package-boundary-reviewer
-description: Review and document Nodzimo UI package boundaries for React Server Component safety. Use when changing src/core, src/client, public entrypoints, Vite externals, package dependencies, React Compiler scope, generated icons/SVGR config, built dist output, icon/runtime dependencies such as lucide-react, or investigating Next/Turbopack consumer build failures involving RSC, SSR, SSG, createContext, use client, or bundled dependency leaks.
+description: Review and document Nodzimo UI package boundaries for React Server Component safety. Use when changing src/core, src/client, public entrypoints, Vite externals, package dependencies, React Compiler scope, generated icons/SVGR config, built dist output, icon/runtime dependency leaks such as lucide-react, or investigating Next/Turbopack consumer build failures involving RSC, SSR, SSG, createContext, use client, or bundled dependency leaks.
 ---
 
 # RSC Package Boundary Reviewer
@@ -40,7 +40,7 @@ the full review checklist.
       `rg -n "createContext|useContext|useState|useEffect|react/compiler-runtime|@base-ui/react|lucide-react|node_modules/lucide" dist/nodzimo-ui.js`
     - Client entry:
       confirm `dist/client.js` starts with `"use client";` and may import `react/compiler-runtime`.
-    - `lucide-react` should not appear in the root entry while it is story-only.
+    - `lucide-react` should not appear in built package output.
 
 4. Check dependency contracts.
     - Externalized runtime imports must still be installable through `dependencies` or required through
@@ -55,8 +55,9 @@ the full review checklist.
 
 ## Decisions
 
-- Keep `lucide-react` story-only unless publishable runtime source imports it again. If it becomes runtime code again,
-  revisit both `dependencies` and Vite externals before building.
+- Keep `lucide-react` out of dependencies and source imports. Use raw SVG inputs plus generated project-owned icons
+  instead. If it becomes a deliberate dependency again, revisit package metadata, Vite externals, and Next consumer
+  verification before building.
 - For fundamental core primitives such as `Spinner`, prefer inline SVG or generated project-owned RSC-safe icon
   components over third-party React icon packages.
 - Generated icons in `src/core/icons/generated` must stay plain SVG components: no hooks, no `'use client'`, no `memo`,

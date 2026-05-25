@@ -1,18 +1,18 @@
 // noinspection JSUnusedGlobalSymbols
 
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import {
-	ArrowUpRightIcon,
-	FolderOpen,
-	Heart,
-	KeyRound,
-	Star,
-	Trash2,
-	X,
-} from 'lucide-react'
 import type { ComponentProps, PropsWithChildren } from 'react'
 import { fn } from 'storybook/test'
-import { Spinner } from '#core'
+import {
+	ArrowUpRightIcon,
+	FolderOpenIcon,
+	HeartIcon,
+	KeyRoundIcon,
+	Spinner,
+	StarIcon,
+	Trash2Icon,
+	XIcon,
+} from '#core'
 import { Button } from '.'
 
 const BUTTON_VARIANT_OPTIONS = [
@@ -37,12 +37,12 @@ const BUTTON_SIZE_OPTIONS = [
 
 const BUTTON_STORY_ICONS = {
 	ArrowUpRightIcon,
-	FolderOpen,
-	Heart,
-	KeyRound,
-	Star,
-	Trash2,
-	X,
+	FolderOpenIcon,
+	HeartIcon,
+	KeyRoundIcon,
+	StarIcon,
+	Trash2Icon,
+	XIcon,
 } as const
 
 type ButtonStoryIconName = keyof typeof BUTTON_STORY_ICONS
@@ -58,8 +58,7 @@ function ButtonPreviewRow(props: PropsWithChildren) {
 	return <div {...props} className={'flex items-end gap-5'} />
 }
 
-type ButtonStoryIcon =
-	(typeof BUTTON_STORY_ICONS)[keyof typeof BUTTON_STORY_ICONS]
+type ButtonStoryIcon = (typeof BUTTON_STORY_ICONS)[ButtonStoryIconName]
 
 type ButtonStoryArgs = ComponentProps<typeof Button> & {
 	Icon?: ButtonStoryIcon
@@ -122,7 +121,7 @@ const meta = {
 			)
 		},
 	],
-	render: ({ children, Icon = Heart, ...restArgs }) => {
+	render: ({ children, Icon = HeartIcon, ...restArgs }) => {
 		return (
 			<ButtonPreviewRow>
 				<Button {...restArgs}>
@@ -161,7 +160,7 @@ export const Outline: Story = {
 	args: {
 		variant: 'outline',
 		children: 'Open',
-		Icon: FolderOpen,
+		Icon: FolderOpenIcon,
 	},
 }
 
@@ -169,7 +168,7 @@ export const Secondary: Story = {
 	args: {
 		variant: 'secondary',
 		children: 'Close',
-		Icon: X,
+		Icon: XIcon,
 	},
 }
 
@@ -177,7 +176,7 @@ export const Ghost: Story = {
 	args: {
 		variant: 'ghost',
 		children: 'Login',
-		Icon: KeyRound,
+		Icon: KeyRoundIcon,
 	},
 }
 
@@ -185,7 +184,7 @@ export const Destructive: Story = {
 	args: {
 		children: 'Delete',
 		variant: 'destructive',
-		Icon: Trash2,
+		Icon: Trash2Icon,
 	},
 }
 

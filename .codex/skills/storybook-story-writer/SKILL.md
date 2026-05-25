@@ -27,9 +27,8 @@ composition patterns in one canvas instead of isolated one-control examples.
 - Confirm whether the component is client or core:
     - client components usually live under `src/client/components/<component>`.
     - core components should keep stories colocated with their component folder if/when story coverage is added there.
-- Story-only visual helpers may import packages such as `lucide-react` when they help demonstrate composition. Keep
-  those imports inside `*.stories.*` files and do not copy them into a core component implementation only because the
-  story uses them.
+- Story-only visual helpers should use project-owned generated icons from `#core/icons`. Do not add third-party icon
+  component packages such as `lucide-react` just to demonstrate composition in stories.
 - If a core component needs an icon at runtime, remember that stories are not proof of RSC safety. The runtime component
   still needs a core-safe implementation or a documented package-boundary review.
 - Create or update a colocated kebab-case `*.stories.tsx` file.
@@ -119,7 +118,9 @@ contract.
   such as `meta` in `camelCase`.
 - Use `as const` for literal Storybook option arrays and mapping objects when deriving unions from them. Do not annotate
   those tables as `readonly string[]` unless a widened `string` element type is intentional. `as const` keeps values
-  narrow enough for types such as `(typeof BUTTON_SIZE_OPTIONS)[number]` and `keyof typeof BUTTON_STORY_ICONS`.
+  narrow enough for types such as `(typeof BUTTON_SIZE_OPTIONS)[number]` and `keyof typeof BUTTON_STORY_ICONS`. Reuse
+  the derived key union when indexing the mapping, for example
+  `(typeof BUTTON_STORY_ICONS)[ButtonStoryIconName]`, instead of repeating `keyof typeof BUTTON_STORY_ICONS`.
 - Keep stories colocated beside components.
 - Do not import from `@sefo/nodzimo-ui` inside this package.
 - Do not restore Storybook onboarding/demo files or `@storybook/addon-onboarding`. Generated examples are not part of
@@ -288,7 +289,8 @@ toggle two explicit states instead of treating light as an invisible absence of 
 - For local story-only helpers, keep simple names when they stay local; choose precise names if responsibility grows.
 - For story-only preview controls such as selectable icons, use a typed mapping object plus string options:
   `const BUTTON_STORY_ICONS = { ... } as const`, `type ButtonStoryIconName = keyof typeof BUTTON_STORY_ICONS`,
-  `Object.keys(BUTTON_STORY_ICONS) as ButtonStoryIconName[]`, and `mapping: BUTTON_STORY_ICONS`.
+  `Object.keys(BUTTON_STORY_ICONS) as ButtonStoryIconName[]`,
+  `type ButtonStoryIcon = (typeof BUTTON_STORY_ICONS)[ButtonStoryIconName]`, and `mapping: BUTTON_STORY_ICONS`.
   The arg may be a component value, but the control options must stay serializable strings.
 - Mark story-only controls clearly in `description`, for example:
   `Story-only icon picker (this is not a Button prop!)`.

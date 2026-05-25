@@ -50,7 +50,9 @@ type ButtonVariantOption = (typeof BUTTON_VARIANT_OPTIONS)[number]
 
 Avoid duplicating the same union by hand unless the source is not a literal table. For runtime APIs such as
 `Object.keys`, which still return `string[]`, cast narrowly back to the key union after the literal object is
-declared, for example `Object.keys(BUTTON_STORY_ICONS) as ButtonStoryIconName[]`.
+declared, for example `Object.keys(BUTTON_STORY_ICONS) as ButtonStoryIconName[]`. When deriving a value union from the
+same mapping, reuse that key union instead of repeating the expression, for example
+`type ButtonStoryIcon = (typeof BUTTON_STORY_ICONS)[ButtonStoryIconName]`.
 
 ## Skills
 
@@ -242,10 +244,10 @@ declared, for example `Object.keys(BUTTON_STORY_ICONS) as ButtonStoryIconName[]`
   in the root entry instead of copying Lucide internals into `dist/nodzimo-ui.js`.
 - The long-term fix is now preferred: `Spinner` uses a generated project-owned SVG icon from `#core/icons`, so the root
   entry no longer imports `lucide-react` at runtime.
-- Keep `lucide-react` in `devDependencies` while it is used only by stories or development examples. Do not add it back
-  to `dependencies` or Vite externals unless publishable runtime code imports it again.
-- `lucide-react` remains acceptable in stories and demos because Storybook files are excluded from the published
-  entrypoints.
+- `lucide-react` has been removed from package dependencies entirely. Stories and demos should use project-owned
+  generated icons from `#core/icons`, not reintroduce `lucide-react` as a convenience dependency.
+- Do not add `lucide-react` back to `dependencies`, `devDependencies`, or Vite externals unless the project deliberately
+  accepts a runtime or tooling dependency again and documents why generated project-owned icons are not enough.
 
 ## React Compiler Boundary
 
@@ -535,9 +537,10 @@ declared, for example `Object.keys(BUTTON_STORY_ICONS) as ButtonStoryIconName[]`
   `aria-hidden` SVG props.
 - `bun run build:icons` reads raw SVG files from `assets/icons`, writes generated TSX under
   `src/core/icons/generated`, and then runs the project's Biome fix flow so generated output follows local formatting.
-- Raw Lucide SVG files should be downloaded as SVG source only. Remove source `class` attributes such as `lucide` before
-  generation; they are HTML/CSS hooks for raw SVG usage and become noisy generated `className` values.
-- Preserve raw SVG `viewBox`, `stroke='currentColor'`, and `fill='none'` for Lucide outline icons. `icon: true` changes
+- Third-party icon sets such as Lucide should be consumed as raw SVG source only, then generated into project-owned
+  components. Remove source `class` attributes such as `lucide` before generation; they are HTML/CSS hooks for raw SVG
+  usage and become noisy generated `className` values.
+- Preserve raw SVG `viewBox`, `stroke='currentColor'`, and `fill='none'` for outline icons. `icon: true` changes
   generated `width` and `height` to `1em`, while `viewBox` keeps scaling correct.
 - Do not create separate filled variants when the same outline SVG can be filled by the consumer. For fillable icons
   such as hearts or stars, keep the outline source and let usage pass `fill='currentColor'` and, when needed,
@@ -984,8 +987,8 @@ declared, for example `Object.keys(BUTTON_STORY_ICONS) as ButtonStoryIconName[]`
   `rg -n "createContext|useContext|useState|useEffect|react/compiler-runtime|@base-ui/react|lucide-react|node_modules/lucide" dist/nodzimo-ui.js`.
 - Expected root output may import `react/jsx-runtime`, but must not import `react/compiler-runtime` or inline React
   component-library internals that call context/hooks.
-- `lucide-react` should not appear in `dist/nodzimo-ui.js` while it is story-only. If it appears there, either a runtime
-  source import leaked back into the root entry or package dependency/external decisions need to be revisited.
+- `lucide-react` should not appear anywhere in built package output. If it appears there, a runtime source import leaked
+  back into the package or package dependency/external decisions need to be revisited.
 - For Next/Turbopack consumer checks, install the published `@sefo/nodzimo-ui` package in the Next app. Use tarball
   testing only when validating changes before publication.
 - If a client component fails in Next with compiler runtime errors, check whether `"use client";` is present in the

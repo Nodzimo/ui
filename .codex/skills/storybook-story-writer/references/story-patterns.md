@@ -282,7 +282,7 @@ const BUTTON_STORY_ICON_OPTIONS = Object.keys(
 const UNION_SEPARATOR = ' | '
 
 type ButtonStoryIcon =
-    (typeof BUTTON_STORY_ICONS)[keyof typeof BUTTON_STORY_ICONS]
+    (typeof BUTTON_STORY_ICONS)[ButtonStoryIconName]
 
 const meta = {
     argTypes: {

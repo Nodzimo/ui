@@ -6,10 +6,22 @@ import { mcn } from '#lib'
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>
 type IconGroup = Record<string, IconComponent>
 
-const { HeartIcon, LoaderPinwheelIcon, LoaderIcon, LoaderCircleIcon } =
-	lucideIcons
+const {
+	HeartIcon,
+	LoaderPinwheelIcon,
+	LoaderIcon,
+	LoaderCircleIcon,
+	KeyRoundIcon,
+	StarIcon,
+	Trash2Icon,
+} = lucideIcons
 
-const FILLABLE_ICONS = { HeartIcon } satisfies IconGroup
+const FILLABLE_ICONS = {
+	HeartIcon,
+	KeyRoundIcon,
+	StarIcon,
+	Trash2Icon,
+} satisfies IconGroup
 
 const SPINNABLE_ICONS = {
 	LoaderCircleIcon,
