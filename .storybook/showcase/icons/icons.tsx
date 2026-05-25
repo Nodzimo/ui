@@ -43,7 +43,7 @@ function renderIconGallery(
 					<Icon
 						className={mcn(
 							filled && 'fill-nui-primary text-nui-primary hover:fill-none',
-							spinning && 'animate-spin hover:animate-none',
+							spinning && 'hover:nui-animate-paused animate-spin',
 						)}
 					/>
 				</IconItem>

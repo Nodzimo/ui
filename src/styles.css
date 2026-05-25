@@ -3,3 +3,4 @@
 
 @source "./**/*";
 @source not "./**/*.stories.*";
+@source inline("{hover:,active:,group-hover:,}nui-animate-paused");

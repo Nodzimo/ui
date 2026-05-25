@@ -347,6 +347,12 @@ declared, for example `Object.keys(BUTTON_STORY_ICONS) as ButtonStoryIconName[]`
 - The package CSS entrypoint should keep `@import "tailwindcss" source(none);` and `@import "./library.css";` before
   `@source` directives. This keeps `@import` rules valid for CSS/Biome while still preventing story-only classes from
   entering `dist/styles.css`.
+- Tailwind v4 `@utility` registers a utility with Tailwind, but does not by itself guarantee that the utility or its
+  variants are emitted into `dist/styles.css`. Public NUI utilities belong in `src/library.css`; class forms promised to
+  consumers but not used in package source must be safe-listed in `src/styles.css` with Tailwind's official
+  `@source inline(...)` syntax. Example: define `@utility nui-animate-paused { animation-play-state: paused; }` in
+  `src/library.css`, then safelist `@source inline("{hover:,active:,group-hover:,}nui-animate-paused");` in
+  `src/styles.css` so the base, hover, active, and group-hover forms ship in the built package CSS.
 - Use relative CSS imports for local stylesheet entrypoints. `src/styles.css` should import `./library.css`, and
   `.storybook/preview.css` should import `../src/library.css`. Do not route these CSS imports through package/import-map
   aliases unless the CSS toolchain explicitly supports and needs that contract.

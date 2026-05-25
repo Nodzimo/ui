@@ -168,3 +168,7 @@
 		cursor: pointer;
 	}
 }
+
+@utility nui-animate-paused {
+	animation-play-state: paused;
+}

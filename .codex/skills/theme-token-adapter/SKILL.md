@@ -57,6 +57,15 @@ tokens.
 - Treat the two Tailwind imports as separate compiler entrypoints for separate artifacts, not duplicate runtime Tailwind
   instances. This follows Tailwind v4's documented `source(none)` plus explicit `@source` pattern for stylesheets with
   different source sets.
+- Tailwind v4 `@utility` registers a utility with Tailwind; it does not by itself guarantee that the utility or its
+  variants are emitted into the publishable `dist/styles.css`. Public NUI utilities should be defined in
+  `src/library.css` with `@utility`, and any class forms promised to consumers but not present in package source must be
+  safe-listed in `src/styles.css` with Tailwind's official `@source inline(...)` syntax. For example, the public
+  animation
+  pause utility is defined as `@utility nui-animate-paused { animation-play-state: paused; }` in `src/library.css`,
+  while
+  `src/styles.css` safelists `@source inline("{hover:,active:,group-hover:,}nui-animate-paused");` so the base, hover,
+  active, and group-hover variants ship in the built package CSS.
 - Storybook's theme toggle changes the `dark` class and NUI variables, but Storybook does not automatically repaint all
   preview and Docs canvas surfaces. Keep the project workaround in `.storybook/preview.css`: apply
   `background-color: var(--nui-background)` to `html` and `.docs-story`. This is Storybook-only theme surface glue, not
@@ -86,13 +95,16 @@ tokens.
 7. Keep local implementation imports relative inside the component folder.
 8. When adding a new package-facing design token, verify it has a raw `--nui-*` runtime variable and an `@theme inline`
    mapping if Tailwind utility generation is needed.
-9. Search changed files for unprefixed theme tokens.
-10. If changing story files, Storybook-only preview classes, or Tailwind source detection, verify both CSS surfaces:
+9. When adding a public package-facing Tailwind utility with `@utility`, verify the utility and promised variants are
+   emitted into `dist/styles.css`. If the class is not used in package source, safelist the public class forms in
+   `src/styles.css` with `@source inline(...)`.
+10. Search changed files for unprefixed theme tokens.
+11. If changing story files, Storybook-only preview classes, or Tailwind source detection, verify both CSS surfaces:
     package CSS should not contain story-only utilities, while static Storybook CSS should contain the utilities needed
     by
     stories and preview decorators. Check concrete class names in the built CSS artifacts instead of trusting that the
     build passed.
-11. Run the smallest relevant verification:
+12. Run the smallest relevant verification:
     - `bun run build:ts` for component-only TypeScript changes.
     - `bun run build:css` after changing `src/library.css`, `src/styles.css`, or Tailwind theme tokens.
     - `bun run storybook:build` after changing Storybook CSS imports, `.storybook` configuration, or story-only layout
