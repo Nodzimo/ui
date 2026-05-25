@@ -26,7 +26,7 @@ For new client components, use `Client/Components/<ComponentName>` unless the re
 more specific grouping for that component category.
 
 Use `.storybook/showcase` for Storybook-only design-system pages and tools that are not package components. These pages
-may use titles such as `Design System/Colors`, `Design System/Tokens`, or `Design System/Spacing`. Do not put those
+may use titles such as `Design System/Colors`, `Design System/Icons`, or `Design System/Spacing`. Do not put those
 showcase-only helpers under `src/core` or `src/client`; `src` remains the publishable library source plus colocated
 stories for real components.
 
@@ -94,11 +94,13 @@ Storybook Controls need runtime options arrays. For CVA-backed variants, duplica
 constants in `argTypes`:
 
 ```ts
-const BUTTON_VARIANT_OPTIONS: readonly string[] = [
+const BUTTON_VARIANT_OPTIONS = [
     'default',
     'outline',
     'secondary',
-]
+] as const
+
+type ButtonVariantOption = (typeof BUTTON_VARIANT_OPTIONS)[number]
 
 const STRING_UNION_SUMMARY = 'string union'
 const UNION_SEPARATOR = ' | '
@@ -208,6 +210,11 @@ literal light/dark values. The tradeoff is explicit: Storybook's built-in `Color
 not the computed `oklch(...)` value, and it does not provide copy buttons. Do not add a custom TSX token explorer until
 the project intentionally accepts that extra runtime/tooling complexity.
 
+Spacing belongs to the same design-system showcase level as colors and icons. Use `Design System/Spacing` in the
+singular because the page documents one spacing scale. A small TSX helper such as `SpacingScale` is appropriate when
+the MDX page needs typed rendering logic. The helper should read public runtime variables such as
+`var(--nui-spacing-md)`, not Tailwind utility mapping names such as `--spacing-nui-md`.
+
 Biome does not process MDX in this project. Format `.storybook/showcase/**/*.mdx` manually. WebStorm inspection false
 positives for Storybook MDX should be handled through the shared `Storybook MDX Documentation` inspection scope.
 
@@ -266,7 +273,12 @@ const BUTTON_STORY_ICONS = {
     X,
 } as const
 
-const BUTTON_STORY_ICON_OPTIONS: readonly string[] = Object.keys(BUTTON_STORY_ICONS)
+type ButtonStoryIconName = keyof typeof BUTTON_STORY_ICONS
+
+const BUTTON_STORY_ICON_OPTIONS = Object.keys(
+    BUTTON_STORY_ICONS,
+) as ButtonStoryIconName[]
+
 const UNION_SEPARATOR = ' | '
 
 type ButtonStoryIcon =

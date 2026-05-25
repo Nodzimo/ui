@@ -15,16 +15,16 @@ import { fn } from 'storybook/test'
 import { Spinner } from '#core'
 import { Button } from '.'
 
-const BUTTON_VARIANT_OPTIONS: readonly string[] = [
+const BUTTON_VARIANT_OPTIONS = [
 	'default',
 	'outline',
 	'secondary',
 	'ghost',
 	'destructive',
 	'link',
-]
+] as const
 
-const BUTTON_SIZE_OPTIONS: readonly string[] = [
+const BUTTON_SIZE_OPTIONS = [
 	'default',
 	'xs',
 	'sm',
@@ -33,7 +33,7 @@ const BUTTON_SIZE_OPTIONS: readonly string[] = [
 	'icon-xs',
 	'icon-sm',
 	'icon-lg',
-]
+] as const
 
 const BUTTON_STORY_ICONS = {
 	ArrowUpRightIcon,
@@ -45,8 +45,11 @@ const BUTTON_STORY_ICONS = {
 	X,
 } as const
 
-const BUTTON_STORY_ICON_OPTIONS: readonly string[] =
-	Object.keys(BUTTON_STORY_ICONS)
+type ButtonStoryIconName = keyof typeof BUTTON_STORY_ICONS
+
+const BUTTON_STORY_ICON_OPTIONS = Object.keys(
+	BUTTON_STORY_ICONS,
+) as ButtonStoryIconName[]
 
 const STRING_UNION_SUMMARY = 'string union'
 const UNION_SEPARATOR = ' | '

@@ -15,11 +15,20 @@ tokens.
 
 - Treat `src/library.css` as the source of truth for available theme tokens and foundation classes. `src/styles.css` is
   only the publishable package stylesheet entrypoint.
+- Distinguish raw runtime CSS variables from Tailwind utility mappings. Public package tokens live as `--nui-*`
+  variables in `:root`; Tailwind utility mappings live in `@theme inline` as `--color-nui-*`, `--radius-nui-*`, and
+  `--spacing-nui-*`.
+- If a token is part of the UI kit product contract, define both sides: the raw `--nui-*` variable for runtime
+  consumers and the matching `@theme inline` mapping for Tailwind utilities. Do not leave product tokens only in
+  `@theme inline`.
 - Read `docs/design-system-doctrine/README.md` and the relevant chapter files before changing color token values,
   button variants, interactive-state styling, or the semantic meaning of `primary`, `secondary`, `outline`, `ghost`,
   `link`, `muted`, `accent`, `border`, `input`, or `ring`.
 - Raw CSS variables use `--nui-*`.
 - Tailwind theme tokens use `--color-nui-*`, `--radius-nui-*`, and `--spacing-nui-*`.
+- Current spacing tokens are product tokens, not Storybook-only data: `--nui-spacing-2xs` through
+  `--nui-spacing-2xl` are raw runtime variables, while `--spacing-nui-2xs` through `--spacing-nui-2xl` map those values
+  for Tailwind utilities such as `gap-nui-md`.
 - Reusable color-intensity rhythm uses Tailwind slash opacity values `/20`, `/50`, and `/80`, described as `subtle`,
   `half`, and `strong`. Treat these as naming/review conventions, not CSS variables or hover/active/pressed event
   tokens.
@@ -75,13 +84,15 @@ tokens.
 5. Preserve modifiers, state variants, opacity suffixes, and arbitrary selectors.
 6. Convert directional physical utilities to logical utilities when they represent inline start/end behavior.
 7. Keep local implementation imports relative inside the component folder.
-8. Search changed files for unprefixed theme tokens.
-9. If changing story files, Storybook-only preview classes, or Tailwind source detection, verify both CSS surfaces:
-   package CSS should not contain story-only utilities, while static Storybook CSS should contain the utilities needed
-   by
-   stories and preview decorators. Check concrete class names in the built CSS artifacts instead of trusting that the
-   build passed.
-10. Run the smallest relevant verification:
+8. When adding a new package-facing design token, verify it has a raw `--nui-*` runtime variable and an `@theme inline`
+   mapping if Tailwind utility generation is needed.
+9. Search changed files for unprefixed theme tokens.
+10. If changing story files, Storybook-only preview classes, or Tailwind source detection, verify both CSS surfaces:
+    package CSS should not contain story-only utilities, while static Storybook CSS should contain the utilities needed
+    by
+    stories and preview decorators. Check concrete class names in the built CSS artifacts instead of trusting that the
+    build passed.
+11. Run the smallest relevant verification:
     - `bun run build:ts` for component-only TypeScript changes.
     - `bun run build:css` after changing `src/library.css`, `src/styles.css`, or Tailwind theme tokens.
     - `bun run storybook:build` after changing Storybook CSS imports, `.storybook` configuration, or story-only layout

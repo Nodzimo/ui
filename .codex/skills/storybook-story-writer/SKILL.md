@@ -117,6 +117,9 @@ contract.
 - Use `UPPER_SNAKE_CASE` for intentional module-scope immutable story tables, mappings, options, and literal constants,
   such as variant option arrays, story-only icon maps, and string union separators. Keep Storybook convention objects
   such as `meta` in `camelCase`.
+- Use `as const` for literal Storybook option arrays and mapping objects when deriving unions from them. Do not annotate
+  those tables as `readonly string[]` unless a widened `string` element type is intentional. `as const` keeps values
+  narrow enough for types such as `(typeof BUTTON_SIZE_OPTIONS)[number]` and `keyof typeof BUTTON_STORY_ICONS`.
 - Keep stories colocated beside components.
 - Do not import from `@sefo/nodzimo-ui` inside this package.
 - Do not restore Storybook onboarding/demo files or `@storybook/addon-onboarding`. Generated examples are not part of
@@ -127,6 +130,9 @@ contract.
 - Put Storybook-only showcase pages and tools under `.storybook/showcase`. Use that area for design-system pages such
   as colors, tokens, spacing, icons, and other documentation UI that exists only inside Storybook. Keep actual component
   stories colocated in `src` beside the component they document.
+- Treat spacing as a design-system showcase page named in the singular: `Design System/Spacing`. The page documents the
+  spacing scale, not many independent "spacings". Use a typed helper such as `SpacingScale` under
+  `.storybook/showcase/spacing` when the MDX page needs TSX rendering logic.
 - Treat iconography as a design-system showcase, not as colocated stories for individual icon components. An icon set
   gallery answers "which icons exist in the design system?", not "how does this one icon component behave?". Keep icon
   galleries and typed display helpers under `.storybook/showcase`, import real icon surfaces from `#core/icons/*`, and
@@ -281,8 +287,8 @@ toggle two explicit states instead of treating light as an invisible absence of 
   name adds real clarity.
 - For local story-only helpers, keep simple names when they stay local; choose precise names if responsibility grows.
 - For story-only preview controls such as selectable icons, use a typed mapping object plus string options:
-  `const componentStoryIcons = { ... } as const`, `Object.keys(componentStoryIcons)`, and
-  `mapping: componentStoryIcons`.
+  `const BUTTON_STORY_ICONS = { ... } as const`, `type ButtonStoryIconName = keyof typeof BUTTON_STORY_ICONS`,
+  `Object.keys(BUTTON_STORY_ICONS) as ButtonStoryIconName[]`, and `mapping: BUTTON_STORY_ICONS`.
   The arg may be a component value, but the control options must stay serializable strings.
 - Mark story-only controls clearly in `description`, for example:
   `Story-only icon picker (this is not a Button prop!)`.

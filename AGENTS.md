@@ -39,6 +39,18 @@
 - Use `UPPER_SNAKE_CASE` for intentional module-scope immutable tables, mappings, defaults, and literal constants, such
   as Storybook option arrays or global preview defaults. Keep framework convention objects such as `meta`, `config`, and
   `preview`, plus computed local bindings and render-scope values, in `camelCase`.
+- Use `as const` for literal option arrays and mapping objects when the project derives a union type from their values
+  or keys. `readonly string[]` only makes the array immutable at the type level; it widens every element to `string` and
+  loses the useful union. Prefer:
+
+```ts
+const BUTTON_VARIANT_OPTIONS = ['default', 'outline', 'secondary'] as const
+type ButtonVariantOption = (typeof BUTTON_VARIANT_OPTIONS)[number]
+```
+
+Avoid duplicating the same union by hand unless the source is not a literal table. For runtime APIs such as
+`Object.keys`, which still return `string[]`, cast narrowly back to the key union after the literal object is
+declared, for example `Object.keys(BUTTON_STORY_ICONS) as ButtonStoryIconName[]`.
 
 ## Skills
 
@@ -299,6 +311,14 @@
 - Keep `tailwindcss` and `@tailwindcss/cli` in `devDependencies`; consumers receive built CSS from `dist/styles.css`.
 - Do not rely on consumer Tailwind scanning to style library components. A Next consumer may appear to pick up some
   utility classes from the package, but that is incidental and not the package contract.
+- Separate runtime CSS variables from Tailwind theme mappings. A `:root` variable such as `--nui-background` or
+  `--nui-spacing-md` is emitted into the built CSS as part of the package stylesheet contract and can be read at runtime
+  with `var(--nui-*)`. An `@theme inline` token such as `--color-nui-background` or `--spacing-nui-md` teaches Tailwind
+  how to generate utilities such as `bg-nui-background` or `gap-nui-md`; it is not by itself the public runtime token a
+  consumer should read with `var(...)`.
+- When a design-system value is a product token that consumers may use directly, define the raw `--nui-*` variable in
+  `:root` and map the matching Tailwind utility token in `@theme inline`. Do not define package-facing tokens only in
+  `@theme inline`, because that makes them compiler configuration rather than a stable runtime CSS-variable contract.
 - Do not import `src/styles.css` from `src/index.ts` or `src/client.ts` just to pull CSS into the JS graph. The library
   has separate core and client JS entrypoints, and global styles should remain an explicit stylesheet import.
 - Do not add a CSS entry to Vite library entries for the current setup. CSS is generated directly with Tailwind CLI:
@@ -379,11 +399,13 @@
     - `radius`: the base corner-radius scale for cards, inputs, buttons, popovers, and derived `radius-nui-*` tokens.
 - The radius scale follows shadcn's model: `radius-nui-lg` is the base value from `--nui-radius`, smaller radii scale
   down from it, larger radii scale up from it, and changing `--nui-radius` updates the whole radius scale.
-- The spacing scale is the NUI rhythm layer over Tailwind spacing. Use `--spacing()` in source, not handwritten
-  `calc(var(--spacing) * n)`, because `--spacing()` is Tailwind's native source function and compiles to the calc form.
-- Current NUI spacing tokens are `spacing-nui-2xs` through `spacing-nui-2xl`, mapped to Tailwind spacing values
-  `0.5`, `1`, `2`, `4`, `6`, `8`, and `12` respectively. Comments in `src/styles.css` should document their current
-  pixel values.
+- The spacing scale is a public NUI rhythm layer, not Storybook-only display data. Define raw runtime variables
+  `--nui-spacing-2xs` through `--nui-spacing-2xl` in `:root`, then map Tailwind utilities through
+  `--spacing-nui-2xs` through `--spacing-nui-2xl` in `@theme inline`.
+- Current NUI spacing tokens map to Tailwind spacing values `0.5`, `1`, `2`, `4`, `6`, `8`, and `12` respectively.
+  Use `--spacing()` in `src/library.css`, not handwritten `calc(var(--spacing) * n)`, because `--spacing()` is
+  Tailwind's native source function and compiles to the calc form. Keep comments beside the raw `--nui-spacing-*`
+  variables documenting the current pixel values.
 - Use NUI spacing utilities for reusable design-system rhythm such as standard gaps between sections, headings, cards,
   and repeated UI groups. Do not replace incidental component tuning such as `px-2.5`, `gap-1.5`, `size-8`, or
   one-off layout nudges unless the spacing is intentionally part of the shared rhythm contract.

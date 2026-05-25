@@ -86,6 +86,7 @@ const preview: Preview = {
 						],
 						'Colors',
 						'Icons',
+						'Spacing',
 					],
 					'Core',
 					'Client',

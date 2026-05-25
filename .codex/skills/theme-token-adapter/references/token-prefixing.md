@@ -6,6 +6,25 @@ Use `src/library.css` as the token and foundation contract. `src/styles.css` is 
 imports `src/library.css` and applies the package source policy. Do not invent token names if no matching `nui-*` token
 exists; either map to an existing token or flag the missing token.
 
+Use two layers for package-facing design tokens:
+
+```css
+:root {
+    --nui-spacing-md: --spacing(4);
+}
+
+@theme inline {
+    --spacing-nui-md: var(--nui-spacing-md);
+}
+```
+
+- `--nui-*` is the runtime CSS-variable contract shipped in `dist/styles.css`. Consumers and Storybook showcase code can
+  read it with `var(--nui-*)`.
+- `--color-nui-*`, `--radius-nui-*`, and `--spacing-nui-*` inside `@theme inline` are Tailwind compiler mappings. They
+  make utilities such as `bg-nui-background`, `rounded-nui-lg`, and `gap-nui-md` possible.
+- A token defined only in `@theme inline` is compiler configuration, not a stable runtime token for consumers to read.
+  If the value is part of the UI kit product contract, add the raw `--nui-*` variable too.
+
 ## Prefix Semantic Color Utilities
 
 Common mappings:
@@ -213,16 +232,16 @@ gap-nui-md
 space-y-nui-lg
 ```
 
-The current spacing scale is:
+The current spacing scale has both raw runtime variables and Tailwind utility mappings:
 
 ```text
-spacing-nui-2xs -> --spacing(0.5) -> 2px
-spacing-nui-xs  -> --spacing(1)   -> 4px
-spacing-nui-sm  -> --spacing(2)   -> 8px
-spacing-nui-md  -> --spacing(4)   -> 16px
-spacing-nui-lg  -> --spacing(6)   -> 24px
-spacing-nui-xl  -> --spacing(8)   -> 32px
-spacing-nui-2xl -> --spacing(12)  -> 48px
+--nui-spacing-2xs -> --spacing(0.5) -> 2px  -> --spacing-nui-2xs
+--nui-spacing-xs  -> --spacing(1)   -> 4px  -> --spacing-nui-xs
+--nui-spacing-sm  -> --spacing(2)   -> 8px  -> --spacing-nui-sm
+--nui-spacing-md  -> --spacing(4)   -> 16px -> --spacing-nui-md
+--nui-spacing-lg  -> --spacing(6)   -> 24px -> --spacing-nui-lg
+--nui-spacing-xl  -> --spacing(8)   -> 32px -> --spacing-nui-xl
+--nui-spacing-2xl -> --spacing(12)  -> 48px -> --spacing-nui-2xl
 ```
 
 Use `--spacing()` in `src/library.css`, not handwritten `calc(var(--spacing) * n)`. Tailwind compiles `--spacing()` to
