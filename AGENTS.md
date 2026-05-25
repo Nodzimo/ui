@@ -147,6 +147,9 @@
   folder as SVGR input.
 - `src/core/icons/index.ts` is the hand-authored icon public surface inside core and should re-export generated icon
   groups intentionally.
+- Storybook iconography pages are design-system showcase inventory, not colocated stories for individual icon
+  components. Put icon set galleries and their typed display helpers under `.storybook/showcase`, import real icon
+  surfaces from `#core/icons/*`, and keep generated/runtime icon code under `src/core/icons`.
 - `src/lib` contains internal/shared library utilities. Keep utilities small, named clearly, and exported through local
   barrels when they are intended for cross-area source imports.
 - `src/core` contains exports that are safe to import from React Server Components and ordinary modern React apps.
@@ -618,6 +621,10 @@
   `nui-surface nui-boundaries nui-interactive`. `nui-surface` is required here so the wrapper itself receives
   `bg-nui-background text-nui-foreground` after the addon toggles `.dark`; otherwise transparent stories can show dark
   tokens on a light Storybook canvas or vice versa.
+- Use the same NUI foundation wrapper around the custom Storybook Docs container so standalone MDX showcase pages
+  inherit `nui-surface nui-boundaries nui-interactive` instead of each MDX page adding local wrappers. This applies the
+  active NUI token values to Docs content; it does not replace the separate unattached-MDX theme bridge that toggles
+  `light` / `dark` classes on `document.documentElement`.
 - Storybook does not currently provide a clean built-in bridge between `@storybook/addon-themes` and the full preview
   canvas background. The project workaround belongs in `.storybook/preview.css`, after the Tailwind imports and
   `@source` directives: set `background-color: var(--nui-background)` on `html` for single-story centered canvas mode
@@ -664,6 +671,9 @@
   `props.context.store?.userGlobals?.globals?.theme` and toggles the explicit `light` / `dark` classes on
   `document.documentElement`. This relies on Storybook internal Docs context shape, so keep it small, optional-chained,
   and isolated in `.storybook/preview.tsx`.
+- Keep the Docs wrapper and the unattached-MDX theme bridge because they solve different problems: the bridge selects
+  which token values are active, while the wrapper applies the NUI surface/foreground/boundary/interactive contract to
+  Docs and MDX content.
 - Do not use Storybook preview hooks such as `useGlobals()` inside `DocsContainer`. Storybook throws
   `Storybook preview hooks can only be called inside decorators and story functions`; Docs containers are not that hook
   zone. The accepted workaround is based on the public `DocsContainer` hook for Docs UI theme plus the narrow internal

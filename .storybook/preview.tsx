@@ -1,6 +1,6 @@
 import { withThemeByClassName } from '@storybook/addon-themes'
 import type { Preview } from '@storybook/react-vite'
-import type { CSSProperties } from 'react'
+import type { ComponentPropsWithoutRef, CSSProperties } from 'react'
 import './preview.css'
 import {
 	DocsContainer,
@@ -12,6 +12,12 @@ import { useDarkMode } from 'storybook-dark-mode'
 const DEFAULT_WRAPPER_BACKGROUND = 'transparent'
 const LIGHT_THEME = 'light'
 const DARK_THEME = 'dark'
+
+function PreviewWrapper(props: ComponentPropsWithoutRef<'div'>) {
+	return (
+		<div {...props} className={'nui-surface nui-boundaries nui-interactive'} />
+	)
+}
 
 type DocsContextWithStore = DocsContainerProps['context'] & {
 	store?: {
@@ -39,7 +45,11 @@ function ThemedDocsContainer(props: DocsContainerProps) {
 		componentTheme === DARK_THEME,
 	)
 
-	return <DocsContainer {...props} theme={theme} />
+	return (
+		<PreviewWrapper>
+			<DocsContainer {...props} theme={theme} />
+		</PreviewWrapper>
+	)
 }
 
 const preview: Preview = {
@@ -63,7 +73,6 @@ const preview: Preview = {
 				order: [
 					'Design System',
 					[
-						'Colors',
 						'Doctrine',
 						[
 							'Overview',
@@ -75,6 +84,8 @@ const preview: Preview = {
 							'References And Evidence',
 							'Final Reminder',
 						],
+						'Colors',
+						'Icons',
 					],
 					'Core',
 					'Client',
@@ -116,12 +127,9 @@ const preview: Preview = {
 					: { backgroundColor: wrapperBackground }
 
 			return (
-				<div
-					className={'nui-surface nui-boundaries nui-interactive'}
-					style={wrapperStyle}
-				>
+				<PreviewWrapper style={wrapperStyle}>
 					<Story args={storyArgs} />
-				</div>
+				</PreviewWrapper>
 			)
 		},
 	],

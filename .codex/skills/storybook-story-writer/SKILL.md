@@ -127,6 +127,14 @@ contract.
 - Put Storybook-only showcase pages and tools under `.storybook/showcase`. Use that area for design-system pages such
   as colors, tokens, spacing, icons, and other documentation UI that exists only inside Storybook. Keep actual component
   stories colocated in `src` beside the component they document.
+- Treat iconography as a design-system showcase, not as colocated stories for individual icon components. An icon set
+  gallery answers "which icons exist in the design system?", not "how does this one icon component behave?". Keep icon
+  galleries and typed display helpers under `.storybook/showcase`, import real icon surfaces from `#core/icons/*`, and
+  do not move display-name formatting or gallery mapping helpers into `src/lib` or `src/core`.
+- Use Storybook's official `IconGallery` / `IconItem` doc blocks for simple icon set pages. Keep generated icon
+  component names as stable technical keys, but format user-facing labels for readability, for example by removing an
+  `Icon` postfix and splitting PascalCase into words. If this formatting needs TypeScript, move it to a local
+  `.storybook/showcase/**.tsx` helper instead of writing untyped functions inside MDX.
 - Keep long project doctrine content source-of-truth under `docs`, not embedded directly in Storybook. The current
   design-system doctrine lives in `docs/design-system-doctrine/README.md` plus identity-named chapter files. Storybook
   should mirror those chapters through `.storybook/showcase` MDX wrappers that import the chapter Markdown with `?raw`.
@@ -157,6 +165,9 @@ contract.
   `nui-surface nui-boundaries nui-interactive` around all stories. `nui-surface` is intentional in Storybook because
   the theme addon toggles `.dark`, and the wrapper must receive `bg-nui-background text-nui-foreground` for transparent
   story canvases to stay readable in both themes.
+- Keep the custom Docs container wrapped in the same NUI foundation contract. Docs/MDX content is not a normal story
+  canvas, so it needs the Docs container wrapper to apply `nui-surface nui-boundaries nui-interactive` globally instead
+  of repeating local wrappers in every showcase MDX page.
 - Use global `parameters.layout = 'centered'` for normal centered component stories. Storybook already centers the
   single-story canvas; do not add wrapper `min-height`, `viewMode`, or full-screen flex decorators only for centering.
 - Keep the Storybook theme-canvas background workaround in `.storybook/preview.css`, after Tailwind imports and
@@ -216,6 +227,8 @@ unless the project needs a custom docs-only toggle.
   context shape, so keep it narrow, optional-chained, and documented. Do not replace it with `useGlobals()` inside the
   Docs container; Storybook preview hooks are only valid inside decorators and story functions. Track the upstream
   discussion at https://github.com/storybookjs/storybook/discussions/28495.
+- Do not remove that bridge just because the Docs container has an NUI wrapper. The wrapper applies NUI classes to the
+  Docs surface; the bridge keeps the active `light` / `dark` token values synchronized for unattached MDX pages.
 - Keep `withThemeByClassName` configured with explicit class names:
 
 ```tsx
