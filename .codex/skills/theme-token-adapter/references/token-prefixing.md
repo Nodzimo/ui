@@ -272,6 +272,27 @@ Only keep physical left/right utilities when the design intentionally targets a 
 direction. Symmetric utilities such as `px-*`, `mx-*`, `inset-x-*`, `border-x-*`, and `rounded-*` are already
 direction-neutral.
 
+## Flip Directional Icons At Usage Sites
+
+Generated icons are raw assets. Do not edit generated icon components to add RTL behavior.
+
+Flip an icon with `rtl:rotate-180` only where the usage means inline direction:
+
+```text
+next / previous
+back / forward
+collapse start / collapse end
+chevron start / chevron end
+arrow to inline-start / arrow to inline-end
+```
+
+Do not flip icons just because their shape points left or right. External/open icons such as `ArrowUpRightIcon` used
+for `Visit`, brand icons, decorative icons, spinners, hearts, trash, folders, and close icons should keep their asset
+direction unless the component usage gives them directional meaning.
+
+Storybook icon galleries show the raw icon inventory. Do not apply RTL flip classes in icon showcase pages; component
+usage decides direction behavior.
+
 ## Do Not Prefix Ordinary Tailwind Utilities
 
 Leave these alone unless they contain a semantic token:

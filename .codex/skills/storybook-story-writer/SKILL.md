@@ -283,6 +283,13 @@ toggle two explicit states instead of treating light as an invisible absence of 
 - Use `storybook-addon-rtl` for Storybook's global LTR/RTL toolbar check when reviewing layout-sensitive stories. It is
   a preview verification tool; component and story class names should still prefer logical utilities for inline-axis
   spacing, positioning, borders, and radii.
+- When hardcoded English story text contains neutral punctuation and is rendered under RTL, isolate only that text with
+  explicit direction, for example `<span dir={'ltr'}>Processing...</span>`. This is a story/demo bidi fix; do not add
+  punctuation logic to components.
+- Flip icons with `rtl:rotate-180` only where the story usage means inline direction, such as next/previous or
+  back/forward. Do not flip external/open icons such as `ArrowUpRightIcon` used for `Visit`.
+- Treat iconography pages as raw icon inventory. Do not mirror icons in `.storybook/showcase/icons` for RTL; component
+  usage decides whether an icon is directional.
 - Put shared pseudo-state defaults in `meta.parameters.pseudo` when a story file uses the same preview targets across
   stories. Use story-level `parameters.pseudo` only for exceptions.
 - Target forced pseudo states with story-only `data-*` selectors such as `[data-preview="hover"]`, not repeated `id`

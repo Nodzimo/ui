@@ -41,6 +41,12 @@ tokens.
   `ms-*`, `me-*`, `start-*`, `end-*`, `border-s-*`, `border-e-*`, `rounded-s-*`, and `rounded-e-*`. Avoid physical
   `pl-*`, `pr-*`, `ml-*`, `mr-*`, `left-*`, `right-*`, `border-l-*`, and `border-r-*` unless the design truly means a
   physical side.
+- Directional icon flipping is a usage-site decision, not an icon-generation decision. Add `rtl:rotate-180` only when
+  an icon means inline direction such as next/previous, back/forward, or start/end. Do not flip external/open icons such
+  as an `ArrowUpRightIcon` used for `Visit`, and do not flip icon gallery inventory.
+- If hardcoded LTR demo text with neutral punctuation is shown inside an RTL Storybook preview, isolate the text
+  fragment with explicit direction, for example `<span dir={'ltr'}>Processing...</span>`. Do not make components parse
+  or rearrange punctuation.
 - Component class strings use NUI-prefixed semantic utilities when they refer to design-system colors, radii, or spacing
   tokens.
 - Keep ordinary Tailwind layout/typography/state utilities unchanged.
@@ -92,19 +98,21 @@ tokens.
 4. Convert only theme-facing styles to NUI-prefixed equivalents.
 5. Preserve modifiers, state variants, opacity suffixes, and arbitrary selectors.
 6. Convert directional physical utilities to logical utilities when they represent inline start/end behavior.
-7. Keep local implementation imports relative inside the component folder.
-8. When adding a new package-facing design token, verify it has a raw `--nui-*` runtime variable and an `@theme inline`
+7. Review directional icon usages. Flip only usage sites that mean inline direction; leave generated icons, external
+   link icons, and icon galleries alone.
+8. Keep local implementation imports relative inside the component folder.
+9. When adding a new package-facing design token, verify it has a raw `--nui-*` runtime variable and an `@theme inline`
    mapping if Tailwind utility generation is needed.
-9. When adding a public package-facing Tailwind utility with `@utility`, verify the utility and promised variants are
-   emitted into `dist/styles.css`. If the class is not used in package source, safelist the public class forms in
-   `src/styles.css` with `@source inline(...)`.
-10. Search changed files for unprefixed theme tokens.
-11. If changing story files, Storybook-only preview classes, or Tailwind source detection, verify both CSS surfaces:
+10. When adding a public package-facing Tailwind utility with `@utility`, verify the utility and promised variants are
+    emitted into `dist/styles.css`. If the class is not used in package source, safelist the public class forms in
+    `src/styles.css` with `@source inline(...)`.
+11. Search changed files for unprefixed theme tokens.
+12. If changing story files, Storybook-only preview classes, or Tailwind source detection, verify both CSS surfaces:
     package CSS should not contain story-only utilities, while static Storybook CSS should contain the utilities needed
     by
     stories and preview decorators. Check concrete class names in the built CSS artifacts instead of trusting that the
     build passed.
-12. Run the smallest relevant verification:
+13. Run the smallest relevant verification:
     - `bun run build:ts` for component-only TypeScript changes.
     - `bun run build:css` after changing `src/library.css`, `src/styles.css`, or Tailwind theme tokens.
     - `bun run storybook:build` after changing Storybook CSS imports, `.storybook` configuration, or story-only layout

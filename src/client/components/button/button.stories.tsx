@@ -267,7 +267,7 @@ export const Loading: Story = {
 			<ButtonPreviewRow>
 				<Button {...restArgs}>
 					<Spinner data-icon={'inline-start'} />
-					Processing...
+					<span dir={'ltr'}>Processing...</span>
 				</Button>
 				<Button {...restArgs}>
 					Please wait

@@ -101,6 +101,8 @@ Useful distinctions to preserve:
 - passive support vs active response
 - general structure vs control structure
 - surface ownership vs text placed on an external surface
+- framework-agnostic UI-kit provider vs app/framework provider
+- RTL inline direction behavior vs raw icon asset direction
 
 ## Structure Patterns
 
@@ -242,5 +244,7 @@ Before finishing, verify:
 - Metaphors are paired with practical UI examples
 - Exact project values are avoided unless intentionally requested
 - Existing doctrine terminology remains consistent
+- Provider guidance distinguishes UI-kit-owned framework-agnostic providers from app-owned providers when relevant
+- RTL guidance distinguishes logical layout, bidi text isolation, and usage-site icon flipping when relevant
 - Storybook and Markdown navigation are synchronized
 - No implementation files were changed unless requested

@@ -17,6 +17,8 @@ the full review checklist.
 
 - `src/core` and `dist/nodzimo-ui.js` are the root/RSC-safe surface.
 - `src/client.ts` and `src/client/**` are the client-boundary surface. `src/client.ts` must keep `'use client'`.
+- `src/client/providers/**` owns framework-agnostic UI-kit providers required by client component behavior, such as
+  Base UI direction context. These providers must flow only through `src/client.ts` and `@sefo/nodzimo-ui/client`.
 - RSC-safe is stricter than SSR-safe. A dependency can render on the server during SSR and still be unsafe for the RSC
   import graph if it calls `createContext`, hooks, providers, or browser-only code at module top level.
 - SSG output in a Next consumer proves build-time pre-rendering, not RSC purity.
@@ -27,6 +29,9 @@ the full review checklist.
     - For core changes, inspect imports from the component file through local barrels up to `src/index.ts`.
     - For client changes, confirm the code is reachable through `src/client.ts` and not accidentally through
       `src/index.ts`.
+    - For provider changes, confirm the provider is framework-agnostic and required by UI-kit component behavior. App
+      providers for locale routing, auth, data, cookies, `next-intl`, or `next-themes` belong in consumer apps, not in
+      this package.
     - For dependency changes, inspect both `package.json` and `vite.config.ts`.
     - For generated icon changes, inspect `assets/icons`, `svgr.config.cjs`, `src/core/icons`, and any core component
       importing icons.
@@ -69,3 +74,6 @@ the full review checklist.
   output. Next can analyze client boundaries in an app source graph, while Vite/Rolldown can erase that boundary by
   inlining dependency internals into `dist/nodzimo-ui.js`.
 - Put interactive primitives, Base UI components, hooks, browser APIs, and React Compiler output in the client entry.
+- Export UI-kit-owned providers only from the client entry. After adding a provider, build and verify the root artifact
+  does not contain `@base-ui/react`, provider names, `createContext`, `useContext`, state/effect hooks, or
+  `react/compiler-runtime`.

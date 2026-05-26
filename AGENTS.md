@@ -227,6 +227,12 @@ same mapping, reuse that key union instead of repeating the expression, for exam
   part of a fundamental core component such as `Spinner`.
 - Third-party React component libraries that use context, providers, hooks, or `"use client"` belong in `src/client`
   unless their RSC behavior has been inspected in the built package and verified in the Next consumer.
+- Framework-agnostic providers that are required for UI-kit component behavior, such as Base UI direction context, may
+  be exported from `@sefo/nodzimo-ui/client` through `src/client/providers`. Do not export them from the root/RSC-safe
+  entrypoint.
+- Do not move app-owned providers into the UI kit merely because a consumer app uses them. Framework, routing, locale,
+  auth, data, cookie, or Next-specific providers such as `next-intl` or `next-themes` belong in the consumer app unless
+  the UI kit itself requires a framework-agnostic runtime provider for its own components.
 
 ## RSC Boundary Incident: Lucide Spinner
 
@@ -515,6 +521,17 @@ same mapping, reuse that key union instead of repeating the expression, for exam
   `pe-*`, `ms-*`, `me-*`, `start-*`, `end-*`, `border-s-*`, and `border-e-*` instead of physical `pl-*`, `pr-*`,
   `ml-*`, `mr-*`, `left-*`, `right-*`, `border-l-*`, or `border-r-*`. Symmetric utilities such as `px-*`, `mx-*`,
   `inset-x-*`, and `border-x-*` are fine.
+- Directional icons are flipped at the usage site only when the icon means inline direction, such as next/previous,
+  back/forward, collapse start/end, or chevron start/end. Use a local class such as `rtl:rotate-180` for that usage.
+  Do not add RTL flipping to generated icon components.
+- Do not flip icons that are not expressing inline flow. External/open icons such as `ArrowUpRightIcon` in a `Visit`
+  story, brand icons, decorative icons, spinners, hearts, trash, folders, and close icons should keep their asset
+  direction unless the specific component usage gives them directional meaning.
+- Storybook icon galleries show raw icon inventory. Do not add RTL flip classes in icon showcase pages; the usage
+  context decides directional behavior.
+- When hardcoded LTR demo text appears inside an RTL Storybook preview and neutral punctuation moves incorrectly, wrap
+  only that text fragment in a neutral inline element with explicit direction, for example
+  `<span dir={'ltr'}>Processing...</span>`. Use real localized text for real RTL examples.
 
 ## Component Styling
 
@@ -552,6 +569,9 @@ same mapping, reuse that key union instead of repeating the expression, for exam
   them.
 - Generated icon components belong in `src/core` and are RSC-safe only when they remain plain SVG components: no hooks,
   no `'use client'`, no `memo`, no `forwardRef`, and no runtime icon package imports.
+- Generated icon components are raw assets, not semantic usage decisions. Do not edit generated output to add
+  `rtl:rotate-180` or other usage-specific behavior; apply those classes where a component uses an icon to mean
+  inline-start or inline-end movement.
 - Public icon names should use the `SomethingIcon` suffix, such as `HeartIcon` or `GithubIcon`. Keep source grouping in
   folders, not in public component names.
 
@@ -753,6 +773,10 @@ same mapping, reuse that key union instead of repeating the expression, for exam
   addon configuration.
 - Use `storybook-addon-rtl` as the Storybook toolbar check for left-to-right and right-to-left rendering. Treat it as a
   preview QA surface, not a substitute for component code using logical spacing, positioning, borders, and radii.
+- Treat Storybook RTL as a layout and bidi QA surface. Hardcoded English examples that contain neutral punctuation may
+  need `dir={'ltr'}` on the text span; this is a story/demo fix, not component punctuation logic.
+- Icon showcase pages should not mirror directional-looking assets in RTL. They document the icon set. Mirror icons only
+  inside component stories or examples where the icon specifically means inline-start or inline-end movement.
 - Put shared pseudo-state defaults in `meta.parameters.pseudo` when every story in the file follows the same preview
   convention. Use story-level `parameters.pseudo` only for stories that need different pseudo-state targets.
 - When targeting one element for a pseudo state inside a story canvas, prefer story-only `data-*` selectors such as

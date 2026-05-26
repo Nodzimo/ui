@@ -84,7 +84,7 @@ them:
 
 ```tsx
 render: ({Icon: _Icon, children: _children, ...restArgs}) => {
-    return <Button {...restArgs}>Processing...</Button>
+    return <Button {...restArgs}>Ready</Button>
 }
 ```
 
@@ -267,6 +267,25 @@ Use `storybook-addon-rtl` for the global Storybook LTR/RTL toolbar toggle. When 
 review it with the toggle, but keep the underlying component/story classes logical: use `ps-*`, `pe-*`, `ms-*`,
 `me-*`, `start-*`, `end-*`, `border-s-*`, `border-e-*`, `rounded-s-*`, and `rounded-e-*` for inline-axis behavior
 instead of physical left/right utilities.
+
+If hardcoded LTR story text contains neutral punctuation and looks wrong under the RTL toolbar, isolate only that text
+fragment with explicit direction:
+
+```tsx
+<span dir={'ltr'}>Processing...</span>
+```
+
+Use real localized RTL text for real RTL examples. Do not make the component parse or rearrange punctuation.
+
+Flip directional icons only at usage sites where the icon means inline direction, such as next/previous, back/forward,
+or collapse start/end:
+
+```tsx
+<ArrowRightIcon className={'rtl:rotate-180'}/>
+```
+
+Do not flip external/open icons such as `ArrowUpRightIcon` used for `Visit`; that icon means external/open, not
+inline-end movement. Do not flip icons in icon showcase pages, because the gallery documents raw icon assets.
 
 For icon-like story controls, never put React components directly in `options`. Use serializable string options plus
 Storybook `mapping`:

@@ -142,6 +142,11 @@ The workaround is also not a guarantee that every future third-party React packa
 - Do not import `@base-ui/react` from `src/core`.
 - Avoid third-party React component packages in `src/core` if they call `createContext`, hooks, providers, or browser
   APIs at module top level.
+- Keep framework-agnostic UI-kit providers under `src/client/providers` and export them only from
+  `@sefo/nodzimo-ui/client`. Providers required by Base UI component behavior, such as direction context, belong there.
+- Do not move app-owned providers into the UI kit. Locale routing, framework theme adapters, auth, data, cookies,
+  `next-intl`, `next-themes`, and other framework/business providers belong in consumer apps unless the UI kit itself
+  requires a framework-agnostic provider for its own components.
 - Prefer inline SVG or generated project-owned RSC-safe icon components for fundamental core primitives.
 - Keep `lucide-react` out of stories, demos, and runtime source. Use generated project-owned icons from raw SVG inputs.
   If the package is deliberately reintroduced, inspect the built output and verify a Next consumer before accepting it.
@@ -178,6 +183,16 @@ Inspect the root entry:
 ```powershell
 rg -n "createContext|useContext|useState|useEffect|react/compiler-runtime|@base-ui/react|lucide-react|node_modules/lucide" dist/nodzimo-ui.js
 ```
+
+For provider changes, also search root declarations and the client artifact:
+
+```powershell
+rg -n "DirectionProvider|useDirection|direction-provider|@base-ui/react" dist/nodzimo-ui.js dist/nodzimo-ui.d.ts
+rg -n "DirectionProvider|useDirection|direction-provider|@base-ui/react" dist/client.js dist/client.d.ts
+```
+
+Expected result: no provider or Base UI hits in the root entry or root declaration file; provider hits may appear in the
+client entry and client declarations.
 
 Interpretation:
 
