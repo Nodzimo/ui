@@ -136,7 +136,7 @@
 		"react-dom": "19.x"
 	},
 	"devDependencies": {
-		"@babel/core": "7.29.0",
+		"@babel/core": "7.29.7",
 		"@biomejs/biome": "2.4.15",
 		"@chromatic-com/storybook": "5.2.1",
 		"@microsoft/api-extractor": "7.58.7",
@@ -157,7 +157,7 @@
 		"@vitest/browser-playwright": "4.1.7",
 		"@vitest/coverage-v8": "4.1.7",
 		"babel-plugin-react-compiler": "1.0.0",
-		"dependency-cruiser": "17.4.0",
+		"dependency-cruiser": "17.4.2",
 		"fkill-cli": "9.0.0",
 		"playwright": "1.60.0",
 		"react": "19.2.6",
