@@ -272,6 +272,23 @@ Only keep physical left/right utilities when the design intentionally targets a 
 direction. Symmetric utilities such as `px-*`, `mx-*`, `inset-x-*`, `border-x-*`, and `rounded-*` are already
 direction-neutral.
 
+For positioned elements, prefer Tailwind's canonical logical inset utilities when available:
+
+```text
+right-2 -> inset-e-2
+left-2 -> inset-s-2
+```
+
+Match animation direction to placement semantics. Logical placements should use logical animation utilities; physical
+placements can keep physical animation utilities:
+
+```text
+data-[side=inline-end]:slide-in-from-start-*
+data-[side=inline-start]:slide-in-from-end-*
+data-[side=right]:slide-in-from-left-*
+data-[side=left]:slide-in-from-right-*
+```
+
 ## Flip Directional Icons At Usage Sites
 
 Generated icons are raw assets. Do not edit generated icon components to add RTL behavior.

@@ -140,8 +140,11 @@ contract.
   do not move display-name formatting or gallery mapping helpers into `src/lib` or `src/core`.
 - Use Storybook's official `IconGallery` / `IconItem` doc blocks for simple icon set pages. Keep generated icon
   component names as stable technical keys, but format user-facing labels for readability, for example by removing an
-  `Icon` postfix and splitting PascalCase into words. If this formatting needs TypeScript, move it to a local
-  `.storybook/showcase/**.tsx` helper instead of writing untyped functions inside MDX.
+  `Icon` postfix and splitting PascalCase into words. Preserve numeric icon suffixes as separate label parts, for
+  example `Trash2Icon` should display as `Trash 2`. Sort icon galleries by the displayed label rather than by export
+  order. Keep the implementation direct: prepare typed local entries when needed, sort them, then render them; avoid
+  dense `map().sort().map()` chains when they obscure the data shape. If this formatting needs TypeScript, move it to a
+  local `.storybook/showcase/**.tsx` helper instead of writing untyped functions inside MDX.
 - Keep long project doctrine content source-of-truth under `docs`, not embedded directly in Storybook. The current
   design-system doctrine lives in `docs/design-system-doctrine/README.md` plus identity-named chapter files. Storybook
   should mirror those chapters through `.storybook/showcase` MDX wrappers that import the chapter Markdown with `?raw`.

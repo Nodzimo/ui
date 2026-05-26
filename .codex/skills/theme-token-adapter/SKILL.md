@@ -1,6 +1,6 @@
 ---
 name: theme-token-adapter
-description: Review, adapt, or validate Tailwind/React component styles against this repository's NUI-prefixed theme-token contract. Use when Codex is asked to add or port UI components from shadcn, Radix, Base UI, examples, or storybook code; prefix semantic classes; inspect CSS variables; or check that component styles use the local design-system tokens correctly.
+description: Review, adapt, or validate Tailwind/React component styles against this repository's NUI-prefixed theme-token contract. Use when Codex is asked to add or port UI components from shadcn, Radix, Base UI, examples, or storybook code; prefix semantic classes; adapt radius tokens; preserve RTL spacing, positioning, and animations; inspect CSS variables; or check that component styles use the local design-system tokens correctly.
 ---
 
 # Theme Token Adapter
@@ -26,6 +26,10 @@ tokens.
   `link`, `muted`, `accent`, `border`, `input`, or `ring`.
 - Raw CSS variables use `--nui-*`.
 - Tailwind theme tokens use `--color-nui-*`, `--radius-nui-*`, and `--spacing-nui-*`.
+- Radius is a theme-facing design-system token. Port shadcn radius classes and variables to NUI equivalents, for
+  example `rounded-lg` -> `rounded-nui-lg`, `rounded-md` -> `rounded-nui-md`, and `var(--radius-md)` ->
+  `var(--radius-nui-md)`. This preserves shadcn's tokenized radius model under the NUI namespace instead of using
+  Tailwind's default radius scale.
 - Current spacing tokens are product tokens, not Storybook-only data: `--nui-spacing-2xs` through
   `--nui-spacing-2xl` are raw runtime variables, while `--spacing-nui-2xs` through `--spacing-nui-2xl` map those values
   for Tailwind utilities such as `gap-nui-md`.
@@ -41,6 +45,10 @@ tokens.
   `ms-*`, `me-*`, `start-*`, `end-*`, `border-s-*`, `border-e-*`, `rounded-s-*`, and `rounded-e-*`. Avoid physical
   `pl-*`, `pr-*`, `ml-*`, `mr-*`, `left-*`, `right-*`, `border-l-*`, and `border-r-*` unless the design truly means a
   physical side.
+- Directional animation classes should match the side semantics. When a component uses logical placement such as
+  `side='inline-start'` or `side='inline-end'`, use logical animation utilities such as `slide-in-from-end-*` or
+  `slide-in-from-start-*`. Keep physical animation utilities for explicit physical sides such as `left`, `right`,
+  `top`, and `bottom`.
 - Directional icon flipping is a usage-site decision, not an icon-generation decision. Add `rtl:rotate-180` only when
   an icon means inline direction such as next/previous, back/forward, or start/end. Do not flip external/open icons such
   as an `ArrowUpRightIcon` used for `Visit`, and do not flip icon gallery inventory.
@@ -50,6 +58,9 @@ tokens.
 - Component class strings use NUI-prefixed semantic utilities when they refer to design-system colors, radii, or spacing
   tokens.
 - Keep ordinary Tailwind layout/typography/state utilities unchanged.
+- Keep implementation code readable while adapting classes. Prefer named local constants for preparation, sorting, and
+  rendering steps when a chain becomes dense. Use small explicit local types when inferred types become noisy; do not
+  add helper functions or abstraction layers unless they simplify repeated logic.
 - Keep broad foundation styles opt-in through the foundation utility classes documented in
   `references/token-prefixing.md`; do not silently style the entire consumer app.
 - Keep Storybook story-only classes out of the publishable CSS artifact. `src/styles.css` is the package Tailwind
@@ -98,21 +109,26 @@ tokens.
 4. Convert only theme-facing styles to NUI-prefixed equivalents.
 5. Preserve modifiers, state variants, opacity suffixes, and arbitrary selectors.
 6. Convert directional physical utilities to logical utilities when they represent inline start/end behavior.
-7. Review directional icon usages. Flip only usage sites that mean inline direction; leave generated icons, external
+7. Convert directional animation utilities to logical forms when the placement itself is logical. Do not change physical
+   `left`, `right`, `top`, or `bottom` animation classes unless the component is actually using inline/block logical
+   side names.
+8. Review directional icon usages. Flip only usage sites that mean inline direction; leave generated icons, external
    link icons, and icon galleries alone.
-8. Keep local implementation imports relative inside the component folder.
-9. When adding a new package-facing design token, verify it has a raw `--nui-*` runtime variable and an `@theme inline`
-   mapping if Tailwind utility generation is needed.
-10. When adding a public package-facing Tailwind utility with `@utility`, verify the utility and promised variants are
+9. Keep local implementation imports relative inside the component folder.
+10. Keep the component folder `index.ts` as the intentional local public surface. Do not re-export internal helper
+    subcomponents only because a copied source exports them.
+11. When adding a new package-facing design token, verify it has a raw `--nui-*` runtime variable and an `@theme inline`
+    mapping if Tailwind utility generation is needed.
+12. When adding a public package-facing Tailwind utility with `@utility`, verify the utility and promised variants are
     emitted into `dist/styles.css`. If the class is not used in package source, safelist the public class forms in
     `src/styles.css` with `@source inline(...)`.
-11. Search changed files for unprefixed theme tokens.
-12. If changing story files, Storybook-only preview classes, or Tailwind source detection, verify both CSS surfaces:
+13. Search changed files for unprefixed theme tokens.
+14. If changing story files, Storybook-only preview classes, or Tailwind source detection, verify both CSS surfaces:
     package CSS should not contain story-only utilities, while static Storybook CSS should contain the utilities needed
     by
     stories and preview decorators. Check concrete class names in the built CSS artifacts instead of trusting that the
     build passed.
-13. Run the smallest relevant verification:
+15. Run the smallest relevant verification:
     - `bun run build:ts` for component-only TypeScript changes.
     - `bun run build:css` after changing `src/library.css`, `src/styles.css`, or Tailwind theme tokens.
     - `bun run storybook:build` after changing Storybook CSS imports, `.storybook` configuration, or story-only layout

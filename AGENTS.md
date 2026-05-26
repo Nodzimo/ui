@@ -33,6 +33,10 @@
   behind each recommendation, challenge weak naming or architecture, and treat disagreement as a way to clarify the
   better solution rather than as a reason to soften the critique.
 - Preserve project style: tabs, single quotes, no semicolons, named exports.
+- Keep implementation code direct and readable. Prefer a few named local constants over dense chains when a chain mixes
+  data preparation, sorting, and rendering. Introduce small explicit local types when inferred types become noisy or
+  leak implementation detail into editor hovers; do not add helper functions, wrapper types, or advanced APIs unless
+  they remove real complexity.
 - Name things according to their lifespan and scope. Broad, exported, cross-file, or public-facing entities need precise
   descriptive names. Short-lived local helpers may stay simple and generic when their surrounding context makes their
   purpose obvious.
@@ -381,6 +385,10 @@ same mapping, reuse that key union instead of repeating the expression, for exam
   `bg-background`, or `text-foreground` in library source.
 - Preserve normal Tailwind structural utilities such as `flex`, `inline-flex`, `items-center`, `gap-2`, `px-2.5`,
   `text-sm`, `size-8`, `transition-all`, and `disabled:opacity-50`; prefix only theme-facing design-system utilities.
+- Treat radius as a theme-facing design-system utility, not a generic structural utility. When porting shadcn classes
+  such as `rounded-lg`, `rounded-md`, or `var(--radius-md)`, map them to the matching NUI radius contract such as
+  `rounded-nui-lg`, `rounded-nui-md`, or `var(--radius-nui-md)`. This preserves shadcn's tokenized radius model under
+  the NUI namespace instead of falling back to Tailwind's default radius scale.
 - Keep `@custom-variant dark (&:is(.dark *));` because components may use Tailwind `dark:` variants.
 - Dark mode overrides should redefine the same `--nui-*` raw variables under `.dark`; do not create separate
   `*-dark` token names.
@@ -413,6 +421,10 @@ same mapping, reuse that key union instead of repeating the expression, for exam
     - `radius`: the base corner-radius scale for cards, inputs, buttons, popovers, and derived `radius-nui-*` tokens.
 - The radius scale follows shadcn's model: `radius-nui-lg` is the base value from `--nui-radius`, smaller radii scale
   down from it, larger radii scale up from it, and changing `--nui-radius` updates the whole radius scale.
+- For RTL-sensitive components, convert inline-axis physical animation utilities to logical equivalents when the side or
+  placement is logical. For example, a popup using `side='inline-start'` or `side='inline-end'` should use logical
+  animation classes such as `slide-in-from-end-*` or `slide-in-from-start-*`, while explicit physical sides such as
+  `left` and `right` may keep physical animation classes.
 - The spacing scale is a public NUI rhythm layer, not Storybook-only display data. Define raw runtime variables
   `--nui-spacing-2xs` through `--nui-spacing-2xl` in `:root`, then map Tailwind utilities through
   `--spacing-nui-2xs` through `--spacing-nui-2xl` in `@theme inline`.
@@ -543,6 +555,9 @@ same mapping, reuse that key union instead of repeating the expression, for exam
   alias such as `mcn`.
 - When porting components from shadcn, Radix examples, or other Tailwind sources, preserve behavior and structure but
   adapt theme-facing classes to the NUI token namespace.
+- Keep component public surfaces intentional. Do not export internal composition helpers merely because a copied source
+  exports them; export subcomponents through a folder `index.ts` only when consumers should intentionally depend on
+  them.
 - Use the repo skill `.codex/skills/theme-token-adapter` for repeated token-prefix adaptation and review work.
 
 ## Icon Generation
