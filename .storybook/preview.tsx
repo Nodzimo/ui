@@ -78,6 +78,7 @@ const preview: Preview = {
 							'Overview',
 							'Core Position',
 							'Theme-Specific Values',
+							'Token Role Semantics',
 							'Button Action Hierarchy',
 							'Token Discipline',
 							'Theme Character Guardrails',

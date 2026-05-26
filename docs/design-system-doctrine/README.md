@@ -6,6 +6,7 @@ This folder contains the Nodzimo design-system doctrine split into readable chap
 
 - [Core Position](core-position.md)
 - [Theme-Specific Values](theme-specific-values.md)
+- [Token Role Semantics](token-role-semantics.md)
 - [Button Action Hierarchy](button-action-hierarchy.md)
 - [Token Discipline](token-discipline.md)
 - [Theme Character Guardrails](theme-character-guardrails.md)
