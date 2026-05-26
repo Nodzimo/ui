@@ -15,6 +15,7 @@ const config: StorybookConfig = {
 		'@storybook/addon-themes',
 		'storybook-dark-mode',
 		'storybook-addon-pseudo-states',
+		'storybook-addon-rtl',
 	],
 	framework: {
 		name: '@storybook/react-vite',

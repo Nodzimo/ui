@@ -602,6 +602,9 @@ same mapping, reuse that key union instead of repeating the expression, for exam
   published JS entrypoints.
 - Keep `.storybook/main.ts` focused on maintained project addons. Do not add `@storybook/addon-onboarding` or restore
   generated onboarding demo files; component docs should be real colocated stories or intentional project MDX.
+- Keep Storybook addon entries in `.storybook/main.ts` mirrored by direct `devDependencies` and by
+  `.codex/skills/dependency-update-reviewer/references/dependency-sources.md`. Current intentional third-party
+  preview/manager addons include `storybook-dark-mode`, `storybook-addon-pseudo-states`, and `storybook-addon-rtl`.
 - Keep Storybook's manager branding on supported APIs: `storybook/theming` for title/link/theme and
   `.storybook/manager-head.html` for head tags such as favicon. Avoid CSS or DOM hacks against Storybook's internal
   sidebar markup for simple branding.
@@ -748,6 +751,8 @@ same mapping, reuse that key union instead of repeating the expression, for exam
 - Use `storybook-addon-pseudo-states` for fixed CSS pseudo-class previews such as `hover` and `active`. Real component
   states such as `disabled`, `checked`, `selected`, `open`, or `loading` should stay real args/props, not pseudo-state
   addon configuration.
+- Use `storybook-addon-rtl` as the Storybook toolbar check for left-to-right and right-to-left rendering. Treat it as a
+  preview QA surface, not a substitute for component code using logical spacing, positioning, borders, and radii.
 - Put shared pseudo-state defaults in `meta.parameters.pseudo` when every story in the file follows the same preview
   convention. Use story-level `parameters.pseudo` only for stories that need different pseudo-state targets.
 - When targeting one element for a pseudo state inside a story canvas, prefer story-only `data-*` selectors such as

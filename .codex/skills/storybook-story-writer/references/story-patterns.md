@@ -263,6 +263,11 @@ picker. The official backgrounds addon is useful for presets only. If the projec
 picker for the whole canvas, build or adopt a maintained toolbar/global addon deliberately instead of changing every
 story layout or using preview `document.body` effects.
 
+Use `storybook-addon-rtl` for the global Storybook LTR/RTL toolbar toggle. When a component has directional layout,
+review it with the toggle, but keep the underlying component/story classes logical: use `ps-*`, `pe-*`, `ms-*`,
+`me-*`, `start-*`, `end-*`, `border-s-*`, `border-e-*`, `rounded-s-*`, and `rounded-e-*` for inline-axis behavior
+instead of physical left/right utilities.
+
 For icon-like story controls, never put React components directly in `options`. Use serializable string options plus
 Storybook `mapping`:
 

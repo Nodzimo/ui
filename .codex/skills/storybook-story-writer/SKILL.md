@@ -280,6 +280,9 @@ toggle two explicit states instead of treating light as an invisible absence of 
   addon, not layout hacks or `document.body` effects in preview.
 - Use `storybook-addon-pseudo-states` for fixed CSS pseudo-class previews such as `hover` and `active`; do not use it
   for real component states such as `disabled`, `checked`, `selected`, `open`, or `loading`.
+- Use `storybook-addon-rtl` for Storybook's global LTR/RTL toolbar check when reviewing layout-sensitive stories. It is
+  a preview verification tool; component and story class names should still prefer logical utilities for inline-axis
+  spacing, positioning, borders, and radii.
 - Put shared pseudo-state defaults in `meta.parameters.pseudo` when a story file uses the same preview targets across
   stories. Use story-level `parameters.pseudo` only for exceptions.
 - Target forced pseudo states with story-only `data-*` selectors such as `[data-preview="hover"]`, not repeated `id`
