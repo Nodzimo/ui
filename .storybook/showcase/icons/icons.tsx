@@ -30,13 +30,14 @@ const SPINNABLE_ICONS = {
 } satisfies IconGroup
 
 const ICON_POSTFIX = 'Icon'
+const ICON_LABEL_PART_PATTERN = /(?=[A-Z])|(?<=[A-Za-z])(?=\d)/
 
 function getIconLabel(name: string) {
 	const nameWithoutPostfix = name.endsWith(ICON_POSTFIX)
 		? name.slice(0, -ICON_POSTFIX.length)
 		: name
 
-	return nameWithoutPostfix.split(/(?=[A-Z])/).join(' ')
+	return nameWithoutPostfix.split(ICON_LABEL_PART_PATTERN).join(' ')
 }
 
 type IconPreviewOptions = {
@@ -44,24 +45,44 @@ type IconPreviewOptions = {
 	spinning?: boolean
 }
 
+type IconItemEntry = {
+	Icon: IconComponent
+	label: string
+	name: string
+}
+
 function renderIconGallery(
 	iconGroup: IconGroup,
 	{ filled, spinning }: IconPreviewOptions = {},
 ) {
-	const iconItems = Object.entries(iconGroup).map(
-		([name, Icon]: [string, IconComponent]) => {
-			return (
-				<IconItem key={name} name={getIconLabel(name)}>
-					<Icon
-						className={mcn(
-							filled && 'fill-nui-primary text-nui-primary hover:fill-none',
-							spinning && 'hover:nui-animate-paused animate-spin',
-						)}
-					/>
-				</IconItem>
-			)
+	const iconEntries: IconItemEntry[] = Object.entries(iconGroup).map(
+		([name, Icon]): IconItemEntry => {
+			return { Icon, label: getIconLabel(name), name }
 		},
 	)
+
+	const sortedIconEntries: IconItemEntry[] = iconEntries.toSorted(
+		({ label: leftIconLabel }, { label: rightIconLabel }) => {
+			if (leftIconLabel === rightIconLabel) {
+				return 0
+			}
+
+			return leftIconLabel > rightIconLabel ? 1 : -1
+		},
+	)
+
+	const iconItems = sortedIconEntries.map(({ Icon, label, name }) => {
+		return (
+			<IconItem key={name} name={label}>
+				<Icon
+					className={mcn(
+						filled && 'fill-nui-primary text-nui-primary hover:fill-none',
+						spinning && 'hover:nui-animate-paused animate-spin',
+					)}
+				/>
+			</IconItem>
+		)
+	})
 
 	return <IconGallery>{iconItems}</IconGallery>
 }
