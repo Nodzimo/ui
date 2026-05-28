@@ -1,7 +1,7 @@
 // noinspection JSUnusedGlobalSymbols
 
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import type { ComponentProps, PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 import { fn } from 'storybook/test'
 import {
 	ArrowUpRightIcon,
@@ -13,27 +13,7 @@ import {
 	Trash2Icon,
 	XIcon,
 } from '#core'
-import { Button } from '.'
-
-const BUTTON_VARIANT_OPTIONS = [
-	'default',
-	'outline',
-	'secondary',
-	'ghost',
-	'destructive',
-	'link',
-] as const
-
-const BUTTON_SIZE_OPTIONS = [
-	'default',
-	'xs',
-	'sm',
-	'lg',
-	'icon',
-	'icon-xs',
-	'icon-sm',
-	'icon-lg',
-] as const
+import { BUTTON_SIZES, BUTTON_VARIANTS, Button, type ButtonProps } from '.'
 
 const BUTTON_STORY_ICONS = {
 	ArrowUpRightIcon,
@@ -60,7 +40,7 @@ function ButtonPreviewRow(props: PropsWithChildren) {
 
 type ButtonStoryIcon = (typeof BUTTON_STORY_ICONS)[ButtonStoryIconName]
 
-type ButtonStoryArgs = ComponentProps<typeof Button> & {
+type ButtonStoryArgs = ButtonProps & {
 	Icon?: ButtonStoryIcon
 }
 
@@ -78,29 +58,31 @@ const meta = {
 			table: {
 				type: {
 					summary: STRING_UNION_SUMMARY,
-					detail: BUTTON_VARIANT_OPTIONS.join(UNION_SEPARATOR),
+					detail: BUTTON_VARIANTS.join(UNION_SEPARATOR),
 				},
 			},
 			control: 'select',
-			options: BUTTON_VARIANT_OPTIONS,
+			options: BUTTON_VARIANTS,
 		},
 		size: {
 			table: {
 				type: {
 					summary: STRING_UNION_SUMMARY,
-					detail: BUTTON_SIZE_OPTIONS.join(UNION_SEPARATOR),
+					detail: BUTTON_SIZES.join(UNION_SEPARATOR),
 				},
 			},
 			control: 'select',
-			options: BUTTON_SIZE_OPTIONS,
+			options: BUTTON_SIZES,
 		},
 		Icon: {
 			description: 'Story-only icon picker (this is not a Button prop!)',
 			table: {
+				category: 'Story canvas',
 				type: {
 					summary: 'component union',
 					detail: BUTTON_STORY_ICON_OPTIONS.join(UNION_SEPARATOR),
 				},
+				defaultValue: { summary: BUTTON_STORY_ICON_OPTIONS[2] },
 			},
 			control: 'select',
 			options: BUTTON_STORY_ICON_OPTIONS,
