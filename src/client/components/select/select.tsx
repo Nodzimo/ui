@@ -5,7 +5,11 @@ import { mcn } from '#lib'
 
 const Select = SelectPrimitive.Root
 
-function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
+export type SelectProps = ComponentProps<typeof Select>
+
+export type SelectGroupProps = SelectPrimitive.Group.Props
+
+function SelectGroup({ className, ...props }: SelectGroupProps) {
 	return (
 		<SelectPrimitive.Group
 			className={mcn('scroll-my-1 p-1', className)}
@@ -15,7 +19,9 @@ function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
 	)
 }
 
-function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
+export type SelectValueProps = SelectPrimitive.Value.Props
+
+function SelectValue({ className, ...props }: SelectValueProps) {
 	return (
 		<SelectPrimitive.Value
 			className={mcn('flex flex-1 text-start', className)}
@@ -25,14 +31,20 @@ function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
 	)
 }
 
+export const SELECT_TRIGGER_SIZES = Object.freeze(['sm', 'default'] as const)
+
+export type SelectTriggerSize = (typeof SELECT_TRIGGER_SIZES)[number]
+
+export type SelectTriggerProps = SelectPrimitive.Trigger.Props & {
+	size?: SelectTriggerSize
+}
+
 function SelectTrigger({
 	className,
 	size = 'default',
 	children,
 	...props
-}: SelectPrimitive.Trigger.Props & {
-	size?: 'sm' | 'default'
-}) {
+}: SelectTriggerProps) {
 	return (
 		<SelectPrimitive.Trigger
 			className={mcn(
@@ -55,6 +67,35 @@ function SelectTrigger({
 	)
 }
 
+export type SelectContentSide = NonNullable<
+	SelectPrimitive.Positioner.Props['side']
+>
+
+export const SELECT_CONTENT_SIDES = Object.freeze([
+	'top',
+	'bottom',
+	'left',
+	'right',
+	'inline-end',
+	'inline-start',
+] as const satisfies readonly SelectContentSide[])
+
+export type SelectContentAlign = NonNullable<
+	SelectPrimitive.Positioner.Props['align']
+>
+
+export const SELECT_CONTENT_ALIGNS = Object.freeze([
+	'start',
+	'center',
+	'end',
+] as const satisfies readonly SelectContentAlign[])
+
+export type SelectContentProps = SelectPrimitive.Popup.Props &
+	Pick<
+		SelectPrimitive.Positioner.Props,
+		'align' | 'alignOffset' | 'side' | 'sideOffset' | 'alignItemWithTrigger'
+	>
+
 function SelectContent({
 	className,
 	children,
@@ -64,11 +105,7 @@ function SelectContent({
 	alignOffset = 0,
 	alignItemWithTrigger = true,
 	...props
-}: SelectPrimitive.Popup.Props &
-	Pick<
-		SelectPrimitive.Positioner.Props,
-		'align' | 'alignOffset' | 'side' | 'sideOffset' | 'alignItemWithTrigger'
-	>) {
+}: SelectContentProps) {
 	return (
 		<SelectPrimitive.Portal>
 			<SelectPrimitive.Positioner
@@ -97,10 +134,9 @@ function SelectContent({
 	)
 }
 
-function SelectLabel({
-	className,
-	...props
-}: SelectPrimitive.GroupLabel.Props) {
+export type SelectLabelProps = SelectPrimitive.GroupLabel.Props
+
+function SelectLabel({ className, ...props }: SelectLabelProps) {
 	return (
 		<SelectPrimitive.GroupLabel
 			className={mcn(
@@ -113,11 +149,9 @@ function SelectLabel({
 	)
 }
 
-function SelectItem({
-	className,
-	children,
-	...props
-}: SelectPrimitive.Item.Props) {
+export type SelectItemProps = SelectPrimitive.Item.Props
+
+function SelectItem({ className, children, ...props }: SelectItemProps) {
 	return (
 		<SelectPrimitive.Item
 			className={mcn(
@@ -147,10 +181,9 @@ function SelectItem({
 	)
 }
 
-function SelectSeparator({
-	className,
-	...props
-}: SelectPrimitive.Separator.Props) {
+export type SelectSeparatorProps = SelectPrimitive.Separator.Props
+
+function SelectSeparator({ className, ...props }: SelectSeparatorProps) {
 	return (
 		<SelectPrimitive.Separator
 			className={mcn(
@@ -163,10 +196,14 @@ function SelectSeparator({
 	)
 }
 
+export type SelectScrollUpButtonProps = ComponentProps<
+	typeof SelectPrimitive.ScrollUpArrow
+>
+
 function SelectScrollUpButton({
 	className,
 	...props
-}: ComponentProps<typeof SelectPrimitive.ScrollUpArrow>) {
+}: SelectScrollUpButtonProps) {
 	return (
 		<SelectPrimitive.ScrollUpArrow
 			className={mcn(
@@ -181,10 +218,14 @@ function SelectScrollUpButton({
 	)
 }
 
+export type SelectScrollDownButtonProps = ComponentProps<
+	typeof SelectPrimitive.ScrollDownArrow
+>
+
 function SelectScrollDownButton({
 	className,
 	...props
-}: ComponentProps<typeof SelectPrimitive.ScrollDownArrow>) {
+}: SelectScrollDownButtonProps) {
 	return (
 		<SelectPrimitive.ScrollDownArrow
 			className={mcn(
