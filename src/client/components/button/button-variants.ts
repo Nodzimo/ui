@@ -27,18 +27,18 @@ const BUTTON_SIZE_CLASSES = {
 	'icon-lg': 'size-9',
 } as const
 
-export type ButtonVariant = keyof typeof BUTTON_VARIANT_CLASSES
-export type ButtonSize = keyof typeof BUTTON_SIZE_CLASSES
+type ButtonVariant = keyof typeof BUTTON_VARIANT_CLASSES
+type ButtonSize = keyof typeof BUTTON_SIZE_CLASSES
 
-export const BUTTON_VARIANTS = Object.freeze(
+const BUTTON_VARIANTS = Object.freeze(
 	Object.keys(BUTTON_VARIANT_CLASSES) as ButtonVariant[],
 )
 
-export const BUTTON_SIZES = Object.freeze(
+const BUTTON_SIZES = Object.freeze(
 	Object.keys(BUTTON_SIZE_CLASSES) as ButtonSize[],
 )
 
-export const buttonVariants = cva(
+const buttonVariants = cva(
 	"group/button inline-flex shrink-0 items-center justify-center rounded-nui-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-nui-ring focus-visible:ring-3 focus-visible:ring-nui-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-nui-destructive aria-invalid:ring-3 aria-invalid:ring-nui-destructive/20 dark:aria-invalid:border-nui-destructive/50 dark:aria-invalid:ring-nui-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
 	{
 		variants: {
@@ -51,3 +51,11 @@ export const buttonVariants = cva(
 		},
 	},
 )
+
+export {
+	BUTTON_SIZES,
+	BUTTON_VARIANTS,
+	type ButtonSize,
+	type ButtonVariant,
+	buttonVariants,
+}
