@@ -42,11 +42,23 @@ import { Button } from '.'
   `ComponentStoryArgs` type as `ComponentProps<typeof Component> & { ... }`, then use
   `satisfies Meta<ComponentStoryArgs>`.
 - Put shared baseline args in `meta.args`; override only story-specific args in each story.
-- Add runtime `argTypes.options` for meaningful variant controls because CVA unions are not runtime values.
+- Treat Storybook as the first demanding consumer of the component contract. When Storybook needs finite runtime values
+  for Controls, expose those values from the component layer when they are part of the public API, then import them into
+  stories. This is a workaround for Storybook docgen/Controls limits, not a reason to hand-roll private story metadata.
+- Add runtime `argTypes.options` for meaningful variant controls because TypeScript unions, CVA `VariantProps`, and
+  Base UI compound part props are not runtime values.
 - Add explicit baseline `meta.args` for native or passthrough props when Storybook would otherwise omit useful Controls,
   for example `disabled: false`.
+- Do not assume docgen will infer usable Controls for wrapped Base UI or CVA-backed components. The Button incident was
+  caused by the `docgen -> Controls` pipeline failing to turn `ButtonPrimitive.Props & VariantProps<typeof
+  buttonVariants>` into clean runtime select options. `react-docgen` saw weak prop shapes, and a
+  `react-docgen-typescript` trial did not produce reliable Storybook Controls in this setup. Provide explicit
+  `argTypes`, `options`, `table.type`, and `table.defaultValue` for the props that matter.
 - Write focused semantic stories first, then comparison stories for scales, sizes, layouts, or icon-only forms. When a
   component has common composition patterns, prefer a shared `meta.render` that displays the practical set together.
+- For compound components, model story args as the composition surface being documented. Prefix child-part controls with
+  the part name, for example `triggerSize`, `triggerAriaInvalid`, `contentSide`, or `contentAlign`, instead of
+  pretending those are root props.
 - Keep colocated `.stories.*` imports development-only. They may import Storybook utilities such as `storybook/test`;
   dependency-cruiser's `not-to-dev-dep` rule should exclude story files rather than forcing Storybook packages into
   runtime dependencies.
@@ -116,11 +128,17 @@ contract.
 - Use `UPPER_SNAKE_CASE` for intentional module-scope immutable story tables, mappings, options, and literal constants,
   such as variant option arrays, story-only icon maps, and string union separators. Keep Storybook convention objects
   such as `meta` in `camelCase`.
+- Reuse shared Storybook arg-table constants from `src/storybook/constants.ts` instead of duplicating labels such as
+  `STRING_UNION_SUMMARY` or separators such as `UNION_SEPARATOR` in every story file.
 - Use `as const` for literal Storybook option arrays and mapping objects when deriving unions from them. Do not annotate
   those tables as `readonly string[]` unless a widened `string` element type is intentional. `as const` keeps values
   narrow enough for types such as `(typeof BUTTON_SIZE_OPTIONS)[number]` and `keyof typeof BUTTON_STORY_ICONS`. Reuse
   the derived key union when indexing the mapping, for example
   `(typeof BUTTON_STORY_ICONS)[ButtonStoryIconName]`, instead of repeating `keyof typeof BUTTON_STORY_ICONS`.
+- Prefer component-owned constants for public finite values. For Button, variants and sizes belong beside the CVA
+  variant definition and are exported for consumers and stories. For Select, trigger size belongs beside
+  `SelectTrigger`; Base UI placement unions used by `SelectContent` should be mirrored as runtime arrays validated
+  against Base UI-derived types.
 - Keep stories colocated beside components.
 - Do not import from `@sefo/nodzimo-ui` inside this package.
 - Do not restore Storybook onboarding/demo files or `@storybook/addon-onboarding`. Generated examples are not part of
@@ -305,6 +323,9 @@ toggle two explicit states instead of treating light as an invisible absence of 
   `Object.keys(BUTTON_STORY_ICONS) as ButtonStoryIconName[]`,
   `type ButtonStoryIcon = (typeof BUTTON_STORY_ICONS)[ButtonStoryIconName]`, and `mapping: BUTTON_STORY_ICONS`.
   The arg may be a component value, but the control options must stay serializable strings.
+- Do not contort a story-only icon arg into an `iconName` string only to make the select control display a default
+  selected option. If passing the icon component keeps stories simpler, accept that Storybook may not reverse-map the
+  component value back to the string option in the Controls UI.
 - Mark story-only controls clearly in `description`, for example:
   `Story-only icon picker (this is not a Button prop!)`.
 - When story-only args should not reach the rendered component, destructure and discard them explicitly:

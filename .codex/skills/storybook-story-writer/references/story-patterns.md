@@ -14,6 +14,121 @@ Use `src/client/components/button/button.stories.tsx` as the current reference p
 - focused semantic stories first
 - comparison render stories after semantic stories
 
+## Storybook As Consumer
+
+Treat Storybook as the first demanding consumer of the component API. It is where the UI kit discovers early whether a
+consumer can understand the public contract. Do not write private one-off option arrays inside stories when the values
+are part of the component API. Expose real component constants and types, then let Storybook consume them.
+
+This is a workaround for a concrete auto-controls failure, not a preference for verbose stories.
+
+### Incident: Auto Controls Failure
+
+The Button and Select work exposed a failure in the `docgen -> Storybook Controls` pipeline.
+
+The failure was not "TypeScript cannot type this." TypeScript understands the component contracts. The failure was that
+Storybook did not turn those contracts into usable runtime Controls.
+
+For a shadcn/Radix-style Button, the usual shape is simple for docgen:
+
+```text
+export interface ButtonProps
+    extends ButtonHTMLAttributes<HTMLButtonElement>,
+        VariantProps<typeof buttonVariants> {
+    asChild?: boolean
+}
+
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(...)
+```
+
+That shape gives docgen a named props interface and a direct `forwardRef<HTMLButtonElement, ButtonProps>` component
+signature. The base props are ordinary React DOM props. Even then, CVA variant values are not truly runtime metadata;
+Storybook may appear to handle them better in some setups, but the mechanism is still docgen heuristics, story args, and
+framework behavior, not a stable CVA introspection contract.
+
+The current Button intentionally has a different contract because it wraps Base UI:
+
+```ts
+export type ButtonProps = ButtonPrimitive.Props &
+    VariantProps<typeof buttonVariants>
+```
+
+This is a valid consumer contract, but it is harder for docgen:
+
+- `ButtonPrimitive.Props` is a Base UI namespace type, not plain `ButtonHTMLAttributes`.
+- Base UI props include `render`, state-aware `className` / `style`, Base UI event wrappers, `nativeButton`, and
+  accessibility behavior.
+- `variant` and `size` are computed through `VariantProps<typeof buttonVariants>`, not declared as local fields.
+- The component is a wrapper function over a Base UI primitive, so the readable API is a TypeScript intersection rather
+  than a small explicit interface.
+
+`react-docgen` can notice destructured defaults such as `variant = 'default'` and `size = 'default'`, but it does not
+recover the full CVA union values as runtime select options. In practice this produced weak Autodocs output such as
+unknown or object-like controls instead of clean select controls.
+
+`react-docgen-typescript` can sometimes resolve the TypeScript union in isolation, but switching Storybook to it was
+tested in this project and did not produce reliable usable Controls in the real Storybook setup. It also made other prop
+extraction worse. Therefore, "flip the docgen switch" is not the accepted solution for this codebase.
+
+The mature conclusion:
+
+- Keep the Base UI contract. Do not replace Base UI props with simpler React DOM props only to satisfy Storybook.
+- Keep CVA for styling variants.
+- Promote owned finite values to component-level runtime constants and derived public types.
+- Feed those same constants to Storybook `argTypes.options`.
+
+This makes Storybook a consumer of the same public metadata that package consumers can use.
+
+### Type Vs Interface In Stories And Components
+
+Do not rewrite every props contract to `interface` only for docgen.
+
+Use `type` when the contract is naturally a composition of external or computed types:
+
+```ts
+export type SelectContentProps = SelectPrimitive.Popup.Props &
+    Pick<SelectPrimitive.Positioner.Props, 'side' | 'align' | 'sideOffset'>
+```
+
+Use `interface` when the component owns a mostly explicit props surface:
+
+```ts
+export interface ButtonProps extends ButtonPrimitive.Props {
+    variant?: ButtonVariant
+    size?: ButtonSize
+}
+```
+
+The second shape may be more docgen-friendly because `variant` and `size` are direct fields, but it is not a replacement
+for runtime constants. Controls still need runtime `options`; TypeScript types alone disappear at runtime.
+
+### Compound Components
+
+Select adds a separate problem: it is compound. `Select` root props, `SelectTrigger` props, and `SelectContent`
+positioner props live on different components. Storybook cannot infer from `component: Select` that the story should
+also expose controls for `SelectTrigger.size`, `SelectTrigger.aria-invalid`, `SelectContent.side`,
+`SelectContent.align`, or offset props.
+
+For compound components, model the story args as the documented composition surface:
+
+- `triggerSize`
+- `triggerAriaInvalid`
+- `contentSide`
+- `contentAlign`
+- `contentSideOffset`
+- `contentAlignItemWithTrigger`
+
+These are not fake Select root props. They are controls for the public compound parts used by the story composition.
+
+### Accepted Model
+
+- Owned finite values belong at the component layer as runtime constants and derived types.
+- Stories import those constants and types instead of duplicating option arrays.
+- Storybook-specific table language belongs in `src/storybook/constants.ts`, not in every story file.
+- Story-only controls are allowed, but they must be named and described as story-only.
+- Do not describe this as a simple `forwardRef` failure. `forwardRef` can make a component signature easier for docgen,
+  but it does not solve CVA runtime options, Base UI namespace props, or compound child-part props.
+
 ## Titles
 
 Use Storybook titles that mirror source ownership:
@@ -90,20 +205,12 @@ render: ({Icon: _Icon, children: _children, ...restArgs}) => {
 
 ## Controls
 
-Storybook Controls need runtime options arrays. For CVA-backed variants, duplicate small option arrays or local option
-constants in `argTypes`:
+Storybook Controls need runtime options arrays. For public component variants, prefer importing component-owned
+constants instead of duplicating story-only option arrays. Button variants and sizes are the reference pattern:
 
 ```ts
-const BUTTON_VARIANT_OPTIONS = [
-    'default',
-    'outline',
-    'secondary',
-] as const
-
-type ButtonVariantOption = (typeof BUTTON_VARIANT_OPTIONS)[number]
-
-const STRING_UNION_SUMMARY = 'string union'
-const UNION_SEPARATOR = ' | '
+import {STRING_UNION_SUMMARY, UNION_SEPARATOR} from '../../../storybook/constants'
+import {BUTTON_VARIANTS} from '.'
 
 const meta = {
     argTypes: {
@@ -111,18 +218,41 @@ const meta = {
             table: {
                 type: {
                     summary: STRING_UNION_SUMMARY,
-                    detail: BUTTON_VARIANT_OPTIONS.join(UNION_SEPARATOR),
+                    detail: BUTTON_VARIANTS.join(UNION_SEPARATOR),
                 },
             },
             control: 'select',
-            options: BUTTON_VARIANT_OPTIONS,
+            options: BUTTON_VARIANTS,
         },
     },
 }
 ```
 
 Use `select` when the set is larger or when the row should stay visually quiet in Docs. Do not add a custom CVA metadata
-layer only for Storybook controls.
+layer only for Storybook controls, but do expose component-owned runtime constants when those values are part of the
+public UI-kit contract.
+
+For Base UI finite string unions that are public through a wrapper, TypeScript can validate the list but cannot create
+the runtime list. Mirror the values in a constant and validate them with `satisfies` against the Base UI-derived type:
+
+```ts
+type SelectContentSide = NonNullable<SelectPrimitive.Positioner.Props['side']>
+
+const SELECT_CONTENT_SIDES = Object.freeze([
+    'top',
+    'bottom',
+    'left',
+    'right',
+    'inline-end',
+    'inline-start',
+] as const satisfies readonly SelectContentSide[])
+```
+
+Keep `undefined` in the prop type when the upstream prop is optional, but do not include `undefined` in control option
+arrays. Storybook options represent explicit selectable values, not the absence of a prop.
+
+Numeric Base UI offsets such as `sideOffset` and `alignOffset` may accept functions upstream. Stories may still use
+`control: 'number'` for the documented numeric case; do not over-engineer a function editor for Controls.
 
 Global preview-only controls belong in `.storybook/preview.tsx`, not individual component stories. The current global
 preview control is `wrapperBackground`:
@@ -326,8 +456,31 @@ const meta = {
 }
 ```
 
+The story arg may remain the component value when that keeps stories simple. Storybook may not show the mapped default
+as the selected string option because it cannot reliably reverse-map a React component value back to the option key.
+Do not rewrite every story to an `iconName` arg only for that cosmetic control-state improvement unless the story file
+benefits from string keys in several places.
+
 Intentional module-scope immutable story tables, mappings, options, and literal constants use `UPPER_SNAKE_CASE`.
 Storybook convention objects such as `meta`, plus render-scope values and computed local bindings, stay `camelCase`.
+
+For several related defaults in one story composition, group them into one immutable object instead of scattering many
+single constants:
+
+```ts
+const SELECT_DEFAULTS = {
+    contentAlign: SELECT_CONTENT_ALIGNS[1],
+    contentAlignItemWithTrigger: true,
+    contentAlignOffset: 0,
+    contentSide: SELECT_CONTENT_SIDES[1],
+    contentSideOffset: 4,
+    triggerAriaInvalid: false,
+    triggerSize: SELECT_TRIGGER_SIZES[0],
+} as const
+```
+
+Use the object both in `args` and `table.defaultValue.summary` so docs and canvas defaults do not drift. Use `STORY` in
+the name only for values invented for the canvas; real component defaults can be named `SELECT_DEFAULTS`.
 
 ## Story Order
 
@@ -425,6 +578,10 @@ render: ({Icon: _Icon, ...restArgs}) => {
 - Do not include the component name in every story name when the Storybook title already scopes it.
 - Do not import implementation files directly when the local folder `index.ts` exposes the component.
 - Do not rely on TypeScript-only unions for controls.
+- Do not expect `react-docgen` or `react-docgen-typescript` to infer usable controls for CVA-backed wrappers or Base UI
+  compound compositions. Verify, then write explicit `argTypes` when the control is part of the documentation contract.
+- Do not put Storybook arg-table constants in component files. Shared labels and separators belong in
+  `src/storybook/constants.ts`; component-owned variant values belong beside the component.
 - Do not let story-only args such as `Icon` leak into rendered DOM or primitive components through `{...args}`.
 - Do not add canvas text that explains obvious visual matrices; it adds noise and duplicates story/control context.
 - Do not switch to CSF Next unless the project intentionally accepts preview API churn.

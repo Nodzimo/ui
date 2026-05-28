@@ -58,6 +58,11 @@ declared, for example `Object.keys(BUTTON_STORY_ICONS) as ButtonStoryIconName[]`
 same mapping, reuse that key union instead of repeating the expression, for example
 `type ButtonStoryIcon = (typeof BUTTON_STORY_ICONS)[ButtonStoryIconName]`.
 
+- Treat Storybook as a real consumer of the UI-kit contract. If a component has owned finite values such as variants,
+  sizes, placement sides, or alignments, prefer exposing runtime constants and derived types from the component layer so
+  Storybook and package consumers share one source of truth. Storybook Controls cannot use erased TypeScript unions by
+  themselves.
+
 ## Skills
 
 - For pre-update dependency research from `bun outdated`, post-update changelog review, breaking-change triage, or
@@ -865,11 +870,33 @@ same mapping, reuse that key union instead of repeating the expression, for exam
   more precise names when they become broader, exported, reused across files, or responsible for more than local layout.
 - Storybook Controls need runtime `options` arrays for select/radio controls. TypeScript may know CVA-derived unions in
   the editor, but those type unions are not available as runtime values for Storybook controls.
+- Storybook is the first demanding consumer of component metadata. For public finite values, define runtime constants at
+  the component layer and derive/export types from them. Button variants/sizes should come from the button variant
+  module; Select trigger sizes and content placement values should come from the Select component files. Stories should
+  import those constants instead of duplicating option arrays. This is a response to a real Storybook auto-controls
+  failure, not a preference for verbose stories.
+- Do not assume docgen will infer usable Controls for wrapped Base UI or CVA-backed components. The project hit this
+  with Button: the public contract `ButtonPrimitive.Props & VariantProps<typeof buttonVariants>` is valid TypeScript and
+  preserves the Base UI contract, but Storybook did not turn it into clean runtime select options. A simpler
+  shadcn/Radix-style `forwardRef<HTMLButtonElement, ButtonProps>` with an explicit `interface ButtonProps extends
+  ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<...>` is more docgen-friendly because the component signature
+  points directly at a named props interface and ordinary DOM props. That does not mean this project should abandon Base
+  UI props or rewrite everything for docgen.
+- Do not treat `forwardRef` as the root cause. It can help component detection, but it does not create runtime option
+  arrays for CVA, does not simplify Base UI namespace props, and does not make root compound components expose child
+  part props. Use explicit `argTypes.options`, `table.type`, and `table.defaultValue` for meaningful documented
+  controls.
+- For compound components, story args may represent the documented composition surface, not only the root component's
+  direct props. Prefix child-part controls with the part name, such as `triggerSize`, `triggerAriaInvalid`,
+  `contentSide`, `contentAlign`, `contentSideOffset`, and `contentAlignItemWithTrigger`.
+- Shared Storybook arg-table labels and separators belong in `src/storybook/constants.ts`. Keep that folder out of
+  public barrels and runtime entrypoints; it is for colocated `*.stories.*` files and story-only helpers.
 - `class-variance-authority` currently does not expose a stable runtime introspection API for variant keys. CVA
   discussion https://github.com/joe-bell/cva/discussions/146 tracks requests for exposing variants; until CVA provides
   this, do not introduce a custom CVA fork, wrapper, or large metadata layer only to satisfy Storybook controls.
-- For CVA-backed component variants, it is acceptable to duplicate small `argTypes.options` arrays in stories as the
-  lowest-cost workaround for working controls. Use explicit Storybook table summaries such as `string union` or
+- For CVA-backed component variants, do not duplicate public variant arrays in every story. Define component-owned
+  runtime constants beside the variant implementation, derive/export the matching types from those constants, and import
+  the constants into `argTypes.options`. Use explicit Storybook table summaries such as `string union` or
   `component union` when Autodocs would otherwise show unclear types such as `unknown`, and put the concrete option list
   in `table.type.detail`. Revisit this only if CVA or Storybook gains reliable variant introspection.
 - Do not rely on `react-docgen-typescript` configuration as the primary solution for CVA variant controls. In this
