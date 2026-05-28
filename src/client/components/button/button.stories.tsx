@@ -13,6 +13,10 @@ import {
 	Trash2Icon,
 	XIcon,
 } from '#core'
+import {
+	STRING_UNION_SUMMARY,
+	UNION_SEPARATOR,
+} from '../../../storybook/constants'
 import { BUTTON_SIZES, BUTTON_VARIANTS, Button, type ButtonProps } from '.'
 
 const BUTTON_STORY_ICONS = {
@@ -31,8 +35,7 @@ const BUTTON_STORY_ICON_OPTIONS = Object.keys(
 	BUTTON_STORY_ICONS,
 ) as ButtonStoryIconName[]
 
-const STRING_UNION_SUMMARY = 'string union'
-const UNION_SEPARATOR = ' | '
+const DEFAULT_BUTTON_DISABLED = false
 
 function ButtonPreviewRow(props: PropsWithChildren) {
 	return <div {...props} className={'flex items-end gap-5'} />
@@ -88,11 +91,23 @@ const meta = {
 			options: BUTTON_STORY_ICON_OPTIONS,
 			mapping: BUTTON_STORY_ICONS,
 		},
+		disabled: {
+			table: { defaultValue: { summary: String(DEFAULT_BUTTON_DISABLED) } },
+		},
+		children: {
+			table: {
+				type: {
+					summary: 'ReactNode',
+				},
+			},
+		},
 	},
 	args: {
 		children: 'Button',
 		onClick: fn(),
-		disabled: false,
+		disabled: DEFAULT_BUTTON_DISABLED,
+		variant: 'default',
+		size: 'default',
 	},
 	decorators: [
 		Story => {
