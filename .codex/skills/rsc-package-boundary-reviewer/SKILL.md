@@ -8,15 +8,19 @@ description: Review and document Nodzimo UI package boundaries for React Server 
 ## Overview
 
 Use this skill to protect the UI kit's public package shape for Next/RSC consumers. The root entry
-`@sefo/nodzimo-ui` is expected to be RSC-safe. The client entry `@sefo/nodzimo-ui/client` owns client-boundary exports.
+`@sefo/nodzimo-ui` is expected to be RSC-safe. The client entry `@sefo/nodzimo-ui/client` owns client-boundary exports
+and must stay a clean library client bundle, not a copy of third-party runtime internals.
 
 Read `references/rsc-package-boundaries.md` when the task needs the detailed model, the Lucide/Spinner postmortem, or
-the full review checklist.
+the full review checklist. Read it before changing package externals, dependency metadata, public entrypoints, or any
+large client component built on third-party primitives.
 
 ## Boundary Model
 
 - `src/core` and `dist/nodzimo-ui.js` are the root/RSC-safe surface.
 - `src/client.ts` and `src/client/**` are the client-boundary surface. `src/client.ts` must keep `'use client'`.
+- Client-safe is not the same thing as "bundle everything into the client artifact". Client code may use Base UI and
+  other runtime dependencies, but the library build should normally leave those dependencies as external imports.
 - `src/client/providers/**` owns framework-agnostic UI-kit providers required by client component behavior, such as
   Base UI direction context. These providers must flow only through `src/client.ts` and `@sefo/nodzimo-ui/client`.
 - RSC-safe is stricter than SSR-safe. A dependency can render on the server during SSR and still be unsafe for the RSC
@@ -45,6 +49,16 @@ the full review checklist.
       `rg -n "createContext|useContext|useState|useEffect|react/compiler-runtime|@base-ui/react|lucide-react|node_modules/lucide" dist/nodzimo-ui.js`
     - Client entry:
       confirm `dist/client.js` starts with `"use client";` and may import `react/compiler-runtime`.
+    - Client size sanity:
+      compare the reported `dist/client.js` size to the previous build or package. A sudden large jump is a bundle
+      boundary signal, not just a harmless implementation detail.
+    - Client bundle safety:
+      `rg -n "require\\(|Calling .require|new Proxy|use-sync-external-store|node_modules/@base-ui|node_modules/use-sync" dist/client.js`
+      should not report bundled CommonJS shims or inlined dependency internals. External client imports such as
+      `@base-ui/react/select` are expected when the package dependency is externalized.
+    - External import sanity:
+      `rg -n 'from "(@base-ui/react|class-variance-authority|clsx|tailwind-merge|react|react-dom|react/jsx-runtime|react/compiler-runtime)' dist/client.js dist/nodzimo-ui.js`
+      should show runtime dependency imports as imports, not copied `node_modules` regions.
     - `lucide-react` should not appear in built package output.
 
 4. Check dependency contracts.
@@ -52,6 +66,11 @@ the full review checklist.
       `peerDependencies`.
     - React and React DOM are peers.
     - Story-only packages belong in `devDependencies`.
+    - Runtime implementation dependencies used by built entries must stay listed in `dependencies` and externalized in
+      Vite/Rolldown unless a deliberate exception is documented and consumer-tested.
+    - The current Vite config derives externals from `dependencies + peerDependencies` and matches both package roots
+      and subpath imports. Do not replace this with a handwritten list or a root-only package-name array.
+    - Do not inline Base UI or its transitive CJS shims into `dist/client.js`.
 
 5. Verify with a Next/Turbopack consumer when the root entry, externals, React Compiler, or dependency metadata changed.
     - Prefer the packed tarball before publish and the npm package after publish.
@@ -77,3 +96,8 @@ the full review checklist.
 - Export UI-kit-owned providers only from the client entry. After adding a provider, build and verify the root artifact
   does not contain `@base-ui/react`, provider names, `createContext`, `useContext`, state/effect hooks, or
   `react/compiler-runtime`.
+- Keep client-entry runtime dependencies externalized. If `dist/client.js` contains Rolldown's dynamic `require`
+  helper, `use-sync-external-store` shim code, or large `node_modules/@base-ui` regions, the library has copied
+  dependency internals into the browser-facing bundle and can fail under Next/Turbopack.
+- Treat a Next/Turbopack browser error such as `Error: dynamic usage of require is not supported` as a likely client
+  bundle externalization failure. Inspect `dist/client.js` before looking for RSC root leaks.

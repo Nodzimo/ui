@@ -40,6 +40,8 @@ These changes are usually safe when the local code shape is clear:
 - Remove explicit `.ts` / `.tsx` extensions from local TypeScript imports when the project resolver can resolve the
   module without them.
 - Apply `tailwind-class-formatter` to long Tailwind class lists without changing the class tokens.
+- Separate multiline declarations from neighboring declarations with blank lines when they would otherwise visually
+  stick to single-line constants or functions.
 
 Run verification after safe fixes.
 
@@ -60,13 +62,13 @@ Report these unless the correct change is obvious from local context:
 In hand-authored TSX source, prefer expression containers for string literal prop values:
 
 ```tsx
-<SelectTrigger data-slot={'select-trigger'} size={'default'} />
+<SelectTrigger data-slot={'select-trigger'} size={'default'}/>
 ```
 
 Do not prefer bare string JSX attributes in TSX source:
 
 ```tsx
-<SelectTrigger data-slot='select-trigger' size='default' />
+<SelectTrigger data-slot='select-trigger' size='default'/>
 ```
 
 Rationale:
@@ -115,16 +117,16 @@ When destructuring an object and collecting the remaining properties, name the r
 Good:
 
 ```tsx
-function Button({ className, variant, ...restProps }: ButtonProps) {
-	return <button className={className} {...restProps} />
+function Button({className, variant, ...restProps}: ButtonProps) {
+    return <button className={className} {...restProps} />
 }
 ```
 
 Avoid:
 
 ```tsx
-function Button({ className, variant, ...props }: ButtonProps) {
-	return <button className={className} {...props} />
+function Button({className, variant, ...props}: ButtonProps) {
+    return <button className={className} {...props} />
 }
 ```
 
@@ -150,7 +152,8 @@ Use `interface` where an object contract is intentionally open, extendable, or n
 - class implementation contracts;
 - external-facing object contracts where extension is part of the model.
 
-Do not convert between `type` and `interface` only for taste or only because one form sorts better. If the best choice is
+Do not convert between `type` and `interface` only for taste or only because one form sorts better. If the best choice
+is
 not clear, report the candidate and reason instead of editing.
 
 ## File Extension Policy
@@ -169,15 +172,15 @@ When renaming `.tsx` to `.ts` or `.ts` to `.tsx`, update local imports as needed
 Do not include explicit `.ts` or `.tsx` extensions in TypeScript source imports:
 
 ```ts
-import { Button } from './button'
-import { SelectContent } from './select-content'
+import {Button} from './button'
+import {SelectContent} from './select-content'
 ```
 
 Avoid:
 
 ```ts
-import { Button } from './button.tsx'
-import { SelectContent } from './select-content.tsx'
+import {Button} from './button.tsx'
+import {SelectContent} from './select-content.tsx'
 ```
 
 Rationale:
@@ -198,8 +201,8 @@ Use direct named exports for small leaf files with one primary runtime export an
 ```tsx
 export type SpinnerProps = ComponentProps<'svg'>
 
-export function Spinner({ className, ...restProps }: SpinnerProps) {
-	return <svg className={className} {...restProps} />
+export function Spinner({className, ...restProps}: SpinnerProps) {
+    return <svg className={className} {...restProps} />
 }
 ```
 
@@ -208,12 +211,12 @@ public:
 
 ```ts
 export {
-	SELECT_CONTENT_ALIGNS,
-	SELECT_CONTENT_SIDES,
-	SelectContent,
-	type SelectContentAlign,
-	type SelectContentProps,
-	type SelectContentSide,
+    SELECT_CONTENT_ALIGNS,
+    SELECT_CONTENT_SIDES,
+    SelectContent,
+    type SelectContentAlign,
+    type SelectContentProps,
+    type SelectContentSide,
 }
 ```
 
@@ -236,10 +239,10 @@ When validating against an external finite union, preserve literal inference and
 
 ```ts
 const SELECT_CONTENT_SIDES = Object.freeze([
-	'top',
-	'bottom',
-	'inline-start',
-	'inline-end',
+    'top',
+    'bottom',
+    'inline-start',
+    'inline-end',
 ] as const satisfies readonly SelectContentSide[])
 ```
 
@@ -266,9 +269,54 @@ For runtime APIs that widen keys, cast narrowly after the literal object is decl
 
 ```ts
 const BUTTON_STORY_ICON_OPTIONS = Object.keys(
-	BUTTON_STORY_ICONS,
+    BUTTON_STORY_ICONS,
 ) as ButtonStoryIconName[]
 ```
+
+## Declaration Spacing Policy
+
+Use blank lines to separate multiline declarations from neighboring declarations. Single-line declarations that are
+closely related may be grouped together, but a multiline array, object, function, or expression should not visually
+stick to a one-line constant above or below it.
+
+Good:
+
+```ts
+const clientCompilerIncludes = [/src[\\/]client\.ts$/, /src[\\/]client[\\/]/]
+const {dependencies, peerDependencies} = packageJson
+
+const runtimePackageNames = [
+    ...Object.keys(dependencies),
+    ...Object.keys(peerDependencies),
+]
+
+function isExternalRuntimeImport(importId: string) {
+    return runtimePackageNames.some((packageName) => {
+        return importId === packageName || importId.startsWith(`${packageName}/`)
+    })
+}
+```
+
+Avoid:
+
+```ts
+const clientCompilerIncludes = [/src[\\/]client\.ts$/, /src[\\/]client[\\/]/]
+const {dependencies, peerDependencies} = packageJson
+const runtimePackageNames = [
+    ...Object.keys(dependencies),
+    ...Object.keys(peerDependencies),
+]
+
+function isExternalRuntimeImport(importId: string) {
+    return runtimePackageNames.some((packageName) => {
+        return importId === packageName || importId.startsWith(`${packageName}/`)
+    })
+}
+```
+
+This is a readability convention, not a request for decorative spacing everywhere. Do not add blank lines between every
+small local binding. Use the rule when a multiline declaration creates a visual block that should be scanned as its own
+unit.
 
 ## Tailwind Class Lists
 
@@ -287,9 +335,9 @@ remove, rename, or "fix" classes.
 5. For type/interface decisions, fix only obvious mismatches; otherwise report the candidate with the tradeoff.
 6. Leave raw SVG, raw HTML, MDX, CSS, and generated output alone unless the task explicitly targets those files.
 7. Run the smallest relevant verification:
-   - `bunx biome check <changed-files>` for style-only changes.
-   - `bun run build:ts` after TypeScript type-shape or exported type changes.
-   - Tailwind class-token comparison when class-list formatting changed.
+    - `bunx biome check <changed-files>` for style-only changes.
+    - `bun run build:ts` after TypeScript type-shape or exported type changes.
+    - Tailwind class-token comparison when class-list formatting changed.
 8. Summarize changed conventions and any review-only findings.
 
 ## Review Checklist
@@ -305,5 +353,6 @@ remove, rename, or "fix" classes.
 - `.ts` files do not contain JSX, and `.tsx` files are used when JSX is present.
 - TypeScript source imports omit `.ts` and `.tsx` extensions.
 - Export style matches file shape: direct exports for small leaf modules, grouped export blocks for compound modules.
+- Multiline declarations are visually separated from adjacent single-line declarations when needed for scanning.
 - Raw SVG/HTML quote churn was not introduced.
 - Biome and TypeScript verification passed where relevant.

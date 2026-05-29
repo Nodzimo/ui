@@ -40,6 +40,8 @@
   data preparation, sorting, and rendering. Introduce small explicit local types when inferred types become noisy or
   leak implementation detail into editor hovers; do not add helper functions, wrapper types, or advanced APIs unless
   they remove real complexity.
+- Separate multiline declarations from neighboring declarations with blank lines when they would otherwise stick to
+  single-line constants, functions, or other visual blocks. Closely related one-line constants may stay grouped.
 - Name things according to their lifespan and scope. Broad, exported, cross-file, or public-facing entities need precise
   descriptive names. Short-lived local helpers may stay simple and generic when their surrounding context makes their
   purpose obvious.
@@ -294,6 +296,16 @@ same mapping, reuse that key union instead of repeating the expression, for exam
 - `external` in Vite/Rolldown keeps dependencies such as React out of the bundled library output. It does not remove the
   dependency from runtime; it leaves an import in `dist` for the consumer's bundler/package manager to resolve.
 - `external` is a bundler contract. `dependencies` and `peerDependencies` are package-manager contracts.
+- Runtime implementation dependencies used by built entrypoints should stay externalized unless the project documents a
+  deliberate reason to bundle them. This keeps dependency internals and CommonJS shims out of package artifacts while
+  `dependencies` ensures consumers install them.
+- The Vite/Rolldown external contract is derived from `package.json` `dependencies + peerDependencies`. Do not maintain
+  a separate handwritten external package list for runtime dependencies.
+- The external matcher must handle both package roots and subpath imports. A package root such as `@base-ui/react` does
+  not by itself cover imports such as `@base-ui/react/select`; the matcher must also accept import ids that start with
+  the package name plus `/`.
+- Vite/Rolldown calls the external callback for each discovered import id. This is why the helper takes an `importId`
+  and returns whether that import should remain external.
 - Runtime dependencies listed in `dependencies` are installed automatically when a consumer installs this package. If a
   compatible copy already exists in the consumer dependency tree, the package manager may dedupe it; if not, it may
   install a nested copy.
@@ -309,6 +321,9 @@ same mapping, reuse that key union instead of repeating the expression, for exam
   major or minor line.
 - Runtime implementation dependencies used by built components belong in `dependencies`, not `devDependencies`. This
   currently includes `@base-ui/react`, `class-variance-authority`, `clsx`, and `tailwind-merge`.
+- Keep those runtime implementation dependencies in Vite/Rolldown `external` as well. Inlining `@base-ui/react` can copy
+  `use-sync-external-store` CommonJS shims into `dist/client.js`, which can fail in Next/Turbopack browser chunks with
+  dynamic `require` errors.
 - Do not make implementation helpers such as `clsx`, `tailwind-merge`, or `class-variance-authority` peer dependencies
   unless they become an intentional consumer-facing contract.
 - Do not move a runtime import from `dependencies` to `devDependencies` merely because it is externalized. Externalized
@@ -318,6 +333,26 @@ same mapping, reuse that key union instead of repeating the expression, for exam
   import.
 - Multiple entrypoints separate the RSC-safe API from the client API.
 - React Compiler scope controls which source files get compiler runtime output.
+
+## Client Bundle Incident: Base UI Select
+
+- Incident summary: `Select` in `src/client` imported Base UI subpaths such as `@base-ui/react/select`. Before runtime
+  dependencies were automatically externalized from `dependencies + peerDependencies`, the library build copied Base UI,
+  Floating UI, store helpers, and `use-sync-external-store` internals into `dist/client.js`.
+- The earlier Button implementation also copied a small Base UI slice into the client artifact, but it did not pull the
+  dangerous CommonJS shim path. Button working was not proof that the bundling policy was correct.
+- After Select expanded the Base UI dependency graph, `dist/client.js` grew from the tens of kilobytes range to roughly
+  198 KB and contained Rolldown dynamic `require` support such as `typeof require`, `new Proxy`, and
+  `Calling \`require\``.
+- A Next/Turbopack consumer can fail in this state with a browser error such as
+  `Error: dynamic usage of require is not supported`.
+- This is not a root/RSC leak when `dist/nodzimo-ui.js` stays clean. It is a client bundle externalization failure.
+- The fix is not moving Base UI to `devDependencies` and not making consumers install Base UI manually. Base UI remains
+  a runtime implementation dependency in `dependencies`; Vite/Rolldown leaves it as an external import in `dist`, and
+  the consumer package manager installs it automatically with this package.
+- Treat a sudden `dist/client.js` size jump as a release-blocking signal until the built artifact is inspected.
+- Client artifact checks must look for bundled third-party internals and CJS shims, not only for missing
+  `"use client";`.
 
 ## Dependency Graph Checks
 

@@ -3,8 +3,21 @@ import tailwindcss from '@tailwindcss/vite'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import dts from 'unplugin-dts/vite'
 import { defineConfig } from 'vite'
+import packageJson from './package.json'
 
 const clientCompilerIncludes = [/src[\\/]client\.ts$/, /src[\\/]client[\\/]/]
+const { dependencies, peerDependencies } = packageJson
+
+const runtimePackageNames = [
+	...Object.keys(dependencies),
+	...Object.keys(peerDependencies),
+]
+
+function isExternalRuntimeImport(importId: string) {
+	return runtimePackageNames.some((packageName) => {
+		return importId === packageName || importId.startsWith(`${packageName}/`)
+	})
+}
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -17,12 +30,7 @@ export default defineConfig({
 			formats: ['es'],
 		},
 		rolldownOptions: {
-			external: [
-				'react',
-				'react-dom',
-				'react/jsx-runtime',
-				'react/compiler-runtime',
-			],
+			external: isExternalRuntimeImport,
 			output: {
 				chunkFileNames: 'internal/[name]-[hash].js',
 			},
