@@ -17,7 +17,7 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {}
 
 export const WithLabel: Story = {
-	render: args => {
+	render: (args) => {
 		return (
 			<div className={'flex items-center gap-2 text-nui-muted-foreground'}>
 				<Spinner {...args} data-icon={'inline-start'} />

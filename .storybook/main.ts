@@ -25,7 +25,7 @@ const config: StorybookConfig = {
 			},
 		},
 	},
-	viteFinal: config => {
+	viteFinal: (config) => {
 		return {
 			...config,
 			build: {

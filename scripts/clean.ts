@@ -60,8 +60,8 @@ async function collectMatchingPaths(pattern: string) {
 		const entries = await readdir(projectRoot, { withFileTypes: true })
 
 		return entries
-			.filter(entry => entry.isFile() && entry.name.endsWith('.tgz'))
-			.map(entry => resolve(projectRoot, entry.name))
+			.filter((entry) => entry.isFile() && entry.name.endsWith('.tgz'))
+			.map((entry) => resolve(projectRoot, entry.name))
 	}
 
 	throw new Error(
@@ -147,7 +147,7 @@ for (const targetName of requestedTargets) {
 
 	const target = cleanTargets[targetName]
 	const targetPaths = (
-		await Promise.all(target.paths.map(path => collectMatchingPaths(path)))
+		await Promise.all(target.paths.map((path) => collectMatchingPaths(path)))
 	).flat()
 
 	for (const targetPath of targetPaths) {

@@ -22,8 +22,7 @@
 		"formatter": {
 			"semicolons": "asNeeded",
 			"quoteStyle": "single",
-			"jsxQuoteStyle": "single",
-			"arrowParentheses": "asNeeded"
+			"jsxQuoteStyle": "single"
 		}
 	},
 	"html": {
@@ -33,7 +32,10 @@
 	"json": { "parser": { "allowComments": false } },
 	"assist": {
 		"actions": {
-			"source": { "useSortedAttributes": "on" }
+			"source": {
+				"useSortedAttributes": "on",
+				"useSortedInterfaceMembers": "on"
+			}
 		}
 	}
 }

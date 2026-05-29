@@ -110,7 +110,7 @@ const meta = {
 		size: 'default',
 	},
 	decorators: [
-		Story => {
+		(Story) => {
 			return (
 				<div className={'p-10'}>
 					<Story />
