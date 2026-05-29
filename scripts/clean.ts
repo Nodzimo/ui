@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 
-const cleanTargets = {
+const CLEAN_TARGETS = {
 	dist: {
 		label: 'generated distribution artifacts',
 		paths: ['dist', 'dist-ssr', 'dependency-graph.svg', '*.tgz'],
@@ -20,10 +20,10 @@ const cleanTargets = {
 	},
 } as const
 
-type CleanTarget = keyof typeof cleanTargets
+type CleanTarget = keyof typeof CLEAN_TARGETS
 
 function isCleanTarget(value: string): value is CleanTarget {
-	return Object.hasOwn(cleanTargets, value)
+	return Object.hasOwn(CLEAN_TARGETS, value)
 }
 
 function assertInsideProject(path: string) {
@@ -133,7 +133,7 @@ const requestedTargets = process.argv.slice(2)
 
 if (requestedTargets.length === 0) {
 	console.error(
-		`Usage: bun scripts/clean.ts <${Object.keys(cleanTargets).join('|')}> [...]`,
+		`Usage: bun scripts/clean.ts <${Object.keys(CLEAN_TARGETS).join('|')}> [...]`,
 	)
 	process.exit(1)
 }
@@ -141,11 +141,11 @@ if (requestedTargets.length === 0) {
 for (const targetName of requestedTargets) {
 	if (!isCleanTarget(targetName)) {
 		console.error(`Unknown clean target: ${targetName}`)
-		console.error(`Available targets: ${Object.keys(cleanTargets).join(', ')}`)
+		console.error(`Available targets: ${Object.keys(CLEAN_TARGETS).join(', ')}`)
 		process.exit(1)
 	}
 
-	const target = cleanTargets[targetName]
+	const target = CLEAN_TARGETS[targetName]
 	const targetPaths = (
 		await Promise.all(target.paths.map((path) => collectMatchingPaths(path)))
 	).flat()

@@ -8,31 +8,31 @@ type SelectProps = ComponentProps<typeof Select>
 
 type SelectGroupProps = SelectPrimitive.Group.Props
 
-function SelectGroup({ className, ...props }: SelectGroupProps) {
+function SelectGroup({ className, ...restProps }: SelectGroupProps) {
 	return (
 		<SelectPrimitive.Group
 			className={mcn('scroll-my-1 p-1', className)}
 			data-slot={'select-group'}
-			{...props}
+			{...restProps}
 		/>
 	)
 }
 
 type SelectValueProps = SelectPrimitive.Value.Props
 
-function SelectValue({ className, ...props }: SelectValueProps) {
+function SelectValue({ className, ...restProps }: SelectValueProps) {
 	return (
 		<SelectPrimitive.Value
 			className={mcn('flex flex-1 text-start', className)}
 			data-slot={'select-value'}
-			{...props}
+			{...restProps}
 		/>
 	)
 }
 
 type SelectLabelProps = SelectPrimitive.GroupLabel.Props
 
-function SelectLabel({ className, ...props }: SelectLabelProps) {
+function SelectLabel({ className, ...restProps }: SelectLabelProps) {
 	return (
 		<SelectPrimitive.GroupLabel
 			className={mcn(
@@ -40,14 +40,14 @@ function SelectLabel({ className, ...props }: SelectLabelProps) {
 				className,
 			)}
 			data-slot={'select-label'}
-			{...props}
+			{...restProps}
 		/>
 	)
 }
 
 type SelectSeparatorProps = SelectPrimitive.Separator.Props
 
-function SelectSeparator({ className, ...props }: SelectSeparatorProps) {
+function SelectSeparator({ className, ...restProps }: SelectSeparatorProps) {
 	return (
 		<SelectPrimitive.Separator
 			className={mcn(
@@ -55,7 +55,7 @@ function SelectSeparator({ className, ...props }: SelectSeparatorProps) {
 				className,
 			)}
 			data-slot={'select-separator'}
-			{...props}
+			{...restProps}
 		/>
 	)
 }

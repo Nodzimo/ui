@@ -9,7 +9,7 @@ type SelectScrollUpButtonProps = ComponentProps<
 
 function SelectScrollUpButton({
 	className,
-	...props
+	...restProps
 }: SelectScrollUpButtonProps) {
 	return (
 		<SelectPrimitive.ScrollUpArrow
@@ -20,7 +20,7 @@ function SelectScrollUpButton({
 				className,
 			)}
 			data-slot={'select-scroll-up-button'}
-			{...props}
+			{...restProps}
 		>
 			<ChevronUpIcon />
 		</SelectPrimitive.ScrollUpArrow>
@@ -33,7 +33,7 @@ type SelectScrollDownButtonProps = ComponentProps<
 
 function SelectScrollDownButton({
 	className,
-	...props
+	...restProps
 }: SelectScrollDownButtonProps) {
 	return (
 		<SelectPrimitive.ScrollDownArrow
@@ -44,7 +44,7 @@ function SelectScrollDownButton({
 				className,
 			)}
 			data-slot={'select-scroll-down-button'}
-			{...props}
+			{...restProps}
 		>
 			<ChevronDownIcon />
 		</SelectPrimitive.ScrollDownArrow>
@@ -84,7 +84,7 @@ function SelectContent({
 	align = 'center',
 	alignOffset = 0,
 	alignItemWithTrigger = true,
-	...props
+	...restProps
 }: SelectContentProps) {
 	return (
 		<SelectPrimitive.Portal>
@@ -111,7 +111,7 @@ function SelectContent({
 					)}
 					data-align-trigger={alignItemWithTrigger}
 					data-slot={'select-content'}
-					{...props}
+					{...restProps}
 				>
 					<SelectScrollUpButton />
 					<SelectPrimitive.List>{children}</SelectPrimitive.List>

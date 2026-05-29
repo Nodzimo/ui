@@ -1,0 +1,4 @@
+interface:
+  display_name: "Code Style Reviewer"
+  short_description: "Review code conventions"
+  default_prompt: "Review and fix project code style conventions that Biome does not fully enforce."

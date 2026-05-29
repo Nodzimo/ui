@@ -14,7 +14,7 @@ function SelectTrigger({
 	className,
 	size = 'default',
 	children,
-	...props
+	...restProps
 }: SelectTriggerProps) {
 	return (
 		<SelectPrimitive.Trigger
@@ -37,7 +37,7 @@ function SelectTrigger({
 			)}
 			data-size={size}
 			data-slot={'select-trigger'}
-			{...props}
+			{...restProps}
 		>
 			{children}
 			<SelectPrimitive.Icon

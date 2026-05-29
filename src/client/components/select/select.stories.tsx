@@ -21,7 +21,7 @@ import {
 	SelectValue,
 } from '.'
 
-const northAmerica = [
+const NORTH_AMERICA = [
 	{ label: 'Eastern Standard Time', value: 'est' },
 	{ label: 'Central Standard Time', value: 'cst' },
 	{ label: 'Mountain Standard Time', value: 'mst' },
@@ -30,7 +30,7 @@ const northAmerica = [
 	{ label: 'Hawaii Standard Time', value: 'hst' },
 ] as const
 
-const europeAfrica = [
+const EUROPE_AFRICA = [
 	{ label: 'Greenwich Mean Time', value: 'gmt' },
 	{ label: 'Central European Time', value: 'cet' },
 	{ label: 'Eastern European Time', value: 'eet' },
@@ -39,7 +39,7 @@ const europeAfrica = [
 	{ label: 'East Africa Time', value: 'eat' },
 ] as const
 
-const asia = [
+const ASIA = [
 	{ label: 'Moscow Time', value: 'msk' },
 	{ label: 'India Standard Time', value: 'ist' },
 	{ label: 'China Standard Time', value: 'cst_china' },
@@ -48,7 +48,7 @@ const asia = [
 	{ label: 'Indonesia Central Standard Time', value: 'ist_indonesia' },
 ] as const
 
-const australiaPacific = [
+const AUSTRALIA_PACIFIC = [
 	{ label: 'Australian Western Standard Time', value: 'awst' },
 	{ label: 'Australian Central Standard Time', value: 'acst' },
 	{ label: 'Australian Eastern Standard Time', value: 'aest' },
@@ -56,20 +56,20 @@ const australiaPacific = [
 	{ label: 'Fiji Time', value: 'fjt' },
 ] as const
 
-const southAmerica = [
+const SOUTH_AMERICA = [
 	{ label: 'Argentina Time', value: 'art' },
 	{ label: 'Bolivia Time', value: 'bot' },
 	{ label: 'Brasilia Time', value: 'brt' },
 	{ label: 'Chile Standard Time', value: 'clt' },
 ] as const
 
-const items = [
+const ITEMS = [
 	{ label: 'Select a timezone', value: null },
-	...northAmerica,
-	...europeAfrica,
-	...asia,
-	...australiaPacific,
-	...southAmerica,
+	...NORTH_AMERICA,
+	...EUROPE_AFRICA,
+	...ASIA,
+	...AUSTRALIA_PACIFIC,
+	...SOUTH_AMERICA,
 ] as const
 
 const SELECT_DEFAULTS = {
@@ -174,7 +174,7 @@ const meta = {
 		...restArgs
 	}) => {
 		return (
-			<Select items={items} {...restArgs}>
+			<Select items={ITEMS} {...restArgs}>
 				<SelectTrigger
 					aria-invalid={triggerAriaInvalid}
 					className={'w-full max-w-64'}
@@ -191,7 +191,7 @@ const meta = {
 				>
 					<SelectGroup>
 						<SelectLabel>North America</SelectLabel>
-						{northAmerica.map(({ value, label }) => (
+						{NORTH_AMERICA.map(({ value, label }) => (
 							<SelectItem key={value} value={value}>
 								{label}
 							</SelectItem>
@@ -199,7 +199,7 @@ const meta = {
 					</SelectGroup>
 					<SelectGroup>
 						<SelectLabel>Europe & Africa</SelectLabel>
-						{europeAfrica.map(({ value, label }) => (
+						{EUROPE_AFRICA.map(({ value, label }) => (
 							<SelectItem key={value} value={value}>
 								{label}
 							</SelectItem>
@@ -207,7 +207,7 @@ const meta = {
 					</SelectGroup>
 					<SelectGroup>
 						<SelectLabel>Asia</SelectLabel>
-						{asia.map(({ value, label }) => (
+						{ASIA.map(({ value, label }) => (
 							<SelectItem key={value} value={value}>
 								{label}
 							</SelectItem>
@@ -215,7 +215,7 @@ const meta = {
 					</SelectGroup>
 					<SelectGroup>
 						<SelectLabel>Australia & Pacific</SelectLabel>
-						{australiaPacific.map(({ value, label }) => (
+						{AUSTRALIA_PACIFIC.map(({ value, label }) => (
 							<SelectItem key={value} value={value}>
 								{label}
 							</SelectItem>
@@ -223,7 +223,7 @@ const meta = {
 					</SelectGroup>
 					<SelectGroup>
 						<SelectLabel>South America</SelectLabel>
-						{southAmerica.map(({ value, label }) => (
+						{SOUTH_AMERICA.map(({ value, label }) => (
 							<SelectItem key={value} value={value}>
 								{label}
 							</SelectItem>

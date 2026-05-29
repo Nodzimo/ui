@@ -75,6 +75,9 @@ same mapping, reuse that key union instead of repeating the expression, for exam
   `.codex/skills/theme-token-adapter`.
 - For formatting long Tailwind class strings into readable grouped chunks without changing the styles, use the
   project-local `tailwind-class-formatter` skill at `.codex/skills/tailwind-class-formatter`.
+- For final project convention review and safe fixes beyond Biome, including JSX literal braces, rest-prop naming,
+  type-vs-interface choices, literal table typing, and orchestration of Tailwind class formatting, use the project-local
+  `code-style-reviewer` skill at `.codex/skills/code-style-reviewer`.
 - For writing, reviewing, or updating component stories, use the project-local `storybook-story-writer` skill at
   `.codex/skills/storybook-story-writer`.
 - For changes that affect `src/core`, `src/client`, public entrypoints, Vite externals, package dependency metadata,

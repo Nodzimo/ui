@@ -4,7 +4,11 @@ import { mcn } from '#lib'
 
 export type SelectItemProps = SelectPrimitive.Item.Props
 
-export function SelectItem({ className, children, ...props }: SelectItemProps) {
+export function SelectItem({
+	className,
+	children,
+	...restProps
+}: SelectItemProps) {
 	return (
 		<SelectPrimitive.Item
 			className={mcn(
@@ -19,7 +23,7 @@ export function SelectItem({ className, children, ...props }: SelectItemProps) {
 				className,
 			)}
 			data-slot={'select-item'}
-			{...props}
+			{...restProps}
 		>
 			<SelectPrimitive.ItemText
 				className={'flex flex-1 shrink-0 gap-2 whitespace-nowrap'}
