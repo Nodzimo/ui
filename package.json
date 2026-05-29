@@ -172,5 +172,5 @@
 		"storybook:upgrade": "bunx storybook@latest upgrade"
 	},
 	"type": "module",
-	"version": "0.0.7"
+	"version": "0.0.8"
 }
