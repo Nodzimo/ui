@@ -14,7 +14,9 @@ function SelectScrollUpButton({
 	return (
 		<SelectPrimitive.ScrollUpArrow
 			className={mcn(
-				"top-0 z-10 flex w-full cursor-default items-center justify-center bg-nui-popover py-1 [&_svg:not([class*='size-'])]:size-4",
+				'top-0 z-10 flex w-full items-center justify-center',
+				'cursor-default bg-nui-popover py-1',
+				"[&_svg:not([class*='size-'])]:size-4",
 				className,
 			)}
 			data-slot={'select-scroll-up-button'}
@@ -36,7 +38,9 @@ function SelectScrollDownButton({
 	return (
 		<SelectPrimitive.ScrollDownArrow
 			className={mcn(
-				"bottom-0 z-10 flex w-full cursor-default items-center justify-center bg-nui-popover py-1 [&_svg:not([class*='size-'])]:size-4",
+				'bottom-0 z-10 flex w-full items-center justify-center',
+				'cursor-default bg-nui-popover py-1',
+				"[&_svg:not([class*='size-'])]:size-4",
 				className,
 			)}
 			data-slot={'select-scroll-down-button'}
@@ -94,7 +98,15 @@ function SelectContent({
 			>
 				<SelectPrimitive.Popup
 					className={mcn(
-						'data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-start-2 data-[side=inline-start]:slide-in-from-end-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:fade-in-0 data-open:zoom-in-95 data-closed:fade-out-0 data-closed:zoom-out-95 relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-y-auto overflow-x-hidden rounded-nui-lg bg-nui-popover text-nui-popover-foreground shadow-md ring-1 ring-nui-foreground/10 duration-100 data-[align-trigger=true]:animate-none data-closed:animate-out data-open:animate-in',
+						'relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36',
+						'origin-(--transform-origin) overflow-y-auto overflow-x-hidden',
+						'rounded-nui-lg bg-nui-popover text-nui-popover-foreground shadow-md ring-1 ring-nui-foreground/10 duration-100',
+						'data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2',
+						'data-[side=inline-end]:slide-in-from-start-2 data-[side=inline-start]:slide-in-from-end-2',
+						'data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2',
+						'data-open:fade-in-0 data-open:zoom-in-95 data-open:animate-in',
+						'data-closed:fade-out-0 data-closed:zoom-out-95 data-closed:animate-out',
+						'data-[align-trigger=true]:animate-none',
 						className,
 					)}
 					data-align-trigger={alignItemWithTrigger}

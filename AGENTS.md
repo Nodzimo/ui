@@ -33,6 +33,9 @@
   behind each recommendation, challenge weak naming or architecture, and treat disagreement as a way to clarify the
   better solution rather than as a reason to soften the critique.
 - Preserve project style: tabs, single quotes, no semicolons, named exports.
+- When writing Markdown documentation, use a language-tagged fenced code block only for snippets that are syntactically
+  valid as that language on their own. Use `text` for partial JSX attributes, JSON fragments, placeholder syntax, or
+  other illustrative snippets that IDE inspections would parse as broken code.
 - Keep implementation code direct and readable. Prefer a few named local constants over dense chains when a chain mixes
   data preparation, sorting, and rendering. Introduce small explicit local types when inferred types become noisy or
   leak implementation detail into editor hovers; do not add helper functions, wrapper types, or advanced APIs unless
@@ -70,6 +73,8 @@ same mapping, reuse that key union instead of repeating the expression, for exam
   `dependency-update-reviewer` skill at `.codex/skills/dependency-update-reviewer`.
 - For repeated token-prefix adaptation and review work, use the project-local `theme-token-adapter` skill at
   `.codex/skills/theme-token-adapter`.
+- For formatting long Tailwind class strings into readable grouped chunks without changing the styles, use the
+  project-local `tailwind-class-formatter` skill at `.codex/skills/tailwind-class-formatter`.
 - For writing, reviewing, or updating component stories, use the project-local `storybook-story-writer` skill at
   `.codex/skills/storybook-story-writer`.
 - For changes that affect `src/core`, `src/client`, public entrypoints, Vite externals, package dependency metadata,
