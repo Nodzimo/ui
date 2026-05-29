@@ -62,6 +62,8 @@ Start by deciding which mode applies:
     - Say whether the existing dependency diff is reasonable to commit.
     - Name required local code/config/package contract changes, if any.
     - Recommend checks to run before commit, publishing, or consumer testing.
+    - For Biome updates, verify whether `biome.json` changed with the dependency update. If it did not, run the local
+      migration script when available, or recommend `biome migrate --write` before treating the update as complete.
 
 ## Shared Research Workflow
 
@@ -154,6 +156,11 @@ recommendation about whether to update now or whether an existing dependency dif
 This repository is a Bun-powered React UI library built with Vite library mode, Rolldown, React Compiler, TypeScript,
 Tailwind CSS, Storybook, Vitest, and Dependency Cruiser. Read root `AGENTS.md` before interpreting build, package, peer
 dependency, styling, or publishing changes.
+
+When `@biomejs/biome` is updated, treat `biome.json` as part of the dependency update surface, even for patch updates.
+Check that the `$schema` version matches the installed Biome version when the schema URL is versioned. Prefer the local
+project script `bun run biome:migrate` when present; otherwise use `biome migrate --write`. Do not recommend `bunx` for
+this project when `@biomejs/biome` is already installed locally.
 
 Post-update triage should pay special attention to Vite/Vitest/Storybook package alignment:
 

@@ -100,6 +100,9 @@ same mapping, reuse that key union instead of repeating the expression, for exam
   experimental and does not currently expose an HTML attribute quote-style option, so double-quoted HTML attributes are
   acceptable even though JavaScript and JSX use single quotes.
 - Keep JSON comments disabled. Project JSON files should be strict JSON, not JSONC.
+- After updating `@biomejs/biome`, run the local migration script `bun run biome:migrate` and review any
+  `biome.json` changes before treating the dependency update as complete. Keep the `$schema` version aligned with the
+  installed Biome version when the schema URL is versioned.
 - Do not add `files.includes` globs that duplicate `.gitignore` unless Biome needs a narrower project-specific scope.
 - Do not enable global `assist/source/useSortedKeys`; it sorts whole JSON objects such as `package.json`, `scripts`,
   `exports`, and tsconfig sections into an unreadable order.
