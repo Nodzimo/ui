@@ -8,38 +8,38 @@ const clientCompilerIncludes = [/src[\\/]client\.ts$/, /src[\\/]client[\\/]/]
 
 // https://vite.dev/config/
 export default defineConfig({
-	plugins: [
-		react(),
-		babel({
-			presets: [reactCompilerPreset()],
-			include: clientCompilerIncludes,
-		}),
-		dts({
-			tsconfigPath: 'tsconfig.app.json',
-			exclude: '**/*.stories.*',
-			bundleTypes: true,
-		}),
-		tailwindcss(),
-	],
 	build: {
-		target: 'esnext',
 		lib: {
 			entry: {
-				'nodzimo-ui': 'src/index',
 				client: 'src/client',
+				'nodzimo-ui': 'src/index',
 			},
 			formats: ['es'],
 		},
 		rolldownOptions: {
-			output: {
-				chunkFileNames: 'internal/[name]-[hash].js',
-			},
 			external: [
 				'react',
 				'react-dom',
 				'react/jsx-runtime',
 				'react/compiler-runtime',
 			],
+			output: {
+				chunkFileNames: 'internal/[name]-[hash].js',
+			},
 		},
+		target: 'esnext',
 	},
+	plugins: [
+		react(),
+		babel({
+			include: clientCompilerIncludes,
+			presets: [reactCompilerPreset()],
+		}),
+		dts({
+			bundleTypes: true,
+			exclude: '**/*.stories.*',
+			tsconfigPath: 'tsconfig.app.json',
+		}),
+		tailwindcss(),
+	],
 })

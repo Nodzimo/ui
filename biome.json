@@ -1,41 +1,42 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
-	"vcs": {
-		"enabled": true,
-		"clientKind": "git",
-		"useIgnoreFile": true
-	},
-	"linter": {
-		"rules": {
-			"nursery": {
-				"useSortedClasses": { "level": "error", "fix": "safe" }
-			},
-			"style": {
-				"noUnusedTemplateLiteral": "error"
-			}
-		},
-		"domains": {
-			"react": "recommended"
-		}
-	},
-	"javascript": {
-		"formatter": {
-			"semicolons": "asNeeded",
-			"quoteStyle": "single",
-			"jsxQuoteStyle": "single"
-		}
-	},
-	"html": {
-		"formatter": { "enabled": true }
-	},
-	"css": { "parser": { "tailwindDirectives": true } },
-	"json": { "parser": { "allowComments": false } },
 	"assist": {
 		"actions": {
 			"source": {
 				"useSortedAttributes": "on",
-				"useSortedInterfaceMembers": "on"
+				"useSortedInterfaceMembers": "on",
+				"useSortedKeys": "on"
 			}
 		}
+	},
+	"css": { "parser": { "tailwindDirectives": true } },
+	"html": {
+		"formatter": { "enabled": true }
+	},
+	"javascript": {
+		"formatter": {
+			"jsxQuoteStyle": "single",
+			"quoteStyle": "single",
+			"semicolons": "asNeeded"
+		}
+	},
+	"json": { "parser": { "allowComments": false } },
+	"linter": {
+		"domains": {
+			"react": "recommended"
+		},
+		"rules": {
+			"nursery": {
+				"useSortedClasses": { "fix": "safe", "level": "error" }
+			},
+			"style": {
+				"noUnusedTemplateLiteral": "error"
+			}
+		}
+	},
+	"vcs": {
+		"clientKind": "git",
+		"enabled": true,
+		"useIgnoreFile": true
 	}
 }

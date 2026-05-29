@@ -93,52 +93,25 @@ type SelectStoryArgs = SelectProps & {
 }
 
 const meta = {
-	title: 'Client/Components/Select',
-	component: Select,
+	args: {
+		contentAlign: SELECT_DEFAULTS.contentAlign,
+		contentAlignItemWithTrigger: SELECT_DEFAULTS.contentAlignItemWithTrigger,
+		contentAlignOffset: SELECT_DEFAULTS.contentAlignOffset,
+		contentSide: SELECT_DEFAULTS.contentSide,
+		contentSideOffset: SELECT_DEFAULTS.contentSideOffset,
+		triggerAriaInvalid: SELECT_DEFAULTS.triggerAriaInvalid,
+		triggerSize: SELECT_DEFAULTS.triggerSize,
+	},
 	argTypes: {
-		triggerSize: {
-			table: {
-				type: {
-					summary: STRING_UNION_SUMMARY,
-					detail: SELECT_TRIGGER_SIZES.join(UNION_SEPARATOR),
-				},
-				defaultValue: { summary: `'${SELECT_DEFAULTS.triggerSize}'` },
-			},
-			control: 'select',
-			options: SELECT_TRIGGER_SIZES,
-		},
-		contentSide: {
-			table: {
-				type: {
-					summary: STRING_UNION_SUMMARY,
-					detail: SELECT_CONTENT_SIDES.join(UNION_SEPARATOR),
-				},
-				defaultValue: { summary: `'${SELECT_DEFAULTS.contentSide}'` },
-			},
-			control: 'select',
-			options: SELECT_CONTENT_SIDES,
-		},
 		contentAlign: {
-			table: {
-				type: {
-					summary: STRING_UNION_SUMMARY,
-					detail: SELECT_CONTENT_ALIGNS.join(UNION_SEPARATOR),
-				},
-				defaultValue: { summary: `'${SELECT_DEFAULTS.contentAlign}'` },
-			},
 			control: 'select',
 			options: SELECT_CONTENT_ALIGNS,
-		},
-		contentSideOffset: {
-			control: 'number',
 			table: {
-				defaultValue: { summary: String(SELECT_DEFAULTS.contentSideOffset) },
-			},
-		},
-		contentAlignOffset: {
-			control: 'number',
-			table: {
-				defaultValue: { summary: String(SELECT_DEFAULTS.contentAlignOffset) },
+				defaultValue: { summary: `'${SELECT_DEFAULTS.contentAlign}'` },
+				type: {
+					detail: SELECT_CONTENT_ALIGNS.join(UNION_SEPARATOR),
+					summary: STRING_UNION_SUMMARY,
+				},
 			},
 		},
 		contentAlignItemWithTrigger: {
@@ -149,21 +122,47 @@ const meta = {
 				},
 			},
 		},
+		contentAlignOffset: {
+			control: 'number',
+			table: {
+				defaultValue: { summary: String(SELECT_DEFAULTS.contentAlignOffset) },
+			},
+		},
+		contentSide: {
+			control: 'select',
+			options: SELECT_CONTENT_SIDES,
+			table: {
+				defaultValue: { summary: `'${SELECT_DEFAULTS.contentSide}'` },
+				type: {
+					detail: SELECT_CONTENT_SIDES.join(UNION_SEPARATOR),
+					summary: STRING_UNION_SUMMARY,
+				},
+			},
+		},
+		contentSideOffset: {
+			control: 'number',
+			table: {
+				defaultValue: { summary: String(SELECT_DEFAULTS.contentSideOffset) },
+			},
+		},
 		triggerAriaInvalid: {
 			table: {
 				defaultValue: { summary: String(SELECT_DEFAULTS.triggerAriaInvalid) },
 			},
 		},
+		triggerSize: {
+			control: 'select',
+			options: SELECT_TRIGGER_SIZES,
+			table: {
+				defaultValue: { summary: `'${SELECT_DEFAULTS.triggerSize}'` },
+				type: {
+					detail: SELECT_TRIGGER_SIZES.join(UNION_SEPARATOR),
+					summary: STRING_UNION_SUMMARY,
+				},
+			},
+		},
 	},
-	args: {
-		contentAlign: SELECT_DEFAULTS.contentAlign,
-		contentAlignItemWithTrigger: SELECT_DEFAULTS.contentAlignItemWithTrigger,
-		contentAlignOffset: SELECT_DEFAULTS.contentAlignOffset,
-		contentSide: SELECT_DEFAULTS.contentSide,
-		contentSideOffset: SELECT_DEFAULTS.contentSideOffset,
-		triggerSize: SELECT_DEFAULTS.triggerSize,
-		triggerAriaInvalid: SELECT_DEFAULTS.triggerAriaInvalid,
-	},
+	component: Select,
 	render: ({
 		contentAlign,
 		contentAlignItemWithTrigger,
@@ -234,6 +233,7 @@ const meta = {
 			</Select>
 		)
 	},
+	title: 'Client/Components/Select',
 } satisfies Meta<SelectStoryArgs>
 
 export default meta

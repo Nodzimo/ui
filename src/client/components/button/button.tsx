@@ -14,7 +14,7 @@ export function Button({
 }: ButtonProps) {
 	return (
 		<ButtonPrimitive
-			className={mcn(buttonVariants({ variant, size, className }))}
+			className={mcn(buttonVariants({ className, size, variant }))}
 			data-slot={'button'}
 			{...restProps}
 		/>

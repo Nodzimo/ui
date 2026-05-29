@@ -48,52 +48,14 @@ type ButtonStoryArgs = ButtonProps & {
 }
 
 const meta = {
-	title: 'Client/Components/Button',
-	component: Button,
-	parameters: {
-		pseudo: {
-			hover: '[data-preview="hover"]',
-			active: '[data-preview="active"]',
-		},
+	args: {
+		children: 'Button',
+		disabled: DEFAULT_BUTTON_DISABLED,
+		onClick: fn(),
+		size: 'default',
+		variant: 'default',
 	},
 	argTypes: {
-		variant: {
-			table: {
-				type: {
-					summary: STRING_UNION_SUMMARY,
-					detail: BUTTON_VARIANTS.join(UNION_SEPARATOR),
-				},
-			},
-			control: 'select',
-			options: BUTTON_VARIANTS,
-		},
-		size: {
-			table: {
-				type: {
-					summary: STRING_UNION_SUMMARY,
-					detail: BUTTON_SIZES.join(UNION_SEPARATOR),
-				},
-			},
-			control: 'select',
-			options: BUTTON_SIZES,
-		},
-		Icon: {
-			description: 'Story-only icon picker (this is not a Button prop!)',
-			table: {
-				category: 'Story canvas',
-				type: {
-					summary: 'component union',
-					detail: BUTTON_STORY_ICON_OPTIONS.join(UNION_SEPARATOR),
-				},
-				defaultValue: { summary: BUTTON_STORY_ICON_OPTIONS[2] },
-			},
-			control: 'select',
-			options: BUTTON_STORY_ICON_OPTIONS,
-			mapping: BUTTON_STORY_ICONS,
-		},
-		disabled: {
-			table: { defaultValue: { summary: String(DEFAULT_BUTTON_DISABLED) } },
-		},
 		children: {
 			table: {
 				type: {
@@ -101,14 +63,45 @@ const meta = {
 				},
 			},
 		},
+		disabled: {
+			table: { defaultValue: { summary: String(DEFAULT_BUTTON_DISABLED) } },
+		},
+		Icon: {
+			control: 'select',
+			description: 'Story-only icon picker (this is not a Button prop!)',
+			mapping: BUTTON_STORY_ICONS,
+			options: BUTTON_STORY_ICON_OPTIONS,
+			table: {
+				category: 'Story canvas',
+				defaultValue: { summary: BUTTON_STORY_ICON_OPTIONS[2] },
+				type: {
+					detail: BUTTON_STORY_ICON_OPTIONS.join(UNION_SEPARATOR),
+					summary: 'component union',
+				},
+			},
+		},
+		size: {
+			control: 'select',
+			options: BUTTON_SIZES,
+			table: {
+				type: {
+					detail: BUTTON_SIZES.join(UNION_SEPARATOR),
+					summary: STRING_UNION_SUMMARY,
+				},
+			},
+		},
+		variant: {
+			control: 'select',
+			options: BUTTON_VARIANTS,
+			table: {
+				type: {
+					detail: BUTTON_VARIANTS.join(UNION_SEPARATOR),
+					summary: STRING_UNION_SUMMARY,
+				},
+			},
+		},
 	},
-	args: {
-		children: 'Button',
-		onClick: fn(),
-		disabled: DEFAULT_BUTTON_DISABLED,
-		variant: 'default',
-		size: 'default',
-	},
+	component: Button,
 	decorators: [
 		(Story) => {
 			return (
@@ -118,6 +111,12 @@ const meta = {
 			)
 		},
 	],
+	parameters: {
+		pseudo: {
+			active: '[data-preview="active"]',
+			hover: '[data-preview="hover"]',
+		},
+	},
 	render: ({ children, Icon = HeartIcon, ...restArgs }) => {
 		return (
 			<ButtonPreviewRow>
@@ -143,53 +142,54 @@ const meta = {
 			</ButtonPreviewRow>
 		)
 	},
+	title: 'Client/Components/Button',
 } satisfies Meta<ButtonStoryArgs>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 export const Primary: Story = {
-	name: 'Primary (default)',
 	args: { children: 'Like' },
+	name: 'Primary (default)',
 }
 
 export const Outline: Story = {
 	args: {
-		variant: 'outline',
 		children: 'Open',
 		Icon: FolderOpenIcon,
+		variant: 'outline',
 	},
 }
 
 export const Secondary: Story = {
 	args: {
-		variant: 'secondary',
 		children: 'Close',
 		Icon: XIcon,
+		variant: 'secondary',
 	},
 }
 
 export const Ghost: Story = {
 	args: {
-		variant: 'ghost',
 		children: 'Login',
 		Icon: KeyRoundIcon,
+		variant: 'ghost',
 	},
 }
 
 export const Destructive: Story = {
 	args: {
 		children: 'Delete',
-		variant: 'destructive',
 		Icon: Trash2Icon,
+		variant: 'destructive',
 	},
 }
 
 export const Link: Story = {
 	args: {
 		children: 'Visit',
-		variant: 'link',
 		Icon: ArrowUpRightIcon,
+		variant: 'link',
 	},
 }
 

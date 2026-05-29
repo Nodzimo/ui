@@ -4,11 +4,11 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Spinner } from '.'
 
 const meta = {
-	title: 'Core/Components/Spinner',
 	component: Spinner,
 	parameters: {
 		layout: 'centered',
 	},
+	title: 'Core/Components/Spinner',
 } satisfies Meta<typeof Spinner>
 
 export default meta

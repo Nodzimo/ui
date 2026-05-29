@@ -1,129 +1,12 @@
 {
-	"name": "@sefo/nodzimo-ui",
-	"description": "Sefo Nodzimo UI",
-	"keywords": [
-		"Sefo",
-		"Nodzimo",
-		"UI",
-		"NUI",
-		"SNUI",
-		"React",
-		"TypeScript",
-		"Tailwind",
-		"Components",
-		"Icons",
-		"ShadCN",
-		"Storybook",
-		"RTL"
-	],
-	"publishConfig": {
-		"access": "public"
-	},
-	"version": "0.0.6",
 	"author": {
-		"name": "Sefo Nodzimo",
 		"email": "Sefo@Nodzimo.com",
+		"name": "Sefo Nodzimo",
 		"url": "https://Nodzimo.com"
 	},
-	"license": "MIT",
-	"homepage": "https://github.com/Nodzimo/nodzimo-ui",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/Nodzimo/nodzimo-ui.git"
-	},
 	"bugs": {
-		"url": "https://github.com/Nodzimo/nodzimo-ui/issues",
-		"email": "Sefo@Nodzimo.com"
-	},
-	"funding": [
-		{
-			"type": "Individual",
-			"url": "https://Nodzimo.com/donate"
-		},
-		{
-			"type": "Boosty",
-			"url": "https://boosty.to/Nodzimo"
-		}
-	],
-	"type": "module",
-	"files": [
-		"dist"
-	],
-	"imports": {
-		"#lib": "./src/lib/index.ts",
-		"#lib/*": "./src/lib/*/index.ts",
-		"#core": "./src/core/index.ts",
-		"#core/*": "./src/core/*/index.ts",
-		"#client": "./src/client/index.ts",
-		"#client/*": "./src/client/*/index.ts"
-	},
-	"exports": {
-		".": {
-			"import": "./dist/nodzimo-ui.js",
-			"types": "./dist/nodzimo-ui.d.ts"
-		},
-		"./client": {
-			"import": "./dist/client.js",
-			"types": "./dist/client.d.ts"
-		},
-		"./styles.css": "./dist/styles.css"
-	},
-	"scripts": {
-		"project:audit": "bun run build:ts && bun run check:lint && bun run check:deps && bun run deps:outdated",
-		"project:verify": "bun run deps:install && bun run project:audit && bun run build:icons && bun run build:js && bun run build:css && bun run lib:pack && bun run storybook:build",
-		"dev": "vite",
-		"preview": "vite preview",
-		"build": "bun run build:ts && bun run build:js",
-		"build:js": "vite build",
-		"build:js-watch": "bun run build:js --watch",
-		"build:ts": "tsc --build",
-		"build:ts-watch": "bun run build:ts --watch",
-		"build:css": "tailwindcss --input src/styles.css --output dist/styles.css --minify",
-		"build:css-watch": "bun run build:css --watch",
-		"build:icons": "svgr assets/icons && bun run check:fix-unsafe",
-		"build:all": "bun run build:icons && bun run build && bun run build:css",
-		"check:lint": "biome check",
-		"check:format": "biome format --write",
-		"check:fix": "bun run check:lint --write",
-		"check:fix-unsafe": "bun run check:fix --unsafe",
-		"check:deps": "depcruise src",
-		"check:deps-graph": "depcruise src --include-only '^src' --output-type dot | dot -Tsvg > dependency-graph.svg",
-		"lib:link": "bun link",
-		"lib:unlink": "bun unlink",
-		"lib:pack": "bun pm pack --filename nodzimo-ui.tgz",
-		"deps:install": "bun install",
-		"deps:outdated": "bun outdated",
-		"deps:update": "bun update --interactive",
-		"git:status": "git status",
-		"git:pull": "git pull",
-		"git:normalize": "git add --renormalize .",
-		"git:reset": "git reset",
-		"git:stash": "git stash",
-		"git:stash-pop": "git stash pop",
-		"storybook": "storybook dev --port 6006",
-		"storybook:docs": "bun run storybook --docs",
-		"storybook:serve": "bunx http-server storybook-static --port 6007 --coop --cors -c-1",
-		"storybook:preview": "bun run storybook:build && bun run storybook:serve",
-		"storybook:test": "vitest --project=storybook",
-		"storybook:build": "storybook build",
-		"storybook:build-test": "bun run storybook:build --test",
-		"storybook:build-docs": "bun run storybook:build --docs",
-		"storybook:upgrade": "bunx storybook@latest upgrade",
-		"clean:dist": "bun scripts/clean dist",
-		"clean:modules": "bun scripts/clean modules",
-		"clean:storybook": "bun scripts/clean storybook",
-		"clean:all": "bun scripts/clean dist storybook modules",
-		"clean:ports": "fkill :5173 :4173 :6006 :6007",
-		"publish:who": "npm whoami",
-		"publish:login": "npm login",
-		"publish:fund": "npm fund",
-		"publish:fix": "npm pkg fix",
-		"publish:bump": "npm version patch",
-		"publish:npm": "npm publish"
-	},
-	"engines": {
-		"node": "25.x",
-		"bun": "1.3.x"
+		"email": "Sefo@Nodzimo.com",
+		"url": "https://github.com/Nodzimo/nodzimo-ui/issues"
 	},
 	"dependencies": {
 		"@base-ui/react": "1.5.0",
@@ -131,10 +14,7 @@
 		"clsx": "2.1.1",
 		"tailwind-merge": "3.6.0"
 	},
-	"peerDependencies": {
-		"react": "19.x",
-		"react-dom": "19.x"
-	},
+	"description": "Sefo Nodzimo UI",
 	"devDependencies": {
 		"@babel/core": "7.29.7",
 		"@biomejs/biome": "2.4.15",
@@ -171,5 +51,125 @@
 		"unplugin-dts": "1.0.1",
 		"vite": "8.0.14",
 		"vitest": "4.1.7"
-	}
+	},
+	"engines": {
+		"bun": "1.3.x",
+		"node": "25.x"
+	},
+	"exports": {
+		".": {
+			"import": "./dist/nodzimo-ui.js",
+			"types": "./dist/nodzimo-ui.d.ts"
+		},
+		"./client": {
+			"import": "./dist/client.js",
+			"types": "./dist/client.d.ts"
+		},
+		"./styles.css": "./dist/styles.css"
+	},
+	"files": [
+		"dist"
+	],
+	"funding": [
+		{
+			"type": "Individual",
+			"url": "https://Nodzimo.com/donate"
+		},
+		{
+			"type": "Boosty",
+			"url": "https://boosty.to/Nodzimo"
+		}
+	],
+	"homepage": "https://github.com/Nodzimo/nodzimo-ui",
+	"imports": {
+		"#client": "./src/client/index.ts",
+		"#client/*": "./src/client/*/index.ts",
+		"#core": "./src/core/index.ts",
+		"#core/*": "./src/core/*/index.ts",
+		"#lib": "./src/lib/index.ts",
+		"#lib/*": "./src/lib/*/index.ts"
+	},
+	"keywords": [
+		"Sefo",
+		"Nodzimo",
+		"UI",
+		"NUI",
+		"SNUI",
+		"React",
+		"TypeScript",
+		"Tailwind",
+		"Components",
+		"Icons",
+		"ShadCN",
+		"Storybook",
+		"RTL"
+	],
+	"license": "MIT",
+	"name": "@sefo/nodzimo-ui",
+	"peerDependencies": {
+		"react": "19.x",
+		"react-dom": "19.x"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Nodzimo/nodzimo-ui.git"
+	},
+	"scripts": {
+		"build": "bun run build:ts && bun run build:js",
+		"build:all": "bun run build:icons && bun run build && bun run build:css",
+		"build:css": "tailwindcss --input src/styles.css --output dist/styles.css --minify",
+		"build:css-watch": "bun run build:css --watch",
+		"build:icons": "svgr assets/icons && bun run check:fix-unsafe",
+		"build:js": "vite build",
+		"build:js-watch": "bun run build:js --watch",
+		"build:ts": "tsc --build",
+		"build:ts-watch": "bun run build:ts --watch",
+		"check:deps": "depcruise src",
+		"check:deps-graph": "depcruise src --include-only '^src' --output-type dot | dot -Tsvg > dependency-graph.svg",
+		"check:fix": "bun run check:lint --write",
+		"check:fix-unsafe": "bun run check:fix --unsafe",
+		"check:format": "biome format --write",
+		"check:lint": "biome check",
+		"clean:all": "bun scripts/clean dist storybook modules",
+		"clean:dist": "bun scripts/clean dist",
+		"clean:modules": "bun scripts/clean modules",
+		"clean:ports": "fkill :5173 :4173 :6006 :6007",
+		"clean:storybook": "bun scripts/clean storybook",
+		"deps:install": "bun install",
+		"deps:outdated": "bun outdated",
+		"deps:update": "bun update --interactive",
+		"dev": "vite",
+		"git:normalize": "git add --renormalize .",
+		"git:pull": "git pull",
+		"git:reset": "git reset",
+		"git:stash": "git stash",
+		"git:stash-pop": "git stash pop",
+		"git:status": "git status",
+		"lib:link": "bun link",
+		"lib:pack": "bun pm pack --filename nodzimo-ui.tgz",
+		"lib:unlink": "bun unlink",
+		"preview": "vite preview",
+		"project:audit": "bun run build:ts && bun run check:lint && bun run check:deps && bun run deps:outdated",
+		"project:verify": "bun run deps:install && bun run project:audit && bun run build:icons && bun run build:js && bun run build:css && bun run lib:pack && bun run storybook:build",
+		"publish:bump": "npm version patch",
+		"publish:fix": "npm pkg fix",
+		"publish:fund": "npm fund",
+		"publish:login": "npm login",
+		"publish:npm": "npm publish",
+		"publish:who": "npm whoami",
+		"storybook": "storybook dev --port 6006",
+		"storybook:build": "storybook build",
+		"storybook:build-docs": "bun run storybook:build --docs",
+		"storybook:build-test": "bun run storybook:build --test",
+		"storybook:docs": "bun run storybook --docs",
+		"storybook:preview": "bun run storybook:build && bun run storybook:serve",
+		"storybook:serve": "bunx http-server storybook-static --port 6007 --coop --cors -c-1",
+		"storybook:test": "vitest --project=storybook",
+		"storybook:upgrade": "bunx storybook@latest upgrade"
+	},
+	"type": "module",
+	"version": "0.0.6"
 }

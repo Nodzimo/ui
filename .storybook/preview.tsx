@@ -53,12 +53,45 @@ function ThemedDocsContainer(props: DocsContainerProps) {
 }
 
 const preview: Preview = {
-	tags: ['autodocs'],
+	args: { wrapperBackground: DEFAULT_WRAPPER_BACKGROUND },
+	argTypes: {
+		wrapperBackground: {
+			name: 'Wrapper background',
+			table: {
+				category: 'Story canvas',
+				defaultValue: { summary: `'${DEFAULT_WRAPPER_BACKGROUND}'` },
+			},
+		},
+	},
+	decorators: [
+		withThemeByClassName({
+			defaultTheme: LIGHT_THEME,
+			themes: {
+				dark: DARK_THEME,
+				light: LIGHT_THEME,
+			},
+		}),
+		(Story, { args }) => {
+			const { wrapperBackground, ...storyArgs } = args
+
+			const wrapperStyle: CSSProperties | undefined =
+				wrapperBackground === DEFAULT_WRAPPER_BACKGROUND
+					? undefined
+					: { backgroundColor: wrapperBackground }
+
+			return (
+				<PreviewWrapper style={wrapperStyle}>
+					<Story args={storyArgs} />
+				</PreviewWrapper>
+			)
+		},
+	],
 	parameters: {
-		layout: 'centered',
-		docs: {
-			toc: true, // Enables the table of contents
-			container: ThemedDocsContainer,
+		a11y: {
+			// 'todo' - show a11y violations in the test UI only
+			// 'error' - fail CI on a11y violations
+			// 'off' - skip a11y checks entirely
+			test: 'todo',
 		},
 		controls: {
 			expanded: true,
@@ -67,6 +100,11 @@ const preview: Preview = {
 				date: /Date$/i,
 			},
 		},
+		docs: {
+			container: ThemedDocsContainer,
+			toc: true, // Enables the table of contents
+		},
+		layout: 'centered',
 		options: {
 			storySort: {
 				method: 'alphabetical',
@@ -95,46 +133,8 @@ const preview: Preview = {
 				],
 			},
 		},
-		a11y: {
-			// 'todo' - show a11y violations in the test UI only
-			// 'error' - fail CI on a11y violations
-			// 'off' - skip a11y checks entirely
-			test: 'todo',
-		},
 	},
-	argTypes: {
-		wrapperBackground: {
-			table: {
-				category: 'Story canvas',
-				defaultValue: { summary: `'${DEFAULT_WRAPPER_BACKGROUND}'` },
-			},
-			name: 'Wrapper background',
-		},
-	},
-	args: { wrapperBackground: DEFAULT_WRAPPER_BACKGROUND },
-	decorators: [
-		withThemeByClassName({
-			defaultTheme: LIGHT_THEME,
-			themes: {
-				light: LIGHT_THEME,
-				dark: DARK_THEME,
-			},
-		}),
-		(Story, { args }) => {
-			const { wrapperBackground, ...storyArgs } = args
-
-			const wrapperStyle: CSSProperties | undefined =
-				wrapperBackground === DEFAULT_WRAPPER_BACKGROUND
-					? undefined
-					: { backgroundColor: wrapperBackground }
-
-			return (
-				<PreviewWrapper style={wrapperStyle}>
-					<Story args={storyArgs} />
-				</PreviewWrapper>
-			)
-		},
-	],
+	tags: ['autodocs'],
 }
 
 // noinspection JSUnusedGlobalSymbols

@@ -10,13 +10,13 @@ const cleanTargets = {
 		label: 'generated distribution artifacts',
 		paths: ['dist', 'dist-ssr', 'dependency-graph.svg', '*.tgz'],
 	},
-	storybook: {
-		label: 'generated Storybook artifacts',
-		paths: ['storybook-static'],
-	},
 	modules: {
 		label: 'installed dependencies',
 		paths: ['node_modules'],
+	},
+	storybook: {
+		label: 'generated Storybook artifacts',
+		paths: ['storybook-static'],
 	},
 } as const
 

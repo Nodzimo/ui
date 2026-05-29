@@ -9,8 +9,8 @@ const MDX_REACT_PROXY_IMPORT = MDX_REACT_PROXY_PATH.replaceAll('\\', '/')
 
 export function mdxReactProxyPlugin(): Plugin {
 	return {
-		name: 'storybook-mdx-react-proxy',
 		enforce: 'pre',
+		name: 'storybook-mdx-react-proxy',
 		transform(code, id) {
 			if (
 				id.includes('@storybook/addon-docs') &&

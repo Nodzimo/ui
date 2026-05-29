@@ -27,16 +27,16 @@ export default mergeConfig(
 						}),
 					],
 					test: {
-						name: 'storybook',
 						// Enable browser mode
 						browser: {
+							api: { host: '127.0.0.1' },
 							enabled: true,
 							headless: true,
+							instances: [{ browser: 'chromium' }],
 							// Make sure to install Playwright
 							provider: playwright({}),
-							instances: [{ browser: 'chromium' }],
-							api: { host: '127.0.0.1' },
 						},
+						name: 'storybook',
 					},
 				},
 			],
