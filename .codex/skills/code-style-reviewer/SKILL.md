@@ -226,6 +226,26 @@ surface in one place.
 Do not churn export style in files where the current shape is already clear. Prefer grouped exports when a file exposes
 several related components, constants, and types from one module.
 
+When a helper has a short project-facing name, expose that name at the helper module boundary rather than aliasing it
+only from a distant barrel:
+
+```ts
+function mergeClassNames(...inputs: ClassValue[]) {
+    return twMerge(clsx(inputs))
+}
+
+export {mergeClassNames as mcn}
+```
+
+Then the local barrel should re-export the already-intentional name:
+
+```ts
+export {mcn} from './merge-class-names'
+```
+
+This keeps imports, editor hovers, generated output, and the module's own public surface aligned. A barrel-only alias
+is acceptable for external compatibility shims, but avoid it for the primary local name used throughout the project.
+
 ## Literal Table Policy
 
 Use module-scope `UPPER_SNAKE_CASE` for intentional immutable tables, mappings, defaults, and finite option lists:
@@ -272,6 +292,33 @@ const BUTTON_STORY_ICON_OPTIONS = Object.keys(
     BUTTON_STORY_ICONS,
 ) as ButtonStoryIconName[]
 ```
+
+Do not turn every module-scope value into an immutable literal table. `as const`, `satisfies`, `Object.freeze`, and
+`UPPER_SNAKE_CASE` are useful when the value is intentionally a reusable constant, mapping, finite option list, or
+source for derived unions. They are usually noise for ordinary configuration fragments whose main job is to satisfy a
+framework type.
+
+For config fragments, prefer light explicit typing when that is enough:
+
+```ts
+const previewWrapperArgs: Preview['args'] = {
+    wrapperBackground: 'transparent',
+}
+```
+
+Use `satisfies` when a framework type is too broad, optional, or inference-sensitive and a direct annotation widens or
+breaks assignability:
+
+```ts
+const previewDecorators = [
+    withThemeByClassName({...}),
+    previewWrapperDecorator,
+] satisfies Preview['decorators']
+```
+
+Avoid stacking `as const`, `satisfies`, `Readonly`, `NonNullable`, and uppercase naming only to make a normal config
+piece feel more immutable. Add that ceremony only when it preserves a useful literal union, validates an external finite
+contract, prevents real mutation risk, or makes the exported contract clearer.
 
 ## Declaration Spacing Policy
 

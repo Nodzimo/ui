@@ -149,6 +149,14 @@ contract.
 - Put Storybook-only showcase pages and tools under `.storybook/showcase`. Use that area for design-system pages such
   as colors, tokens, spacing, icons, and other documentation UI that exists only inside Storybook. Keep actual component
   stories colocated in `src` beside the component they document.
+- Put Storybook-only reusable Docs blocks under `.storybook/blocks`. Use this for MDX/Docs presentation adapters such
+  as the themed Source wrapper; these are Storybook infrastructure, not package components.
+- Put Storybook preview runtime infrastructure under `.storybook/preview-runtime`. Use this for theme context, the
+  custom Docs container, preview decorators, and preview wrappers that support `.storybook/preview.tsx`. Keep
+  `.storybook/preview.tsx` as the readable configuration entrypoint, and do not create a sibling `.storybook/preview`
+  directory because it collides with `preview.tsx` and forces trailing-slash imports.
+- Put Storybook-only Vite build workarounds under `.storybook/build-plugins`. Do not use a generic `.storybook/mdx`
+  directory for the MDX React proxy, because that name reads like MDX documentation content rather than build plumbing.
 - Treat spacing as a design-system showcase page named in the singular: `Design System/Spacing`. The page documents the
   spacing scale, not many independent "spacings". Use a typed helper such as `SpacingScale` under
   `.storybook/showcase/spacing` when the MDX page needs TSX rendering logic.
@@ -189,10 +197,11 @@ contract.
   `items-end`, or `min-h-screen` has no effect, first inspect the Storybook CSS import and Tailwind source policy. The
   usual failure mode is importing the package entrypoint instead of `.storybook/preview.css`, or forgetting to include
   the relevant Storybook/source directory in `.storybook/preview.css` `@source` directives.
-- Keep the global `.storybook/preview.tsx` decorator aligned with the project preview contract:
+- Keep the global Storybook decorator aligned with the project preview contract:
   `nui-surface nui-boundaries nui-interactive` around all stories. `nui-surface` is intentional in Storybook because
   the theme addon toggles `.dark`, and the wrapper must receive `bg-nui-background text-nui-foreground` for transparent
-  story canvases to stay readable in both themes.
+  story canvases to stay readable in both themes. The decorator implementation belongs in `.storybook/preview-runtime`;
+  `.storybook/preview.tsx` should only import and register it.
 - Keep the custom Docs container wrapped in the same NUI foundation contract. Docs/MDX content is not a normal story
   canvas, so it needs the Docs container wrapper to apply `nui-surface nui-boundaries nui-interactive` globally instead
   of repeating local wrappers in every showcase MDX page.
@@ -230,7 +239,7 @@ active Storybook CSS entrypoint.
   preview iframe and conflicts with the component-theme addon.
 - Storybook Docs theming must be wired separately from both the manager and the component preview canvas. With
   `storybook-dark-mode`, do not hard-code `parameters.docs.theme = themes.normal`; it freezes Docs in light mode. Use a
-  typed custom Docs container in `.storybook/preview.tsx`:
+  typed custom Docs container in `.storybook/preview-runtime`:
 
 ```tsx
 function ThemedDocsContainer(props: DocsContainerProps) {
@@ -242,12 +251,12 @@ function ThemedDocsContainer(props: DocsContainerProps) {
 }
 ```
 
-Then set `parameters.docs.container = ThemedDocsContainer`. Import `DocsContainer` and `DocsContainerProps` from
-`@storybook/addon-docs/blocks`, and `useDarkMode` from `storybook-dark-mode`. Keep `theme` after `{...props}` so the
-dark-mode state wins intentionally. Prefer this hook-based bridge over manual `DARK_MODE_EVENT_NAME` channel plumbing
-unless the project needs a custom docs-only toggle.
+Then set `parameters.docs.container = ThemedDocsContainer` from `.storybook/preview.tsx`. Import `DocsContainer` and
+`DocsContainerProps` from `@storybook/addon-docs/blocks`, and `useDarkMode` from `storybook-dark-mode`. Keep `theme`
+after `{...props}` so the dark-mode state wins intentionally. Prefer this hook-based bridge over manual
+`DARK_MODE_EVENT_NAME` channel plumbing unless the project needs a custom docs-only toggle.
 
-- Keep the local unattached-MDX theme bridge in `.storybook/preview.tsx`. Standalone MDX pages such as design-system
+- Keep the local unattached-MDX theme bridge in `.storybook/preview-runtime`. Standalone MDX pages such as design-system
   color/token docs do not behave like ordinary story canvases: when the `@storybook/addon-themes` toolbar is toggled
   while already on the MDX page, the story decorator does not re-run, so the root `light` / `dark` class can stay stale.
   The accepted workaround reads `props.context.store?.userGlobals?.globals?.theme` inside the custom Docs container and
@@ -257,6 +266,15 @@ unless the project needs a custom docs-only toggle.
   discussion at https://github.com/storybookjs/storybook/discussions/28495.
 - Do not remove that bridge just because the Docs container has an NUI wrapper. The wrapper applies NUI classes to the
   Docs surface; the bridge keeps the active `light` / `dark` token values synchronized for unattached MDX pages.
+- Do not use Storybook preview hooks such as `useGlobals()` inside MDX-rendered helper components. Storybook preview
+  hooks are only valid inside decorators and story functions. When an MDX block needs the active Docs/component theme,
+  expose ordinary React context from the custom Docs container in `.storybook/preview-runtime` and consume that context
+  from `.storybook/blocks`.
+- Storybook's official `Source` Docs block accepts a static `dark` boolean and does not automatically follow either
+  `storybook-dark-mode` or `@storybook/addon-themes`. Use the local themed Source adapter from `.storybook/blocks` for
+  MDX code examples that should follow the current Docs/theme state. Do not hard-code `dark={true}` in docs unless a
+  permanently dark snippet is intentional, and do not replace `Source` with a custom syntax highlighter without a
+  stronger reason.
 - Keep `withThemeByClassName` configured with explicit class names:
 
 ```tsx
@@ -282,10 +300,16 @@ toggle two explicit states instead of treating light as an invisible absence of 
 - Be aware of the current Storybook 10.4 production Docs workaround. In this project, a custom Docs container plus
   addon-docs triggered a production-only React #130 crash because Storybook's `DocsRenderer` dynamically imported
   `@mdx-js/react`, but the static Vite/Rolldown output resolved that import to a chunk without a usable named
-  `MDXProvider` export. The local fix is `.storybook/mdx-react-proxy-plugin.ts`, registered in
+  `MDXProvider` export. The local fix is `.storybook/build-plugins/mdx-react-proxy-plugin.ts`, registered in
   `.storybook/vite.config.ts`, which rewrites the dynamic `import("@mdx-js/react")` from addon-docs to
-  `.storybook/mdx-react-proxy.ts`. That proxy re-exports `MDXProvider` and `useMDXComponents` from the real
-  `@mdx-js/react` package.
+  `.storybook/build-plugins/mdx-react-proxy.ts`. That proxy re-exports `MDXProvider` and `useMDXComponents` from the
+  real `@mdx-js/react` package.
+- Keep the MDX React proxy split into a build-time plugin file and a browser-runtime proxy file. The plugin runs in
+  Vite/Node config space; the proxy is the module Storybook Docs dynamically imports in the browser bundle. Merging
+  them would mix `node:url`/`vite` build-time imports into the runtime target and make the workaround less clear.
+- In `.storybook/build-plugins/mdx-react-proxy.ts`, re-export from the package import `@mdx-js/react`. Do not deep-link
+  or relatively import `../node_modules/@mdx-js/react/index.js`; the normal package import resolves correctly in the
+  Storybook Vite build and keeps the workaround smaller and less coupled to package internals.
 - Treat the MDX React proxy as Storybook-only build plumbing. Do not copy it into component stories, do not add MDX
   files only to "force" the provider, do not patch `node_modules`, and do not remove Docs or the custom Docs container
   to make the build smaller. Revisit and remove the workaround only after a Storybook/Vite/Rolldown upgrade proves the
