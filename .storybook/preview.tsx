@@ -1,100 +1,13 @@
-import { withThemeByClassName } from '@storybook/addon-themes'
 import type { Preview } from '@storybook/react-vite'
-import type { ComponentPropsWithoutRef, CSSProperties } from 'react'
 import './preview.css'
-import {
-	DocsContainer,
-	type DocsContainerProps,
-} from '@storybook/addon-docs/blocks'
-import { themes } from 'storybook/theming'
-import { useDarkMode } from 'storybook-dark-mode'
-import {
-	type StorybookDocsTheme,
-	StorybookDocsThemeContext,
-} from './blocks/docs-theme-context'
-
-const DEFAULT_WRAPPER_BACKGROUND = 'transparent'
-const LIGHT_THEME = 'light'
-const DARK_THEME = 'dark'
-
-function PreviewWrapper(props: ComponentPropsWithoutRef<'div'>) {
-	return (
-		<div {...props} className={'nui-surface nui-boundaries nui-interactive'} />
-	)
-}
-
-type DocsContextWithStore = DocsContainerProps['context'] & {
-	store?: {
-		userGlobals?: {
-			globals?: {
-				theme?: typeof LIGHT_THEME | typeof DARK_THEME
-			}
-		}
-	}
-}
-
-function ThemedDocsContainer(props: DocsContainerProps) {
-	const isManagerDark = useDarkMode()
-	const docsTheme = isManagerDark ? themes.dark : themes.normal
-	const context = props.context as DocsContextWithStore
-	const componentTheme = context.store?.userGlobals?.globals?.theme
-
-	const blockTheme: StorybookDocsTheme =
-		componentTheme ?? (isManagerDark ? DARK_THEME : LIGHT_THEME)
-
-	document.documentElement.classList.toggle(
-		LIGHT_THEME,
-		componentTheme === LIGHT_THEME,
-	)
-
-	document.documentElement.classList.toggle(
-		DARK_THEME,
-		componentTheme === DARK_THEME,
-	)
-
-	return (
-		<StorybookDocsThemeContext.Provider value={blockTheme}>
-			<PreviewWrapper>
-				<DocsContainer {...props} theme={docsTheme} />
-			</PreviewWrapper>
-		</StorybookDocsThemeContext.Provider>
-	)
-}
+import { previewDecorators } from './preview-decorators'
+import { ThemedDocsContainer } from './preview-theme'
+import { previewWrapperArgs, previewWrapperArgTypes } from './preview-wrapper'
 
 const preview: Preview = {
-	args: { wrapperBackground: DEFAULT_WRAPPER_BACKGROUND },
-	argTypes: {
-		wrapperBackground: {
-			name: 'Wrapper background',
-			table: {
-				category: 'Story canvas',
-				defaultValue: { summary: `'${DEFAULT_WRAPPER_BACKGROUND}'` },
-			},
-		},
-	},
-	decorators: [
-		withThemeByClassName({
-			defaultTheme: LIGHT_THEME,
-			themes: {
-				dark: DARK_THEME,
-				light: LIGHT_THEME,
-			},
-		}),
-		(Story, { args }) => {
-			const { wrapperBackground, ...storyArgs } = args
-
-			const wrapperStyle: CSSProperties | undefined =
-				wrapperBackground === DEFAULT_WRAPPER_BACKGROUND
-					? undefined
-					: { backgroundColor: wrapperBackground }
-
-			return (
-				<PreviewWrapper style={wrapperStyle}>
-					<Story args={storyArgs} />
-				</PreviewWrapper>
-			)
-		},
-	],
+	args: { ...previewWrapperArgs },
+	argTypes: { ...previewWrapperArgTypes },
+	decorators: [...previewDecorators],
 	parameters: {
 		a11y: {
 			// 'todo' - show a11y violations in the test UI only
