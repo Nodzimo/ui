@@ -8,6 +8,10 @@ import {
 } from '@storybook/addon-docs/blocks'
 import { themes } from 'storybook/theming'
 import { useDarkMode } from 'storybook-dark-mode'
+import {
+	type StorybookDocsTheme,
+	StorybookDocsThemeContext,
+} from './blocks/docs-theme-context'
 
 const DEFAULT_WRAPPER_BACKGROUND = 'transparent'
 const LIGHT_THEME = 'light'
@@ -30,10 +34,13 @@ type DocsContextWithStore = DocsContainerProps['context'] & {
 }
 
 function ThemedDocsContainer(props: DocsContainerProps) {
-	const isDark = useDarkMode()
-	const theme = isDark ? themes.dark : themes.normal
+	const isManagerDark = useDarkMode()
+	const docsTheme = isManagerDark ? themes.dark : themes.normal
 	const context = props.context as DocsContextWithStore
 	const componentTheme = context.store?.userGlobals?.globals?.theme
+
+	const blockTheme: StorybookDocsTheme =
+		componentTheme ?? (isManagerDark ? DARK_THEME : LIGHT_THEME)
 
 	document.documentElement.classList.toggle(
 		LIGHT_THEME,
@@ -46,9 +53,11 @@ function ThemedDocsContainer(props: DocsContainerProps) {
 	)
 
 	return (
-		<PreviewWrapper>
-			<DocsContainer {...props} theme={theme} />
-		</PreviewWrapper>
+		<StorybookDocsThemeContext.Provider value={blockTheme}>
+			<PreviewWrapper>
+				<DocsContainer {...props} theme={docsTheme} />
+			</PreviewWrapper>
+		</StorybookDocsThemeContext.Provider>
 	)
 }
 

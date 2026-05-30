@@ -1,0 +1,44 @@
+import {Meta} from '@storybook/addon-docs/blocks'
+import {ThemedSource} from '../../blocks/themed-source'
+
+<Meta title='Client/Providers/Direction'/>
+
+# Direction
+
+`DirectionProvider` sets the text direction for client components that need `ltr` or `rtl` awareness.
+
+Use it near the app root when the interface should follow a right-to-left language such as Arabic, Hebrew, or Persian.
+
+<ThemedSource
+	language={'tsx'}
+	code={`import {DirectionProvider} from '@sefo/nodzimo-ui/client'
+
+export function AppProviders({children}: {children: ReactNode}) {
+    return (
+      <DirectionProvider direction={'rtl'}>
+        {children}
+      </DirectionProvider>
+    )
+}`}/>
+
+### Reading Direction
+
+Use `useDirection` inside client components that need the active direction value.
+
+<ThemedSource
+	language={'tsx'}
+	code={`import {useDirection} from '@sefo/nodzimo-ui/client'
+
+export function DirectionLabel() {
+    const direction = useDirection()
+
+    return <span>Current direction: {direction}</span>
+}`}/>
+
+### Import
+
+<ThemedSource
+	language={'ts'}
+	code={`import {DirectionProvider, useDirection} from '@sefo/nodzimo-ui/client'`}/>
+
+`DirectionProvider` belongs to the client entrypoint because it provides runtime context for interactive components.
