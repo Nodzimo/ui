@@ -1,8 +1,11 @@
 import type { Preview } from '@storybook/react-vite'
 import './preview.css'
-import { previewDecorators } from './preview-decorators'
-import { ThemedDocsContainer } from './preview-theme'
-import { previewWrapperArgs, previewWrapperArgTypes } from './preview-wrapper'
+import {
+	previewDecorators,
+	previewWrapperArgs,
+	previewWrapperArgTypes,
+	ThemedDocsContainer,
+} from './preview/'
 
 const preview: Preview = {
 	args: { ...previewWrapperArgs },

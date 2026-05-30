@@ -2,7 +2,7 @@ import { fileURLToPath } from 'node:url'
 import type { Plugin } from 'vite'
 
 const MDX_REACT_PROXY_PATH = fileURLToPath(
-	new URL('./mdx-react-proxy.ts', import.meta.url),
+	new URL('./mdx-react-proxy', import.meta.url),
 )
 
 const MDX_REACT_PROXY_IMPORT = MDX_REACT_PROXY_PATH.replaceAll('\\', '/')
