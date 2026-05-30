@@ -1,5 +1,5 @@
 import { Source, type SourceProps } from '@storybook/addon-docs/blocks'
-import { useDocsTheme } from '../preview/'
+import { useDocsTheme } from '../preview-runtime'
 
 export function ThemedSource(props: SourceProps) {
 	const docsTheme = useDocsTheme()

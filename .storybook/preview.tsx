@@ -5,7 +5,7 @@ import {
 	previewWrapperArgs,
 	previewWrapperArgTypes,
 	ThemedDocsContainer,
-} from './preview/'
+} from './preview-runtime'
 
 const preview: Preview = {
 	args: { ...previewWrapperArgs },

@@ -1,1 +1,1 @@
-export { mergeClassNames as mcn } from './merge-class-names'
+export { mcn } from './merge-class-names'

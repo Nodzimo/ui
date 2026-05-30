@@ -11,7 +11,7 @@ Use it near the app root when the interface should follow a right-to-left langua
 
 <ThemedSource
 	language={'tsx'}
-	code={`import {DirectionProvider} from '@sefo/nodzimo-ui/client'
+	code={`import { DirectionProvider } from '@sefo/nodzimo-ui/client'
 
 export function AppProviders({children}: {children: ReactNode}) {
     return (
@@ -27,7 +27,7 @@ Use `useDirection` inside client components that need the active direction value
 
 <ThemedSource
 	language={'tsx'}
-	code={`import {useDirection} from '@sefo/nodzimo-ui/client'
+	code={`import { useDirection } from '@sefo/nodzimo-ui/client'
 
 export function DirectionLabel() {
     const direction = useDirection()
