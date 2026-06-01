@@ -59,6 +59,10 @@ large client component built on third-party primitives.
     - External import sanity:
       `rg -n 'from "(@base-ui/react|class-variance-authority|clsx|tailwind-merge|react|react-dom|react/jsx-runtime|react/compiler-runtime)' dist/client.js dist/nodzimo-ui.js`
       should show runtime dependency imports as imports, not copied `node_modules` regions.
+    - Declaration shape:
+      confirm `dist/nodzimo-ui.d.ts` and `dist/client.d.ts` exist at the `dist` root, and that no public `dist/src`
+      declaration tree is being produced. When this changes after `unplugin-dts` updates, inspect plugin-local
+      `compilerOptions.rootDir: 'src'` before accepting path rewrites or exported internal type topology.
     - `lucide-react` should not appear in built package output.
 
 4. Check dependency contracts.

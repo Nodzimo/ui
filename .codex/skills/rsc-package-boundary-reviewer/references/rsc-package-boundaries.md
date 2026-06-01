@@ -45,6 +45,15 @@ React Compiler output belong here.
 `core` does not mean server-only. It means no client boundary is needed and the code is suitable for the RSC import
 graph. This is stricter than "it can render on the server".
 
+The public declaration topology mirrors the public JavaScript topology. `dist/nodzimo-ui.d.ts` is the root/RSC-safe type
+surface, and `dist/client.d.ts` is the client-boundary type surface. Do not publish a mirrored `dist/src` declaration
+tree as part of the package contract unless a real tooling need appears.
+
+`unplugin-dts` should keep this topology explicit with plugin-local `compilerOptions.rootDir: 'src'`, alongside
+`bundleTypes: true` and `tsconfigPath: 'tsconfig.app.json'`. This is the clean declaration-build contract, not a path
+rewrite workaround. If an update emits declarations under `dist/src` or API Extractor cannot find `dist/client.d.ts`,
+fix the declaration root first.
+
 ## App Source Vs Prebuilt Library
 
 Do not assume an example copied from an app-source component library has the same boundary behavior after this package
@@ -346,6 +355,15 @@ Inspect the root entry:
 ```powershell
 rg -n "createContext|useContext|useState|useEffect|react/compiler-runtime|@base-ui/react|lucide-react|node_modules/lucide" dist/nodzimo-ui.js
 ```
+
+Inspect declaration topology:
+
+```powershell
+Get-ChildItem dist -Recurse -Filter *.d.ts
+```
+
+Expected result: root public declarations are `dist/nodzimo-ui.d.ts` and `dist/client.d.ts`; there should be no public
+`dist/src` declaration tree.
 
 For provider changes, also search root declarations and the client artifact:
 

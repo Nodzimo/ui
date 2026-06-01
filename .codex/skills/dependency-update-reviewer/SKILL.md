@@ -180,6 +180,11 @@ Post-update triage should pay special attention to Vite/Vitest/Storybook package
   Playwright-driven Storybook tests.
 - If Storybook test UI logs `vitest.init()` deprecation warnings, first check whether the warning originates inside
   `@storybook/addon-vitest` before recommending local config rewrites.
+- For `unplugin-dts` updates, verify that `vite.config.ts` keeps `bundleTypes: true`, `tsconfigPath:
+  'tsconfig.app.json'`, story exclusions, and plugin-local `compilerOptions.rootDir: 'src'`. `unplugin-dts@1.0.2`
+  exposed the declaration-root assumption: without the explicit root, declarations may emit under `dist/src`, and API
+  Extractor can fail because `dist/client.d.ts` or `dist/nodzimo-ui.d.ts` is missing. Prefer the explicit `rootDir`
+  config over `beforeWriteFile` path rewrites.
 - After build-tool or Storybook updates, include package artifact inspection in the recommendation when declarations,
   CSS output, or private chunks might have changed: `bun run build:all` followed by `bun pm pack --dry-run`.
 

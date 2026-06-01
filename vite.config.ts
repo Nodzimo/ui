@@ -45,6 +45,7 @@ export default defineConfig({
 		}),
 		dts({
 			bundleTypes: true,
+			compilerOptions: { rootDir: 'src' },
 			exclude: '**/*.stories.*',
 			tsconfigPath: 'tsconfig.app.json',
 		}),
