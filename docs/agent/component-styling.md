@@ -18,6 +18,14 @@
 - Read [Theme Token Contract](theme-token-contract.md) before adapting copied component styles, and use
   [Tailwind And Styles](tailwind-and-styles.md) for class naming, CSS entrypoint, and source-detection rules.
 
+### Class Formatting
+
+- Long Tailwind class lists should be split into readable static chunks without changing visual behavior. Prefer
+  recognizable groups to equal line lengths, keep caller `className` last in merge calls, and do not use CVA only as a
+  line-break mechanism.
+- Treat copied class lists as source-of-truth data during formatting: do not add, remove, rename, token-adapt, or
+  silently fix classes while doing a formatting-only pass.
+
 ### Public Surface
 
 - Keep component public surfaces intentional. Do not export internal composition helpers merely because a copied source

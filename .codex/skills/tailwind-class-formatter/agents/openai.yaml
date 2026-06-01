@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tailwind Class Formatter"
+  short_description: "Format long Tailwind class lists."
+  default_prompt: "Format these Tailwind class lists into readable grouped chunks without changing visual behavior."

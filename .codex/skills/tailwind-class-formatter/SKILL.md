@@ -5,13 +5,20 @@ description: Format long Tailwind class lists in Nodzimo UI React/TSX components
 
 # Tailwind Class Formatter
 
-## Overview
+## Purpose
 
 Use this skill to turn unreadable Tailwind class strings into maintainable grouped class chunks. The skill fills the
 gap left by Biome and Tailwind: they can sort classes, but they do not split long class lists into readable project
 groups.
 
 This is a formatting and grouping skill only. It must preserve the exact style contract.
+
+## Required Reading
+
+- Read `docs/agent/component-styling.md` for the canonical project convention before changing component classes.
+- If a class looks like it needs token adaptation, use `theme-token-adapter` instead of fixing it inside this skill.
+- If broader code-style cleanup is requested, use `code-style-reviewer` to orchestrate this skill with the other style
+  checks.
 
 ## Non-Negotiable Safety Contract
 
@@ -80,19 +87,19 @@ Good:
 
 ```ts
 const triggerClassName = mcn(
-	'flex w-fit items-center justify-between',
-	'gap-1.5 py-2 ps-2.5 pe-2',
-	'select-none whitespace-nowrap text-sm',
-	'rounded-nui-lg border border-nui-input outline-none',
-	'bg-transparent transition-colors',
-	'focus-visible:border-nui-ring focus-visible:ring-3 focus-visible:ring-nui-ring/50',
-	'disabled:cursor-not-allowed disabled:opacity-50',
-	'aria-invalid:border-nui-destructive aria-invalid:ring-3 aria-invalid:ring-nui-destructive/20',
-	'data-[size=default]:h-8 data-[size=sm]:h-7 data-[size=sm]:rounded-[min(var(--radius-nui-md),10px)] data-placeholder:text-nui-muted-foreground',
-	'dark:bg-nui-input/30 dark:aria-invalid:border-nui-destructive/50 dark:aria-invalid:ring-nui-destructive/40 dark:hover:bg-nui-input/50',
-	'*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5',
-	"[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
-	className,
+    'flex w-fit items-center justify-between',
+    'gap-1.5 py-2 ps-2.5 pe-2',
+    'select-none whitespace-nowrap text-sm',
+    'rounded-nui-lg border border-nui-input outline-none',
+    'bg-transparent transition-colors',
+    'focus-visible:border-nui-ring focus-visible:ring-3 focus-visible:ring-nui-ring/50',
+    'disabled:cursor-not-allowed disabled:opacity-50',
+    'aria-invalid:border-nui-destructive aria-invalid:ring-3 aria-invalid:ring-nui-destructive/20',
+    'data-[size=default]:h-8 data-[size=sm]:h-7 data-[size=sm]:rounded-[min(var(--radius-nui-md),10px)] data-placeholder:text-nui-muted-foreground',
+    'dark:bg-nui-input/30 dark:aria-invalid:border-nui-destructive/50 dark:aria-invalid:ring-nui-destructive/40 dark:hover:bg-nui-input/50',
+    '*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5',
+    "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+    className,
 )
 ```
 
@@ -100,7 +107,7 @@ Avoid:
 
 ```ts
 const triggerClassName =
-	'flex w-fit select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-nui-lg border border-nui-input bg-transparent py-2 ps-2.5 pe-2 text-sm outline-none transition-colors focus-visible:border-nui-ring focus-visible:ring-3 focus-visible:ring-nui-ring/50 disabled:cursor-not-allowed disabled:opacity-50'
+    'flex w-fit select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-nui-lg border border-nui-input bg-transparent py-2 ps-2.5 pe-2 text-sm outline-none transition-colors focus-visible:border-nui-ring focus-visible:ring-3 focus-visible:ring-nui-ring/50 disabled:cursor-not-allowed disabled:opacity-50'
 ```
 
 Also avoid using CVA only as a line-break mechanism:
@@ -114,7 +121,7 @@ Use CVA only when the component has real variant inputs.
 ## Workflow
 
 1. Identify long Tailwind class lists in `className`, `mcn`, `cn`, `cva`, or similar class composition calls.
-2. Copy the original classes mentally as an immutable set. Do not reinterpret the design.
+2. Treat the original classes as an immutable set. Do not reinterpret the design.
 3. Split classes into the modifier groups and base utility families above.
 4. Keep static class chunks as literal strings so Tailwind source scanning still sees them.
 5. Keep caller `className` or override values last.
