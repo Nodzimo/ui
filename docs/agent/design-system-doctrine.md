@@ -1,5 +1,7 @@
 ## Design System Doctrine
 
+### Source Of Truth
+
 - Read `docs/design-system-doctrine/README.md` and the relevant chapter files before changing theme colors, button
   variants, interactive-state styling, or the meaning of theme tokens. They record the current Nodzimo design direction
   and the reasoning behind it.
@@ -9,9 +11,17 @@
   Storybook manager instead of `iframe.html`.
 - Keep doctrine chapter file names based on chapter identity, not position. Do not prefix chapter files with `01-`,
   `02-`, and so on; order belongs in `README.md`, Storybook overview links, and `storySort`.
+
+### Semantic Architecture
+
 - Preserve the shadcn-style semantic token architecture. Do not add one-off state tokens such as `primaryTextHover`,
   `primaryLinkActive`, or `primaryBackgroundPressed` unless the existing semantic roles have clearly failed across
   multiple components.
+
+For token implementation rules, see [Theme Token Contract](theme-token-contract.md).
+
+### Theme Direction
+
 - Treat light and dark themes as two intentional expressions of the same brand, not as a technical inversion:
     - Light theme: `Living Emerald`, internally nicknamed `Liverald`, with natural, confident, trustworthy,
       growth-oriented emerald energy.
@@ -22,6 +32,9 @@
   can take on in dark mode.
 - Do not timidly torture one color until it barely works in both themes. Keep the green brand DNA, but allow each theme
   to express it differently when that produces a stronger and more readable system.
+
+### Interaction Legibility
+
 - Respect the shadcn semantic structure, but do not inherit shadcn blandness as a design goal. shadcn is a conservative
   white-label baseline that is hard to ruin; Nodzimo should keep its architecture while adding deliberate character and
   clearer active/passive/disabled distinction.
@@ -42,6 +55,9 @@
 - When adapting shadcn-style components, do not paint the component by hand. Tune the semantic tokens until the existing
   semantic classes become alive. If private button-only color classes are needed just to make a standard variant
   readable, first suspect `secondary`, `accent`, `border`, `input`, `ring`, or related theme tokens.
+
+### Brand And Intensity
+
 - Current primary direction:
     - Light primary: `Living Emerald`, internally nicknamed `Liverald`, `oklch(0.55 0.19 151)` with light foreground.
     - Dark primary: `Night Emerald`, internally nicknamed `Nimerald`, `oklch(0.82 0.26 145)` with dark
@@ -56,6 +72,9 @@
   semantic color plus `/20`, `/50`, or `/80` expresses the treatment. Do not create CSS variables for these values
   unless
   Tailwind gains a clean named opacity API or repeated real usage proves a better implementation.
+
+### Button Hierarchy
+
 - Button variants are semantic hierarchy, not random visual costumes:
     - `primary`: brand speaks loudly; main action.
     - `secondary`: brand speaks quietly; lower-emphasis filled action.
@@ -91,6 +110,9 @@
   through border tone, hover tint, focus ring, spacing, radius, and context.
 - Keep `ghost` hover softer than `secondary` rest. If ghost hover becomes visually identical to secondary, the action
   hierarchy is too compressed.
+
+### RTL And Icon Direction
+
 - Nodzimo UI supports RTL consumers. For directional inline-axis layout, use logical Tailwind utilities such as `ps-*`,
   `pe-*`, `ms-*`, `me-*`, `start-*`, `end-*`, `border-s-*`, and `border-e-*` instead of physical `pl-*`, `pr-*`,
   `ml-*`, `mr-*`, `left-*`, `right-*`, `border-l-*`, or `border-r-*`. Symmetric utilities such as `px-*`, `mx-*`,
@@ -106,4 +128,3 @@
 - When hardcoded LTR demo text appears inside an RTL Storybook preview and neutral punctuation moves incorrectly, wrap
   only that text fragment in a neutral inline element with explicit direction, for example
   `<span dir={'ltr'}>Processing...</span>`. Use real localized text for real RTL examples.
-
