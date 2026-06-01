@@ -9,7 +9,8 @@ exception.
   dependencies were automatically externalized from `dependencies + peerDependencies`, the library build copied Base UI,
   Floating UI, store helpers, and `use-sync-external-store` internals into `dist/client.js`.
 - The earlier Button implementation also copied a small Base UI slice into the client artifact, but it did not pull the
-  dangerous CommonJS shim path. Button working was not proof that the bundling policy was correct.
+  dangerous CommonJS shim path. Button working was not proof that the bundling policy was correct; it only failed to
+  exercise the dangerous dependency path.
 - After Select expanded the Base UI dependency graph, `dist/client.js` grew from the tens of kilobytes range to roughly
   198 KB and contained Rolldown dynamic `require` support such as `typeof require`, `new Proxy`, and
   `Calling \`require\``.
@@ -19,6 +20,8 @@ exception.
 - The fix is not moving Base UI to `devDependencies` and not making consumers install Base UI manually. Base UI remains
   a runtime implementation dependency in `dependencies`; Vite/Rolldown leaves it as an external import in `dist`, and
   the consumer package manager installs it automatically with this package.
+- Types were not the cause. TypeScript declarations and prop typing are erased from runtime output; the copied code
+  came from runtime imports such as `@base-ui/react/select`.
 - Treat a sudden `dist/client.js` size jump as a release-blocking signal until the built artifact is inspected.
 - Client artifact checks must look for bundled third-party internals and CJS shims, not only for missing
   `"use client";`.

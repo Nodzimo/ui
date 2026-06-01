@@ -10,11 +10,15 @@ This incident is historical context for the current core/client boundary rules. 
 - The Next consumer imported only `Card` from `@sefo/nodzimo-ui`, but the root barrel also exported `Spinner`. Because
   Lucide had been inlined into the same root entry, the RSC graph evaluated code that called `createContext` under
   React's `react-server` condition and the consumer build failed with `TypeError: createContext is not a function`.
+- The failure was not caused by two React instances. It was an RSC import-graph violation caused by inlined third-party
+  React code inside the root entry.
 - Do not treat shadcn-style app-source examples as proof that the same import is safe after this package prebuilds a
   public entrypoint. Next can inspect client boundaries in an app source graph, while Vite/Rolldown can erase that
   boundary by copying dependency internals into `dist/nodzimo-ui.js`.
 - The old workaround was to keep `lucide-react` external in Vite/Rolldown, which kept an external `lucide-react` import
   in the root entry instead of copying Lucide internals into `dist/nodzimo-ui.js`.
+- Externalizing `lucide-react` restored its package boundary, but it was boundary containment, not proof that rendering
+  a fundamental core primitive through a third-party React icon package was the right long-term RSC-safe design.
 - The long-term fix is now preferred: `Spinner` uses a generated project-owned SVG icon from `#core/icons`, so the root
   entry no longer imports `lucide-react` at runtime.
 - `lucide-react` has been removed from package dependencies entirely. Stories and demos should use project-owned
