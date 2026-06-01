@@ -30,6 +30,7 @@ dist-ssr
 !/.idea/inspectionProfiles/**
 !/.idea/scopes/
 !/.idea/scopes/**
+!/.idea/tailwindcss.xml
 
 *.tgz
 /dependency-graph.svg

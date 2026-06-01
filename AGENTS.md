@@ -371,6 +371,14 @@ same mapping, reuse that key union instead of repeating the expression, for exam
 ## Tailwind And Styles
 
 - Tailwind is used as build-time styling tooling for the library, not as a runtime dependency for consumers.
+- Use `class`, `className`, `classNames`, `classes`, and `*_CLASSES` naming for values that contain Tailwind class
+  strings, including string constants, arrays, and object tables such as CVA variant class maps. Reserve `style` and
+  `styles` naming for inline style objects, `CSSProperties`, or other non-Tailwind style declarations.
+- Keep WebStorm Tailwind autocomplete for non-JSX class tables scoped through the project Tailwind language-server
+  `experimental.classRegex` setting. The regex should target variable declarations whose names contain class/className/
+  classNames/classes/CLASSES, and should not include `styles`; JSX `className` attributes are already covered by the
+  standard Tailwind class-attribute support. The project regex convention is adapted from the practical examples in
+  <https://github.com/codewithhridoy/tailwind-autosuggestion-for-custom-classes>.
 - Keep `tailwindcss` and `@tailwindcss/cli` in `devDependencies`; consumers receive built CSS from `dist/styles.css`.
 - Do not rely on consumer Tailwind scanning to style library components. A Next consumer may appear to pick up some
   utility classes from the package, but that is incidental and not the package contract.
