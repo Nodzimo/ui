@@ -21,8 +21,7 @@
   `Inline`/`WithLabel` composition if that pattern is worth documenting.
 - Prefer separate focused stories for semantic roles and materially different behavior, such as a button's primary,
   outline, secondary, ghost, destructive, link, disabled, icon-only, or loading states. Do not include the component
-  name
-  in each story name when the Storybook title already scopes the file to that component.
+  name in each story name when the Storybook title already scopes the file to that component.
 - Prefer comparison stories for visual scales and repetitive styling variations, such as component sizes or icon sizes.
   Show comparable variants side by side so rhythm, spacing, and scale can be inspected in one canvas instead of clicking
   through many near-identical sidebar entries.
@@ -33,9 +32,12 @@
   override the args that make that story meaningful. Use specific children only when the label clarifies semantics, such
   as `Delete` for destructive actions or `Visit` for link-style actions.
 - For story-only args such as preview icons, extend the story args type with `ComponentProps<typeof Component>`. Expose
-  a
-  clearly described control such as `Story-only icon picker (this is not a Button prop!)`, and destructure unused
+  a clearly described control such as `Story-only icon picker (this is not a Button prop!)`, and destructure unused
   story-only args out of custom renders so they do not leak into the rendered component or DOM.
+  For icon-like story-only controls, keep control options as serializable string keys plus Storybook `mapping`; do not
+  put React components directly in `options`. It is acceptable if Storybook cannot reverse-map a React component default
+  back to the selected string option in the Controls UI; do not rewrite the arg to an `iconName` string only for that
+  cosmetic control-state improvement.
 - Keep story export names short and stable because they form technical story ids. Use `name` only when the display name
   needs human-facing clarification or sentence casing, such as `Primary (default)` or `Icon sizes`.
 - In comparison, story render functions, spread `args` before pinned props that define the comparison item, for example
@@ -64,6 +66,10 @@
 - For compound components, story args may represent the documented composition surface, not only the root component's
   direct props. Prefix child-part controls with the part name, such as `triggerSize`, `triggerAriaInvalid`,
   `contentSide`, `contentAlign`, `contentSideOffset`, and `contentAlignItemWithTrigger`.
+- Keep `undefined` in the prop type when an upstream prop is optional, but do not include `undefined` in Storybook
+  control option arrays. Options represent explicit selectable values, not the absence of a prop. Numeric Base UI
+  offsets such as `sideOffset` and `alignOffset` may accept functions upstream, but stories may use `control: 'number'`
+  for the documented numeric case instead of inventing a function editor.
 - Shared Storybook arg-table labels and separators belong in `src/storybook/constants.ts`. Keep that folder out of
   public barrels and runtime entrypoints; it is for colocated `*.stories.*` files and story-only helpers.
 - `class-variance-authority` currently does not expose a stable runtime introspection API for variant keys. CVA
@@ -83,5 +89,7 @@
 - Top-level MDX documentation may live separately from component folders, but it should be project documentation, not
   generated onboarding content.
 - CSF 3 is the stable default story format. CSF Next is not related to Next.js; it is an experimental next Component
-  Story
-  Format. Do not switch to CSF Next unless the project explicitly accepts preview API churn.
+  Story Format. Do not switch to CSF Next unless the project explicitly accepts preview API churn.
+- Use this default story order unless a component suggests a clearer domain sequence: default/highest-emphasis story,
+  semantic intent variants, important states, structural usage patterns, then comparison stories for owned scales,
+  densities, alignments, or grouped variants. Do not stretch a small component to fill the whole sequence.
