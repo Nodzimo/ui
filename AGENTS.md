@@ -379,6 +379,31 @@ same mapping, reuse that key union instead of repeating the expression, for exam
   classNames/classes/CLASSES, and should not include `styles`; JSX `className` attributes are already covered by the
   standard Tailwind class-attribute support. The project regex convention is adapted from the practical examples in
   <https://github.com/codewithhridoy/tailwind-autosuggestion-for-custom-classes>.
+- WebStorm stores Tailwind language-server settings as escaped JSON inside `.idea/tailwindcss.xml`, which is not
+  readable enough to reconstruct the regex later. Keep this human-readable minimal JSON block as the source reference
+  for the shared class regex convention:
+
+```json
+{
+  "experimental": {
+    "classRegex": [
+      [
+        "(?:export\\s+)?(?:const|let|var)\\s+[\\w$]*(?:[Cc]lass(?:Name)?s?|[Cc]lasses|CLASSES|CLASS_NAME|CLASS_NAMES|CLASSNAME)[\\w$]*\\s*(?::[^=]+)?=\\s*([\\s\\S]*?)(?=\\n\\s*(?:export\\s+)?(?:const|let|var|function|type|interface|enum)\\b|$)",
+        "(?:^|[:,\\[?]\\s*)'([^']*)'(?!\\s*:)"
+      ],
+      [
+        "(?:export\\s+)?(?:const|let|var)\\s+[\\w$]*(?:[Cc]lass(?:Name)?s?|[Cc]lasses|CLASSES|CLASS_NAME|CLASS_NAMES|CLASSNAME)[\\w$]*\\s*(?::[^=]+)?=\\s*([\\s\\S]*?)(?=\\n\\s*(?:export\\s+)?(?:const|let|var|function|type|interface|enum)\\b|$)",
+        "(?:^|[:,\\[?]\\s*)\"([^\"]*)\"(?!\\s*:)"
+      ],
+      [
+        "(?:export\\s+)?(?:const|let|var)\\s+[\\w$]*(?:[Cc]lass(?:Name)?s?|[Cc]lasses|CLASSES|CLASS_NAME|CLASS_NAMES|CLASSNAME)[\\w$]*\\s*(?::[^=]+)?=\\s*([\\s\\S]*?)(?=\\n\\s*(?:export\\s+)?(?:const|let|var|function|type|interface|enum)\\b|$)",
+        "(?:^|[:,\\[?]\\s*)`([^`]*)`(?!\\s*:)"
+      ]
+    ]
+  }
+}
+```
+
 - Keep `tailwindcss` and `@tailwindcss/cli` in `devDependencies`; consumers receive built CSS from `dist/styles.css`.
 - Do not rely on consumer Tailwind scanning to style library components. A Next consumer may appear to pick up some
   utility classes from the package, but that is incidental and not the package contract.
