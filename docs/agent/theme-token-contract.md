@@ -1,5 +1,7 @@
 ## Theme Token Contract
 
+### Namespace
+
 - Use the shadcn theme architecture as the baseline model, adapted for a publishable library.
 - All library-owned semantic tokens must use the `nui` namespace. Raw variables use `--nui-*`, Tailwind color mappings
   use `--color-nui-*`, radius mappings use `--radius-nui-*`, and spacing mappings use `--spacing-nui-*`.
@@ -13,6 +15,11 @@
   such as `rounded-lg`, `rounded-md`, or `var(--radius-md)`, map them to the matching NUI radius contract such as
   `rounded-nui-lg`, `rounded-nui-md`, or `var(--radius-nui-md)`. This preserves shadcn's tokenized radius model under
   the NUI namespace instead of falling back to Tailwind's default radius scale.
+
+For CSS entrypoint and source-detection rules, see [Tailwind And Styles](tailwind-and-styles.md).
+
+### Theme Variants And Foundation Utilities
+
 - Keep `@custom-variant dark (&:is(.dark *));` because components may use Tailwind `dark:` variants.
 - Dark mode overrides should redefine the same `--nui-*` raw variables under `.dark`; do not create separate
   `*-dark` token names.
@@ -23,6 +30,9 @@
 - Consumers that want the full NUI foundation can add all three classes at the app root. Consumers can also apply only
   the specific foundation utilities they want, or scope them to a subtree.
 - Use `src/library.css` as the source of truth for available theme tokens before adapting a copied component.
+
+### Semantic Roles
+
 - Theme token meanings follow the shadcn semantic token convention:
     - `background` / `foreground`: default app background and text, page shell, sections, and default text.
     - `card` / `card-foreground`: elevated surfaces such as cards, dashboard panels, and settings panels.
@@ -45,10 +55,16 @@
     - `radius`: the base corner-radius scale for cards, inputs, buttons, popovers, and derived `radius-nui-*` tokens.
 - The radius scale follows shadcn's model: `radius-nui-lg` is the base value from `--nui-radius`, smaller radii scale
   down from it, larger radii scale up from it, and changing `--nui-radius` updates the whole radius scale.
+
+### RTL And Logical Motion
+
 - For RTL-sensitive components, convert inline-axis physical animation utilities to logical equivalents when the side or
   placement is logical. For example, a popup using `side='inline-start'` or `side='inline-end'` should use logical
   animation classes such as `slide-in-from-end-*` or `slide-in-from-start-*`, while explicit physical sides such as
   `left` and `right` may keep physical animation classes.
+
+### Spacing
+
 - The spacing scale is a public NUI rhythm layer, not Storybook-only display data. Define raw runtime variables
   `--nui-spacing-2xs` through `--nui-spacing-2xl` in `:root`, then map Tailwind utilities through
   `--spacing-nui-2xs` through `--spacing-nui-2xl` in `@theme inline`.
@@ -59,4 +75,3 @@
 - Use NUI spacing utilities for reusable design-system rhythm such as standard gaps between sections, headings, cards,
   and repeated UI groups. Do not replace incidental component tuning such as `px-2.5`, `gap-1.5`, `size-8`, or
   one-off layout nudges unless the spacing is intentionally part of the shared rhythm contract.
-
