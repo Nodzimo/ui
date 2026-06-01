@@ -163,6 +163,15 @@ const meta = {
 		},
 	},
 	component: Select,
+	decorators: [
+		(Story) => {
+			return (
+				<div className={'flex justify-center'}>
+					<Story />
+				</div>
+			)
+		},
+	],
 	parameters: { layout: 'padded' },
 	render: ({
 		contentAlign,
