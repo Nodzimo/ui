@@ -28,30 +28,14 @@
 
 ### Literal Tables And Storybook Values
 
-- Use `UPPER_SNAKE_CASE` for intentional module-scope immutable tables, mappings, defaults, and literal constants, such
-  as Storybook option arrays or global preview defaults. Keep framework convention objects such as `meta`, `config`, and
-  `preview`, plus computed local bindings and render-scope values, in `camelCase`.
-- Use `as const` for literal option arrays and mapping objects when the project derives a union type from their values
-  or keys. `readonly string[]` only makes the array immutable at the type level; it widens every element to `string` and
-  loses the useful union. Prefer:
-
-```ts
-const BUTTON_VARIANT_OPTIONS = ['default', 'outline', 'secondary'] as const
-type ButtonVariantOption = (typeof BUTTON_VARIANT_OPTIONS)[number]
-```
-
-Avoid duplicating the same union by hand unless the source is not a literal table. For runtime APIs such as
-`Object.keys`, which still return `string[]`, cast narrowly back to the key union after the literal object is
-declared, for example `Object.keys(BUTTON_STORY_ICONS) as ButtonStoryIconName[]`. When deriving a value union from the
-same mapping, reuse that key union instead of repeating the expression, for example
-`type ButtonStoryIcon = (typeof BUTTON_STORY_ICONS)[ButtonStoryIconName]`.
-
+- Keep literal-table typing, naming, and finite-value conventions aligned with
+  [Code Style Conventions](code-style-conventions.md).
 - Treat Storybook as a real consumer of the UI-kit contract. If a component has owned finite values such as variants,
-  sizes, placement sides, or alignments, prefer exposing runtime constants and derived types from the component layer so
+  sizes, placement sides, or alignments, expose runtime constants and derived types from the component layer so
   Storybook and package consumers share one source of truth. Storybook Controls cannot use erased TypeScript unions by
   themselves.
 
-For story-specific guidance, see [Storybook Story Writing](storybook-story-writing.md).
+For story-specific controls guidance, see [Storybook Story Writing](storybook-story-writing.md).
 
 ### Markdown Documentation
 

@@ -21,6 +21,13 @@ conventions.
 
 See [docs/agent/collaboration.md](docs/agent/collaboration.md).
 
+## Code Style Conventions
+
+Code-style review should preserve local readability conventions around JSX literals, rest names, literal tables,
+file extensions, imports, exports, and text/quote boundaries.
+
+See [docs/agent/code-style-conventions.md](docs/agent/code-style-conventions.md).
+
 ## Skills
 
 Use the project-local skills for dependency review, token adaptation, Tailwind class formatting, style review, Storybook
