@@ -19,7 +19,12 @@ const previewWrapperArgTypes: Preview['argTypes'] = {
 
 function PreviewWrapper(props: ComponentPropsWithoutRef<'div'>) {
 	return (
-		<div {...props} className={'nui-surface nui-boundaries nui-interactive'} />
+		<div
+			{...props}
+			className={
+				'nui-surface nui-boundaries nui-interactive flex justify-center'
+			}
+		/>
 	)
 }
 

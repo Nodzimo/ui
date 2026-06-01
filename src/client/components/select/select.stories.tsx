@@ -163,6 +163,7 @@ const meta = {
 		},
 	},
 	component: Select,
+	parameters: { layout: 'padded' },
 	render: ({
 		contentAlign,
 		contentAlignItemWithTrigger,
