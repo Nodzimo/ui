@@ -1,6 +1,15 @@
 ## Dependency Concepts
 
+### Public Entrypoints
+
 - `exports` defines the package public entrypoints and the files consumers are allowed to import.
+- Multiple entrypoints separate the RSC-safe API from the client API.
+- `'use client'` is a Next/React client boundary. It must be present on the built public client entry that consumers
+  import.
+- React Compiler scope controls which source files get compiler runtime output.
+
+### Externalization
+
 - `external` in Vite/Rolldown keeps dependencies such as React out of the bundled library output. It does not remove the
   dependency from runtime; it leaves an import in `dist` for the consumer's bundler/package manager to resolve.
 - `external` is a bundler contract. `dependencies` and `peerDependencies` are package-manager contracts.
@@ -14,11 +23,12 @@
   the package name plus `/`.
 - Vite/Rolldown calls the external callback for each discovered import id. This is why the helper takes an `importId`
   and returns whether that import should remain external.
+
+### Package Metadata
+
 - Runtime dependencies listed in `dependencies` are installed automatically when a consumer installs this package. If a
   compatible copy already exists in the consumer dependency tree, the package manager may dedupe it; if not, it may
   install a nested copy.
-- Runtime dependencies listed in `peerDependencies` are required from the consumer. React and React DOM must be peers so
-  the consumer app owns the React instance.
 - `peerDependencies` declare dependencies that must be provided by the consuming app. React and React DOM are peer
   dependencies for consumers and dev dependencies for local library development.
 - Keep React peer ranges intentionally scoped to React 19 with `19.x` until compatibility with later React majors is
@@ -40,8 +50,3 @@
 - CSS utility sources that are consumed only by the Tailwind build also belong in `devDependencies`. This includes
   `tw-animate-css`: it is imported while compiling `src/styles.css` and Storybook preview CSS, then emitted into the
   built stylesheet. Consumers receive `dist/styles.css`; they do not resolve `tw-animate-css` at runtime.
-- `'use client'` is a Next/React client boundary. It must be present on the built public client entry that consumers
-  import.
-- Multiple entrypoints separate the RSC-safe API from the client API.
-- React Compiler scope controls which source files get compiler runtime output.
-

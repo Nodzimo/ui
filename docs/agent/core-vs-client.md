@@ -1,5 +1,7 @@
 ## Core Vs Client
 
+### Boundary Meaning
+
 - `core` does not mean server-only. It means no client boundary is required and the root entry must stay safe for
   React Server Component import graphs.
 - Treat `@sefo/nodzimo-ui` as the RSC-safe entrypoint. It should be more restrictive than "works during SSR".
@@ -13,6 +15,9 @@
   keep the route SSG when no dynamic request-time APIs or uncached runtime data are used.
 - Static Site Generation (SSG) means the route can be computed at build time. SSG is not proof that a dependency is
   RSC-pure; it only proves the route did not require dynamic runtime rendering in that build.
+
+### Source Rules
+
 - `core` code must not depend on browser-only APIs, React state/effect hooks, event-driven behavior, React Compiler
   runtime, or third-party modules that execute RSC-incompatible React APIs at module top level.
 - `client` code may use state, effects, refs, browser APIs, interactive behavior, and React Compiler.
@@ -29,3 +34,8 @@
   auth, data, cookie, or Next-specific providers such as `next-intl` or `next-themes` belong in the consumer app unless
   the UI kit itself requires a framework-agnostic runtime provider for its own components.
 
+### Related Incidents
+
+- The Lucide Spinner incident explains why app-source examples are not enough to prove a root export remains RSC-safe
+  after this package prebuilds the entrypoint. See
+  [RSC Boundary Incident: Lucide Spinner](rsc-boundary-incident-lucide-spinner.md).

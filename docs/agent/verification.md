@@ -36,6 +36,11 @@
   component-library internals that call context/hooks.
 - `lucide-react` should not appear anywhere in built package output. If it appears there, a runtime source import leaked
   back into the package or package dependency/external decisions need to be revisited.
+- For client output, inspect `dist/client.js` for bundled third-party internals, CommonJS shims, or dynamic require
+  support after changing runtime dependencies, Vite externalization, or client component imports:
+  `rg -n "Calling .*require|typeof require|new Proxy|node_modules|use-sync-external-store|@base-ui/react" dist/client.js`.
+- A large unexpected `dist/client.js` size jump should be treated as a release-blocking signal until the artifact is
+  inspected.
 - For Next/Turbopack consumer checks, install the published `@sefo/nodzimo-ui` package in the Next app. Use tarball
   testing only when validating changes before publication.
 - If a client component fails in Next with compiler runtime errors, check whether `"use client";` is present in the

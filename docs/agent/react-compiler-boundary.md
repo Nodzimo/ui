@@ -11,3 +11,5 @@
 - If `react/compiler-runtime` appears in `dist/nodzimo-ui.js`, the root entry is no longer RSC-safe.
 - If `"use client";` disappears from `dist/client.js`, Next will not see the client boundary.
 
+For the broader source boundary rules, see [Core Vs Client](core-vs-client.md). For build-output checks, see
+[Verification](verification.md).

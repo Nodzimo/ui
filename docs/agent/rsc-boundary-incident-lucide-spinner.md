@@ -1,5 +1,8 @@
 ## RSC Boundary Incident: Lucide Spinner
 
+This incident is historical context for the current core/client boundary rules. The active rule is still in
+[Core Vs Client](core-vs-client.md): root exports must stay safe for React Server Component import graphs.
+
 - Incident summary: `Spinner` in `src/core` imported `Loader2Icon` from `lucide-react`. Before `lucide-react` was marked
   external in Vite/Rolldown, the library build inlined Lucide's implementation into `dist/nodzimo-ui.js`.
 - The inlined Lucide code included top-level React context setup, including `createContext`, plus icon helpers such as
@@ -18,4 +21,3 @@
   generated icons from `#core/icons`, not reintroduce `lucide-react` as a convenience dependency.
 - Do not add `lucide-react` back to `dependencies`, `devDependencies`, or Vite externals unless the project deliberately
   accepts a runtime or tooling dependency again and documents why generated project-owned icons are not enough.
-

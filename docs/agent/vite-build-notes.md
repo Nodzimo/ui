@@ -7,11 +7,15 @@
 - The package intentionally targets the latest JavaScript surface: TypeScript app and Node configs use `target`, `lib`,
   and `module` set to `ESNext`, and Vite uses `build.target: 'esnext'` to keep library output modern with minimal
   transpilation. Keep this modern-only contract unless a real consumer needs a lower target.
-- Keep these externals:
+- Keep React package ids external because React is a peer dependency and the client output may import React Compiler
+  runtime:
     - `react`
     - `react-dom`
     - `react/jsx-runtime`
     - `react/compiler-runtime`
+- The rest of the runtime externalization contract is derived from `package.json` `dependencies + peerDependencies`.
+  Do not replace that derived matcher with a handwritten complete package list. See
+  [Dependency Concepts](dependency-concepts.md).
 - `react/compiler-runtime` is required because client output compiled by React Compiler imports it.
 - Adding a package to externals is not enough by itself. If built runtime code still imports that package, keep it in
   `dependencies` or `peerDependencies` according to the package contract.
@@ -59,4 +63,3 @@ dts({
 - Keep non-entry build chunks visually private by setting Vite/Rolldown output names to
   `chunkFileNames: 'internal/[name]-[hash].js'`. Use `.js` explicitly; `[format]` produces format labels such as `es`
   instead of the expected JavaScript extension.
-

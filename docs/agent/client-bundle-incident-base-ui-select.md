@@ -1,5 +1,10 @@
 ## Client Bundle Incident: Base UI Select
 
+This incident is historical context for the current dependency externalization rule. The active rule is in
+[Dependency Concepts](dependency-concepts.md): runtime implementation dependencies stay installable through package
+metadata and externalized from the built library artifacts unless the project documents a deliberate bundled-runtime
+exception.
+
 - Incident summary: `Select` in `src/client` imported Base UI subpaths such as `@base-ui/react/select`. Before runtime
   dependencies were automatically externalized from `dependencies + peerDependencies`, the library build copied Base UI,
   Floating UI, store helpers, and `use-sync-external-store` internals into `dist/client.js`.
@@ -17,4 +22,3 @@
 - Treat a sudden `dist/client.js` size jump as a release-blocking signal until the built artifact is inspected.
 - Client artifact checks must look for bundled third-party internals and CJS shims, not only for missing
   `"use client";`.
-
