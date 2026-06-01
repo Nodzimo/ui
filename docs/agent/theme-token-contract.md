@@ -58,6 +58,11 @@ For CSS entrypoint and source-detection rules, see [Tailwind And Styles](tailwin
 
 ### RTL And Logical Motion
 
+- For directional inline-axis layout, use logical Tailwind utilities such as `ps-*`, `pe-*`, `ms-*`, `me-*`,
+  `start-*`, `end-*`, `inset-s-*`, `inset-e-*`, `border-s-*`, `border-e-*`, `rounded-s-*`, and `rounded-e-*` instead
+  of physical utilities such as `pl-*`, `pr-*`, `left-*`, `right-*`, `border-l-*`, `border-r-*`, `rounded-l-*`, and
+  `rounded-r-*` unless the design intentionally targets a physical side.
+- Symmetric utilities such as `px-*`, `mx-*`, `inset-x-*`, `border-x-*`, and `rounded-*` are already direction-neutral.
 - For RTL-sensitive components, convert inline-axis physical animation utilities to logical equivalents when the side or
   placement is logical. For example, a popup using `side='inline-start'` or `side='inline-end'` should use logical
   animation classes such as `slide-in-from-end-*` or `slide-in-from-start-*`, while explicit physical sides such as
