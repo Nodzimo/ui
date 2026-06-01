@@ -5,7 +5,7 @@ description: Review available or already-installed package dependency updates. U
 
 # Dependency Update Reviewer
 
-## Overview
+## Purpose
 
 Use this skill to turn dependency update noise into a short engineering decision report. Research what changed upstream,
 map the changes to the UI kit's actual usage and published package contract, and say whether the project should update,
@@ -13,6 +13,23 @@ can commit an existing update, or needs action.
 
 Do not edit project files unless the user explicitly asks for implementation. A review request should end with a report,
 not a patch.
+
+## Required Reading
+
+Read only the files relevant to the update surface:
+
+- Dependency/package metadata concepts, runtime vs peer vs dev dependencies, and source-map maintenance:
+  `docs/agent/dependency-concepts.md`
+- Vite, externalization, declaration generation, React Compiler, and build-tool notes:
+  `docs/agent/vite-build-notes.md`
+- Storybook package, Vite builder, addon, and preview CSS boundaries:
+  `docs/agent/storybook-configuration.md`
+- Storybook/Vitest/browser testing notes: `docs/agent/storybook-testing.md`
+- Biome update and migration policy: `docs/agent/biome-policy.md`
+- Verification command selection and artifact checks: `docs/agent/verification.md`
+
+Use `references/dependency-sources.md` as the compact map of official upstream sources and local package-specific
+review focus.
 
 ## Mode Selection
 
@@ -151,42 +168,11 @@ recommendation about whether to update now or whether an existing dependency dif
 - Do not remove package metadata, generated declarations, lockfile entries, IDE settings, Storybook files, package
   archives, or dependency graph artifacts during review.
 
-## Project-Specific Notes
+## Project Routing
 
-This repository is a Bun-powered React UI library built with Vite library mode, Rolldown, React Compiler, TypeScript,
-Tailwind CSS, Storybook, Vitest, and Dependency Cruiser. Read root `AGENTS.md` before interpreting build, package, peer
-dependency, styling, or publishing changes.
+Read root `AGENTS.md` before interpreting build, package, peer dependency, styling, Storybook, or publishing changes.
+Keep reusable review workflow in this skill, durable project rules in `docs/agent`, and the current package source map
+in `references/dependency-sources.md`.
 
-When `@biomejs/biome` is updated, treat `biome.json` as part of the dependency update surface, even for patch updates.
-Check that the `$schema` version matches the installed Biome version when the schema URL is versioned. Prefer the local
-project script `bun run biome:migrate` when present; otherwise use `biome migrate --write`. Do not recommend `bunx` for
-this project when `@biomejs/biome` is already installed locally.
-
-Post-update triage should pay special attention to Vite/Vitest/Storybook package alignment:
-
-- If Vite config typings reject a `test` key after an update, check whether root `vite` and Vitest's resolved/nested
-  `vite` copy differ. In a shared config, `defineConfig` from `vitest/config` may be needed for the test config type
-  augmentation, but this project should keep publish build config and Storybook/Vitest config separated.
-- For the publishable `vite.config.ts`, `defineConfig` should come from `vite` and the file should not contain the
-  Vitest `test` section.
-- Storybook uses its own `.storybook/vite.config.ts` through `@storybook/react-vite` framework builder options. Keep it
-  separate from the publishable library `vite.config.ts`; Storybook builds should not inherit `unplugin-dts`,
-  `build.lib`, package externals, or declaration bundling.
-- For Storybook build warnings that need final Vite build overrides, prefer `.storybook/main.ts` `viteFinal`.
-  Storybook's Vite builder may ignore most `build` options loaded from `viteConfigPath` except selected fields such as
-  `build.target`.
-- For Storybook browser tests, verify the separate `vitest.config.ts`, Playwright browser installation, and the Vitest
-  browser API host. On this Windows setup, `api.host: '127.0.0.1'` avoids `localhost` connection-refused failures in
-  Playwright-driven Storybook tests.
-- If Storybook test UI logs `vitest.init()` deprecation warnings, first check whether the warning originates inside
-  `@storybook/addon-vitest` before recommending local config rewrites.
-- For `unplugin-dts` updates, verify that `vite.config.ts` keeps `bundleTypes: true`, `tsconfigPath:
-  'tsconfig.app.json'`, story exclusions, and plugin-local `compilerOptions.rootDir: 'src'`. `unplugin-dts@1.0.2`
-  exposed the declaration-root assumption: without the explicit root, declarations may emit under `dist/src`, and API
-  Extractor can fail because `dist/client.d.ts` or `dist/nodzimo-ui.d.ts` is missing. Prefer the explicit `rootDir`
-  config over `beforeWriteFile` path rewrites.
-- After build-tool or Storybook updates, include package artifact inspection in the recommendation when declarations,
-  CSS output, or private chunks might have changed: `bun run build:all` followed by `bun pm pack --dry-run`.
-
-Keep the skill portable: put reusable workflow rules here, and keep this repo's current dependency source map in
-`references/dependency-sources.md`.
+When a dependency change touches build output, Storybook, Biome, declarations, CSS artifacts, package metadata, or test
+configuration, route the review through the relevant `docs/agent` files above instead of relying only on release notes.

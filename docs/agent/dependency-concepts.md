@@ -50,3 +50,10 @@
 - CSS utility sources that are consumed only by the Tailwind build also belong in `devDependencies`. This includes
   `tw-animate-css`: it is imported while compiling `src/styles.css` and Storybook preview CSS, then emitted into the
   built stylesheet. Consumers receive `dist/styles.css`; they do not resolve `tw-animate-css` at runtime.
+
+### Dependency Review Sources
+
+- Keep `.codex/skills/dependency-update-reviewer/references/dependency-sources.md` aligned with direct dependencies,
+  peer dependencies, and dev dependencies. When adding a new direct package, add its official repository/docs/changelog
+  source and the local review focus.
+- Do not pin installed versions in the dependency source map. Version state belongs to `package.json` and the lockfile.
