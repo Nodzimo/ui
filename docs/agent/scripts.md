@@ -5,10 +5,12 @@
 - `bun run project:audit` is the main audit button. It runs TypeScript checks, Biome checks, dependency graph checks,
   and dependency update visibility checks.
 - `bun run project:verify` is the main full verification button. It installs dependencies, runs `project:audit`, builds
-  icons, builds JS/types, builds CSS, and packs `nodzimo-ui.tgz`.
+  icons, builds JS/types, builds CSS, packs `nodzimo-ui.tgz`, and builds the public static Storybook.
 
 ### Build Scripts
 
+- `bun run dev` starts the regular Vite dev server.
+- `bun run preview` starts Vite preview for the built Vite app output.
 - `bun run build:icons` regenerates icon components from `assets/icons` through SVGR and applies the project's Biome
   fix flow to the generated output.
 - `bun run build` runs TypeScript project checks and Vite library build.
@@ -35,11 +37,15 @@
   Keep `-c-1` because `http-server` does not support a long `--cache -1` flag in the tested version.
 - `bun run storybook:preview` runs the public static Storybook build and then serves `storybook-static`. Use this when a
   bug appears only after deployment or production build; the dev server is not enough for those incidents.
+- `bun run storybook:test` runs the Storybook Vitest browser test project.
+- `bun run storybook:upgrade` runs Storybook's upgrade command through `bunx`.
 
 ### Package Scripts
 
 - `bun run lib:pack` only packs the current build output as `nodzimo-ui.tgz`; it intentionally does not build. Use it
   after `build:all` or through `project:verify`.
+- `bun run lib:link` and `bun run lib:unlink` run Bun's local package link helpers. Prefer published package or tarball
+  testing for Next/Turbopack consumers; see [Local Consumer Testing](local-consumer-testing.md).
 
 ### Check Scripts
 
@@ -50,6 +56,7 @@
 - `bun run check:format` runs only Biome formatting.
 - `bun run check:fix` applies safe Biome fixes, formatting, and import organization.
 - `bun run check:fix-unsafe` applies unsafe Biome fixes intentionally.
+- `bun run biome:migrate` runs Biome's local migration command after a Biome dependency update.
 
 ### Cleanup Scripts
 
@@ -62,10 +69,17 @@
 
 ### Dependency And Publishing Scripts
 
+- `bun run deps:install` installs dependencies.
 - `bun run deps:outdated` checks dependency updates.
+- `bun run deps:update` starts Bun's interactive dependency update flow.
 - `bun run publish:npm` publishes the package to npm using the package's `publishConfig`.
 - `bun run publish:who` checks the active npm account.
 - `bun run publish:login` starts npm login.
 - `bun run publish:bump` bumps the package patch version with npm.
 - `bun run publish:fund` checks package funding metadata.
 - `bun run publish:fix` asks npm to normalize package metadata.
+
+### Git Helper Scripts
+
+- `bun run git:status`, `bun run git:pull`, `bun run git:stash`, `bun run git:stash-pop`, `bun run git:reset`, and
+  `bun run git:normalize` are lightweight local git helpers.

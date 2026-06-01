@@ -4,7 +4,7 @@
 
 - Prefer `bun run project:audit` for the regular full check pass.
 - Prefer `bun run project:verify` before publishing, tarball consumer testing, or any change that should prove the full
-  package artifact still builds and packs.
+  package artifact still builds, packs, and produces the public static Storybook.
 - Use `bun run build:all` after changing Vite config, package exports, type generation, source entrypoints, React
   Compiler scope, Tailwind styles, generated icons, or client/core boundaries.
 - Use `bun run storybook:build` after changing `.storybook/main.ts`, `.storybook/vite.config.ts`, Storybook addons,
