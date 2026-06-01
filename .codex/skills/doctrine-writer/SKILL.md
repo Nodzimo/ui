@@ -12,14 +12,17 @@ Maintain the Nodzimo UI doctrine as a product artifact, not a private note and n
 The doctrine should read like a practical design-system guide for people who need to make decisions: clear enough for a
 beginner, useful enough for a professional, and specific enough to prevent weak architecture or visual guesswork.
 
-## First Read
+## Required Reading
 
-Before writing or editing doctrine, read:
+Before writing or editing doctrine, read only the relevant sources:
 
-1. `docs/design-system-doctrine/README.md`
-2. The chapters directly related to the request
-3. Adjacent chapters when the requested change affects ordering, terminology, tokens, components, hierarchy, theme
-   philosophy, references, or Storybook presentation
+- Agent routing and source-of-truth rules: `docs/agent/design-system-doctrine.md`
+- Doctrine source overview: `docs/design-system-doctrine/README.md`
+- The product doctrine chapters directly related to the request.
+- Adjacent doctrine chapters when the requested change affects ordering, terminology, tokens, components, hierarchy,
+  theme philosophy, references, or Storybook presentation.
+- Storybook routing docs when changing MDX wrappers, overview links, sidebar order, or Docs presentation:
+  `docs/agent/storybook-configuration.md` and `docs/agent/storybook-theming-and-docs.md`.
 
 Use the current doctrine as the strongest style reference. Do not copy its content into this skill.
 
@@ -232,6 +235,9 @@ When renaming or reordering chapters, check all navigation surfaces:
 - Storybook doctrine overview links
 - Storybook MDX wrapper title
 - Storybook `storySort.order`
+
+Do not move doctrine source material into `docs/agent`. Agent docs may describe workflow and routing, but
+product-facing doctrine belongs under `docs/design-system-doctrine`.
 
 ## Review Checklist
 
