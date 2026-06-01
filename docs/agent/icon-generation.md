@@ -1,5 +1,7 @@
 ## Icon Generation
 
+### Generator Contract
+
 - Generate project-owned icon components with SVGR CLI. SVGR is a dev-only generator here, not a runtime dependency and
   not a Vite plugin.
 - Keep `svgr.config.cjs` compact. Do not add explicit SVGR defaults; keep only options that change this project's
@@ -7,6 +9,9 @@
   `aria-hidden` SVG props.
 - `bun run build:icons` reads raw SVG files from `assets/icons`, writes generated TSX under
   `src/core/icons/generated`, and then runs the project's Biome fix flow so generated output follows local formatting.
+
+### SVG Source Rules
+
 - Third-party icon sets such as Lucide should be consumed as raw SVG source only, then generated into project-owned
   components. Remove source `class` attributes such as `lucide` before generation; they are HTML/CSS hooks for raw SVG
   usage and become noisy generated `className` values.
@@ -20,6 +25,9 @@
 - For custom symbols that need independent color control per shape, keep a hand-authored component with separate SVG
   paths and explicit props. Do not rely on SVGR/SVGO to preserve same-colored sibling paths; optimization may merge
   them.
+
+### Runtime And Usage Rules
+
 - Generated icon components belong in `src/core` and are RSC-safe only when they remain plain SVG components: no hooks,
   no `'use client'`, no `memo`, no `forwardRef`, and no runtime icon package imports.
 - Generated icon components are raw assets, not semantic usage decisions. Do not edit generated output to add
@@ -27,4 +35,3 @@
   inline-start or inline-end movement.
 - Public icon names should use the `SomethingIcon` suffix, such as `HeartIcon` or `GithubIcon`. Keep source grouping in
   folders, not in public component names.
-

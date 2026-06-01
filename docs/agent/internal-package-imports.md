@@ -1,5 +1,7 @@
 ## Internal Package Imports
 
+### Import Map
+
 - Use `package.json#imports` for internal source imports, not Vite-only `@/*` aliases.
 - Keep the internal import map aligned with the barrel architecture:
     - `#lib` -> `src/lib/index.ts`
@@ -8,6 +10,9 @@
     - `#core/*` -> `src/core/*/index.ts`
     - `#client` -> `src/client/index.ts`
     - `#client/*` -> `src/client/*/index.ts`
+
+### Preferred Paths
+
 - Use `#lib` for shared utilities such as the class-name merge helper.
 - Use `#client` and `#core` when a story or internal integration should validate the public internal barrel.
 - Use specific imports such as `#client/components/button` for focused component work.
@@ -21,4 +26,3 @@
 - Do not import from the public package name (`@sefo/nodzimo-ui`) inside this package's source. Public package imports
   are
   for consumers.
-
