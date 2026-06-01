@@ -76,8 +76,10 @@ function renderIconGallery(
 			<IconItem key={name} name={label}>
 				<Icon
 					className={mcn(
-						filled && 'fill-nui-primary text-nui-primary hover:fill-none',
-						spinning && 'hover:nui-animate-paused animate-spin',
+						filled &&
+							'fill-nui-primary text-nui-primary hover:fill-none active:fill-none',
+						spinning &&
+							'hover:nui-animate-paused active:nui-animate-paused animate-spin',
 					)}
 				/>
 			</IconItem>
