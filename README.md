@@ -1,3 +1,3 @@
-# Nodzimo UI
+# Sefo Nodzimo UI
 
-[UI.Nodzimo.com](https://UI.Nodzimo.com)
+[ui.Nodzimo.com](https://ui.Nodzimo.com)
