@@ -1,5 +1,7 @@
 ## Collaboration
 
+### Communication
+
 - Keep explanations concise, practical, and human-readable.
 - When discussing architecture or config, explain what each setting is responsible for.
 - Do not invent compatibility requirements. If a setting is a fallback or legacy convenience, say that clearly.
@@ -10,10 +12,10 @@
 - For review and design feedback, be direct and rigorous: lead with concrete issues, explain the technical or UX reason
   behind each recommendation, challenge weak naming or architecture, and treat disagreement as a way to clarify the
   better solution rather than as a reason to soften the critique.
+
+### Project Code Style
+
 - Preserve project style: tabs, single quotes, no semicolons, named exports.
-- When writing Markdown documentation, use a language-tagged fenced code block only for snippets that are syntactically
-  valid as that language on their own. Use `text` for partial JSX attributes, JSON fragments, placeholder syntax, or
-  other illustrative snippets that IDE inspections would parse as broken code.
 - Keep implementation code direct and readable. Prefer a few named local constants over dense chains when a chain mixes
   data preparation, sorting, and rendering. Introduce small explicit local types when inferred types become noisy or
   leak implementation detail into editor hovers; do not add helper functions, wrapper types, or advanced APIs unless
@@ -23,6 +25,9 @@
 - Name things according to their lifespan and scope. Broad, exported, cross-file, or public-facing entities need precise
   descriptive names. Short-lived local helpers may stay simple and generic when their surrounding context makes their
   purpose obvious.
+
+### Literal Tables And Storybook Values
+
 - Use `UPPER_SNAKE_CASE` for intentional module-scope immutable tables, mappings, defaults, and literal constants, such
   as Storybook option arrays or global preview defaults. Keep framework convention objects such as `meta`, `config`, and
   `preview`, plus computed local bindings and render-scope values, in `camelCase`.
@@ -46,3 +51,10 @@ same mapping, reuse that key union instead of repeating the expression, for exam
   Storybook and package consumers share one source of truth. Storybook Controls cannot use erased TypeScript unions by
   themselves.
 
+For story-specific guidance, see [Storybook Story Writing](storybook-story-writing.md).
+
+### Markdown Documentation
+
+- When writing Markdown documentation, use a language-tagged fenced code block only for snippets that are syntactically
+  valid as that language on their own. Use `text` for partial JSX attributes, JSON fragments, placeholder syntax, or
+  other illustrative snippets that IDE inspections would parse as broken code.
