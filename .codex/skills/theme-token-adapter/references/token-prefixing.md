@@ -6,6 +6,11 @@ Use `src/library.css` as the token and foundation contract. `src/styles.css` is 
 imports `src/library.css` and applies the package source policy. Do not invent token names if no matching `nui-*` token
 exists; either map to an existing token or flag the missing token.
 
+Shared CSS-first utility sources belong in `src/library.css` when both the package stylesheet and Storybook need them.
+The current animation source is `tw-animate-css`, imported as `@import "tw-animate-css";` before local NUI declarations.
+It stays in `devDependencies` because Tailwind compiles its utilities into `dist/styles.css`; consumers do not resolve
+that package at runtime.
+
 Use two layers for package-facing design tokens:
 
 ```css

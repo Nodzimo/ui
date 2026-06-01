@@ -329,6 +329,9 @@ same mapping, reuse that key union instead of repeating the expression, for exam
 - Do not move a runtime import from `dependencies` to `devDependencies` merely because it is externalized. Externalized
   runtime imports still need to be installable by consumers.
 - Packages used only in Storybook stories, examples, tests, or docs belong in `devDependencies`.
+- CSS utility sources that are consumed only by the Tailwind build also belong in `devDependencies`. This includes
+  `tw-animate-css`: it is imported while compiling `src/styles.css` and Storybook preview CSS, then emitted into the
+  built stylesheet. Consumers receive `dist/styles.css`; they do not resolve `tw-animate-css` at runtime.
 - `'use client'` is a Next/React client boundary. It must be present on the built public client entry that consumers
   import.
 - Multiple entrypoints separate the RSC-safe API from the client API.
@@ -404,7 +407,8 @@ same mapping, reuse that key union instead of repeating the expression, for exam
 }
 ```
 
-- Keep `tailwindcss` and `@tailwindcss/cli` in `devDependencies`; consumers receive built CSS from `dist/styles.css`.
+- Keep `tailwindcss`, `@tailwindcss/cli`, and `tw-animate-css` in `devDependencies`; consumers receive built CSS from
+  `dist/styles.css`.
 - Do not rely on consumer Tailwind scanning to style library components. A Next consumer may appear to pick up some
   utility classes from the package, but that is incidental and not the package contract.
 - Separate runtime CSS variables from Tailwind theme mappings. A `:root` variable such as `--nui-background` or
@@ -424,12 +428,17 @@ same mapping, reuse that key union instead of repeating the expression, for exam
 - `build:css` should use `--minify` for the publishable CSS artifact. Use the CSS watch script for iterative rebuilds.
 - Keep the stylesheet architecture split by role:
     - `src/library.css` is the shared library style contract: NUI theme tokens, dark variant, raw CSS variables, and
-      foundation classes. It does not import Tailwind by itself.
+      foundation classes. It does not import Tailwind by itself, but it may import shared CSS-first utility sources
+      that are part of the library style contract.
     - `src/styles.css` is the publishable package stylesheet entrypoint. It imports Tailwind with `source(none)`,
       imports `./library.css`, scans `src`, and excludes colocated stories.
     - `.storybook/preview.css` is the Storybook stylesheet entrypoint. It imports Tailwind with `source(none)`, imports
       `../src/library.css`, and explicitly scans `src` plus `.storybook` so story and preview utilities can be
       generated.
+- Keep `@import "tw-animate-css";` in `src/library.css`, before local theme and utility declarations. This makes the
+  shadcn-style animation utilities such as `animate-in`, `animate-out`, `fade-in-*`, `zoom-in-*`, and `slide-in-*`
+  available to both CSS entrypoints: the publishable `dist/styles.css` and Storybook's preview stylesheet. Do not
+  duplicate this import in `src/styles.css` and `.storybook/preview.css`.
 - Multiple Tailwind CSS imports here are compiler entrypoints for different artifacts, not duplicate runtime Tailwind
   instances in one consumer bundle. The package build emits `dist/styles.css`; Storybook emits its own iframe CSS under
   `storybook-static/assets`.

@@ -69,6 +69,9 @@ tokens.
 - Do not put Tailwind imports or Storybook source exclusions in `src/library.css`. Storybook uses its own stylesheet
   entrypoint, `.storybook/preview.css`, to import Tailwind with `source(none)`, import `../src/library.css`, and scan
   `../src` plus `.`.
+- Keep shared CSS-first animation utilities in `src/library.css`. `tw-animate-css` is a dev dependency and should be
+  imported there with `@import "tw-animate-css";` so shadcn-style animation classes are generated for both
+  `dist/styles.css` and Storybook preview CSS. Do not duplicate the import in the two entrypoints.
 - Use relative CSS imports for this local stylesheet pipeline: `src/styles.css` imports `./library.css`, and
   `.storybook/preview.css` imports `../src/library.css`.
 - Treat the two Tailwind imports as separate compiler entrypoints for separate artifacts, not duplicate runtime Tailwind
