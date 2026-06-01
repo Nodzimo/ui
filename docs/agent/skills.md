@@ -20,3 +20,5 @@
   `code-style-reviewer` skill at `.codex/skills/code-style-reviewer`.
 - For writing, reviewing, or updating component stories, use the project-local `storybook-story-writer` skill at
   `.codex/skills/storybook-story-writer`.
+- For writing, revising, reorganizing, or reviewing product-facing design-system doctrine and its Storybook MDX mirrors,
+  use the project-local `doctrine-writer` skill at `.codex/skills/doctrine-writer`.

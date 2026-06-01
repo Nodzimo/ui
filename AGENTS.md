@@ -31,7 +31,7 @@ See [docs/agent/code-style-conventions.md](docs/agent/code-style-conventions.md)
 ## Skills
 
 Use the project-local skills for dependency review, token adaptation, Tailwind class formatting, style review, Storybook
-stories, and RSC/package-boundary work.
+stories, design-system doctrine, and RSC/package-boundary work.
 
 See [docs/agent/skills.md](docs/agent/skills.md).
 
