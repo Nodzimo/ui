@@ -155,8 +155,8 @@ See [docs/agent/vite-build-notes.md](docs/agent/vite-build-notes.md).
 
 ## Storybook
 
-Storybook is a real UI-kit consumer and documentation surface, with focused stories, explicit controls, and
-project-owned showcase conventions.
+Storybook is a real UI-kit consumer and documentation surface. Its focused story-writing, theming, Docs, QA, testing,
+and workaround notes are routed through the Storybook agent index.
 
 See [docs/agent/storybook.md](docs/agent/storybook.md).
 
@@ -200,4 +200,3 @@ Use the smallest relevant verification command, escalating to full build/package
 boundaries or artifacts are affected.
 
 See [docs/agent/verification.md](docs/agent/verification.md).
-
