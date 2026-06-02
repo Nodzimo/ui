@@ -31,7 +31,7 @@ const config: StorybookConfig = {
 			...config,
 			build: {
 				...config.build,
-				chunkSizeWarningLimit: 2_000,
+				chunkSizeWarningLimit: 1_300,
 			},
 		}
 	},
