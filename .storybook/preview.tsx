@@ -40,11 +40,11 @@ const preview: Preview = {
 						[
 							'Overview',
 							'Core Position',
-							'Theme-Specific Values',
+							'Token Discipline',
 							'Token Role Semantics',
 							'Button Action Hierarchy',
-							'Token Discipline',
 							'Theme Character Guardrails',
+							'Theme-Specific Values',
 							'References And Evidence',
 							'Final Reminder',
 						],
