@@ -1,4 +1,4 @@
-# Nodzimo UI Agent Notes
+# Nodzimo UI Agent Operating Charter
 
 ## Project Goal
 

@@ -81,7 +81,7 @@
 			"url": "https://boosty.to/Nodzimo"
 		}
 	],
-	"homepage": "https://github.com/Nodzimo/nodzimo-ui",
+	"homepage": "https://ui.Nodzimo.com",
 	"imports": {
 		"#client": "./src/client/index.ts",
 		"#client/*": "./src/client/*/index.ts",
