@@ -1,6 +1,6 @@
 ## Final Reminder
 
-The final design should not feel like a child poured green paint over every interactive element.
+The final design should not feel like green paint was poured over every interactive element.
 
 It should feel like a disciplined interface where:
 

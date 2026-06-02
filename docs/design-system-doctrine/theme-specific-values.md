@@ -1,5 +1,9 @@
 ## Theme-Specific Values
 
+This chapter explains why the same semantic role may need different physical values in light and dark themes. The
+character target is defined in the Theme Character Guardrails chapter; this chapter is about the value strategy behind
+that target.
+
 One physical color cannot always perform the same semantic role equally well in light and dark conditions.
 
 This is most visible when an expressive element does not control its own foreground/background pair. A filled primary

@@ -186,5 +186,5 @@ ring = brand-derived focus signal
 muted / border / input = passive and structural
 ```
 
-That is a product-specific synthesis of established design-system principles, not a private fantasy.
+That is a product-specific synthesis of established design-system principles, not an isolated preference.
 

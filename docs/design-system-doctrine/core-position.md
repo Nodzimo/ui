@@ -9,8 +9,8 @@ default shadcn neutrality, or add a pile of one-off tokens because one state loo
 Nodzimo UI uses the shadcn semantic token architecture as its baseline, adapted into the `nui` namespace for a
 publishable library.
 
-The project does not follow shadcn because a particular person is sacred. It follows this architecture because it is a
-small, mature semantic system that encodes years of practical interface design:
+Nodzimo follows shadcn's architecture not because shadcn itself is sacred, but because it is a small, mature semantic
+system that encodes years of practical interface design:
 
 - `primary` is not "the color I like"; it is the high-emphasis action surface.
 - `secondary` is not "another random button style"; it is the lower-emphasis filled action.

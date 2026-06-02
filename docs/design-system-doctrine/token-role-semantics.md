@@ -360,7 +360,6 @@ It is where the brand speaks loudly.
 Use `primary` for:
 
 - the main button in a flow
-- the selected high-emphasis action
 - the most important call to action in a local decision context
 - a compact text or icon signal only when the brand emphasis is intentional
 
@@ -378,6 +377,7 @@ Confirm
 ```
 
 Do not use `primary` for every clickable thing. Clickability is not enough. `primary` means highest action emphasis.
+Do not use it for ordinary selected, active, or highlighted local state either. That is usually `accent`.
 
 The question:
 
@@ -1013,7 +1013,7 @@ Settings section:
 card
 
 Section title:
-card-foreground or foreground, depending on implementation
+card-foreground if the section owns a card surface; foreground if it reads as ordinary page text
 
 Description under section title:
 muted-foreground

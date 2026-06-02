@@ -1,5 +1,8 @@
 ## Theme Character Guardrails
 
+This chapter describes the character target for the themes. It is about judging the feel of the system, not about
+choosing individual token values. Exact current anchors live in the Theme-Specific Values chapter.
+
 ### Neutral Base Direction
 
 Nodzimo's neutral foundation intentionally mixes shadcn Studio base-color directions:
