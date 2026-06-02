@@ -211,3 +211,39 @@ Dark primary: near-black text on Night Emerald / Nimerald.
 
 This is one brand with two lighting conditions.
 
+### Current Theme Anchor Values
+
+These values are the current theme anchors. When changing them later, adapt the complete token set coherently rather
+than replacing only `primary`.
+
+```text
+:root {
+	--nui-background: oklch(0.99 0 0);
+	--nui-foreground: oklch(0.14 0.006 150);
+	--nui-muted: oklch(0.93 0.035 151);
+	--nui-muted-foreground: oklch(0.38 0.065 151);
+	--nui-border: oklch(0.82 0.045 151);
+	--nui-input: oklch(0.82 0.045 151);
+	--nui-secondary: oklch(0.87 0.08 151);
+	--nui-secondary-foreground: oklch(0.20 0.095 151);
+	--nui-primary: oklch(0.55 0.19 151);
+	--nui-primary-foreground: oklch(0.98 0.02 151);
+}
+
+.dark {
+	--nui-background: oklch(0.075 0.012 148);
+	--nui-foreground: oklch(0.96 0.018 148);
+	--nui-muted: oklch(0.19 0.05 145);
+	--nui-muted-foreground: oklch(0.78 0.10 145);
+	--nui-border: oklch(0.38 0.075 145);
+	--nui-input: oklch(0.30 0.075 145);
+	--nui-secondary: oklch(0.25 0.11 145);
+	--nui-secondary-foreground: oklch(0.86 0.19 145);
+	--nui-primary: oklch(0.82 0.26 145);
+	--nui-primary-foreground: oklch(0.08 0.02 145);
+}
+```
+
+The real theme also includes `card`, `popover`, `accent`, `ring`, `chart-*`, and `sidebar-*`. These must be adapted with
+the same doctrine, not left as unrelated defaults.
+
