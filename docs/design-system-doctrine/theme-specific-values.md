@@ -1,4 +1,4 @@
-### Theme-Specific Values
+## Theme-Specific Values
 
 One physical color cannot always perform the same semantic role equally well in light and dark conditions.
 

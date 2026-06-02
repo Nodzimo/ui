@@ -1,3 +1,5 @@
+## Token Discipline
+
 ### Do Not Break Hierarchy For Flavor
 
 Nodzimo can have character without coloring every object.
@@ -22,7 +24,7 @@ Do not:
 - add private state tokens for every awkward component state
 - flatten Night Emerald back into timid dark emerald
 
-### Token Discipline
+### Semantic Roles Stay Small
 
 Nodzimo uses the existing shadcn-style roles:
 

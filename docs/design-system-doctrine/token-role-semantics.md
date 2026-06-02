@@ -1,4 +1,4 @@
-# Token Role Semantics
+## Token Role Semantics
 
 Tokens are not colors with fancy names.
 
@@ -45,7 +45,7 @@ What job is this piece of UI doing?
 
 Then use the token that owns that job.
 
-## Base Color Is Raw Material
+### Base Color Is Raw Material
 
 shadcn themes often start from a base color family such as `neutral`, `stone`, `zinc`, `gray`, `slate`, or another
 palette direction. Nodzimo also talks about base directions such as Olive for the light theme and Stone for the dark
@@ -115,7 +115,7 @@ roles stay still while the physical values move underneath them.
 
 That is the whole point.
 
-## Surface And Foreground Pairs
+### Surface And Foreground Pairs
 
 Many shadcn-style tokens come in pairs:
 
@@ -206,9 +206,9 @@ text-nui-primary
 This is why links may use `primary` as text. A link usually does not own a filled `primary` surface. It is a text signal
 on the current surface. `primary-foreground` would be the wrong mental model.
 
-## The World Tokens
+### The World Tokens
 
-### Background
+#### Background
 
 `background` is the world.
 
@@ -234,7 +234,7 @@ background = the room
 Cards, popovers, buttons, inputs, and menus are objects inside the room. They may share a similar physical color, but
 they do not have the same role.
 
-### Foreground
+#### Foreground
 
 `foreground` is the default voice.
 
@@ -268,7 +268,7 @@ primary = the branded signal voice
 If everything uses `foreground`, the interface can become loud in a different way: not colorful, but verbally flat.
 Descriptions, hints, metadata, and disabled-adjacent explanations should not compete with labels and values.
 
-## Surface Tokens
+### Surface Tokens
 
 Surfaces are objects placed inside the world.
 
@@ -277,7 +277,7 @@ They create layers.
 The common mistake is treating all pale or dark surfaces as `background`. That flattens the interface. The user loses
 the difference between the page, a card, a menu, and a floating panel.
 
-### Card
+#### Card
 
 `card` is a contained surface in the page.
 
@@ -311,7 +311,7 @@ Do not use `card` for:
 - popover menus
 - selected rows unless the row is intentionally card-like
 
-### Popover
+#### Popover
 
 `popover` is a floating surface.
 
@@ -345,13 +345,13 @@ I am above the page layout.
 
 A settings panel that is always on the page is probably `card`. A dropdown opened from a button is probably `popover`.
 
-## Action Tokens
+### Action Tokens
 
 Action tokens are for persistent action meaning.
 
 Persistent means the signal is visible before the user interacts with it.
 
-### Primary
+#### Primary
 
 `primary` is the main action surface.
 
@@ -387,7 +387,7 @@ Is this the action the interface is asking the user to take?
 
 If yes, `primary` may be right. If not, consider `secondary`, `outline`, `ghost`, `link`, or ordinary `accent` feedback.
 
-### Secondary
+#### Secondary
 
 `secondary` is a lower-emphasis filled action.
 
@@ -420,7 +420,7 @@ secondary = an important supporting commitment
 
 If the action does not deserve a filled surface, it is probably not `secondary`. It may be `outline` or `ghost`.
 
-### Destructive
+#### Destructive
 
 `destructive` is danger.
 
@@ -438,13 +438,13 @@ Do not make destructive actions brand-colored. Danger is not a brand moment.
 Destructive can appear as a filled action, text action, icon, border, or soft warning surface depending on component
 design. The important part is that the role remains danger, not primary action.
 
-## Interaction Tokens
+### Interaction Tokens
 
 Interaction tokens are not ordinary decoration.
 
 They explain what is happening now.
 
-### Accent
+#### Accent
 
 `accent` is the interaction feedback surface.
 
@@ -508,7 +508,7 @@ The highlighted option inside the open filter dropdown.
 Do not use `accent` as a generic pretty surface. If it is always present and carries action mass, ask whether it is
 actually `secondary`. If it is passive support, ask whether it is actually `muted`.
 
-### Ring
+#### Ring
 
 `ring` is the focus signal.
 
@@ -560,9 +560,9 @@ ring = ring/50
 Do not use `ring` as a decorative outline for ordinary surfaces. If the user is not being shown focus or active
 location, `ring` is probably the wrong token.
 
-## Support Tokens
+### Support Tokens
 
-### Muted
+#### Muted
 
 `muted` is passive support.
 
@@ -635,11 +635,11 @@ Do not use `muted-foreground` for disabled text by reflex either. Disabled treat
 aria-disabled behavior, and component-specific state rules. `muted-foreground` means low-emphasis content, not
 automatically unavailable content.
 
-## Structure Tokens
+### Structure Tokens
 
 Structure tokens define boundaries and controls. They should be readable, but they should not shout.
 
-### Border
+#### Border
 
 `border` is general structure.
 
@@ -682,7 +682,7 @@ border-nui-border
 Do not use `border` when the thing is specifically a form/control boundary and the system has a reason to distinguish
 controls from ordinary layout. That is what `input` is for.
 
-### Input
+#### Input
 
 `input` is control structure.
 
@@ -741,9 +741,9 @@ everything uses `input`, the page starts treating all structure as control chrom
 
 That is why both tokens exist.
 
-## Specialized Domains
+### Specialized Domains
 
-### Chart Tokens
+#### Chart Tokens
 
 `chart-*` tokens are for data visualization.
 
@@ -757,7 +757,7 @@ Use them for:
 Do not use chart tokens as a convenient extra palette for buttons, badges, or random decoration. Chart colors have a
 different job: they separate data, not interface hierarchy.
 
-### Sidebar Tokens
+#### Sidebar Tokens
 
 `sidebar-*` tokens are a scoped system for sidebar surfaces and sidebar interactions.
 
@@ -775,9 +775,9 @@ The reason sidebar tokens exist is that sidebars often behave like a small app s
 Do not use sidebar tokens outside sidebar-like navigation areas just because their values look useful. That leaks a
 domain-specific token into the general system.
 
-## Common Confusions
+### Common Confusions
 
-### Background Vs Card
+#### Background Vs Card
 
 Use `background` for the page world.
 
@@ -794,7 +794,7 @@ card
 If a whole page section uses `card`, the page can start looking like cards inside cards. If every panel uses
 `background`, the layout can become flat and hard to scan.
 
-### Card Vs Popover
+#### Card Vs Popover
 
 Use `card` for layout surfaces.
 
@@ -811,7 +811,7 @@ popover
 The difference is not "which one is prettier". The difference is whether the surface lives in the layout or appears
 above it.
 
-### Foreground Vs Muted-Foreground
+#### Foreground Vs Muted-Foreground
 
 Use `foreground` for normal content.
 
@@ -839,7 +839,7 @@ Should the user read this as primary information or supporting information?
 
 If primary information, use `foreground`. If supporting information, use `muted-foreground`.
 
-### Primary Vs Foreground
+#### Primary Vs Foreground
 
 Use `foreground` for ordinary text.
 
@@ -859,7 +859,7 @@ primary
 Do not make every important word `primary`. Importance in text is often hierarchy, typography, spacing, or position.
 `primary` is a brand/action signal, not a highlighter pen.
 
-### Primary-Foreground Vs Primary
+#### Primary-Foreground Vs Primary
 
 Use `primary` for the primary surface or primary-colored text signal.
 
@@ -879,7 +879,7 @@ primary
 Do not use `primary-foreground` for a link on the page. It is not "primary text". It is text that belongs on a primary
 surface.
 
-### Secondary Vs Accent
+#### Secondary Vs Accent
 
 Use `secondary` for a persistent filled action.
 
@@ -903,7 +903,7 @@ If it matters before interaction, consider `secondary`.
 
 If it appears because of hover, focus, selection, highlight, or local active state, consider `accent`.
 
-### Muted Vs Accent
+#### Muted Vs Accent
 
 Use `muted` for passive support.
 
@@ -927,7 +927,7 @@ accent answers back.
 If a hover state uses `muted`, users can confuse passive background with active feedback. If a passive panel uses
 `accent`, it can look selected or interactive when it is not.
 
-### Border Vs Input
+#### Border Vs Input
 
 Use `border` for general edges.
 
@@ -957,7 +957,7 @@ Layout boundary: `border`.
 
 Control boundary: `input`.
 
-### Input Vs Ring
+#### Input Vs Ring
 
 Use `input` for the control at rest.
 
@@ -981,7 +981,7 @@ ring says: this control is focused right now.
 Do not make `input` do the job of `ring`. A stronger input border can make controls clearer, but it does not replace a
 real focus signal.
 
-### Border Vs Ring
+#### Border Vs Ring
 
 Use `border` for ordinary object edges.
 
@@ -998,7 +998,7 @@ ring
 If a permanent border is as loud as a focus ring, the user loses the focus signal. Focus should be easy to find because
 it is temporary and important.
 
-## Scenario: Settings Form
+### Scenario: Settings Form
 
 A settings screen uses many token roles at once:
 
@@ -1052,7 +1052,7 @@ does not use `foreground` just because it is text. It uses `muted-foreground` be
 hovered outline button does not use `secondary` just because it is clickable. It uses `accent` because the surface is
 interaction feedback.
 
-## Scenario: Command Menu
+### Scenario: Command Menu
 
 A command menu is a floating interface layer:
 
@@ -1094,7 +1094,7 @@ noisy.
 
 The goal is not maximum contrast between every token. The goal is clear role separation.
 
-## Scenario: Data Table
+### Scenario: Data Table
 
 A data table needs dense hierarchy:
 
@@ -1143,7 +1143,7 @@ The row action is ghost until touched.
 The page-level create action is primary.
 ```
 
-## Scenario: Navigation Sidebar
+### Scenario: Navigation Sidebar
 
 A sidebar can use its scoped token family:
 
@@ -1180,7 +1180,7 @@ the app.
 Do not use sidebar tokens as extra colors for ordinary cards or buttons. They are scoped roles, not bonus palette
 slots.
 
-## Decision Questions
+### Decision Questions
 
 When choosing a token, ask these questions in order:
 
@@ -1216,7 +1216,7 @@ data series -> chart-*
 sidebar domain -> sidebar-*
 ```
 
-## Quick Reference
+### Quick Reference
 
 Use this as the final check, not as the whole lesson.
 
@@ -1288,4 +1288,3 @@ The shortest version:
 Do not ask "what color should this be?"
 Ask "what role is this playing?"
 ```
-

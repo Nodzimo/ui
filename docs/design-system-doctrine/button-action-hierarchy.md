@@ -1,4 +1,4 @@
-## Button Variant Semantics
+## Button Action Hierarchy
 
 Button variants are not random costumes. They encode action hierarchy.
 
@@ -27,7 +27,7 @@ If a button needs private color classes to look clickable, first suspect the the
 `secondary`, `accent`, `border`, `input`, `ring`, and related semantic tokens carry enough Nodzimo character that
 standard shadcn-like component classes become readable without breaking their roles.
 
-## Token Action Hierarchy
+### Token Action Hierarchy
 
 The hardest lesson in this design system is that "interactive" is not one color. Interaction has hierarchy.
 
@@ -226,7 +226,7 @@ accent    -> softer brand-derived interaction feedback
 ring      -> brand-derived focus signal
 ```
 
-## Action Mass Decision Framework
+### Action Mass Decision Framework
 
 The most reliable way to choose a button variant is not to ask "which one looks nice?" It is to ask:
 
@@ -638,7 +638,7 @@ Destructive is for dangerous or irreversible actions:
 
 It should not be green. It has its own semantic color because danger is not a brand moment.
 
-## The Button Hierarchy In One Line
+### The Button Hierarchy In One Line
 
 Use this as the quick mental model:
 

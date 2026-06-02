@@ -1,12 +1,10 @@
-# Sefo Nodzimo UI Design System Doctrine
+## Core Position
 
 This document records the current Nodzimo UI design direction. It is not a generic color note. It is the design brief,
 the decision log, and the guardrail for future component work.
 
 The point is simple: future work should not rediscover these decisions from scratch, flatten the palette back into
 default shadcn neutrality, or add a pile of one-off tokens because one state looked awkward in one component.
-
-### Core Position
 
 Nodzimo UI uses the shadcn semantic token architecture as its baseline, adapted into the `nui` namespace for a
 publishable library.
