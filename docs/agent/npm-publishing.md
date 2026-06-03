@@ -3,7 +3,7 @@
 ### Release Flow
 
 - Manual npm publishing is the current release flow.
-- GitHub Releases are automated separately from npm publishing. Use `bun run publish:bump` and `bun run git:release`
+- GitHub Releases are automated separately from npm publishing. Use `bun run release:bump` and `bun run release:push`
   to create and push the version tag that triggers the GitHub Release workflow, then publish to npm manually when the
   package artifact is ready.
 - Use the `sefo` npm account for the `@sefo/nodzimo-ui` package.

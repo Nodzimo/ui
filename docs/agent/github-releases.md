@@ -54,9 +54,9 @@ jobs:
 
 ### Release Commands
 
-- `bun run publish:bump` runs `npm version patch`. In a git repository, npm updates `package.json`, creates a version
+- `bun run release:bump` runs `npm version patch`. In a git repository, npm updates `package.json`, creates a version
   commit, and creates a version tag such as `v0.0.14`.
-- `bun run git:release` runs `git push --follow-tags`. It pushes the branch update and any missing annotated tags
+- `bun run release:push` runs `git push --follow-tags`. It pushes the branch update and any missing annotated tags
   reachable from the pushed commits.
 - Prefer `git push --follow-tags` over `git push --tags` for regular releases because `--tags` pushes every local tag,
   including old or experimental tags.
@@ -67,8 +67,8 @@ jobs:
 Regular manual flow:
 
 ```powershell
-bun run publish:bump
-bun run git:release
+bun run release:bump
+bun run release:push
 ```
 
 Publishing to npm remains separate:
