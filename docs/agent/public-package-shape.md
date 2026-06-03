@@ -5,6 +5,8 @@
 - The public npm package name is `@sefo/nodzimo-ui`.
 - The package is published publicly under the personal `@sefo` npm scope. Keep this as the package namespace unless the
   project intentionally moves to a different package name with a migration plan.
+- Do not assume GitHub Packages can mirror this package from npmjs automatically. Publishing to GitHub Packages would be
+  a separate registry flow and may require an explicit namespace decision distinct from the canonical npm package name.
 - The package is ESM-only.
 - Do not add CJS, UMD, or IIFE outputs unless a real consumer requires them.
 

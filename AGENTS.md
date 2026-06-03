@@ -194,6 +194,13 @@ Publishing is currently manual through the `sefo` npm account, with verification
 
 See [docs/agent/npm-publishing.md](docs/agent/npm-publishing.md).
 
+## GitHub Releases
+
+GitHub Releases are automated from pushed version tags through a minimal GitHub Actions workflow, while npm publishing
+remains a separate manual step.
+
+See [docs/agent/github-releases.md](docs/agent/github-releases.md).
+
 ## Scripts
 
 Project scripts define the regular audit, verification, build, Storybook, check, clean, dependency, and publishing

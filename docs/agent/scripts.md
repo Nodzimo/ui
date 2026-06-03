@@ -75,7 +75,7 @@
 - `bun run publish:npm` publishes the package to npm using the package's `publishConfig`.
 - `bun run publish:who` checks the active npm account.
 - `bun run publish:login` starts npm login.
-- `bun run publish:bump` bumps the package patch version with npm.
+- `bun run publish:bump` bumps the package patch version with npm, creating the npm version commit and version tag.
 - `bun run publish:fund` checks package funding metadata.
 - `bun run publish:fix` asks npm to normalize package metadata.
 
@@ -83,3 +83,6 @@
 
 - `bun run git:status`, `bun run git:pull`, `bun run git:stash`, `bun run git:stash-pop`, `bun run git:reset`, and
   `bun run git:normalize` are lightweight local git helpers.
+- `bun run git:release` pushes the current branch and missing annotated version tags with `git push --follow-tags`.
+  This triggers the GitHub Release workflow when a single matching version tag is pushed. See
+  [GitHub Releases](github-releases.md).
