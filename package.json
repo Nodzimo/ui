@@ -106,7 +106,7 @@
 		"RTL"
 	],
 	"license": "MIT",
-	"name": "@sefo/nodzimo-ui",
+	"name": "@nodzimo/nodzimo-ui",
 	"peerDependencies": {
 		"react": "19.x",
 		"react-dom": "19.x"
