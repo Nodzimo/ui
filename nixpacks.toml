@@ -25,7 +25,7 @@ cmds = [
     'echo "[Nixpacks] Bun version:"',
     '/app/.bun/bin/bun --version',
     'echo "[Nixpacks] Installing dependencies..."',
-    '/app/.bun/bin/bun install --frozen-lockfile'
+    '/app/.bun/bin/bun ci'
 ]
 
 [phases.build]
