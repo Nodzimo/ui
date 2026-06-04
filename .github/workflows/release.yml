@@ -1,15 +1,16 @@
-name: Publish Package
+name: Release
 
 on:
-  release:
-    types: [ created ]
+  push:
+    tags:
+      - v*.*.*
 
 jobs:
   publish-package:
     runs-on: ubuntu-latest
     permissions:
-      packages: write
       contents: read
+      packages: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -27,3 +28,14 @@ jobs:
         run: bun publish --registry https://npm.pkg.github.com
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  create-release:
+    needs: publish-package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Create release
+        run: gh release create ${{ github.ref_name }} --repo ${{ github.repository }} --generate-notes

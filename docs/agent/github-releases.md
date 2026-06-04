@@ -4,78 +4,39 @@
 
 - GitHub Releases are the repository release record: tag, generated notes, full changelog link, and GitHub's automatic
   `Source code (zip)` and `Source code (tar.gz)` archives.
-- GitHub Releases are separate from npmjs publishing. A release records source state; `bun publish` publishes the
-  package artifact to a package registry.
-- GitHub Packages are also separate. GitHub does not import the npmjs package automatically from `package.json`
-  `repository`; publishing to GitHub Packages uses its own registry publish workflow for `@nodzimo/nodzimo-ui`.
+- GitHub Releases are separate from npmjs publishing. npmjs publishing remains a manual local Bun step.
+- GitHub Packages publishing is automated from the pushed version tag and uses the same package name,
+  `@nodzimo/nodzimo-ui`.
+- The release workflow publishes the GitHub Package first, then creates the GitHub Release. A release should record a
+  completed GitHub-side package publication, not precede it.
 
 ### Workflow Contract
 
-- The release workflow is `.github/workflows/create-release.yml`.
+- The release workflow is `.github/workflows/release.yml`.
 - It runs only when a tag matching `v*.*.*` is pushed.
-- The workflow intentionally does not check out the repository. Release creation is an API operation and the command
-  passes the repository explicitly with `--repo`.
-- Keep the workflow minimal unless release creation starts requiring files from the repository.
+- The workflow has two jobs:
+    - `publish-package` builds the package and publishes it to GitHub Packages with Bun.
+    - `create-release` creates the GitHub Release only after `publish-package` succeeds.
+- Keep job permissions scoped to the job that needs them:
+    - `publish-package` needs `contents: read` and `packages: write`.
+    - `create-release` needs `contents: write`.
+- Do not install Node merely for publishing. The workflow is Bun-based and authenticates registry publishing with
+  `NPM_CONFIG_TOKEN: ${{ secrets.GITHUB_TOKEN }}`.
 
 ```yaml
-name: Create Release
+name: Release
 
 on:
   push:
     tags:
       - v*.*.*
 
-permissions:
-  contents: write
-
-jobs:
-  create-release:
-    runs-on: ubuntu-latest
-    env:
-      GH_TOKEN: ${{ github.token }}
-    steps:
-      - name: Create release
-        run: gh release create ${{ github.ref_name }} --repo ${{ github.repository }} --generate-notes
-```
-
-### Required Pieces
-
-- `permissions: contents: write` gives the built-in `github.token` enough repository permission to create a release.
-  Without it, `gh release create` can fail with `HTTP 403: Resource not accessible by integration`.
-- `GH_TOKEN: ${{ github.token }}` authenticates GitHub CLI inside GitHub Actions. This is not a manually created PAT
-  and should not be stored in repository secrets.
-- `github.ref_name` is the short tag name that triggered the workflow, such as `v0.0.14`.
-- `github.repository` is the repository id in `owner/name` form, such as `Nodzimo/nodzimo-ui`.
-- `--repo ${{ github.repository }}` lets `gh` create the release without a local git checkout. Without checkout and
-  without `--repo`, `gh` can fail with `fatal: not a git repository`.
-- `--generate-notes` lets GitHub generate release notes and the full changelog link from the previous release/tag to
-  the current tag.
-
-### Package Publishing Workflow
-
-- The GitHub Packages workflow is `.github/workflows/publish-package.yml`.
-- It runs from GitHub release creation and publishes `@nodzimo/nodzimo-ui` to GitHub Packages.
-- It is intentionally Bun-first: install dependencies with `bun ci`, build with `bun run build:all`, and publish with
-  `bun publish --registry https://npm.pkg.github.com`.
-- Do not add `actions/setup-node` merely for publishing. The workflow does not use `npm publish`; Bun publishes with
-  `NPM_CONFIG_TOKEN: ${{ secrets.GITHUB_TOKEN }}`.
-- Keep `permissions: packages: write` and `contents: read` on the publishing job so the built-in GitHub token can
-  publish
-  the package and read repository contents.
-
-```yaml
-name: Publish Package
-
-on:
-  release:
-    types: [ created ]
-
 jobs:
   publish-package:
     runs-on: ubuntu-latest
     permissions:
-      packages: write
       contents: read
+      packages: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -93,7 +54,35 @@ jobs:
         run: bun publish --registry https://npm.pkg.github.com
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  create-release:
+    needs: publish-package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Create release
+        run: gh release create ${{ github.ref_name }} --repo ${{ github.repository }} --generate-notes
 ```
+
+### Required Pieces
+
+- `publish-package` runs first so GitHub Release creation is blocked when GitHub Packages publishing fails.
+- `bun ci` keeps the GitHub Packages workflow lockfile-strict and aligned with other CI/Nixpacks install phases.
+- `bun run build:all` regenerates icons, builds JS/types, and builds the published stylesheet before packaging.
+- `bun publish --registry https://npm.pkg.github.com` sends the package to GitHub Packages without changing
+  `publishConfig.registry`, keeping npmjs as the default local publish target.
+- `NPM_CONFIG_TOKEN: ${{ secrets.GITHUB_TOKEN }}` is the token shape Bun expects for automated registry publishing.
+- `GH_TOKEN: ${{ github.token }}` authenticates GitHub CLI inside GitHub Actions. This is not a manually created PAT
+  and should not be stored in repository secrets.
+- `github.ref_name` is the short tag name that triggered the workflow, such as `v0.0.14`.
+- `github.repository` is the repository id in `owner/name` form, such as `Nodzimo/nodzimo-ui`.
+- `--repo ${{ github.repository }}` lets `gh` create the release without a local git checkout. Without checkout and
+  without `--repo`, `gh` can fail with `fatal: not a git repository`.
+- `--generate-notes` lets GitHub generate release notes and the full changelog link from the previous release/tag to
+  the current tag.
 
 ### Release Commands
 
@@ -107,18 +96,24 @@ jobs:
   not create `push` events when more than three tags are pushed at once, so that batch may create tags without running
   the release workflow. Later single-tag releases should trigger normally.
 
-Regular manual flow:
+Regular package release flow:
 
 ```powershell
 bun run release:patch
+bun run project:verify
+bun run publish:dry
+bun run publish:npmjs
 bun run release:push
 ```
 
-Publishing to npmjs remains separate:
+This order is intentional:
 
-```powershell
-bun run publish:npmjs
-```
+- `release:patch` creates the version commit and tag locally.
+- `project:verify` proves the package, Storybook, lint, dependency graph, and pack output before publishing.
+- `publish:dry` confirms package name, version, files, access, and npmjs registry target.
+- `publish:npmjs` publishes manually to npmjs while the active npm account and 2FA remain under local control.
+- `release:push` pushes the version tag only after npmjs publication succeeds. The pushed tag then triggers the GitHub
+  workflow that publishes GitHub Packages and creates the GitHub Release.
 
 ### Cleanup And Rollback Commands
 
@@ -190,6 +185,4 @@ web UI instead of changing local credential-manager state blindly.
   explicitly when cleaning up experimental releases.
 - A GitHub tag page can show source archives, but that is not the same as a GitHub Release. The release workflow creates
   the Release object.
-- Do not add `actions/checkout` unless the workflow needs repository files. If future release automation builds
-  artifacts, reads changelog files, runs tests, or packs output, add checkout back intentionally.
 - GitHub Packages uses the canonical package name `@nodzimo/nodzimo-ui`, published under the repository owner namespace.

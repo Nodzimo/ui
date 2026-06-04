@@ -88,8 +88,8 @@
   version tag.
 - `bun run release:version` prints the current package version through `bun pm version`.
 - `bun run release:push` pushes the current branch and missing annotated version tags with `git push --follow-tags`.
-  This triggers the GitHub Release workflow when a single matching version tag is pushed. See
-  [GitHub Releases](github-releases.md).
+  This triggers the GitHub release workflow, which publishes GitHub Packages and then creates the GitHub Release when a
+  single matching version tag is pushed. See [GitHub Releases](github-releases.md).
 
 ### Git Helper Scripts
 
