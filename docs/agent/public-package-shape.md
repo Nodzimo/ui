@@ -6,6 +6,8 @@
 - The package is published publicly under the `@nodzimo` scope on npmjs.
 - GitHub Packages also publishes `@nodzimo/nodzimo-ui` through a separate GitHub Packages registry flow; it is not an
   automatic mirror of npmjs.
+- Publishing is Bun-first. Use `bun publish` for npmjs and `bun publish --registry https://npm.pkg.github.com` for
+  GitHub Packages.
 - The package is ESM-only.
 - Do not add CJS, UMD, or IIFE outputs unless a real consumer requires them.
 
@@ -45,4 +47,5 @@ For source boundary rules, see [Core Vs Client](core-vs-client.md). For dependen
 - Avoid adding `main`, `module`, or `default` fallbacks unless a confirmed consumer needs them.
 - The package license is MIT. Keep a permissive open-source license unless the project direction explicitly changes.
 - Keep `publishConfig.access` set to `public` so scoped publishes do not require passing `--access public` manually.
-- Do not set `publishConfig.registry` unless publishing to a non-default registry is intentional.
+- Do not set `publishConfig.registry` for the regular dual-registry flow. Keep npmjs as the default manual target and
+  pass the GitHub Packages registry explicitly in the GitHub Actions publish command.

@@ -196,8 +196,8 @@ See [docs/agent/npm-publishing.md](docs/agent/npm-publishing.md).
 
 ## GitHub Releases
 
-GitHub Releases are automated from pushed version tags through a minimal GitHub Actions workflow, while npm publishing
-remains a separate manual step.
+GitHub Releases are automated from pushed version tags through a minimal GitHub Actions workflow, while npmjs publishing
+remains a separate manual Bun publish step.
 
 See [docs/agent/github-releases.md](docs/agent/github-releases.md).
 

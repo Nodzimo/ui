@@ -4,21 +4,21 @@
 
 - GitHub Releases are the repository release record: tag, generated notes, full changelog link, and GitHub's automatic
   `Source code (zip)` and `Source code (tar.gz)` archives.
-- GitHub Releases are separate from npm publishing. A release records source state; `npm publish` publishes the package
-  artifact to npm.
+- GitHub Releases are separate from npmjs publishing. A release records source state; `bun publish` publishes the
+  package artifact to a package registry.
 - GitHub Packages are also separate. GitHub does not import the npmjs package automatically from `package.json`
   `repository`; publishing to GitHub Packages uses its own registry publish workflow for `@nodzimo/nodzimo-ui`.
 
 ### Workflow Contract
 
-- The release workflow is `.github/workflows/release.yml`.
+- The release workflow is `.github/workflows/create-release.yml`.
 - It runs only when a tag matching `v*.*.*` is pushed.
 - The workflow intentionally does not check out the repository. Release creation is an API operation and the command
   passes the repository explicitly with `--repo`.
 - Keep the workflow minimal unless release creation starts requiring files from the repository.
 
 ```yaml
-name: Release
+name: Create Release
 
 on:
   push:
@@ -29,12 +29,12 @@ permissions:
   contents: write
 
 jobs:
-  release:
+  create-release:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Create GitHub release
+      - name: Create release
         run: gh release create ${{ github.ref_name }} --repo ${{ github.repository }} --generate-notes
 ```
 
@@ -51,10 +51,54 @@ jobs:
 - `--generate-notes` lets GitHub generate release notes and the full changelog link from the previous release/tag to
   the current tag.
 
+### Package Publishing Workflow
+
+- The GitHub Packages workflow is `.github/workflows/publish-package.yml`.
+- It runs from GitHub release creation and publishes `@nodzimo/nodzimo-ui` to GitHub Packages.
+- It is intentionally Bun-first: install dependencies with `bun ci`, build with `bun run build:all`, and publish with
+  `bun publish --registry https://npm.pkg.github.com`.
+- Do not add `actions/setup-node` merely for publishing. The workflow does not use `npm publish`; Bun publishes with
+  `NPM_CONFIG_TOKEN: ${{ secrets.GITHUB_TOKEN }}`.
+- Keep `permissions: packages: write` and `contents: read` on the publishing job so the built-in GitHub token can
+  publish
+  the package and read repository contents.
+
+```yaml
+name: Publish Package
+
+on:
+  release:
+    types: [ created ]
+
+jobs:
+  publish-package:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun ci
+
+      - name: Build package
+        run: bun run build:all
+
+      - name: Publish package
+        run: bun publish --registry https://npm.pkg.github.com
+        env:
+          NPM_CONFIG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
 ### Release Commands
 
-- `bun run release:bump` runs `npm version patch`. In a git repository, npm updates `package.json`, creates a version
-  commit, and creates a version tag such as `v0.0.14`.
+- `bun run release:patch` runs `bun pm version patch`. In a git repository, Bun updates `package.json`, creates a
+  version commit, and creates a version tag such as `v0.0.14`.
 - `bun run release:push` runs `git push --follow-tags`. It pushes the branch update and any missing annotated tags
   reachable from the pushed commits.
 - Prefer `git push --follow-tags` over `git push --tags` for regular releases because `--tags` pushes every local tag,
@@ -66,14 +110,14 @@ jobs:
 Regular manual flow:
 
 ```powershell
-bun run release:bump
+bun run release:patch
 bun run release:push
 ```
 
-Publishing to npm remains separate:
+Publishing to npmjs remains separate:
 
 ```powershell
-bun run publish:npm
+bun run publish:npmjs
 ```
 
 ### Cleanup And Rollback Commands

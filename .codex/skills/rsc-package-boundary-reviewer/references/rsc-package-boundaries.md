@@ -100,8 +100,8 @@ Expected declaration topology:
 
 ## Consumer Verification
 
-Use tarball testing before publish and the npm package after publish when root exports, dependency metadata, externals,
-React Compiler scope, or a Next/Turbopack failure is involved.
+Use tarball testing before publish and the published package after publish when root exports, dependency metadata,
+externals, React Compiler scope, or a Next/Turbopack failure is involved.
 
 The consumer should import at least:
 

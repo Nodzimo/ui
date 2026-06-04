@@ -28,6 +28,8 @@
 
 - After changing declaration excludes, Tailwind source detection, or package output names, inspect `bun pm pack
   --dry-run` and confirm Storybook-only files are not in the package unless intentionally kept.
+- Before publishing to npmjs, run `bun run publish:dry` after the final build and confirm the package name, version,
+  file list, access, and registry are expected.
 - After changing declaration bundling or package type exports, confirm `dist` contains `nodzimo-ui.d.ts` and
   `client.d.ts`, does not contain `dist/src`, and that `package.json` `exports.types` points at the bundled files.
 - Confirm `dist/styles.css` exists after `bun run build:all` when changing style build scripts or Tailwind setup.

@@ -58,7 +58,7 @@ Use `references/rsc-package-boundaries.md` for compact task checklists and commo
 
 6. Escalate to Next/Turbopack consumer verification when root exports, externals, React Compiler scope, dependency
    metadata, or a consumer failure is involved.
-    - Prefer tarball testing before publish and the npm package after publish.
+    - Prefer tarball testing before publish and the published package after publish.
     - Treat SSG/static output as useful but not sufficient; artifact inspection still matters.
 
 ## Reporting

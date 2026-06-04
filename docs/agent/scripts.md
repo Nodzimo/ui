@@ -70,17 +70,23 @@
 ### Dependency And Publishing Scripts
 
 - `bun run deps:install` installs dependencies.
+- `bun run deps:audit` runs Bun's dependency audit.
 - `bun run deps:outdated` checks dependency updates.
 - `bun run deps:update` starts Bun's interactive dependency update flow.
-- `bun run publish:npm` publishes the package to npm using the package's `publishConfig`.
-- `bun run publish:who` checks the active npm account.
-- `bun run publish:login` starts npm login.
-- `bun run publish:fund` checks package funding metadata.
-- `bun run publish:fix` asks npm to normalize package metadata.
+- `bun run publish:dry` runs `bun publish --dry-run` to inspect the npmjs package contents without publishing.
+- `bun run publish:npmjs` publishes the package to npmjs with `bun publish` using the package's `publishConfig`.
+- `bun run publish:who` checks the active npm account through `bun pm whoami`.
+- `bun run publish:login` starts npm login through `bunx npm login`, because Bun does not provide a dedicated login
+  command.
+- `bun run publish:fund` checks package funding metadata through `bunx npm fund`, because Bun does not provide a
+  dedicated fund command.
+- `bun run publish:fix` normalizes package metadata through `bun pm pkg fix`.
 
 ### Release Scripts
 
-- `bun run release:bump` bumps the package patch version with npm, creating the npm version commit and version tag.
+- `bun run release:patch` bumps the package patch version with `bun pm version patch`, creating the version commit and
+  version tag.
+- `bun run release:version` prints the current package version through `bun pm version`.
 - `bun run release:push` pushes the current branch and missing annotated version tags with `git push --follow-tags`.
   This triggers the GitHub Release workflow when a single matching version tag is pushed. See
   [GitHub Releases](github-releases.md).
