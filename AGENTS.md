@@ -58,7 +58,7 @@ See [docs/agent/webstorm-project-settings.md](docs/agent/webstorm-project-settin
 
 ## Public Package Shape
 
-The public package is ESM-only, published as `@sefo/nodzimo-ui`, and exposes only the root, client, and stylesheet
+The public package is ESM-only, published as `@nodzimo/nodzimo-ui`, and exposes only the root, client, and stylesheet
 entrypoints.
 
 See [docs/agent/public-package-shape.md](docs/agent/public-package-shape.md).
@@ -189,7 +189,7 @@ See [docs/agent/cleanup-scripts.md](docs/agent/cleanup-scripts.md).
 
 ## npm Publishing
 
-Publishing is currently manual through the `sefo` npm account, with verification, package inspection, and interactive
+Publishing is currently manual through the `nodzimo` npm account, with verification, package inspection, and interactive
 2FA authentication.
 
 See [docs/agent/npm-publishing.md](docs/agent/npm-publishing.md).

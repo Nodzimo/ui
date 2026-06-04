@@ -2,19 +2,18 @@
 
 ### Package Identity
 
-- The public npm package name is `@sefo/nodzimo-ui`.
-- The package is published publicly under the personal `@sefo` npm scope. Keep this as the package namespace unless the
-  project intentionally moves to a different package name with a migration plan.
-- Do not assume GitHub Packages can mirror this package from npmjs automatically. Publishing to GitHub Packages would be
-  a separate registry flow and may require an explicit namespace decision distinct from the canonical npm package name.
+- The public package name is `@nodzimo/nodzimo-ui`.
+- The package is published publicly under the `@nodzimo` scope on npmjs.
+- GitHub Packages also publishes `@nodzimo/nodzimo-ui` through a separate GitHub Packages registry flow; it is not an
+  automatic mirror of npmjs.
 - The package is ESM-only.
 - Do not add CJS, UMD, or IIFE outputs unless a real consumer requires them.
 
 ### Public Entrypoints
 
 - The public API is split into two entrypoints:
-    - `@sefo/nodzimo-ui` for core/RSC-safe exports.
-    - `@sefo/nodzimo-ui/client` for client-boundary exports.
+    - `@nodzimo/nodzimo-ui` for core/RSC-safe exports.
+    - `@nodzimo/nodzimo-ui/client` for client-boundary exports.
 - Consumers should import from public package entrypoints, not from `src` or deep internal paths.
 - `files: ["dist"]` keeps packed/published contents limited to build output.
 - The package export map is intentionally minimal:
@@ -27,7 +26,7 @@
   and `dist/client.d.ts` for the client-boundary entry. Do not publish a mirrored `dist/src` declaration tree unless a
   real tooling need appears.
 - Consumers should import the library stylesheet once at the app root, for example
-  `import '@sefo/nodzimo-ui/styles.css'`.
+  `import '@nodzimo/nodzimo-ui/styles.css'`.
 
 For source boundary rules, see [Core Vs Client](core-vs-client.md). For dependency and externalization rules, see
 [Dependency Concepts](dependency-concepts.md).

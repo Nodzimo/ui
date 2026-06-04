@@ -107,7 +107,7 @@ The consumer should import at least:
 
 - one normal root/core component;
 - any affected root/core component;
-- any affected client component or provider from `@sefo/nodzimo-ui/client`.
+- any affected client component or provider from `@nodzimo/nodzimo-ui/client`.
 - the consumer dev server when the incident was a dev-only browser chunk failure.
 
 SSG/static route output is useful, but it does not replace built artifact inspection.

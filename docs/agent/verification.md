@@ -60,7 +60,7 @@
 
 ### Consumer Checks
 
-- For Next/Turbopack consumer checks, install the published `@sefo/nodzimo-ui` package in the Next app. Use tarball
+- For Next/Turbopack consumer checks, install the published `@nodzimo/nodzimo-ui` package in the Next app. Use tarball
   testing only when validating changes before publication.
 - If a client component fails in Next with compiler runtime errors, check whether `"use client";` is present in the
   built client entry.

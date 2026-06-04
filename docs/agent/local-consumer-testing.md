@@ -14,8 +14,9 @@
 
 - Preferred Next/Turbopack consumer flow after publication:
     1. Publish a new package version from this project.
-    2. Install or update the package in the consumer with `bun add "@sefo/nodzimo-ui"` or `bun update @sefo/nodzimo-ui`.
-    3. Import from `@sefo/nodzimo-ui`, `@sefo/nodzimo-ui/client`, and `@sefo/nodzimo-ui/styles.css`.
+    2. Install or update the package in the consumer with `bun add "@nodzimo/nodzimo-ui"` or
+       `bun update @nodzimo/nodzimo-ui`.
+    3. Import from `@nodzimo/nodzimo-ui`, `@nodzimo/nodzimo-ui/client`, and `@nodzimo/nodzimo-ui/styles.css`.
 
 ### Tarball Testing
 

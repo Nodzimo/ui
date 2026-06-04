@@ -7,8 +7,7 @@
 - GitHub Releases are separate from npm publishing. A release records source state; `npm publish` publishes the package
   artifact to npm.
 - GitHub Packages are also separate. GitHub does not import the npmjs package automatically from `package.json`
-  `repository`; publishing to GitHub Packages would require a separate registry publish flow and package namespace
-  decision.
+  `repository`; publishing to GitHub Packages uses its own registry publish workflow for `@nodzimo/nodzimo-ui`.
 
 ### Workflow Contract
 
@@ -149,5 +148,4 @@ web UI instead of changing local credential-manager state blindly.
   the Release object.
 - Do not add `actions/checkout` unless the workflow needs repository files. If future release automation builds
   artifacts, reads changelog files, runs tests, or packs output, add checkout back intentionally.
-- Do not publish to GitHub Packages until the package namespace strategy is explicit. The current canonical public npm
-  package is `@sefo/nodzimo-ui`.
+- GitHub Packages uses the canonical package name `@nodzimo/nodzimo-ui`, published under the repository owner namespace.

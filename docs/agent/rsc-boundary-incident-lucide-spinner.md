@@ -7,7 +7,8 @@ This incident is historical context for the current core/client boundary rules. 
   external in Vite/Rolldown, the library build inlined Lucide's implementation into `dist/nodzimo-ui.js`.
 - The inlined Lucide code included top-level React context setup, including `createContext`, plus icon helpers such as
   `forwardRef`, `createElement`, and `useContext`.
-- The Next consumer imported only `Card` from `@sefo/nodzimo-ui`, but the root barrel also exported `Spinner`. Because
+- The Next consumer imported only `Card` from `@nodzimo/nodzimo-ui`, but the root barrel also exported `Spinner`.
+  Because
   Lucide had been inlined into the same root entry, the RSC graph evaluated code that called `createContext` under
   React's `react-server` condition and the consumer build failed with `TypeError: createContext is not a function`.
 - The failure was not caused by two React instances. It was an RSC import-graph violation caused by inlined third-party
