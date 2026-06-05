@@ -1,11 +1,14 @@
 # Sefo Nodzimo UI
 
-AI-ready engineering workspace for a documented UI system
+AI-ready engineering workspace for a modern React UI system.
+
+Ships with versioned offline documentation for local IDE and agent workflows.
 
 ## Project Atlas
 
 - UI documentation: [ui.Nodzimo.com](https://ui.Nodzimo.com)
 - Package: [@nodzimo/ui](https://www.npmjs.com/package/@nodzimo/ui)
 - Repository: [github.com/Nodzimo/ui](https://github.com/Nodzimo/ui)
-- [Design System Doctrine](docs/design-system-doctrine/README.md)
-- [Agent Operating Charter](AGENTS.md)
+- License: [MIT](https://github.com/Nodzimo/ui/blob/HEAD/LICENSE)
+- [Design System Doctrine](https://github.com/Nodzimo/ui/blob/HEAD/docs/design-system-doctrine/README.md)
+- [Agent Operating Charter](https://github.com/Nodzimo/ui/blob/HEAD/AGENTS.md)

@@ -7,6 +7,7 @@
 - GitHub Releases are separate from npmjs publishing. npmjs publishing remains a manual local Bun step.
 - GitHub Packages publishing is automated from the pushed version tag and uses the same package name,
   `@nodzimo/ui`.
+- The GitHub Packages package page is `https://github.com/Nodzimo/ui/pkgs/npm/ui`.
 - The release workflow publishes the GitHub Package first, then creates the GitHub Release. A release should record a
   completed GitHub-side package publication, not precede it.
 
