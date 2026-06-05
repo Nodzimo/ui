@@ -29,7 +29,7 @@ Use `references/rsc-package-boundaries.md` for compact task checklists and commo
 ## Workflow
 
 1. Identify the affected boundary.
-    - Core/root: `src/core`, `src/index.ts`, `dist/nodzimo-ui.js`, or `dist/nodzimo-ui.d.ts`.
+    - Core/root: `src/core`, `src/index.ts`, `dist/ui.js`, or `dist/ui.d.ts`.
     - Client: `src/client.ts`, `src/client/**`, `dist/client.js`, or `dist/client.d.ts`.
     - Package contract: `package.json`, `vite.config.ts`, dependency metadata, public exports, declaration output, or
       built package artifacts.
@@ -54,7 +54,7 @@ Use `references/rsc-package-boundaries.md` for compact task checklists and commo
 5. Inspect built artifacts after boundary-affecting changes.
     - Confirm root output stays free of client/runtime leaks.
     - Confirm client output keeps `"use client";` and does not inline third-party internals or CommonJS shims.
-    - Confirm declaration topology stays rooted at `dist/nodzimo-ui.d.ts` and `dist/client.d.ts`.
+    - Confirm declaration topology stays rooted at `dist/ui.d.ts` and `dist/client.d.ts`.
 
 6. Escalate to Next/Turbopack consumer verification when root exports, externals, React Compiler scope, dependency
    metadata, or a consumer failure is involved.

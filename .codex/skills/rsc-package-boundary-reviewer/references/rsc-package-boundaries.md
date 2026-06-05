@@ -23,7 +23,7 @@ model here; use `docs/agent` as the canonical source.
   icon packages enter the root graph.
 - Prefer inline SVG or generated project-owned icons for core primitives.
 - Build when the change affects source boundaries or public artifacts.
-- Inspect `dist/nodzimo-ui.js` and root declarations after the build.
+- Inspect `dist/ui.js` and root declarations after the build.
 
 ## Client Change Checklist
 
@@ -63,7 +63,7 @@ bun run build:all
 Inspect root output:
 
 ```powershell
-rg -n "createContext|useContext|useState|useEffect|react/compiler-runtime|@base-ui/react|lucide-react|node_modules/lucide" dist/nodzimo-ui.js
+rg -n "createContext|useContext|useState|useEffect|react/compiler-runtime|@base-ui/react|lucide-react|node_modules/lucide" dist/ui.js
 ```
 
 Inspect client output:
@@ -76,13 +76,13 @@ rg -n "Calling .*require|typeof require|new Proxy|node_modules|use-sync-external
 Inspect external import sanity:
 
 ```powershell
-rg -n 'from "(@base-ui/react|class-variance-authority|clsx|tailwind-merge|react|react-dom|react/jsx-runtime|react/compiler-runtime)' dist/client.js dist/nodzimo-ui.js
+rg -n 'from "(@base-ui/react|class-variance-authority|clsx|tailwind-merge|react|react-dom|react/jsx-runtime|react/compiler-runtime)' dist/client.js dist/ui.js
 ```
 
 For provider changes, also inspect root and client artifacts for provider leakage:
 
 ```powershell
-rg -n "DirectionProvider|useDirection|direction-provider|@base-ui/react" dist/nodzimo-ui.js dist/nodzimo-ui.d.ts
+rg -n "DirectionProvider|useDirection|direction-provider|@base-ui/react" dist/ui.js dist/ui.d.ts
 rg -n "DirectionProvider|useDirection|direction-provider|@base-ui/react" dist/client.js dist/client.d.ts
 ```
 
@@ -94,7 +94,7 @@ Get-ChildItem dist -Recurse -Filter *.d.ts
 
 Expected declaration topology:
 
-- `dist/nodzimo-ui.d.ts`
+- `dist/ui.d.ts`
 - `dist/client.d.ts`
 - no public `dist/src` declaration tree
 
@@ -107,7 +107,7 @@ The consumer should import at least:
 
 - one normal root/core component;
 - any affected root/core component;
-- any affected client component or provider from `@nodzimo/nodzimo-ui/client`.
+- any affected client component or provider from `@nodzimo/ui/client`.
 - the consumer dev server when the incident was a dev-only browser chunk failure.
 
 SSG/static route output is useful, but it does not replace built artifact inspection.

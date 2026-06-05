@@ -6,7 +6,7 @@
 	},
 	"bugs": {
 		"email": "Sefo@Nodzimo.com",
-		"url": "https://github.com/Nodzimo/nodzimo-ui/issues"
+		"url": "https://github.com/Nodzimo/ui/issues"
 	},
 	"dependencies": {
 		"@base-ui/react": "1.5.0",
@@ -59,8 +59,8 @@
 	},
 	"exports": {
 		".": {
-			"import": "./dist/nodzimo-ui.js",
-			"types": "./dist/nodzimo-ui.d.ts"
+			"import": "./dist/ui.js",
+			"types": "./dist/ui.d.ts"
 		},
 		"./client": {
 			"import": "./dist/client.js",
@@ -106,7 +106,7 @@
 		"RTL"
 	],
 	"license": "MIT",
-	"name": "@nodzimo/nodzimo-ui",
+	"name": "@nodzimo/ui",
 	"peerDependencies": {
 		"react": "19.x",
 		"react-dom": "19.x"
@@ -116,7 +116,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Nodzimo/nodzimo-ui.git"
+		"url": "git+https://github.com/Nodzimo/ui.git"
 	},
 	"scripts": {
 		"biome:migrate": "biome migrate --write",
@@ -153,7 +153,7 @@
 		"git:stash-pop": "git stash pop",
 		"git:status": "git status",
 		"lib:link": "bun link",
-		"lib:pack": "bun pm pack --filename nodzimo-ui.tgz",
+		"lib:pack": "bun pm pack --filename ui.tgz",
 		"lib:unlink": "bun unlink",
 		"preview": "vite preview",
 		"project:audit": "bun run build:ts && bun run check:lint && bun run check:deps && bun run deps:outdated",

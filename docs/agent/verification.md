@@ -30,7 +30,7 @@
   --dry-run` and confirm Storybook-only files are not in the package unless intentionally kept.
 - Before publishing to npmjs, run `bun run publish:dry` after the final build and confirm the package name, version,
   file list, access, and registry are expected.
-- After changing declaration bundling or package type exports, confirm `dist` contains `nodzimo-ui.d.ts` and
+- After changing declaration bundling or package type exports, confirm `dist` contains `ui.d.ts` and
   `client.d.ts`, does not contain `dist/src`, and that `package.json` `exports.types` points at the bundled files.
 - Confirm `dist/styles.css` exists after `bun run build:all` when changing style build scripts or Tailwind setup.
 
@@ -47,9 +47,9 @@
 
 ### Built JS Inspection
 
-- Inspect `dist/nodzimo-ui.js` and `dist/client.js` after build changes that affect React Compiler or entrypoints.
-- For root/RSC-safe output, inspect `dist/nodzimo-ui.js` for accidental client or third-party leaks:
-  `rg -n "createContext|useContext|useState|useEffect|react/compiler-runtime|@base-ui/react|lucide-react|node_modules/lucide" dist/nodzimo-ui.js`.
+- Inspect `dist/ui.js` and `dist/client.js` after build changes that affect React Compiler or entrypoints.
+- For root/RSC-safe output, inspect `dist/ui.js` for accidental client or third-party leaks:
+  `rg -n "createContext|useContext|useState|useEffect|react/compiler-runtime|@base-ui/react|lucide-react|node_modules/lucide" dist/ui.js`.
 - Expected root output may import `react/jsx-runtime`, but must not import `react/compiler-runtime` or inline React
   component-library internals that call context/hooks.
 - `lucide-react` should not appear anywhere in built package output. If it appears there, a runtime source import leaked
@@ -62,7 +62,7 @@
 
 ### Consumer Checks
 
-- For Next/Turbopack consumer checks, install the published `@nodzimo/nodzimo-ui` package in the Next app. Use tarball
+- For Next/Turbopack consumer checks, install the published `@nodzimo/ui` package in the Next app. Use tarball
   testing only when validating changes before publication.
 - If a client component fails in Next with compiler runtime errors, check whether `"use client";` is present in the
   built client entry.

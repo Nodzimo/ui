@@ -23,7 +23,7 @@
 - Colocated stories and tests that sit beside a component folder `index.ts` may import the component through the local
   folder surface with `import { Button } from '.'`. This validates the component's local public API, avoids importing
   implementation files directly, and prevents IDE "import can be shortened" noise without suppressions.
-- Do not import from the public package name (`@nodzimo/nodzimo-ui`) inside this package's source. Public package
+- Do not import from the public package name (`@nodzimo/ui`) inside this package's source. Public package
   imports
   are
   for consumers.

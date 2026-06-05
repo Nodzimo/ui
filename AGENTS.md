@@ -58,7 +58,7 @@ See [docs/agent/webstorm-project-settings.md](docs/agent/webstorm-project-settin
 
 ## Public Package Shape
 
-The public package is ESM-only, published as `@nodzimo/nodzimo-ui`, and exposes only the root, client, and stylesheet
+The public package is ESM-only, published as `@nodzimo/ui`, and exposes only the root, client, and stylesheet
 entrypoints.
 
 See [docs/agent/public-package-shape.md](docs/agent/public-package-shape.md).

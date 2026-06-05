@@ -2,9 +2,9 @@
 
 ### Package Identity
 
-- The public package name is `@nodzimo/nodzimo-ui`.
+- The public package name is `@nodzimo/ui`.
 - The package is published publicly under the `@nodzimo` scope on npmjs.
-- GitHub Packages also publishes `@nodzimo/nodzimo-ui` through a separate GitHub Packages registry flow; it is not an
+- GitHub Packages also publishes `@nodzimo/ui` through a separate GitHub Packages registry flow; it is not an
   automatic mirror of npmjs.
 - Publishing is Bun-first. Use `bun publish` for npmjs and `bun publish --registry https://npm.pkg.github.com` for
   GitHub Packages.
@@ -14,21 +14,21 @@
 ### Public Entrypoints
 
 - The public API is split into two entrypoints:
-    - `@nodzimo/nodzimo-ui` for core/RSC-safe exports.
-    - `@nodzimo/nodzimo-ui/client` for client-boundary exports.
+    - `@nodzimo/ui` for core/RSC-safe exports.
+    - `@nodzimo/ui/client` for client-boundary exports.
 - Consumers should import from public package entrypoints, not from `src` or deep internal paths.
 - `files: ["dist"]` keeps packed/published contents limited to build output.
 - The package export map is intentionally minimal:
-    - `exports["."].import` points to `dist/nodzimo-ui.js`.
-    - `exports["."].types` points to `dist/nodzimo-ui.d.ts`.
+    - `exports["."].import` points to `dist/ui.js`.
+    - `exports["."].types` points to `dist/ui.d.ts`.
     - `exports["./client"].import` points to `dist/client.js`.
     - `exports["./client"].types` points to `dist/client.d.ts`.
     - `exports["./styles.css"]` points to `dist/styles.css`.
-- Public declaration files are bundled per public entrypoint. Keep `dist/nodzimo-ui.d.ts` for the root/RSC-safe entry
+- Public declaration files are bundled per public entrypoint. Keep `dist/ui.d.ts` for the root/RSC-safe entry
   and `dist/client.d.ts` for the client-boundary entry. Do not publish a mirrored `dist/src` declaration tree unless a
   real tooling need appears.
 - Consumers should import the library stylesheet once at the app root, for example
-  `import '@nodzimo/nodzimo-ui/styles.css'`.
+  `import '@nodzimo/ui/styles.css'`.
 
 For source boundary rules, see [Core Vs Client](core-vs-client.md). For dependency and externalization rules, see
 [Dependency Concepts](dependency-concepts.md).
@@ -37,7 +37,7 @@ For source boundary rules, see [Core Vs Client](core-vs-client.md). For dependen
 
 - Vite/Rolldown may emit private shared chunks used by the public entrypoints. Keep those chunks inside `dist/internal`
   with a pattern such as `internal/[name]-[hash].js`; do not add them to `exports` or treat them as public entrypoints.
-- Private chunks in `dist/internal` are still required package files because `dist/nodzimo-ui.js` and `dist/client.js`
+- Private chunks in `dist/internal` are still required package files because `dist/ui.js` and `dist/client.js`
   may import them through relative ESM imports.
 - Avoid adding declaration files under `dist/internal` as part of the public type contract. Shared type shapes may be
   duplicated across bundled entrypoint declarations; that is preferable to exposing internal type topology.

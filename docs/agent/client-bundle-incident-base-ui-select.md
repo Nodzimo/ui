@@ -16,7 +16,7 @@ exception.
   `Calling \`require\``.
 - A Next/Turbopack consumer can fail in this state with a browser error such as
   `Error: dynamic usage of require is not supported`.
-- This is not a root/RSC leak when `dist/nodzimo-ui.js` stays clean. It is a client bundle externalization failure.
+- This is not a root/RSC leak when `dist/ui.js` stays clean. It is a client bundle externalization failure.
 - The fix is not moving Base UI to `devDependencies` and not making consumers install Base UI manually. Base UI remains
   a runtime implementation dependency in `dependencies`; Vite/Rolldown leaves it as an external import in `dist`, and
   the consumer package manager installs it automatically with this package.

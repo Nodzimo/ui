@@ -6,7 +6,7 @@
   `Source code (zip)` and `Source code (tar.gz)` archives.
 - GitHub Releases are separate from npmjs publishing. npmjs publishing remains a manual local Bun step.
 - GitHub Packages publishing is automated from the pushed version tag and uses the same package name,
-  `@nodzimo/nodzimo-ui`.
+  `@nodzimo/ui`.
 - The release workflow publishes the GitHub Package first, then creates the GitHub Release. A release should record a
   completed GitHub-side package publication, not precede it.
 
@@ -78,7 +78,7 @@ jobs:
 - `GH_TOKEN: ${{ github.token }}` authenticates GitHub CLI inside GitHub Actions. This is not a manually created PAT
   and should not be stored in repository secrets.
 - `github.ref_name` is the short tag name that triggered the workflow, such as `v0.0.14`.
-- `github.repository` is the repository id in `owner/name` form, such as `Nodzimo/nodzimo-ui`.
+- `github.repository` is the repository id in `owner/name` form, such as `Nodzimo/ui`.
 - `--repo ${{ github.repository }}` lets `gh` create the release without a local git checkout. Without checkout and
   without `--repo`, `gh` can fail with `fatal: not a git repository`.
 - `--generate-notes` lets GitHub generate release notes and the full changelog link from the previous release/tag to
@@ -185,4 +185,4 @@ web UI instead of changing local credential-manager state blindly.
   explicitly when cleaning up experimental releases.
 - A GitHub tag page can show source archives, but that is not the same as a GitHub Release. The release workflow creates
   the Release object.
-- GitHub Packages uses the canonical package name `@nodzimo/nodzimo-ui`, published under the repository owner namespace.
+- GitHub Packages uses the canonical package name `@nodzimo/ui`, published under the repository owner namespace.

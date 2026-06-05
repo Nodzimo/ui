@@ -5,7 +5,7 @@
 - `bun run project:audit` is the main audit button. It runs TypeScript checks, Biome checks, dependency graph checks,
   and dependency update visibility checks.
 - `bun run project:verify` is the main full verification button. It installs dependencies, runs `project:audit`, builds
-  icons, builds JS/types, builds CSS, packs `nodzimo-ui.tgz`, and builds the public static Storybook.
+  icons, builds JS/types, builds CSS, packs `ui.tgz`, and builds the public static Storybook.
 
 ### Build Scripts
 
@@ -42,7 +42,7 @@
 
 ### Package Scripts
 
-- `bun run lib:pack` only packs the current build output as `nodzimo-ui.tgz`; it intentionally does not build. Use it
+- `bun run lib:pack` only packs the current build output as `ui.tgz`; it intentionally does not build. Use it
   after `build:all` or through `project:verify`.
 - `bun run lib:link` and `bun run lib:unlink` run Bun's local package link helpers. Prefer published package or tarball
   testing for Next/Turbopack consumers; see [Local Consumer Testing](local-consumer-testing.md).

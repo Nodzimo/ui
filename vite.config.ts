@@ -25,7 +25,7 @@ export default defineConfig({
 		lib: {
 			entry: {
 				client: 'src/client',
-				'nodzimo-ui': 'src/index',
+				ui: 'src/index',
 			},
 			formats: ['es'],
 		},

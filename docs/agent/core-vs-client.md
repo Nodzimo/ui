@@ -4,7 +4,7 @@
 
 - `core` does not mean server-only. It means no client boundary is required and the root entry must stay safe for
   React Server Component import graphs.
-- Treat `@nodzimo/nodzimo-ui` as the RSC-safe entrypoint. It should be more restrictive than "works during SSR".
+- Treat `@nodzimo/ui` as the RSC-safe entrypoint. It should be more restrictive than "works during SSR".
 - React Server Components (RSC) use React's `react-server` condition. In that graph, React deliberately does not expose
   APIs such as `createContext` or `useContext`; top-level code that calls those APIs can fail before a component is
   even rendered.
@@ -28,7 +28,7 @@
 - Third-party React component libraries that use context, providers, hooks, or `"use client"` belong in `src/client`
   unless their RSC behavior has been inspected in the built package and verified in the Next consumer.
 - Framework-agnostic providers that are required for UI-kit component behavior, such as Base UI direction context, may
-  be exported from `@nodzimo/nodzimo-ui/client` through `src/client/providers`. Do not export them from the
+  be exported from `@nodzimo/ui/client` through `src/client/providers`. Do not export them from the
   root/RSC-safe
   entrypoint.
 - Do not move app-owned providers into the UI kit merely because a consumer app uses them. Framework, routing, locale,

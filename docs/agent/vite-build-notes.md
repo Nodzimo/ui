@@ -1,7 +1,7 @@
 ## Vite Build Notes
 
 - Library mode uses two entries:
-    - `nodzimo-ui: 'src/index'`
+    - `ui: 'src/index'`
     - `client: 'src/client'`
 - Only `formats: ['es']` is needed for the modern target.
 - The package intentionally targets the latest JavaScript surface: TypeScript app and Node configs use `target`, `lib`,
@@ -24,7 +24,7 @@
 - `unplugin-dts` must use `tsconfigPath: 'tsconfig.app.json'`; the root `tsconfig.json` only contains project references
   from the Vite template.
 - `unplugin-dts` must set plugin-local `compilerOptions.rootDir: 'src'`. This is the explicit declaration emit root for
-  the library source tree and keeps bundled public declarations at `dist/nodzimo-ui.d.ts` and `dist/client.d.ts` instead
+  the library source tree and keeps bundled public declarations at `dist/ui.d.ts` and `dist/client.d.ts` instead
   of allowing root inference to emit a `dist/src` declaration tree. This became important after the
   `unplugin-dts@1.0.2` root-inference fix/behavior change exposed the previous implicit assumption.
 - `unplugin-dts` should exclude Storybook story files from public declarations, for example
@@ -46,7 +46,7 @@ dts({
 })
 ```
 
-- If API Extractor reports that `dist/client.d.ts` or `dist/nodzimo-ui.d.ts` does not exist, or if generated
+- If API Extractor reports that `dist/client.d.ts` or `dist/ui.d.ts` does not exist, or if generated
   declarations appear under `dist/src`, inspect `unplugin-dts` root-dir inference before adding path rewrite hooks.
 - Keep `@microsoft/api-extractor` in `devDependencies`; it is build-time tooling for bundled declarations, not a
   runtime or peer dependency.

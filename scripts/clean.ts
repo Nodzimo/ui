@@ -8,7 +8,7 @@ const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const CLEAN_TARGETS = {
 	dist: {
 		label: 'generated distribution artifacts',
-		paths: ['dist', 'dist-ssr', 'dependency-graph.svg', '*.tgz'],
+		paths: ['dist', 'dependency-graph.svg', '*.tgz'],
 	},
 	modules: {
 		label: 'installed dependencies',
