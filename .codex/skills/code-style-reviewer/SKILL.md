@@ -8,19 +8,20 @@ description: Review and fix project code-style conventions that Biome, TypeScrip
 ## Purpose
 
 Run the final local convention pass after Biome, TypeScript, and focused skills. Treat this skill as the procedural
-review checklist; durable code-style rules live in `docs/agent`.
+review checklist; durable code-style rules live in `docs/agent-operating-charter`.
 
 ## Required Reading
 
 Read only the files relevant to the touched surface:
 
 - Local JSX literal, rest naming, type/interface, extension/import/export, literal-table, and quote boundaries:
-  `docs/agent/code-style-conventions.md`
-- General readability and collaboration expectations: `docs/agent/collaboration.md`
-- Internal package imports and local folder import rules: `docs/agent/internal-package-imports.md`
-- Component composition, `mcn`, token adaptation, and class formatting boundaries: `docs/agent/component-styling.md`
-- Tailwind class naming and WebStorm class regex conventions: `docs/agent/tailwind-and-styles.md`
-- Verification command selection: `docs/agent/verification.md`
+  `docs/agent-operating-charter/code-style-conventions.md`
+- General readability and collaboration expectations: `docs/agent-operating-charter/collaboration.md`
+- Internal package imports and local folder import rules: `docs/agent-operating-charter/internal-package-imports.md`
+- Component composition, `mcn`, token adaptation, and class formatting boundaries:
+  `docs/agent-operating-charter/component-styling.md`
+- Tailwind class naming and WebStorm class regex conventions: `docs/agent-operating-charter/tailwind-and-styles.md`
+- Verification command selection: `docs/agent-operating-charter/verification.md`
 
 Use focused skills when their surface is primary:
 

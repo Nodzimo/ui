@@ -8,6 +8,8 @@
 
 ### Documentation
 
+- `AGENTS.md` is the root Agent Operating Charter entrypoint and table of contents. Detailed agent-operating chapters
+  live under `docs/agent-operating-charter`.
 - `docs/design-system-doctrine/README.md` is the GitHub-readable doctrine overview, and that directory's Markdown
   chapter files are the source-of-truth doctrine chapters. Storybook mirrors those chapters through MDX wrappers under
   `.storybook/showcase`; do not collapse the doctrine back into one giant Markdown file.

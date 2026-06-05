@@ -1,20 +1,20 @@
 # RSC Package Boundary Checklists
 
 This reference is a compact checklist for the `rsc-package-boundary-reviewer` skill. Do not duplicate the full boundary
-model here; use `docs/agent` as the canonical source.
+model here; use `docs/agent-operating-charter` as the canonical source.
 
 ## Canonical Docs
 
-- Root/client source rules: `docs/agent/core-vs-client.md`
-- Public package shape: `docs/agent/public-package-shape.md`
-- Dependency and externalization policy: `docs/agent/dependency-concepts.md`
-- Vite and declaration build notes: `docs/agent/vite-build-notes.md`
-- React Compiler boundary: `docs/agent/react-compiler-boundary.md`
-- Icon generation: `docs/agent/icon-generation.md`
-- Verification: `docs/agent/verification.md`
+- Root/client source rules: `docs/agent-operating-charter/core-vs-client.md`
+- Public package shape: `docs/agent-operating-charter/public-package-shape.md`
+- Dependency and externalization policy: `docs/agent-operating-charter/dependency-concepts.md`
+- Vite and declaration build notes: `docs/agent-operating-charter/vite-build-notes.md`
+- React Compiler boundary: `docs/agent-operating-charter/react-compiler-boundary.md`
+- Icon generation: `docs/agent-operating-charter/icon-generation.md`
+- Verification: `docs/agent-operating-charter/verification.md`
 - Historical incidents:
-    - `docs/agent/rsc-boundary-incident-lucide-spinner.md`
-    - `docs/agent/client-bundle-incident-base-ui-select.md`
+    - `docs/agent-operating-charter/rsc-boundary-incident-lucide-spinner.md`
+    - `docs/agent-operating-charter/client-bundle-incident-base-ui-select.md`
 
 ## Core Change Checklist
 

@@ -16,13 +16,14 @@ beginner, useful enough for a professional, and specific enough to prevent weak 
 
 Before writing or editing doctrine, read only the relevant sources:
 
-- Agent routing and source-of-truth rules: `docs/agent/design-system-doctrine.md`
+- Agent routing and source-of-truth rules: `docs/agent-operating-charter/design-system-doctrine.md`
 - Doctrine source overview: `docs/design-system-doctrine/README.md`
 - The product doctrine chapters directly related to the request.
 - Adjacent doctrine chapters when the requested change affects ordering, terminology, tokens, components, hierarchy,
   theme philosophy, references, or Storybook presentation.
 - Storybook routing docs when changing MDX wrappers, overview links, sidebar order, or Docs presentation:
-  `docs/agent/storybook-configuration.md` and `docs/agent/storybook-theming-and-docs.md`.
+  `docs/agent-operating-charter/storybook-configuration.md` and
+  `docs/agent-operating-charter/storybook-theming-and-docs.md`.
 
 Use the current doctrine as the strongest style reference. Do not copy its content into this skill.
 
@@ -236,7 +237,8 @@ When renaming or reordering chapters, check all navigation surfaces:
 - Storybook MDX wrapper title
 - Storybook `storySort.order`
 
-Do not move doctrine source material into `docs/agent`. Agent docs may describe workflow and routing, but
+Do not move doctrine source material into `docs/agent-operating-charter`. Agent docs may describe workflow and routing,
+but
 product-facing doctrine belongs under `docs/design-system-doctrine`.
 
 ## Review Checklist

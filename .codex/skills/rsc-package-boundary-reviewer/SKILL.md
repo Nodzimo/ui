@@ -8,21 +8,21 @@ description: Review and document Nodzimo UI package boundaries for React Server 
 ## Purpose
 
 Protect the package boundary between the RSC-safe root entry and the client entry. Treat this skill as the procedural
-review checklist; the architectural source of truth lives in `docs/agent`.
+review checklist; the architectural source of truth lives in `docs/agent-operating-charter`.
 
 ## Required Reading
 
 Read only the files relevant to the touched surface:
 
-- Core/client source boundary: `docs/agent/core-vs-client.md`
-- Public package shape: `docs/agent/public-package-shape.md`
-- Dependency metadata and externalization: `docs/agent/dependency-concepts.md`
-- Vite/Rolldown and declaration build notes: `docs/agent/vite-build-notes.md`
-- React Compiler scope: `docs/agent/react-compiler-boundary.md`
-- Icon generation and runtime icon safety: `docs/agent/icon-generation.md`
-- Known incidents: `docs/agent/rsc-boundary-incident-lucide-spinner.md` and
-  `docs/agent/client-bundle-incident-base-ui-select.md`
-- Verification commands and artifact checks: `docs/agent/verification.md`
+- Core/client source boundary: `docs/agent-operating-charter/core-vs-client.md`
+- Public package shape: `docs/agent-operating-charter/public-package-shape.md`
+- Dependency metadata and externalization: `docs/agent-operating-charter/dependency-concepts.md`
+- Vite/Rolldown and declaration build notes: `docs/agent-operating-charter/vite-build-notes.md`
+- React Compiler scope: `docs/agent-operating-charter/react-compiler-boundary.md`
+- Icon generation and runtime icon safety: `docs/agent-operating-charter/icon-generation.md`
+- Known incidents: `docs/agent-operating-charter/rsc-boundary-incident-lucide-spinner.md` and
+  `docs/agent-operating-charter/client-bundle-incident-base-ui-select.md`
+- Verification commands and artifact checks: `docs/agent-operating-charter/verification.md`
 
 Use `references/rsc-package-boundaries.md` for compact task checklists and common inspection commands.
 

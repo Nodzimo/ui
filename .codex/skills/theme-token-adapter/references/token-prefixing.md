@@ -1,16 +1,16 @@
 # Token Prefixing Checklists
 
 This reference is the compact working aid for `theme-token-adapter`. Do not duplicate the full token doctrine here; use
-`docs/agent` as the canonical source.
+`docs/agent-operating-charter` as the canonical source.
 
 ## Canonical Docs
 
-- Token contract: `docs/agent/theme-token-contract.md`
-- Tailwind entrypoints and source policy: `docs/agent/tailwind-and-styles.md`
-- Design doctrine routing: `docs/agent/design-system-doctrine.md`
-- Component styling: `docs/agent/component-styling.md`
-- Storybook theming and Docs surfaces: `docs/agent/storybook-theming-and-docs.md`
-- Verification: `docs/agent/verification.md`
+- Token contract: `docs/agent-operating-charter/theme-token-contract.md`
+- Tailwind entrypoints and source policy: `docs/agent-operating-charter/tailwind-and-styles.md`
+- Design doctrine routing: `docs/agent-operating-charter/design-system-doctrine.md`
+- Component styling: `docs/agent-operating-charter/component-styling.md`
+- Storybook theming and Docs surfaces: `docs/agent-operating-charter/storybook-theming-and-docs.md`
+- Verification: `docs/agent-operating-charter/verification.md`
 
 ## Semantic Utility Prefixes
 

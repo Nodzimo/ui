@@ -15,7 +15,8 @@ This is a formatting and grouping skill only. It must preserve the exact style c
 
 ## Required Reading
 
-- Read `docs/agent/component-styling.md` for the canonical project convention before changing component classes.
+- Read `docs/agent-operating-charter/component-styling.md` for the canonical project convention before changing
+  component classes.
 - If a class looks like it needs token adaptation, use `theme-token-adapter` instead of fixing it inside this skill.
 - If broader code-style cleanup is requested, use `code-style-reviewer` to orchestrate this skill with the other style
   checks.

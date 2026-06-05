@@ -17,13 +17,20 @@
     - `@nodzimo/ui` for core/RSC-safe exports.
     - `@nodzimo/ui/client` for client-boundary exports.
 - Consumers should import from public package entrypoints, not from `src` or deep internal paths.
-- `files: ["dist"]` keeps packed/published contents limited to build output.
+- `files` intentionally publishes the runtime build output plus the AI-readable documentation corpus:
+    - `dist` contains the JS, declaration, CSS, and private chunk artifacts.
+    - `docs` contains versioned project doctrine and agent-operating documentation for local IDE and agent workflows.
+    - `AGENTS.md` is the root entrypoint for the Agent Operating Charter.
+- `README.md`, `LICENSE`, and `package.json` are included by package tooling automatically. Do not add duplicate
+  entries for them unless a concrete pack inspection proves a tooling change.
 - The package export map is intentionally minimal:
     - `exports["."].import` points to `dist/ui.js`.
     - `exports["."].types` points to `dist/ui.d.ts`.
     - `exports["./client"].import` points to `dist/client.js`.
     - `exports["./client"].types` points to `dist/client.d.ts`.
     - `exports["./styles.css"]` points to `dist/styles.css`.
+- Do not add documentation paths to `exports`. Markdown files are shipped as local package documentation, not as
+  importable runtime API.
 - Public declaration files are bundled per public entrypoint. Keep `dist/ui.d.ts` for the root/RSC-safe entry
   and `dist/client.d.ts` for the client-boundary entry. Do not publish a mirrored `dist/src` declaration tree unless a
   real tooling need appears.

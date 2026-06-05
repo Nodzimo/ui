@@ -19,14 +19,14 @@ not a patch.
 Read only the files relevant to the update surface:
 
 - Dependency/package metadata concepts, runtime vs peer vs dev dependencies, and source-map maintenance:
-  `docs/agent/dependency-concepts.md`
+  `docs/agent-operating-charter/dependency-concepts.md`
 - Vite, externalization, declaration generation, React Compiler, and build-tool notes:
-  `docs/agent/vite-build-notes.md`
+  `docs/agent-operating-charter/vite-build-notes.md`
 - Storybook package, Vite builder, addon, and preview CSS boundaries:
-  `docs/agent/storybook-configuration.md`
-- Storybook/Vitest/browser testing notes: `docs/agent/storybook-testing.md`
-- Biome update and migration policy: `docs/agent/biome-policy.md`
-- Verification command selection and artifact checks: `docs/agent/verification.md`
+  `docs/agent-operating-charter/storybook-configuration.md`
+- Storybook/Vitest/browser testing notes: `docs/agent-operating-charter/storybook-testing.md`
+- Biome update and migration policy: `docs/agent-operating-charter/biome-policy.md`
+- Verification command selection and artifact checks: `docs/agent-operating-charter/verification.md`
 
 Use `references/dependency-sources.md` as the compact map of official upstream sources and local package-specific
 review focus.
@@ -171,8 +171,10 @@ recommendation about whether to update now or whether an existing dependency dif
 ## Project Routing
 
 Read root `AGENTS.md` before interpreting build, package, peer dependency, styling, Storybook, or publishing changes.
-Keep reusable review workflow in this skill, durable project rules in `docs/agent`, and the current package source map
+Keep reusable review workflow in this skill, durable project rules in `docs/agent-operating-charter`, and the current
+package source map
 in `references/dependency-sources.md`.
 
 When a dependency change touches build output, Storybook, Biome, declarations, CSS artifacts, package metadata, or test
-configuration, route the review through the relevant `docs/agent` files above instead of relying only on release notes.
+configuration, route the review through the relevant `docs/agent-operating-charter` files above instead of relying only
+on release notes.

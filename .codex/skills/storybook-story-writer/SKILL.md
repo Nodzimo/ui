@@ -8,22 +8,23 @@ description: Write, review, or update focused Storybook CSF 3 stories for Nodzim
 ## Purpose
 
 Write component stories as executable UI-kit documentation. Treat this skill as the procedural checklist; the full
-Storybook source of truth lives in `docs/agent`.
+Storybook source of truth lives in `docs/agent-operating-charter`.
 
 ## Required Reading
 
 Read only the files relevant to the touched surface:
 
 - Component story budgets, controls, CVA/docgen limits, story-only args, and CSF guidance:
-  `docs/agent/storybook-story-writing.md`
+  `docs/agent-operating-charter/storybook-story-writing.md`
 - Storybook folders, addons, source globs, story sorting, and preview CSS entrypoint:
-  `docs/agent/storybook-configuration.md`
+  `docs/agent-operating-charter/storybook-configuration.md`
 - Theme decorators, `wrapperBackground`, Docs theming, MDX theme bridge, and preview surface rules:
-  `docs/agent/storybook-theming-and-docs.md`
+  `docs/agent-operating-charter/storybook-theming-and-docs.md`
 - Pseudo states, RTL checks, bidi demo text, icon mirroring, and addon boundaries:
-  `docs/agent/storybook-addons-and-qa.md`
-- Production Docs proxy incident and workaround paths: `docs/agent/storybook-mdx-react-proxy-incident.md`
-- Verification commands and static Storybook checks: `docs/agent/verification.md`
+  `docs/agent-operating-charter/storybook-addons-and-qa.md`
+- Production Docs proxy incident and workaround paths:
+  `docs/agent-operating-charter/storybook-mdx-react-proxy-incident.md`
+- Verification commands and static Storybook checks: `docs/agent-operating-charter/verification.md`
 
 Use `references/story-patterns.md` for compact story shape examples and control snippets.
 

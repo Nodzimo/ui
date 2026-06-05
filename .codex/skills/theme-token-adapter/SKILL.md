@@ -8,21 +8,21 @@ description: Review, adapt, or validate Tailwind/React component styles against 
 ## Purpose
 
 Adapt component and stylesheet code to the NUI theme-token contract. Treat this skill as the procedural checklist; the
-architectural source of truth lives in `docs/agent`.
+architectural source of truth lives in `docs/agent-operating-charter`.
 
 ## Required Reading
 
 Read only the files relevant to the touched surface:
 
 - Token namespace, semantic roles, radius, spacing, foundation utilities, and RTL rules:
-  `docs/agent/theme-token-contract.md`
+  `docs/agent-operating-charter/theme-token-contract.md`
 - Tailwind CSS entrypoints, source detection, `tw-animate-css`, `@utility`, and safelisting:
-  `docs/agent/tailwind-and-styles.md`
+  `docs/agent-operating-charter/tailwind-and-styles.md`
 - Product/design doctrine for color values, button hierarchy, interaction legibility, and expressive color:
-  `docs/agent/design-system-doctrine.md`
-- Component composition and public surface rules: `docs/agent/component-styling.md`
-- Storybook theme surface and Docs canvas behavior: `docs/agent/storybook-theming-and-docs.md`
-- Verification commands and CSS artifact checks: `docs/agent/verification.md`
+  `docs/agent-operating-charter/design-system-doctrine.md`
+- Component composition and public surface rules: `docs/agent-operating-charter/component-styling.md`
+- Storybook theme surface and Docs canvas behavior: `docs/agent-operating-charter/storybook-theming-and-docs.md`
+- Verification commands and CSS artifact checks: `docs/agent-operating-charter/verification.md`
 
 Use `references/token-prefixing.md` for the compact mapping cheat sheet, RTL conversion examples, and useful searches.
 

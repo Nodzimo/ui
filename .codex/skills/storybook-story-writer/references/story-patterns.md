@@ -1,6 +1,7 @@
 # Story Patterns
 
-This reference is a compact working aid for `storybook-story-writer`. Keep architectural rules in `docs/agent`.
+This reference is a compact working aid for `storybook-story-writer`. Keep architectural rules in
+`docs/agent-operating-charter`.
 
 ## Reference Shape
 
