@@ -50,6 +50,12 @@
 - CSS utility sources that are consumed only by the Tailwind build also belong in `devDependencies`. This includes
   `tw-animate-css`: it is imported while compiling `src/styles.css` and Storybook preview CSS, then emitted into the
   built stylesheet. Consumers receive `dist/styles.css`; they do not resolve `tw-animate-css` at runtime.
+- Treat `bun run deps:audit` as security visibility, not an automatic mandate to rewrite the dependency tree. First
+  check whether direct dependencies are already up to date with `bun run deps:outdated`; if they are, classify audit
+  findings by severity, runtime exposure, and whether they affect package artifacts or only development tooling.
+- Do not add transitive packages to `dependencies` merely to silence audit warnings.
+- Consider `overrides` heavy artillery for transitive vulnerabilities. Use them only after explicit review and
+  agreement, especially for critical/high findings or confirmed runtime exposure that cannot wait for upstream fixes.
 
 ### Dependency Review Sources
 
