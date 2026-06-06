@@ -49,6 +49,13 @@ files.
 
 See [docs/agent-operating-charter/repository-text-format.md](docs/agent-operating-charter/repository-text-format.md).
 
+## Community Health Files
+
+GitHub community health files live under `.github`, with README links used to make less-prominent files discoverable
+across GitHub, package, and IDE surfaces.
+
+See [docs/agent-operating-charter/community-health-files.md](docs/agent-operating-charter/community-health-files.md).
+
 ## WebStorm Project Settings
 
 Shared WebStorm settings are intentionally narrow and should use scoped inspection exclusions instead of broad IDE
