@@ -18,18 +18,16 @@ not a patch.
 
 Read only the files relevant to the update surface:
 
-- Dependency/package metadata concepts, runtime vs peer vs dev dependencies, and source-map maintenance:
-  `docs/agent-operating-charter/dependency-concepts.md`
-- Vite, externalization, declaration generation, React Compiler, and build-tool notes:
-  `docs/agent-operating-charter/vite-build-notes.md`
-- Storybook package, Vite builder, addon, and preview CSS boundaries:
-  `docs/agent-operating-charter/storybook-configuration.md`
-- Storybook/Vitest/browser testing notes: `docs/agent-operating-charter/storybook-testing.md`
-- Biome update and migration policy: `docs/agent-operating-charter/biome-policy.md`
-- Verification command selection and artifact checks: `docs/agent-operating-charter/verification.md`
-
-Use `references/dependency-sources.md` as the compact map of official upstream sources and local package-specific
-review focus.
+- Always read `docs/agent-operating-charter/dependency-concepts.md` and
+  `docs/agent-operating-charter/verification.md`.
+- Read `docs/agent-operating-charter/vite-build-notes.md` only when Vite, Rolldown, declarations, React Compiler,
+  package exports, externalization, CSS output, or build tooling is involved.
+- Read `docs/agent-operating-charter/storybook-configuration.md` and
+  `docs/agent-operating-charter/storybook-testing.md` only when Storybook, addon, Docs, Vitest, browser testing, or
+  preview behavior is involved.
+- Read `docs/agent-operating-charter/biome-policy.md` only when Biome is involved.
+- Read `references/dependency-sources.md` only when official upstream source routing is needed for the selected
+  packages.
 
 ## Mode Selection
 

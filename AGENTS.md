@@ -1,5 +1,10 @@
 # Nodzimo UI Agent Operating Charter
 
+## Context Economy
+
+Use [Agent Context Economy](docs/agent-operating-charter/context-economy.md) as the default Codex working contract:
+scope first, read in layers, use broad context deliberately, verify narrowly, and report concisely.
+
 ## Project Goal
 
 Nodzimo UI is a modern React UI kit for package consumers, with minimal explicit configuration and no legacy
