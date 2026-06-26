@@ -10,6 +10,8 @@ of the published library JS entrypoints.
   manager/docs theming, MDX theme bridges, and Docs blocks.
 - [Storybook MDX React Proxy Incident](storybook-mdx-react-proxy-incident.md): the production-only Docs bundling failure
   and the local Vite workaround.
+- [Storybook Docs Heading Anchor Incident](storybook-docs-heading-anchor-incident.md): the dark-mode Docs heading shift
+  caused by Storybook's generated heading-anchor styles losing in the cascade, and the scoped preview CSS workaround.
 - [Storybook Addons And QA](storybook-addons-and-qa.md): background limitations, pseudo-state previews, RTL checks, icon
   mirroring, and global autodocs defaults.
 - [Storybook Testing](storybook-testing.md): Storybook TypeScript context, Vitest/browser config, Playwright browsers,

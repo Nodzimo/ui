@@ -23,6 +23,14 @@
   and on `.docs-story` for Storybook Docs story canvases. Use `background-color`, not the `background` shorthand, so the
   override changes only the surface color. This follows the practical workaround discussed in
   https://github.com/storybookjs/storybook/discussions/25183 and is intentionally local to Storybook.
+- Keep the Storybook Docs heading-anchor workaround in `.storybook/preview.css`. Storybook's generated Markdown heading
+  anchors use a negative left margin to place the paperclip/link icon in the left gutter without moving the heading
+  text. When `storybook-dark-mode` switches the Docs UI theme, Storybook's generic dark Docs link typography can be
+  injected later and reset that anchor margin to `0`, shifting headings right. The local override must stay scoped to
+  `.sbdocs-content :is(h1, h2, h3, h4, h5, h6) > a[aria-hidden="true"][tabindex="-1"]` and should restore only the
+  service-anchor geometry: `float: left`, `line-height: inherit`, `margin-left: -24px`, `padding-right: 10px`,
+  `color: inherit`, and `text-decoration: none`. Do not broaden it to ordinary Docs links. See
+  [Storybook Docs Heading Anchor Incident](storybook-docs-heading-anchor-incident.md).
 - Keep the global Storybook preview `wrapperBackground` arg as a preview-only design aid. It should live under the
   `Story canvas` controls category, use the display name `Wrapper background`, default to `transparent`, and apply only
   to the decorator wrapper. Filter it out before rendering the story so it never leaks into component props or DOM.

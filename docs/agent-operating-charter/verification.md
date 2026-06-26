@@ -23,6 +23,11 @@
     - a separate `mdx-react-proxy-*.js` chunk or another verified fixed path for `MDXProvider`.
     - working Button Docs and Spinner Docs pages with no React #130 runtime error.
     - working ordinary story pages, because Docs-only fixes should not break canvas stories.
+- After changing `.storybook/preview.css`, Storybook Docs theming, `storybook-dark-mode`, or
+  `@storybook/addon-docs`, open a raw-Markdown doctrine Docs page such as `Design System/Doctrine/Core Position` in the
+  static Storybook build and toggle the manager/Docs light/dark button. Confirm the visible heading text does not shift
+  horizontally and the generated heading anchor stays in Storybook's left gutter. See
+  [Storybook Docs Heading Anchor Incident](storybook-docs-heading-anchor-incident.md).
 
 ### Package Artifacts
 
