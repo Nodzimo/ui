@@ -13,9 +13,9 @@ html,
 .sbdocs-content :is(h1, h2, h3, h4, h5, h6)
 	> a[aria-hidden="true"][tabindex="-1"] {
 	float: left;
-	line-height: inherit;
-	margin-left: -24px;
 	padding-right: 10px;
+	margin-left: -24px;
+	line-height: inherit;
 	color: inherit;
 	text-decoration: none;
 }
