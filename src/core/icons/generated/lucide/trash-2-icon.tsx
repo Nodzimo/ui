@@ -2,7 +2,7 @@ import type { SVGProps } from 'react'
 
 const SvgTrash2Icon = (props: SVGProps<SVGSVGElement>) => (
 	<svg
-		aria-hidden={true}
+		aria-hidden='true'
 		fill='none'
 		height='1em'
 		stroke='currentColor'

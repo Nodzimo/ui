@@ -2,7 +2,7 @@ import type { SVGProps } from 'react'
 
 const SvgLoaderIcon = (props: SVGProps<SVGSVGElement>) => (
 	<svg
-		aria-hidden={true}
+		aria-hidden='true'
 		fill='none'
 		height='1em'
 		stroke='currentColor'
