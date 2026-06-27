@@ -20,6 +20,22 @@
   acceptable even though JavaScript and JSX use single quotes.
 - Keep JSON comments disabled. Project JSON files should be strict JSON, not JSONC.
 
+### Assist And Lint Rules
+
+- Keep source assist actions enabled only when they automate an intentional project convention. The shared sorting
+  baseline is attribute sorting, enum member sorting, interface member sorting, JSON object key sorting, CSS property
+  sorting, and duplicate class removal.
+- Keep Tailwind utility class sorting enabled as an error with a safe fix. Tailwind class order should be machine-owned.
+- Keep duplicate class removal enabled through `assist.actions.source.noDuplicateClasses`; duplicated utility classes
+  are
+  copy/paste or merge noise and should be removed by Biome.
+- Keep CSS property sorting enabled through `assist.actions.source.useSortedProperties`; author order should not encode
+  meaning in project CSS.
+- Keep `assist.actions.source.useSortedPackageJson` disabled for now. The rule matches the desired convention, but in
+  this project and the sibling web project Biome 2.5.1 can hang during lint when it is enabled.
+- Do not enable CSS class graph rules in this UI kit. `noUndeclaredClasses` and `noUnusedClasses` are useful in
+  applications, but library CSS includes public classes and token hooks that may be consumed outside this repository.
+
 ### Updates And Scope
 
 - After updating `@biomejs/biome`, run the local migration script `bun run biome:migrate` and review any
