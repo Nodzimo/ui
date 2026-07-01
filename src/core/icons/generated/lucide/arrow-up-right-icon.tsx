@@ -1,6 +1,6 @@
-import type { SVGProps } from 'react'
+import type { JSX } from 'react'
 
-const SvgArrowUpRightIcon = (props: SVGProps<SVGSVGElement>) => (
+const SvgArrowUpRightIcon = (props: JSX.IntrinsicElements['svg']) => (
 	<svg
 		aria-hidden='true'
 		fill='none'

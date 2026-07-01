@@ -13,7 +13,7 @@
 - `nixpacks.toml` should keep an exact `BUN_VERSION` because it is interpolated into a GitHub release asset URL such as
   `bun-v${BUN_VERSION}/bun-linux-x64-baseline.zip`. This is separate from `package.json` `engines.bun`, which declares
   the supported Bun line for the project.
-- Keep `NODE_VERSION = '25'` in `nixpacks.toml` aligned with the Node 25 project line unless the project intentionally
+- Keep `NODE_VERSION = '26'` in `nixpacks.toml` aligned with the Node 26 project line unless the project intentionally
   moves to a new Node line.
 
 ### Coolify Settings

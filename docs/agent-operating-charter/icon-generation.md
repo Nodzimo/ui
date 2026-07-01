@@ -5,9 +5,15 @@
 - Generate project-owned icon components with SVGR CLI. SVGR is a dev-only generator here, not a runtime dependency and
   not a Vite plugin.
 - Keep `svgr.config.cjs` compact. Do not add explicit SVGR defaults; keep only options that change this project's
-  output, such as `outDir`, `filenameCase`, `jsxRuntime`, `icon`, `typescript`, and `prettier`.
+  output, such as `outDir`, `filenameCase`, `jsxRuntime`, `icon`, `typescript`, `prettier`, and the project template.
 - `bun run build:icons` reads raw SVG files from `assets/icons`, writes generated TSX under
   `src/core/icons/generated`, and then runs the project's Biome fix flow so generated output follows local formatting.
+- Keep the custom SVGR component template while this project uses SVGR 8 with Babel 8. SVGR 8 has no newer stable,
+  beta, or alpha line for Babel 8 support, and its default TypeScript output can lose the generic in
+  `SVGProps<SVGSVGElement>` when generated through the mixed Babel 7/8 toolchain. The template is the narrow fix: it
+  changes only the generated component props type to `JSX.IntrinsicElements['svg']`, which React types define as the
+  intrinsic `<svg>` props shape. This preserves strict SVG prop typing without a post-generation string rewrite,
+  patching `node_modules`, downgrading Babel, or changing runtime output.
 
 ### SVG Source Rules
 

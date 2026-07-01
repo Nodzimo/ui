@@ -1,9 +1,9 @@
-import type { SVGProps } from 'react'
+import type { JSX } from 'react'
 
 type Props = {
 	leftColor?: string
 	rightColor?: string
-} & SVGProps<SVGSVGElement>
+} & JSX.IntrinsicElements['svg']
 
 export function NodzimoSymbolIcon({
 	leftColor = 'currentColor',

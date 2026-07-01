@@ -33,7 +33,7 @@
   dependencies for consumers and dev dependencies for local library development.
 - Keep React peer ranges intentionally scoped to React 19 with `19.x` until compatibility with later React majors is
   confirmed.
-- This project intentionally tracks current bleeding-edge tooling. Keep `engines.node` as `25.x` and `engines.bun` as
+- This project intentionally tracks current bleeding-edge tooling. Keep `engines.node` as `26.x` and `engines.bun` as
   `1.3.x` unless the project deliberately moves to a new line. Use exact versions in dev dependencies and lockfiles for
   reproducible local installs; use `x` ranges for public engine/peer lines when the supported contract is the current
   major or minor line.

@@ -1,6 +1,6 @@
-import type { SVGProps } from 'react'
+import type { JSX } from 'react'
 
-const SvgChevronDownIcon = (props: SVGProps<SVGSVGElement>) => (
+const SvgChevronDownIcon = (props: JSX.IntrinsicElements['svg']) => (
 	<svg
 		aria-hidden='true'
 		fill='none'

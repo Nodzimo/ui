@@ -1,6 +1,6 @@
-import type { SVGProps } from 'react'
+import type { JSX } from 'react'
 
-const SvgKeyRoundIcon = (props: SVGProps<SVGSVGElement>) => (
+const SvgKeyRoundIcon = (props: JSX.IntrinsicElements['svg']) => (
 	<svg
 		aria-hidden='true'
 		fill='none'
