@@ -42,6 +42,6 @@
   `biome.json` changes before treating the dependency update as complete. Keep the `$schema` version aligned with the
   installed Biome version when the schema URL is versioned.
 - Do not add `files.includes` globs that duplicate `.gitignore` unless Biome needs a narrower project-specific scope.
-- Do not enable global `assist/source/useSortedKeys`; it sorts whole JSON objects such as `package.json`, `scripts`,
-  `exports`, and tsconfig sections into an unreadable order.
+- Do not use `assist.actions.source.useSortedPackageJson` as a replacement for the existing JSON key sorting baseline
+  until the current Biome hang is fixed.
 - Biome does not format Markdown in this setup. Format Markdown files manually or with the editor.
