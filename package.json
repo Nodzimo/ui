@@ -17,7 +17,7 @@
 	"description": "Sefo Nodzimo UI",
 	"devDependencies": {
 		"@babel/core": "8.0.1",
-		"@biomejs/biome": "2.5.2",
+		"@biomejs/biome": "2.5.3",
 		"@chromatic-com/storybook": "5.2.1",
 		"@microsoft/api-extractor": "7.58.9",
 		"@rolldown/plugin-babel": "0.2.3",
