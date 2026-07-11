@@ -172,6 +172,13 @@ output expectations intact.
 
 See [docs/agent-operating-charter/vite-build-notes.md](docs/agent-operating-charter/vite-build-notes.md).
 
+## TypeScript 7 Native Compiler Incident
+
+TypeScript 7 is the intended bleeding-edge direction, but the root `typescript` package is currently blocked by
+`unplugin-dts` and API Extractor declaration bundling compatibility.
+
+See [docs/agent-operating-charter/typescript-7-native-compiler-incident.md](docs/agent-operating-charter/typescript-7-native-compiler-incident.md).
+
 ## Storybook
 
 Storybook is a real UI-kit consumer and documentation surface. Its focused story-writing, theming, Docs, QA, testing,

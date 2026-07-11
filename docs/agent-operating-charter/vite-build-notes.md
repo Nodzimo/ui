@@ -53,6 +53,10 @@ dts({
 - API Extractor may warn when its bundled TypeScript compiler is older than this project's TypeScript version. Treat
   that as a tooling-version warning, not a package blocker, when declaration output is correct and the latest API
   Extractor still bundles the older compiler.
+- Do not move the root `typescript` dependency to TypeScript 7 until `unplugin-dts` plus API Extractor can still emit
+  bundled `dist/ui.d.ts` and `dist/client.d.ts`. The previous TypeScript 7 attempt failed after the
+  `@typescript/typescript6` fallback with `Unable to follow symbol for "Pick"`. See
+  [TypeScript 7 Native Compiler Incident](typescript-7-native-compiler-incident.md).
 - Keep Storybook/Vitest test configuration out of `vite.config.ts`. Use `vite.config.ts` for the publishable library
   build and a separate `vitest.config.ts` for Storybook browser tests.
 - In `vite.config.ts`, import `defineConfig` from `vite`. In `vitest.config.ts`, import Vitest test config helpers from

@@ -37,6 +37,9 @@
   file list, access, and registry are expected.
 - After changing declaration bundling or package type exports, confirm `dist` contains `ui.d.ts` and
   `client.d.ts`, does not contain `dist/src`, and that `package.json` `exports.types` points at the bundled files.
+- For TypeScript 7 retry attempts, treat `bun run build:js` declaration bundling as the gate, not just
+  `bun run build:ts`. The known blocker is documented in
+  [TypeScript 7 Native Compiler Incident](typescript-7-native-compiler-incident.md).
 - Confirm `dist/styles.css` exists after `bun run build:all` when changing style build scripts or Tailwind setup.
 
 ### CSS Artifacts

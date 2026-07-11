@@ -37,6 +37,10 @@
   `1.3.x` unless the project deliberately moves to a new line. Use exact versions in dev dependencies and lockfiles for
   reproducible local installs; use `x` ranges for public engine/peer lines when the supported contract is the current
   major or minor line.
+- Bleeding-edge dependency policy does not override publishable artifact integrity. TypeScript 7 is the intended
+  direction, but the root `typescript` package must stay on the latest working TypeScript 6 line until declaration
+  bundling with `unplugin-dts` and API Extractor passes. See
+  [TypeScript 7 Native Compiler Incident](typescript-7-native-compiler-incident.md).
 - Runtime implementation dependencies used by built components belong in `dependencies`, not `devDependencies`. This
   currently includes `@base-ui/react`, `class-variance-authority`, `clsx`, and `tailwind-merge`.
 - Keep those runtime implementation dependencies in Vite/Rolldown `external` as well. Inlining `@base-ui/react` can copy
