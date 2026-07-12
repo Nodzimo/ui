@@ -14,13 +14,17 @@ tooling path is ready, keep the project on the latest TypeScript 6 line for the 
 TypeScript 7 moves the compiler to a native Go implementation. Microsoft describes TypeScript 7 as a native port of
 TypeScript intended to deliver much faster compile and editor workflows:
 
+- https://devblogs.microsoft.com/typescript/announcing-typescript-7-0-rc/
 - https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/
 - https://github.com/microsoft/typescript-go
 
-The important package-contract change is that the TypeScript 7 npm package is not a drop-in replacement for the
-JavaScript Compiler API that existing ecosystem tools commonly load through `require('typescript')` or
-`import 'typescript'`. That API surface is still required by declaration bundlers, docgen tools, framework checks, and
-other TypeScript-integrated build tooling.
+The important package-contract change is explicit in Microsoft's TypeScript 7.0 announcement: TypeScript 7.0 does not
+ship with a stable programmatic API. Microsoft expects TypeScript 7.1 to ship a new and different API, and recommends a
+side-by-side TypeScript 6/7 setup until then for tooling that still needs compiler API access.
+
+That missing API is the ecosystem blocker. Existing tools commonly load the JavaScript Compiler API through
+`require('typescript')` or `import 'typescript'`. Declaration bundlers, docgen tools, framework checks, and other
+TypeScript-integrated build tooling still depend on that API surface.
 
 ### Local Failure
 
@@ -50,18 +54,33 @@ contract. The package must emit `dist/ui.d.ts` and `dist/client.d.ts` declaratio
 
 ### Why The Workaround Is Not Accepted
 
-`unplugin-dts` documents an automatic fallback to `@typescript/typescript6` for TypeScript 7 compatibility:
+Microsoft's official transition workaround is to run TypeScript 7 side-by-side with TypeScript 6:
+
+```json
+{
+  "devDependencies": {
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2"
+  }
+}
+```
+
+This lets `tsc` resolve to the TypeScript 7 compiler while tools that import `typescript` continue to receive the
+TypeScript 6 JavaScript API.
+
+`unplugin-dts` also documents an automatic fallback to `@typescript/typescript6` for TypeScript 7 compatibility:
 
 - https://github.com/qmhc/unplugin-dts/releases
 
-That fallback addresses the missing JavaScript Compiler API, but it did not make this project's declaration rollup pass.
-API Extractor also documents that it uses its own TypeScript compiler engine and can be sensitive to compiler API
-version compatibility:
+Those workarounds address the missing JavaScript Compiler API in general, but they did not make this project's
+declaration rollup pass. API Extractor also documents that it uses its own TypeScript compiler engine and can be
+sensitive to compiler API version compatibility:
 
 - https://api-extractor.com/pages/setup/invoking/
 
-Do not replace the root `typescript` dependency with `typescript@7` plus a compatibility shim just to keep the audit
-green. That produces a mixed compiler/tooling state and still failed in this project during declaration bundling.
+Do not replace the root `typescript` dependency with TypeScript 7 plus a compatibility shim just to keep the audit
+green. The official side-by-side workaround is valid for some projects, but this package's `bundleTypes: true` build
+still failed during declaration bundling.
 
 ### Current Decision
 
@@ -74,7 +93,8 @@ green. That produces a mixed compiler/tooling state and still failed in this pro
 
 ### Retest Criteria
 
-Reconsider TypeScript 7 only when upstream tooling has visibly moved forward. Check these sources before retrying:
+Reconsider TypeScript 7 only when TypeScript 7.1 or later provides the new programmatic API and upstream tooling has
+visibly moved forward. Check these sources before retrying:
 
 - TypeScript release notes and native compiler status:
   https://devblogs.microsoft.com/typescript/ and https://github.com/microsoft/typescript-go
