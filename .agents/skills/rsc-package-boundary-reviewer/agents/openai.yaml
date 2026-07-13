@@ -1,3 +1,4 @@
-display_name: RSC Package Boundary Reviewer
-short_description: Review UI-kit core/client boundaries, externals, and Next RSC package output.
-default_prompt: Review the Nodzimo UI package boundary for RSC safety and inspect the built output for leaks.
+interface:
+  display_name: "RSC Package Boundary Reviewer"
+  short_description: "Review RSC-safe UI package boundaries"
+  default_prompt: "Use $rsc-package-boundary-reviewer to review the Nodzimo UI package boundary for RSC safety and inspect built artifacts for leaks."

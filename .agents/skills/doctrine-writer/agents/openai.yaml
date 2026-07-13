@@ -1,4 +1,4 @@
 interface:
   display_name: "Doctrine Writer"
-  short_description: "Write and maintain product-facing Nodzimo design-system doctrine."
-  default_prompt: "Use this skill to write, revise, reorganize, or review Nodzimo UI design-system doctrine chapters and Storybook doctrine wiring."
+  short_description: "Write Nodzimo UI design-system doctrine"
+  default_prompt: "Use $doctrine-writer to write or review Nodzimo UI design-system doctrine and its Storybook navigation."

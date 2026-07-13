@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Style Reviewer"
-  short_description: "Review code conventions"
-  default_prompt: "Review and fix project code style conventions that Biome does not fully enforce."
+  short_description: "Review project code-style conventions"
+  default_prompt: "Use $code-style-reviewer to review project changes for conventions that automated tools do not enforce, apply safe fixes, and report semantic decisions."
