@@ -26,6 +26,12 @@ conventions.
 
 See [docs/agent-operating-charter/collaboration.md](docs/agent-operating-charter/collaboration.md).
 
+## Change Management
+
+Propose requested commit messages in English using Conventional Commits 1.0.0. Apply Semantic Versioning 2.0.0 and
+English Keep a Changelog 1.1.0 only when version or changelog work is explicitly in scope; do not introduce either by
+default.
+
 ## Code Style Conventions
 
 Code-style review should preserve local readability conventions around JSX literals, rest names, literal tables,
