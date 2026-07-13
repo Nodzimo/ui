@@ -37,7 +37,7 @@
 		"@vitest/browser-playwright": "4.1.10",
 		"@vitest/coverage-v8": "4.1.10",
 		"babel-plugin-react-compiler": "1.0.0",
-		"dependency-cruiser": "18.0.0",
+		"dependency-cruiser": "18.1.0",
 		"fkill-cli": "9.0.0",
 		"playwright": "1.61.1",
 		"react": "19.2.7",
