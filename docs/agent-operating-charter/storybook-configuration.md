@@ -5,7 +5,7 @@
 - Keep `.storybook/main.ts` focused on maintained project addons. Do not add `@storybook/addon-onboarding` or restore
   generated onboarding demo files; component docs should be real colocated stories or intentional project MDX.
 - Keep Storybook addon entries in `.storybook/main.ts` mirrored by direct `devDependencies` and by
-  `.codex/skills/dependency-update-reviewer/references/dependency-sources.md`. Current intentional third-party
+  `.agents/skills/dependency-update-reviewer/references/dependency-sources.md`. Current intentional third-party
   preview/manager addons include `storybook-dark-mode`, `storybook-addon-pseudo-states`, and `storybook-addon-rtl`.
 - Keep Storybook's manager branding on supported APIs: `storybook/theming` for title/link/theme and
   `.storybook/manager-head.html` for head tags such as favicon. Avoid CSS or DOM hacks against Storybook's internal

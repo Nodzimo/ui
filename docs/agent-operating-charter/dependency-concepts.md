@@ -63,7 +63,7 @@
 
 ### Dependency Review Sources
 
-- Keep `.codex/skills/dependency-update-reviewer/references/dependency-sources.md` aligned with direct dependencies,
+- Keep `.agents/skills/dependency-update-reviewer/references/dependency-sources.md` aligned with direct dependencies,
   peer dependencies, and dev dependencies. When adding a new direct package, add its official repository/docs/changelog
   source and the local review focus.
 - Do not pin installed versions in the dependency source map. Version state belongs to `package.json` and the lockfile.

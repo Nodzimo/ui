@@ -10,21 +10,21 @@ truth.
 
 - For pre-update dependency research from `bun outdated`, post-update changelog review, breaking-change triage, or
   deciding whether upgraded packages need local code/config/package metadata changes, use the project-local
-  `dependency-update-reviewer` skill at `.codex/skills/dependency-update-reviewer`.
+  `dependency-update-reviewer` skill at `.agents/skills/dependency-update-reviewer`.
 - For changes that affect `src/core`, `src/client`, public entrypoints, Vite externals, package dependency metadata,
   build output, or Next/RSC consumer compatibility, use the project-local `rsc-package-boundary-reviewer` skill at
-  `.codex/skills/rsc-package-boundary-reviewer`.
+  `.agents/skills/rsc-package-boundary-reviewer`.
 
 ### Styling And Stories
 
 - For repeated token-prefix adaptation and review work, use the project-local `theme-token-adapter` skill at
-  `.codex/skills/theme-token-adapter`.
+  `.agents/skills/theme-token-adapter`.
 - For formatting long Tailwind class strings into readable grouped chunks without changing the styles, use the
-  project-local `tailwind-class-formatter` skill at `.codex/skills/tailwind-class-formatter`.
+  project-local `tailwind-class-formatter` skill at `.agents/skills/tailwind-class-formatter`.
 - For final project convention review and safe fixes beyond Biome, including JSX literal braces, rest-prop naming,
   type-vs-interface choices, literal table typing, and orchestration of Tailwind class formatting, use the project-local
-  `code-style-reviewer` skill at `.codex/skills/code-style-reviewer`.
+  `code-style-reviewer` skill at `.agents/skills/code-style-reviewer`.
 - For writing, reviewing, or updating component stories, use the project-local `storybook-story-writer` skill at
-  `.codex/skills/storybook-story-writer`.
+  `.agents/skills/storybook-story-writer`.
 - For writing, revising, reorganizing, or reviewing product-facing design-system doctrine and its Storybook MDX mirrors,
-  use the project-local `doctrine-writer` skill at `.codex/skills/doctrine-writer`.
+  use the project-local `doctrine-writer` skill at `.agents/skills/doctrine-writer`.

@@ -34,4 +34,4 @@
 
 ### Related Skills
 
-- Use the repo skill `.codex/skills/theme-token-adapter` for repeated token-prefix adaptation and review work.
+- Use the repo skill `.agents/skills/theme-token-adapter` for repeated token-prefix adaptation and review work.
