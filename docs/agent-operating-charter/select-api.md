@@ -55,6 +55,11 @@ A `SelectOptions<Locale>` value is structurally assignable to Base UI's broader 
 `SelectProps['items']`: that broad union is appropriate for universal pass-through props but widens flat item values to
 the upstream `any`.
 
+`SelectOptions` is exported from `@nodzimo/ui/client` because it belongs to the client-side Select API. A Server
+Component may import it with `import type`; the import is erased and does not create a client boundary or prevent SSR or
+SSG. Runtime Select parts still come from the client entrypoint and follow the normal Server-to-Client Component
+boundary.
+
 ### Deliberate Limits
 
 `SelectOption` and `SelectOptions` are convenience types. They do not replace, narrow, or override
@@ -91,6 +96,11 @@ Select component.
 is explicit styling inherited from the adapted shadcn-style implementation, not missing consumer CSS. Changing the
 default to an opaque NUI surface remains a separate visual-system decision.
 
-The compound component does not create an accessible label automatically. Consumers must provide an associated label
-or an appropriate accessible name on `SelectTrigger`. Replacing a native labeled select without carrying this contract
-forward is an accessibility regression.
+Select is a form control even when it is not rendered inside a `<form>`, so it must have an accessible name. A visible
+label is optional. When the design has no visible label, provide a localized `aria-label` on `SelectTrigger`; the
+selected value describes the current state and is not a substitute for the control's purpose.
+
+The current public `SelectLabel` wraps Base UI's `GroupLabel`. It labels a group of options inside the popup and does
+not label the trigger. Do not use it as the control's accessible name. Until the library deliberately exposes Base UI's
+root `Label`, use `aria-label` on `SelectTrigger` for visually unlabeled selects. Replacing a native labeled select
+without carrying this contract forward is an accessibility regression.
