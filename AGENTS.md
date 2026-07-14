@@ -164,6 +164,13 @@ class formatting.
 
 See [docs/agent-operating-charter/component-styling.md](docs/agent-operating-charter/component-styling.md).
 
+## Select API
+
+Select preserves the Base UI compound contract while exporting focused readonly option types for strict flat-option
+data shared across consumer component boundaries.
+
+See [docs/agent-operating-charter/select-api.md](docs/agent-operating-charter/select-api.md).
+
 ## Icon Generation
 
 Icon sources, generated components, naming, barrels, and Storybook galleries follow the project-owned SVG generation
