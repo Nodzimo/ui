@@ -1,6 +1,13 @@
 import { Select as SelectPrimitive } from '@base-ui/react/select'
-import type { ComponentProps } from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 import { mcn } from '#lib'
+
+type SelectOption<Value> = Readonly<{
+	value: Value
+	label: ReactNode
+}>
+
+type SelectOptions<Value> = readonly SelectOption<Value>[]
 
 const Select = SelectPrimitive.Root
 
@@ -66,6 +73,8 @@ export {
 	type SelectGroupProps,
 	SelectLabel,
 	type SelectLabelProps,
+	type SelectOption,
+	type SelectOptions,
 	type SelectProps,
 	SelectSeparator,
 	type SelectSeparatorProps,

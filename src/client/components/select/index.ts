@@ -4,6 +4,8 @@ export {
 	type SelectGroupProps,
 	SelectLabel,
 	type SelectLabelProps,
+	type SelectOption,
+	type SelectOptions,
 	type SelectProps,
 	SelectSeparator,
 	type SelectSeparatorProps,
