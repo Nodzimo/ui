@@ -76,8 +76,8 @@ See [docs/agent-operating-charter/webstorm-project-settings.md](docs/agent-opera
 
 ## Public Package Shape
 
-The public package is ESM-only, published as `@nodzimo/ui`, and exposes only the root, client, and stylesheet
-entrypoints.
+The public package is ESM-only, published as `@nodzimo/ui`, and exposes root/client JavaScript plus runtime stylesheet
+and Tailwind-theme CSS entrypoints.
 
 See [docs/agent-operating-charter/public-package-shape.md](docs/agent-operating-charter/public-package-shape.md).
 
@@ -151,6 +151,14 @@ evidence, and reasoning failures to avoid.
 
 See
 [docs/agent-operating-charter/tailwind-preflight-ownership-decision.md](docs/agent-operating-charter/tailwind-preflight-ownership-decision.md).
+
+## Tailwind Consumer Theme Integration Decision
+
+The package separates ready-built browser CSS from uncompiled Tailwind theme metadata so consumers can generate the
+full NUI token utility API without compiling library components or safelisting a combinatorial utility matrix.
+
+See
+[docs/agent-operating-charter/tailwind-consumer-theme-integration-decision.md](docs/agent-operating-charter/tailwind-consumer-theme-integration-decision.md).
 
 ## Theme Token Contract
 

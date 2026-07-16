@@ -16,7 +16,10 @@
     1. Publish a new package version from this project.
     2. Install or update the package in the consumer with `bun add "@nodzimo/ui"` or
        `bun update @nodzimo/ui`.
-    3. Import from `@nodzimo/ui`, `@nodzimo/ui/client`, and `@nodzimo/ui/styles.css`.
+    3. Import React surfaces from `@nodzimo/ui` and `@nodzimo/ui/client`.
+    4. Import `@nodzimo/ui/styles.css` once at the application root before application globals.
+    5. In a Tailwind consumer global stylesheet, import `tailwindcss` first and `@nodzimo/ui/theme.css` second. See
+       [Tailwind And Styles](tailwind-and-styles.md#consumer-tailwind-theme) for the complete CSS contract.
 
 ### Tarball Testing
 

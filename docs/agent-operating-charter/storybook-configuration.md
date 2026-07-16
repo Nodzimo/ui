@@ -48,10 +48,10 @@
   or diagnostics build; do not use it for the deployed docs site unless the project intentionally accepts its
   test-optimized output.
 - Import the Storybook stylesheet entrypoint in `.storybook/preview.tsx` with `import './preview.css'`. That CSS
-  entrypoint imports full Tailwind with `source(none)`, including its application-owned Preflight, imports
-  `../src/library.css`, and explicitly scans `../src` plus `.storybook` so stories render with the same NUI tokens and
-  foundation classes as consumers while allowing Tailwind to generate Storybook-only preview utilities. The published
-  package stylesheet intentionally omits Preflight;
+  entrypoint imports full Tailwind with `source(none)`, including its application-owned Preflight. It also imports
+  `../src/library.css`, which provides the same `src/theme.css` mappings published to consumers. Explicit source scans
+  for `../src` and `.storybook` generate the utilities used only by stories and previews. The published package
+  stylesheet intentionally omits Preflight;
   see [Tailwind And Styles](tailwind-and-styles.md#preflight-ownership).
   Do not import built `dist/styles.css` in local Storybook; Storybook should exercise source CSS during development.
 - Do not import `src/styles.css` in Storybook preview. That file is the package CSS entrypoint and intentionally

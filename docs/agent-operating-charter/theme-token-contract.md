@@ -29,7 +29,8 @@ For CSS entrypoint and source-detection rules, see [Tailwind And Styles](tailwin
     - `.nui-interactive` restores pointer cursors for enabled `button` and `[role="button"]` descendants.
 - Consumers that want the full NUI foundation can add all three classes at the app root. Consumers can also apply only
   the specific foundation utilities they want, or scope them to a subtree.
-- Use `src/library.css` as the source of truth for available theme tokens before adapting a copied component.
+- Use `src/library.css` as the source of truth for raw runtime token values and `src/theme.css` as the source of truth
+  for Tailwind mappings before adapting a copied component. Every public mapped token must preserve both sides.
 
 ### Semantic Roles
 
@@ -71,8 +72,8 @@ For CSS entrypoint and source-detection rules, see [Tailwind And Styles](tailwin
 ### Spacing
 
 - The spacing scale is a public NUI rhythm layer, not Storybook-only display data. Define raw runtime variables
-  `--nui-spacing-2xs` through `--nui-spacing-2xl` in `:root`, then map Tailwind utilities through
-  `--spacing-nui-2xs` through `--spacing-nui-2xl` in `@theme inline`.
+  `--nui-spacing-2xs` through `--nui-spacing-2xl` in `src/library.css`, then map Tailwind utilities through
+  `--spacing-nui-2xs` through `--spacing-nui-2xl` inside the `@theme inline` block in `src/theme.css`.
 - Current NUI spacing tokens map to Tailwind spacing values `0.5`, `1`, `2`, `4`, `6`, `8`, and `12` respectively.
   Use `--spacing()` in `src/library.css`, not handwritten `calc(var(--spacing) * n)`, because `--spacing()` is
   Tailwind's native source function and compiles to the calc form. Keep comments beside the raw `--nui-spacing-*`

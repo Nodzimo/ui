@@ -33,6 +33,9 @@
 
 - After changing declaration excludes, Tailwind source detection, or package output names, inspect `bun pm pack
   --dry-run` and confirm Storybook-only files are not in the package unless intentionally kept.
+- After changing CSS exports or the package whitelist, confirm the pack contains `dist/styles.css` and exactly
+  `src/theme.css`, that `package.json#exports` maps their public aliases correctly, and that no broader `src` tree or
+  stale `dist/theme.css` is included.
 - Before publishing to npmjs, run `bun run publish:dry` after the final build and confirm the package name, version,
   file list, access, and registry are expected.
 - After changing declaration bundling or package type exports, confirm `dist` contains `ui.d.ts` and
@@ -44,7 +47,7 @@
 
 ### CSS Artifacts
 
-- After changing Tailwind CSS entrypoints or source detection, verify both CSS artifacts directly:
+- After changing Tailwind CSS entrypoints, mappings, or source detection, verify all CSS contracts directly:
     - Run `bun run build:css` and confirm `dist/styles.css` contains library foundation/component classes such as
       `.nui-surface`, `bg-nui-primary`, and `focus-visible:ring-nui-ring`.
     - Confirm `dist/styles.css` does not contain Tailwind Preflight signatures such as the universal
@@ -59,6 +62,13 @@
     - Run `bun run storybook:build` and confirm `storybook-static/assets/iframe-*.css` contains its intentional
       Preflight plus needed story and preview utilities such as design-lab gaps, preview padding, and NUI foundation
       classes.
+    - Compile an isolated Tailwind input with `source(none)`, import `@nodzimo/ui/theme.css`, and safelist
+      representative
+      consumer-only classes absent from package component source. Cover at least color, border/ring, radius, spacing,
+      opacity, interaction, and class-based dark forms such as `bg-nui-card`, `ring-nui-ring`, `rounded-nui-4xl`,
+      `gap-nui-md`, `hover:bg-nui-accent/80`, and `dark:text-nui-sidebar-foreground`.
+    - Confirm the consumer compiler accepts `@apply` with a mapped NUI utility. This catches the failure mode where raw
+      `--nui-*` values ship but the consumer Tailwind compiler never receives the `@theme` mapping.
 
 ### Built JS Inspection
 
@@ -79,6 +89,9 @@
 
 - For Next/Turbopack consumer checks, install the published `@nodzimo/ui` package in the Next app. Use tarball
   testing only when validating changes before publication.
+- For Tailwind consumers, confirm application globals import `tailwindcss` before `@nodzimo/ui/theme.css`, while the
+  application root imports ready-built `@nodzimo/ui/styles.css` before its globals. Verify autocomplete and production
+  output with at least one NUI utility not used in UI-kit component source.
 - If a client component fails in Next with compiler runtime errors, check whether `"use client";` is present in the
   built client entry.
 - If a core component fails in a Server Component context, check whether `react/compiler-runtime`, `createContext`,

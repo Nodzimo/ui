@@ -18,8 +18,9 @@ existing opt-in contract for broad NUI foundation behavior.
 ### Decision
 
 - The consumer owns the document-wide reset and imports it once through Tailwind Preflight or another chosen reset.
-- Published `@nodzimo/ui/styles.css` contains compiled NUI component styles, theme mappings, runtime tokens, animations,
-  generated utilities, and opt-in foundation classes, but no Preflight.
+- Published `@nodzimo/ui/styles.css` contains compiled NUI component styles, runtime tokens, animations, generated
+  utilities, and opt-in foundation classes, but no Preflight. Tailwind mappings are a separate compiler contract exposed
+  through `@nodzimo/ui/theme.css`.
 - Nodzimo UI is primarily developed for and visually verified in current Tailwind applications. This is the intended
   baseline, not a requirement that consumers use Tailwind to compile package components.
 - A non-Tailwind consumer may import the same ready-built package stylesheet and choose another reset. Nodzimo UI does
@@ -55,7 +56,7 @@ separate concerns.
   create a second reset implementation for Nodzimo UI to maintain.
 - **Solve it with `important`, `theme(static)`, `theme(inline)`, or a Tailwind prefix.** Rejected because these features
   control utility specificity, theme emission or aliasing, and namespace collisions. They do not change who owns the
-  document reset. Existing targeted `@theme inline` mappings in `src/library.css` remain intentional.
+  document reset. Existing targeted `@theme inline` mappings in `src/theme.css` remain intentional.
 
 ### Verification Evidence
 

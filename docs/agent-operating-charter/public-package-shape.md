@@ -13,12 +13,17 @@
 
 ### Public Entrypoints
 
-- The public API is split into two entrypoints:
+- The public JavaScript API is split into two entrypoints:
     - `@nodzimo/ui` for core/RSC-safe exports.
     - `@nodzimo/ui/client` for client-boundary exports.
+- The public CSS API is split by tool:
+    - `@nodzimo/ui/styles.css` is compiled runtime CSS for browsers.
+    - `@nodzimo/ui/theme.css` is uncompiled theme metadata for a consumer Tailwind compiler.
 - Consumers should import from public package entrypoints, not from `src` or deep internal paths.
-- `files` intentionally publishes the runtime build output plus the AI-readable documentation corpus:
+- `files` intentionally publishes runtime build output, the exact Tailwind compiler theme, and the AI-readable
+  documentation corpus:
     - `dist` contains the JS, declaration, CSS, and private chunk artifacts.
+    - `src/theme.css` is the one intentionally published compiler-source file. Do not publish the rest of `src`.
     - `docs` contains versioned project doctrine and agent-operating documentation for local IDE and agent workflows.
     - `AGENTS.md` is the root entrypoint for the Agent Operating Charter.
 - `README.md`, `LICENSE`, and `package.json` are included by package tooling automatically. Do not add duplicate
@@ -29,13 +34,16 @@
     - `exports["./client"].import` points to `dist/client.js`.
     - `exports["./client"].types` points to `dist/client.d.ts`.
     - `exports["./styles.css"]` points to `dist/styles.css`.
+    - `exports["./theme.css"]` points to `src/theme.css` while exposing only the stable public alias.
 - Do not add documentation paths to `exports`. Markdown files are shipped as local package documentation, not as
   importable runtime API.
 - Public declaration files are bundled per public entrypoint. Keep `dist/ui.d.ts` for the root/RSC-safe entry
   and `dist/client.d.ts` for the client-boundary entry. Do not publish a mirrored `dist/src` declaration tree unless a
   real tooling need appears.
-- Consumers should import the library stylesheet once at the app root, for example
-  `import '@nodzimo/ui/styles.css'`.
+- Consumers should import the library runtime stylesheet once at the app root, for example
+  `import '@nodzimo/ui/styles.css'`. Tailwind consumers should additionally import `@nodzimo/ui/theme.css` immediately
+  after `tailwindcss` in their global Tailwind input; see
+  [Tailwind And Styles](tailwind-and-styles.md#consumer-tailwind-theme).
 
 For source boundary rules, see [Core Vs Client](core-vs-client.md). For dependency and externalization rules, see
 [Dependency Concepts](dependency-concepts.md).

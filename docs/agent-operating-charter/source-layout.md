@@ -7,6 +7,8 @@
 - `src/styles.css` is the publishable stylesheet source for the UI kit and builds to reset-free `dist/styles.css`.
   Document-wide reset ownership remains with the consumer;
   see [Tailwind And Styles](tailwind-and-styles.md#preflight-ownership).
+- `src/theme.css` is the shared Tailwind compiler contract. `src/library.css` imports it for library and Storybook
+  builds, and the package publishes it unchanged through `@nodzimo/ui/theme.css` for Tailwind consumers.
 
 ### Documentation
 
