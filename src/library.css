@@ -109,6 +109,19 @@
 	.nui-interactive [role="button"]:not(:disabled) {
 		cursor: pointer;
 	}
+
+	.nui-link,
+	.nui-links :where(a:any-link) {
+		@apply text-nui-foreground underline decoration-2 decoration-nui-primary underline-offset-4;
+
+		&:hover {
+			@apply text-nui-primary;
+		}
+
+		&:active {
+			@apply decoration-1;
+		}
+	}
 }
 
 @utility nui-animate-paused {

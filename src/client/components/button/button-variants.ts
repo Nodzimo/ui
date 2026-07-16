@@ -13,11 +13,7 @@ const BUTTON_VARIANT_CLASSES = {
 		'aria-expanded:bg-nui-muted aria-expanded:text-nui-foreground',
 		'dark:hover:bg-nui-muted/50',
 	],
-	link: [
-		'text-nui-foreground underline decoration-2 decoration-nui-primary underline-offset-4',
-		'hover:text-nui-primary',
-		'active:decoration-1',
-	],
+	link: 'nui-link',
 	outline: [
 		'border-nui-border bg-nui-background',
 		'hover:bg-nui-muted hover:text-nui-foreground',
