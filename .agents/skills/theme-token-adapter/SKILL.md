@@ -62,6 +62,8 @@ Use `references/token-prefixing.md` for the compact mapping cheat sheet, RTL con
     - Keep public Tailwind mappings and the class-based dark variant in `src/theme.css`.
     - Keep raw runtime tokens, foundation classes, and shared CSS-first utility sources in `src/library.css`; import
       `./theme.css` there so library and Storybook builds use the public mapping source.
+    - Keep `nui-link` and the `nui-links` descendant scope in one grouped CSS rule. Button's `link` variant should
+      reference `nui-link` instead of copying the shared rest, hover, and active styles.
     - Keep package source detection and story exclusions in `src/styles.css`.
     - Keep Storybook source detection in `.storybook/preview.css`.
     - Safelist promised public utility variants in `src/styles.css` with `@source inline(...)` when package source does

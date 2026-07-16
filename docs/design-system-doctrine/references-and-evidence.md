@@ -157,6 +157,40 @@ focus must be visible
 ring may be vivid and brand-derived because it is temporary and accessibility-critical
 ```
 
+### Hyperlinks And Scoped Typography
+
+References:
+
+```text
+https://www.w3.org/WAI/WCAG22/Techniques/general/G182
+https://ui.shadcn.com/docs/components
+https://ui.shadcn.com/docs/typeset
+https://chakra-ui.com/docs/components/link
+https://mui.com/material-ui/react-link/
+```
+
+Why they matter:
+
+- WAI technique G182 identifies underlining as an additional cue that distinguishes links without relying on color
+  alone.
+- shadcn's component inventory contains no standalone general-purpose Link. Its Typeset system instead establishes an
+  opt-in container with low-specificity `:where()` descendant rules for ordinary rendered HTML.
+- Chakra UI and Material UI show the component-wrapper alternative through `asChild`, polymorphic component props, and
+  router adapters. That model is useful when the design system owns behavior or a routing API, but it adds no semantics
+  to Nodzimo's presentation-only requirement.
+
+How they map to Nodzimo:
+
+```text
+underline = durable hyperlink cue
+nui-links = opt-in low-specificity descendant scope
+nui-link = the same recipe on one element
+React Link wrapper = deferred until Nodzimo owns real behavior
+```
+
+The full architecture and trade-off record lives in
+[NUI Link Foundation Decision](../agent-operating-charter/nui-link-foundation-decision.md).
+
 ### Final Evidence Summary
 
 The exact Nodzimo palette is local. The doctrine behind it is not.

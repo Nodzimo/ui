@@ -20,6 +20,9 @@
     4. Import `@nodzimo/ui/styles.css` once at the application root before application globals.
     5. In a Tailwind consumer global stylesheet, import `tailwindcss` first and `@nodzimo/ui/theme.css` second. See
        [Tailwind And Styles](tailwind-and-styles.md#consumer-tailwind-theme) for the complete CSS contract.
+    6. When the product uses the complete NUI foundation, add
+       `nui-surface nui-boundaries nui-interactive nui-links` to the application root. Native anchors and Next.js
+       links inside that scope receive the shared link recipe without a React wrapper.
 
 ### Tarball Testing
 

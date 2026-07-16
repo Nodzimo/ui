@@ -106,6 +106,9 @@ For token implementation rules, see [Theme Token Contract](theme-token-contract.
 - Text links should be underlined in their resting state. Preferred inline-link pattern: foreground text with a
   primary-colored underline at rest, then primary text plus primary underline on hover. Do not rely on color alone to
   communicate that text is a hyperlink.
+- Native hyperlinks and Button's `link` variant share the `.nui-link` visual recipe, not semantics. Use the opt-in
+  `.nui-links` scope for ordinary and framework-rendered anchors; do not add a presentation-only React wrapper or copy
+  the recipe into consumer globals. See [NUI Link Foundation Decision](nui-link-foundation-decision.md).
 - Do not make default `outline` or `ghost` primary-colored text just to make them look branded. Let them carry Nodzimo
   through border tone, hover tint, focus ring, spacing, radius, and context.
 - Keep `ghost` hover softer than `secondary` rest. If ghost hover becomes visually identical to secondary, the action

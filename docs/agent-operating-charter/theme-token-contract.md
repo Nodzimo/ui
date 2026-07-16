@@ -27,10 +27,18 @@ For CSS entrypoint and source-detection rules, see [Tailwind And Styles](tailwin
     - `.nui-boundaries *` applies `border-nui-border` and `outline-nui-ring/50` to descendant element boundaries.
     - `.nui-surface` applies `bg-nui-background` and `text-nui-foreground` to the element it is placed on.
     - `.nui-interactive` restores pointer cursors for enabled `button` and `[role="button"]` descendants.
-- Consumers that want the full NUI foundation can add all three classes at the app root. Consumers can also apply only
-  the specific foundation utilities they want, or scope them to a subtree.
+    - `.nui-links` applies the canonical NUI link recipe to descendant `a:any-link` elements.
+    - `.nui-link` applies the same recipe to one element, including Button's `link` variant.
+- Consumers that want the full NUI foundation can add `nui-boundaries`, `nui-surface`, `nui-interactive`, and
+  `nui-links` at the app root. Consumers can also apply only the specific foundation classes they want or scope them to
+  a subtree.
+- Keep `.nui-link` and `.nui-links :where(a:any-link)` in one grouped rule. The singular class and descendant scope are
+  two applications of one visual contract, not separate style implementations.
 - Use `src/library.css` as the source of truth for raw runtime token values and `src/theme.css` as the source of truth
   for Tailwind mappings before adapting a copied component. Every public mapped token must preserve both sides.
+
+For the research, rejected component-wrapper alternatives, selector rationale, and consumer examples, see
+[NUI Link Foundation Decision](nui-link-foundation-decision.md).
 
 ### Semantic Roles
 

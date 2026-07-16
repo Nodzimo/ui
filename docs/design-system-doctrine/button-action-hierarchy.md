@@ -614,9 +614,13 @@ underline = primary
 This gives links permanent recognizability without turning long-form content into a field of bright green words. The
 brand appears first through the underline, then the full link lights up on interaction.
 
-Button `variant='link'` is related but not identical. It is a command/action button styled like a link, not the global
-typographic rule for every hyperlink. It may use primary text when the command needs stronger action emphasis, but it
-should still be underlined by default unless a specific navigation context makes the link role obvious without it.
+Native hyperlinks and Button `variant='link'` share this exact visual recipe, but they do not share semantics. An
+anchor with `href` navigates; Button remains an action and retains its own geometry, focus, disabled, and interaction
+contract. The recipe is shared; the rendered element still determines behavior.
+
+Use the opt-in `nui-links` foundation when ordinary anchors and framework-rendered anchors in a product should inherit
+this language. Use `nui-link` on one element outside that scope. A presentation-only React Link wrapper would add an API
+without improving native hyperlink behavior, so Nodzimo does not require one.
 
 Do not confuse link and ghost:
 
@@ -624,6 +628,9 @@ Do not confuse link and ghost:
 Link = text/navigation signal, underlined by default.
 Ghost = button action with hit area and hover surface.
 ```
+
+For the implementation boundary, consumer usage, and rejected component-wrapper alternatives, see
+[NUI Link Foundation Decision](../agent-operating-charter/nui-link-foundation-decision.md).
 
 ### Destructive
 

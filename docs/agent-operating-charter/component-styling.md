@@ -18,6 +18,17 @@
 - Read [Theme Token Contract](theme-token-contract.md) before adapting copied component styles, and use
   [Tailwind And Styles](tailwind-and-styles.md) for class naming, CSS entrypoint, and source-detection rules.
 
+### Shared Link Styling
+
+- Use `.nui-link` as the single visual recipe for NUI text links. Do not repeat its foreground, underline, hover, or
+  active classes in React variants or consumer examples.
+- Button `variant='link'` composes `.nui-link` with the Button base. The class shares presentation; it does not turn a
+  button into a hyperlink or move button geometry and behavior into the link recipe.
+- Use `.nui-links` when native and framework-rendered anchors in a subtree should receive the recipe automatically.
+  Do not add a framework-agnostic React `Link` wrapper until the library owns real behavior beyond styling.
+
+See [NUI Link Foundation Decision](nui-link-foundation-decision.md) for the ownership and composition rationale.
+
 ### Class Formatting
 
 - Long Tailwind class lists should be split into readable static chunks without changing visual behavior. Prefer

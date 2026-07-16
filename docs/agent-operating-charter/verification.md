@@ -49,7 +49,8 @@
 
 - After changing Tailwind CSS entrypoints, mappings, or source detection, verify all CSS contracts directly:
     - Run `bun run build:css` and confirm `dist/styles.css` contains library foundation/component classes such as
-      `.nui-surface`, `bg-nui-primary`, and `focus-visible:ring-nui-ring`.
+      `.nui-surface`, `.nui-link`, `.nui-links :where(a:any-link)`, `bg-nui-primary`, and
+      `focus-visible:ring-nui-ring`.
     - Confirm `dist/styles.css` does not contain Tailwind Preflight signatures such as the universal
       `box-sizing: border-box` reset, the `html` text-size/tab-size reset, the form-control reset, or the global media
       display reset. See [Tailwind And Styles](tailwind-and-styles.md#preflight-ownership) for reset ownership.
@@ -69,6 +70,9 @@
       `gap-nui-md`, `hover:bg-nui-accent/80`, and `dark:text-nui-sidebar-foreground`.
     - Confirm the consumer compiler accepts `@apply` with a mapped NUI utility. This catches the failure mode where raw
       `--nui-*` values ship but the consumer Tailwind compiler never receives the `@theme` mapping.
+    - Confirm the built link contract contains one grouped rest rule plus grouped hover and active rules for
+      `.nui-link` and `.nui-links :where(a:any-link)`. Verify Button's built `link` variant references only `nui-link`,
+      and confirm `theme.css` does not duplicate the runtime selector contract.
 
 ### Built JS Inspection
 
@@ -92,6 +96,8 @@
 - For Tailwind consumers, confirm application globals import `tailwindcss` before `@nodzimo/ui/theme.css`, while the
   application root imports ready-built `@nodzimo/ui/styles.css` before its globals. Verify autocomplete and production
   output with at least one NUI utility not used in UI-kit component source.
+- When verifying the NUI link foundation, apply `nui-links` to the consumer root and cover a native link, a fragment
+  link, a Next.js `Link`, an individual `nui-link`, a Button `link` variant, and a utility-class override.
 - If a client component fails in Next with compiler runtime errors, check whether `"use client";` is present in the
   built client entry.
 - If a core component fails in a Server Component context, check whether `react/compiler-runtime`, `createContext`,

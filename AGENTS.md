@@ -167,6 +167,13 @@ and token roles.
 
 See [docs/agent-operating-charter/theme-token-contract.md](docs/agent-operating-charter/theme-token-contract.md).
 
+## NUI Link Foundation Decision
+
+NUI uses one ready-built CSS recipe for Button's link appearance, individually styled elements, and opt-in descendant
+hyperlinks without introducing a React wrapper or an unscoped global anchor rule.
+
+See [the NUI link foundation decision](docs/agent-operating-charter/nui-link-foundation-decision.md).
+
 ## Design System Doctrine
 
 The design-system doctrine is product-facing source material mirrored into Storybook and should remain separate from

@@ -25,9 +25,9 @@
 - This ownership boundary does not make the package stylesheet incomplete. Component utilities, NUI tokens,
   animations, and opt-in foundation classes are compiled into `dist/styles.css`; only document normalization is left
   to the application.
-- Keep broad NUI foundation behavior opt-in through `nui-boundaries`, `nui-surface`, and `nui-interactive`. These
-  classes
-  are package features, not a replacement for Preflight, and they must not become global selectors.
+- Keep broad NUI foundation behavior opt-in through `nui-boundaries`, `nui-surface`, `nui-interactive`, and `nui-links`.
+  These classes are package features, not a replacement for Preflight, and they must not become unscoped global
+  selectors.
 - Storybook is a separate application and the visual reference environment for the kit. Its `.storybook/preview.css`
   intentionally imports full Tailwind, including Preflight, while the package artifact does not.
 
@@ -88,6 +88,8 @@ For token naming and semantic roles, see [Theme Token Contract](theme-token-cont
   application globals and overrides keep the final cascade position.
 - Non-Tailwind consumers import only `@nodzimo/ui/styles.css`. They may use raw `--nui-*` variables directly and should
   not load the compiler-only theme file in the browser.
+- Ready-built CSS-owned classes such as `nui-link` and `nui-links` also come from `@nodzimo/ui/styles.css`. They are not
+  token-derived Tailwind utilities and do not belong in the compiler-only `theme.css` contract.
 - Do not combine the two public files. A browser artifact and compiler input have different lifecycles: publishing both
   raw would force consumers to compile library components, while compiling both would erase the mappings needed for
   consumer-authored utilities.
@@ -110,8 +112,8 @@ trade-offs, see [Tailwind Consumer Theme Integration Decision](tailwind-consumer
     - `src/theme.css` is the public Tailwind compiler contract: NUI theme mappings and the class-based `dark` variant.
       It is imported by `src/library.css` and published unchanged as `@nodzimo/ui/theme.css`.
     - `src/library.css` is the shared library style contract: raw light/dark NUI values, CSS variables, and
-      foundation classes. It imports `./theme.css` and shared CSS-first utility sources, but does not import Tailwind
-      itself.
+      foundation classes, including the shared link recipe. It imports `./theme.css` and shared CSS-first utility
+      sources, but does not import Tailwind itself.
     - `src/styles.css` is the publishable package stylesheet entrypoint. It imports Tailwind theme and utilities without
       Preflight, imports `./library.css`, scans `src`, and excludes colocated stories.
     - `.storybook/preview.css` is the Storybook application stylesheet entrypoint. It imports full Tailwind with
@@ -149,6 +151,8 @@ trade-offs, see [Tailwind Consumer Theme Integration Decision](tailwind-consumer
 - This safelist rule applies to custom package utilities that must exist in ready-built `styles.css`. Do not safelist
   every token-derived Tailwind utility: `src/theme.css` teaches the consumer compiler to generate the exact
   color/radius/spacing utilities and variants used by that application.
+- Plain selectors authored in `src/library.css` are emitted directly and do not need safelisting. The grouped
+  `.nui-link, .nui-links :where(a:any-link)` rule is one such runtime CSS contract; it is not a Tailwind `@utility`.
 - Use relative CSS imports for local stylesheet entrypoints. `src/styles.css` should import `./library.css`, and
   `.storybook/preview.css` should import `../src/library.css`. Do not route these CSS imports through package/import-map
   aliases unless the CSS toolchain explicitly supports and needs that contract.
@@ -157,6 +161,9 @@ trade-offs, see [Tailwind Consumer Theme Integration Decision](tailwind-consumer
 - Vite cleans `dist` during `vite build`, so full builds must run JS/type build first and CSS build afterward.
 - Design direction: components should be styled and usable by default, but themeable through CSS variables/tokens rather
   than hard-coded project-specific colors long term.
+
+For the link-specific research, selector/cascade rationale, rejected wrapper approaches, and consumer usage, see
+[NUI Link Foundation Decision](nui-link-foundation-decision.md).
 
 ### Class Naming And WebStorm Autocomplete
 
