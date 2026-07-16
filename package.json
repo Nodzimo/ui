@@ -66,10 +66,12 @@
 			"import": "./dist/client.js",
 			"types": "./dist/client.d.ts"
 		},
-		"./styles.css": "./dist/styles.css"
+		"./styles.css": "./dist/styles.css",
+		"./theme.css": "./src/theme.css"
 	},
 	"files": [
 		"dist",
+		"src/theme.css",
 		"docs",
 		"AGENTS.md"
 	],
