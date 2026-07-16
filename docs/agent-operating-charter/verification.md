@@ -47,11 +47,18 @@
 - After changing Tailwind CSS entrypoints or source detection, verify both CSS artifacts directly:
     - Run `bun run build:css` and confirm `dist/styles.css` contains library foundation/component classes such as
       `.nui-surface`, `bg-nui-primary`, and `focus-visible:ring-nui-ring`.
+    - Confirm `dist/styles.css` does not contain Tailwind Preflight signatures such as the universal
+      `box-sizing: border-box` reset, the `html` text-size/tab-size reset, the form-control reset, or the global media
+      display reset. See [Tailwind And Styles](tailwind-and-styles.md#preflight-ownership) for reset ownership.
+    - When removing or changing a Tailwind import, compare the previous and rebuilt artifacts. The set of NUI/component
+      class selectors and `--nui-*` variables should remain unchanged unless the source change intentionally affects
+      them; a size reduction alone is not sufficient proof.
     - Confirm `dist/styles.css` does not contain story-only preview utilities from colocated stories or design labs,
       such as `gap-10`, `gap-20`, `rounded-nui-4xl`, `bg-pink-300`, `min-h-screen`, or `items-end`, unless one of those
       classes is intentionally used by production source.
-    - Run `bun run storybook:build` and confirm `storybook-static/assets/iframe-*.css` does contain needed story and
-      preview utilities such as design-lab gaps, preview padding, and NUI foundation classes.
+    - Run `bun run storybook:build` and confirm `storybook-static/assets/iframe-*.css` contains its intentional
+      Preflight plus needed story and preview utilities such as design-lab gaps, preview padding, and NUI foundation
+      classes.
 
 ### Built JS Inspection
 

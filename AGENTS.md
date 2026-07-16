@@ -143,6 +143,15 @@ for consumers.
 
 See [docs/agent-operating-charter/tailwind-and-styles.md](docs/agent-operating-charter/tailwind-and-styles.md).
 
+## Tailwind Preflight Ownership Decision
+
+The consumer owns the global reset; the package ships compiled NUI styles without Preflight, while Storybook keeps its
+own application Preflight. The decision record captures the duplicate-reset audit, rejected alternatives, verification
+evidence, and reasoning failures to avoid.
+
+See
+[docs/agent-operating-charter/tailwind-preflight-ownership-decision.md](docs/agent-operating-charter/tailwind-preflight-ownership-decision.md).
+
 ## Theme Token Contract
 
 NUI theme tokens define the public semantic styling contract and must preserve runtime CSS variables, Tailwind mappings,

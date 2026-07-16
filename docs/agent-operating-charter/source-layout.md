@@ -4,7 +4,9 @@
 
 - `src/index.ts` is the root package entry and re-exports from `src/core`.
 - `src/client.ts` is the client package entry. It must start with `'use client'` and re-export from `src/client/index`.
-- `src/styles.css` is the global stylesheet source for the UI kit and builds to `dist/styles.css`.
+- `src/styles.css` is the publishable stylesheet source for the UI kit and builds to reset-free `dist/styles.css`.
+  Document-wide reset ownership remains with the consumer;
+  see [Tailwind And Styles](tailwind-and-styles.md#preflight-ownership).
 
 ### Documentation
 
