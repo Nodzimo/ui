@@ -14,12 +14,18 @@ const {
 	KeyRoundIcon,
 	StarIcon,
 	Trash2Icon,
+	MonitorIcon,
+	MoonIcon,
+	SunIcon,
 } = lucideIcons
 
 const FILLABLE_ICONS = {
 	HeartIcon,
 	KeyRoundIcon,
+	MonitorIcon,
+	MoonIcon,
 	StarIcon,
+	SunIcon,
 	Trash2Icon,
 } satisfies IconGroup
 
@@ -27,6 +33,7 @@ const SPINNABLE_ICONS = {
 	LoaderCircleIcon,
 	LoaderIcon,
 	LoaderPinwheelIcon,
+	SunIcon,
 } satisfies IconGroup
 
 const ICON_POSTFIX = 'Icon'
