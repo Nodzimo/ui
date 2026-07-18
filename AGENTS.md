@@ -32,10 +32,15 @@ Propose requested commit messages in English using Conventional Commits 1.0.0. A
 English Keep a Changelog 1.1.0 only when version or changelog work is explicitly in scope; do not introduce either by
 default.
 
+## Backlog
+
+Unresolved repository work is tracked as focused records under [backlog](backlog/README.md). Read the backlog contract
+only when capturing, triaging, planning, or executing backlog work; do not load the backlog for unrelated tasks.
+
 ## Code Style Conventions
 
-Code-style review should preserve local readability conventions around JSX literals, rest names, literal tables,
-file extensions, imports, exports, and text/quote boundaries.
+Code-style review should preserve local readability conventions around JSX literals, rest names, literal tables, file
+extensions, imports, exports, and text/quote boundaries.
 
 See [docs/agent-operating-charter/code-style-conventions.md](docs/agent-operating-charter/code-style-conventions.md).
 
@@ -154,8 +159,8 @@ See
 
 ## Tailwind Consumer Theme Integration Decision
 
-The package separates ready-built browser CSS from uncompiled Tailwind theme metadata so consumers can generate the
-full NUI token utility API without compiling library components or safelisting a combinatorial utility matrix.
+The package separates ready-built browser CSS from uncompiled Tailwind theme metadata so consumers can generate the full
+NUI token utility API without compiling library components or safelisting a combinatorial utility matrix.
 
 See
 [docs/agent-operating-charter/tailwind-consumer-theme-integration-decision.md](docs/agent-operating-charter/tailwind-consumer-theme-integration-decision.md).
@@ -190,8 +195,8 @@ See [docs/agent-operating-charter/component-styling.md](docs/agent-operating-cha
 
 ## Select API
 
-Select preserves the Base UI compound contract while exporting focused readonly option types for strict flat-option
-data shared across consumer component boundaries.
+Select preserves the Base UI compound contract while exporting focused readonly option types for strict flat-option data
+shared across consumer component boundaries.
 
 See [docs/agent-operating-charter/select-api.md](docs/agent-operating-charter/select-api.md).
 

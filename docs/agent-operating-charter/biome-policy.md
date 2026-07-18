@@ -6,8 +6,8 @@
   behavior.
 - Do not add explicit defaults such as `formatter.enabled`, `linter.enabled`, `assist.enabled`, or
   `linter.rules.recommended` just for completeness.
-- Keep VCS integration enabled with Git ignore support. The project relies on `.gitignore` to keep generated and
-  service files such as `dist`, `node_modules`, `.idea`, and package archives out of Biome checks.
+- Keep VCS integration enabled with Git ignore support. The project relies on `.gitignore` to keep generated and service
+  files such as `dist`, `node_modules`, `.idea`, and package archives out of Biome checks.
 
 ### Domains And Formatting
 
@@ -27,12 +27,9 @@
   sorting, and duplicate class removal.
 - Keep Tailwind utility class sorting enabled as an error with a safe fix. Tailwind class order should be machine-owned.
 - Keep duplicate class removal enabled through `assist.actions.source.noDuplicateClasses`; duplicated utility classes
-  are
-  copy/paste or merge noise and should be removed by Biome.
+  are copy/paste or merge noise and should be removed by Biome.
 - Keep CSS property sorting enabled through `assist.actions.source.useSortedProperties`; author order should not encode
   meaning in project CSS.
-- Keep `assist.actions.source.useSortedPackageJson` disabled for now. The rule matches the desired convention, but in
-  this project and the sibling web project Biome 2.5.1 can hang during lint when it is enabled.
 - Do not enable CSS class graph rules in this UI kit. `noUndeclaredClasses` and `noUnusedClasses` are useful in
   applications, but library CSS includes public classes and token hooks that may be consumed outside this repository.
 
@@ -42,6 +39,4 @@
   `biome.json` changes before treating the dependency update as complete. Keep the `$schema` version aligned with the
   installed Biome version when the schema URL is versioned.
 - Do not add `files.includes` globs that duplicate `.gitignore` unless Biome needs a narrower project-specific scope.
-- Do not use `assist.actions.source.useSortedPackageJson` as a replacement for the existing JSON key sorting baseline
-  until the current Biome hang is fixed.
 - Biome does not format Markdown in this setup. Format Markdown files manually or with the editor.
