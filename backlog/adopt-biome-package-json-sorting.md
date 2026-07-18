@@ -1,7 +1,5 @@
 ---
 status: ready
-type: maintenance
-created: 2026-07-18
 ---
 
 # Adopt Biome package.json sorting

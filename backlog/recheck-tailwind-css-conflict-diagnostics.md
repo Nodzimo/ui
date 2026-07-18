@@ -1,7 +1,5 @@
 ---
 status: waiting
-type: upstream
-created: 2026-07-18
 review_after: 2026-08-01
 ---
 

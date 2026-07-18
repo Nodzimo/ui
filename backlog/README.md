@@ -5,52 +5,47 @@ This file defines how unresolved work should be preserved in this repository.
 The target model is:
 
 ```text
-one unresolved concern -> one focused record -> one next action -> one resolution
+unresolved concern -> accepted record -> explicit next step -> resolution
 ```
 
-The backlog is the versioned source of truth for accepted work that belongs to the repository and must remain
-discoverable across work sessions. It keeps actionable project state close to the code without mixing temporary work
-with durable documentation, agent instructions, or reusable procedures.
+## Purpose
 
-The directory is intentionally flat: one logical work item per Markdown file. Read only this contract and the records
-needed for the current task. Do not load the entire backlog by default.
+The backlog is the versioned source of truth for accepted repository work that must survive the current work session. It
+covers deferred improvements, known bugs, research, ideas, upstream dependencies, and temporary workarounds that still
+require an action, decision, or verification.
 
-## Boundaries
+It does not replace permanent documentation, agent instructions, an execution plan for current work, or Git history. It
+is not an autonomous queue that an agent may execute without a request.
 
-Create a backlog item when all of the following are true:
+Keep one independently resolvable concern in each Markdown file. When backlog work is in scope, read this contract and
+only the records needed for the task. Inspect the full directory only for an explicit triage, audit, or cleanup request.
 
-- the work belongs to this repository;
-- the problem, opportunity, or dependency is understood well enough to preserve useful context;
-- a future action, decision, or verification remains;
-- losing the record would create a realistic risk of forgotten work or a permanent temporary workaround.
+## Admission
 
-Do not use the backlog for:
+Create a record only when:
 
-- durable product, architecture, operating, or design-system documentation;
-- rules that agents must follow on every task;
-- procedures reusable across multiple tasks;
-- implementation notes that will be resolved in the current work session;
-- chat transcripts, activity journals, release notes, or completed-work archives;
-- vague aspirations without repository-specific context or a plausible next step.
+- the concern belongs to this repository and is expected to remain unresolved beyond the current session;
+- enough context exists to state a useful outcome and next step;
+- forgetting it would create meaningful rework, risk, or a permanent temporary workaround.
 
-Route durable knowledge to the appropriate documentation, recurring agent guidance to `AGENTS.md`, and reusable
-procedures to `.agents/skills`.
+A concern becomes accepted backlog work only when a responsible maintainer asks to record it or approves a proposal.
+Coding agents may propose concerns, but must not silently add them while performing unrelated work. A `ready` record is
+actionable, not pre-authorized for execution.
 
-## File Structure
+Do not record vague aspirations, incidental observations, chat transcripts, activity journals, completed work, or notes
+that will be resolved in the current session. Move durable knowledge to project documentation, recurring agent guidance
+to `AGENTS.md`, and reusable procedures to `.agents/skills`.
 
-Keep records directly under `backlog/` until genuine scale requires another level. Use a short, stable, descriptive
-kebab-case filename such as `recheck-tailwind-css-conflict-diagnostics.md`.
+## Record Format
 
-Do not encode status, type, priority, dates, or numeric IDs in filenames. These values change independently of the work
-item, while the filename should remain a stable link target.
+Keep records directly under `backlog/`. Use a short, stable, descriptive kebab-case filename such as
+`verify-upstream-fix.md`. Do not encode status, priority, dates, or numeric IDs in the filename.
 
-Each record starts with YAML front matter:
+Status is the only metadata required for every record:
 
 ```markdown
 ---
 status: ready
-type: improvement
-created: 2026-07-18
 ---
 
 # Describe the desired outcome
@@ -65,68 +60,51 @@ Describe the observable conditions that make the work complete.
 
 ## Next step
 
-State the smallest concrete action that moves the item forward.
-
-## References
-
-- Link primary upstream sources and relevant repository files.
+State the smallest concrete action that moves the record forward.
 ```
 
-The title, `Context`, `Outcome`, and `Next step` sections are required. Keep records concise and factual. Add focused
-sections such as `Current workaround`, `Resume when`, or `Unblock when` only when they carry information needed to
-resume the work correctly.
+The title, `Context`, `Outcome`, and `Next step` are required. Add `References` when primary upstream sources, issues,
+or repository files would help verify or resume the work. Add `Current workaround`, `Resume when`, or `Unblock when`
+only when needed.
+
+Keep the record concise and current. Replace superseded assumptions and next steps instead of appending a chronological
+diary; Git preserves the history.
 
 ## Status
 
 Use exactly one status:
 
-- `ready`: the next action can be taken with the information currently available;
+- `ready`: the next step can be taken with the available information;
 - `waiting`: progress depends on an external release, issue, date, or other observable event;
-- `blocked`: progress requires a project decision, internal prerequisite, access, or information that is unavailable.
+- `blocked`: progress requires an unavailable internal decision, prerequisite, access, or information.
 
 A `waiting` record must include `review_after: YYYY-MM-DD` in its front matter and a `Resume when` section naming the
-external trigger. During backlog triage, review waiting records whose date has arrived; either resume the work or set a
-new evidence-based review date. The date is a review cue, not a promise that an agent will run automatically.
+external trigger. The date schedules a review, not automatic execution. When it arrives, either resume the work or set a
+new evidence-based review date.
 
-A `blocked` record must include an `Unblock when` section that identifies the missing decision or prerequisite. Do not
-use `blocked` merely because work is difficult or low priority.
+A `blocked` record must include an `Unblock when` section naming the missing decision or prerequisite. Do not use
+`blocked` merely because work is difficult or low priority.
 
-There is no `active` status. Current work is represented by the active branch, working tree, issue, or conversation. If
-work stops before completion, update the record's context and next step so another session can resume it.
-
-## Type
-
-Use the narrowest applicable type:
-
-- `bug`: incorrect repository behavior that can be fixed here;
-- `improvement`: an accepted enhancement to existing behavior or developer experience;
-- `research`: investigation needed before a responsible implementation decision;
-- `upstream`: progress primarily depends on an external project or integration;
-- `maintenance`: repository tooling, dependencies, cleanup, or operational upkeep;
-- `idea`: a repository-specific opportunity accepted for later exploration.
-
-Type describes the nature of the work, not its urgency. The backlog does not encode priority by default: priority is a
-triage decision and should not become stale metadata. When ordering matters, select the next work explicitly from the
-`ready` records.
+There is no `active` status. Current execution state belongs to the active branch, working tree, issue, conversation, or
+execution plan. If work stops before completion, update the record so another session can resume it accurately.
 
 ## Lifecycle
 
-1. Capture one independently resolvable concern in one file.
-2. Confirm the context, outcome, next step, status, and type before treating the item as accepted backlog work.
-3. Update the existing record when evidence, a workaround, or the next step changes; do not append a chronological
-   diary.
-4. When the work is complete, move durable conclusions into code, tests, permanent documentation, or a decision record.
-5. Delete the backlog file in the same change that completes or deliberately abandons the work. Git history is the audit
-   trail; do not create a completed backlog archive.
+1. Capture the accepted concern with its current context, observable outcome, and smallest useful next step.
+2. Update the record when evidence, a workaround, status, or the next step materially changes.
+3. Begin implementation only when a maintainer explicitly selects the record. Once selected, maintaining it through
+   completion is part of the task unless the maintainer says otherwise.
+4. On completion, move durable conclusions into code, tests, permanent documentation, or a decision record.
+5. Delete the backlog file in the same change that completes or deliberately abandons the work.
 
-An item may be deleted as obsolete, duplicated, or intentionally rejected. Use the commit or pull-request description to
-preserve a reason when it would not otherwise be obvious.
+Do not keep a completed archive. Git records the outcome; state a non-obvious completion or rejection reason in the
+commit or pull request.
 
 ## Maintenance
 
-Review the backlog when capturing work, selecting the next item, checking due waiting records, or cleaning stale state.
-A focused review should remove obsolete records, validate waiting triggers, repair unclear next steps, and split items
-that have grown into multiple independently resolvable concerns.
+Review the backlog when capturing work, selecting the next record, checking due waiting records, or cleaning stale
+state. Remove obsolete records, repair unclear outcomes or next steps, and split records that contain multiple
+independently resolvable concerns.
 
-Add automation, indexes, priority metadata, or additional directory levels only after observed scale or recurring
-friction justifies them.
+Add priority, classification, ownership, estimates, indexes, additional directories, or automation only after observed
+scale or recurring friction demonstrates the need.
