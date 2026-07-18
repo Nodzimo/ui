@@ -31,11 +31,6 @@ Enable `useSortedPackageJson`, add a `package.json` override that disables `useS
 the repository's Biome write check twice to prove that the second pass produces no changes or hang. Then run the normal
 lint verification.
 
-## Affected repositories
-
-The sibling `web` repository documents the same rule conflict. Validate the approach in this UI repository first; any
-web change should be represented and verified in that repository rather than performed from this item.
-
 ## References
 
 - [Biome `useSortedPackageJson` documentation](https://biomejs.dev/assist/actions/use-sorted-package-json/)

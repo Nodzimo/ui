@@ -1,13 +1,19 @@
 # Repository Backlog
 
-Backlog convention: 1
+This file defines how unresolved work should be preserved in this repository.
 
-This directory is the versioned source of truth for accepted, unresolved work that belongs to this repository and must
-remain discoverable across work sessions. It keeps actionable project state close to the code without mixing temporary
-work with shipped documentation, durable project rules, or agent procedures.
+The target model is:
 
-The backlog is intentionally flat: one logical work item per Markdown file. Read only the contract and the records
-needed for the current task. Do not load the entire directory by default.
+```text
+one unresolved concern -> one focused record -> one next action -> one resolution
+```
+
+The backlog is the versioned source of truth for accepted work that belongs to the repository and must remain
+discoverable across work sessions. It keeps actionable project state close to the code without mixing temporary work
+with durable documentation, agent instructions, or reusable procedures.
+
+The directory is intentionally flat: one logical work item per Markdown file. Read only this contract and the records
+needed for the current task. Do not load the entire backlog by default.
 
 ## Boundaries
 
@@ -23,7 +29,7 @@ Do not use the backlog for:
 - durable product, architecture, operating, or design-system documentation;
 - rules that agents must follow on every task;
 - procedures reusable across multiple tasks;
-- current implementation notes that will be resolved in the same work session;
+- implementation notes that will be resolved in the current work session;
 - chat transcripts, activity journals, release notes, or completed-work archives;
 - vague aspirations without repository-specific context or a plausible next step.
 
@@ -67,8 +73,8 @@ State the smallest concrete action that moves the item forward.
 ```
 
 The title, `Context`, `Outcome`, and `Next step` sections are required. Keep records concise and factual. Add focused
-sections such as `Current workaround`, `Resume when`, `Unblock when`, or `Affected repositories` only when they carry
-information needed to resume the work correctly.
+sections such as `Current workaround`, `Resume when`, or `Unblock when` only when they carry information needed to
+resume the work correctly.
 
 ## Status
 
@@ -116,20 +122,11 @@ triage decision and should not become stale metadata. When ordering matters, sel
 An item may be deleted as obsolete, duplicated, or intentionally rejected. Use the commit or pull-request description to
 preserve a reason when it would not otherwise be obvious.
 
-## Cross-Repository Work
-
-Give shared concerns one canonical owner: the repository where the contract, dependency, or primary fix belongs. Name
-other affected repositories in the record instead of copying the same item into each backlog.
-
-Create linked records in multiple repositories only when each repository requires an independently verifiable change.
-Each record must describe its own outcome and link to the canonical concern or companion records.
-
 ## Maintenance
 
-Keep the convention self-contained so a person or agent can use the backlog from this repository alone. If the same
-convention is adopted across the Nodzimo ecosystem, preserve the convention version and update repository copies as one
-coordinated change.
+Review the backlog when capturing work, selecting the next item, checking due waiting records, or cleaning stale state.
+A focused review should remove obsolete records, validate waiting triggers, repair unclear next steps, and split items
+that have grown into multiple independently resolvable concerns.
 
-Backlog review should remove stale records, validate waiting triggers, repair unclear next steps, and split items that
-have grown into multiple independently resolvable concerns. Add automation, indexes, or additional directory levels only
-after observed scale or recurring friction justifies them.
+Add automation, indexes, priority metadata, or additional directory levels only after observed scale or recurring
+friction justifies them.
