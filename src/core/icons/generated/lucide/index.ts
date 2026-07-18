@@ -1,6 +1,7 @@
 export { default as ArrowUpRightIcon } from './arrow-up-right-icon'
 export { default as CheckIcon } from './check-icon'
 export { default as ChevronDownIcon } from './chevron-down-icon'
+export { default as ChevronRightIcon } from './chevron-right-icon'
 export { default as ChevronUpIcon } from './chevron-up-icon'
 export { default as FolderOpenIcon } from './folder-open-icon'
 export { default as HeartIcon } from './heart-icon'
