@@ -4,8 +4,8 @@
 
 Nodzimo UI already defined the intended text-link appearance in Button's `link` variant: foreground text, a
 primary-colored underline at rest, primary text on hover, and a thinner underline while active. Ordinary anchors and
-framework links did not receive that treatment, so consumers had to repeat the same classes in application globals or
-at every call site.
+framework links did not receive that treatment, so consumers had to repeat the same classes in application globals or at
+every call site.
 
 The missing contract was presentation, not behavior. Native `<a href>` already provides hyperlink semantics, keyboard
 behavior, browser navigation, context menus, and open-in-new-tab behavior. Next.js `Link` renders an anchor and forwards
@@ -25,10 +25,10 @@ The Typeset model is the closest shadcn precedent for Nodzimo's requirement: sty
 scope instead of wrapping every element in React. Nodzimo uses a narrow link foundation rather than adopting an entire
 article/Markdown typography system.
 
-Chakra UI and Material UI demonstrate the other common architecture. They expose `Link` components and compose or
-adapt framework routers through `asChild`, `component`, or routing adapters. Those are valid choices when a component
-owns a component API, polymorphism, routing defaults, or additional behavior. They do not create new hyperlink
-semantics, and they would add an unnecessary wrapper contract for Nodzimo's current presentation-only requirement.
+Chakra UI and Material UI demonstrate the other common architecture. They expose `Link` components and compose or adapt
+framework routers through `asChild`, `component`, or routing adapters. Those are valid choices when a component owns a
+component API, polymorphism, routing defaults, or additional behavior. They do not create new hyperlink semantics, and
+they would add an unnecessary wrapper contract for Nodzimo's current presentation-only requirement.
 
 ### Decision
 
@@ -109,8 +109,8 @@ The implementation lives in `src/library.css` inside Tailwind's `base` layer:
 - Grouping `.nui-link` with the scoped anchor selector emits one shared declaration block rather than maintaining two
   copies of the visual recipe.
 
-The selectors are authored CSS, not a Tailwind `@utility`. They are therefore emitted directly into the compiled
-package stylesheet and do not require `@source inline(...)` safelisting.
+The selectors are authored CSS, not a Tailwind `@utility`. They are therefore emitted directly into the compiled package
+stylesheet and do not require `@source inline(...)` safelisting.
 
 ### Artifact Ownership
 
@@ -182,12 +182,12 @@ classes.
   <https://ui.shadcn.com/docs/components/base/navigation-menu>.
 - Next.js documents that `Link` extends the anchor surface and forwards anchor attributes such as `className`:
   <https://nextjs.org/docs/app/api-reference/components/link>.
-- Chakra UI demonstrates a component plus `asChild` router composition:
-  <https://chakra-ui.com/docs/components/link>.
-- Material UI demonstrates a component plus routing adapters and a polymorphic `component` prop:
-  <https://mui.com/material-ui/react-link/>.
-- WAI technique G182 identifies underlining as an additional visual cue that keeps links distinguishable without
-  relying on color alone: <https://www.w3.org/WAI/WCAG22/Techniques/general/G182>.
+- [Chakra UI's Link documentation](https://chakra-ui.com/docs/components/link) demonstrates a component plus `asChild`
+  router composition.
+- [Material UI's Link documentation](https://mui.com/material-ui/react-link/) demonstrates a component plus routing
+  adapters and a polymorphic `component` prop.
+- WAI technique G182 identifies underlining as an additional visual cue that keeps links distinguishable without relying
+  on color alone: <https://www.w3.org/WAI/WCAG22/Techniques/general/G182>.
 
 ### Reasoning Failures To Avoid
 
