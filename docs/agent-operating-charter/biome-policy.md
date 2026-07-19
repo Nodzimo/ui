@@ -30,6 +30,14 @@
   are copy/paste or merge noise and should be removed by Biome.
 - Keep CSS property sorting enabled through `assist.actions.source.useSortedProperties`; author order should not encode
   meaning in project CSS.
+- Keep `assist.actions.source.useSortedPackageJson` enabled so the root manifest follows Biome's conventional semantic
+  [package field order](https://biomejs.dev/assist/actions/use-sorted-package-json/). The generic `useSortedKeys` action
+  must remain disabled only for `package.json` through the scoped override: the two actions request different root-key
+  orders, so their safe fixes undo each other and a write pass can loop indefinitely. Biome maintainers treat this
+  overlap as a configuration responsibility and recommend the scoped override documented in
+  [Biome issue #10628](https://github.com/biomejs/biome/issues/10628); the same hang is reproduced in
+  [Biome issue #10783](https://github.com/biomejs/biome/issues/10783). After changing either action or upgrading Biome,
+  run the write check twice and confirm that the second pass is unchanged.
 - Do not enable CSS class graph rules in this UI kit. `noUndeclaredClasses` and `noUnusedClasses` are useful in
   applications, but library CSS includes public classes and token hooks that may be consumed outside this repository.
 
