@@ -93,6 +93,7 @@ function renderIconGallery(
 		)
 	})
 
+	// noinspection com.intellij.reactbuddy.ArrayToJSXMapInspection
 	return <IconGallery>{iconItems}</IconGallery>
 }
 
