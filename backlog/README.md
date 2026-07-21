@@ -79,8 +79,8 @@ Use exactly one status:
 - `blocked`: progress requires an unavailable internal decision, prerequisite, access, or information.
 
 A `waiting` record must include `review_after: YYYY-MM-DD` in its front matter and a `Resume when` section naming the
-external trigger. The date schedules a review, not automatic execution. When it arrives, either continue the work or set
-a new evidence-based review date.
+external trigger. The date schedules a review, not automatic execution. When the review date arrives, check the trigger.
+If it has occurred, proceed with the record; otherwise, set a new evidence-based review date.
 
 A `blocked` record must include an `Unblock when` section naming the missing decision or prerequisite. Do not use
 `blocked` merely because work is difficult or low priority.
