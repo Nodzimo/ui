@@ -42,7 +42,7 @@ function DropdownMenuContent({
 			>
 				<MenuPrimitive.Popup
 					className={mcn(
-						'data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:fade-in-0 data-open:zoom-in-95 data-closed:fade-out-0 data-closed:zoom-out-95 z-50 max-h-(--available-height) w-(--anchor-width) min-w-32 origin-(--transform-origin) overflow-y-auto overflow-x-hidden rounded-nui-lg bg-nui-popover p-1 text-nui-popover-foreground shadow-md outline-none ring-1 ring-nui-foreground/10 duration-100 data-closed:animate-out data-open:animate-in data-closed:overflow-hidden',
+						'data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-start-2 data-[side=inline-start]:slide-in-from-end-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:fade-in-0 data-open:zoom-in-95 data-closed:fade-out-0 data-closed:zoom-out-95 z-50 max-h-(--available-height) w-(--anchor-width) min-w-32 origin-(--transform-origin) overflow-y-auto overflow-x-hidden rounded-nui-lg bg-nui-popover p-1 text-nui-popover-foreground shadow-md outline-none ring-1 ring-nui-foreground/10 duration-100 data-closed:animate-out data-open:animate-in data-closed:overflow-hidden',
 						className,
 					)}
 					data-slot={'dropdown-menu-content'}
@@ -67,7 +67,7 @@ function DropdownMenuLabel({
 	return (
 		<MenuPrimitive.GroupLabel
 			className={mcn(
-				'px-1.5 py-1 font-medium text-nui-muted-foreground text-xs data-inset:pl-7',
+				'px-1.5 py-1 font-medium text-nui-muted-foreground text-xs data-inset:ps-7',
 				className,
 			)}
 			data-inset={inset}
@@ -89,7 +89,7 @@ function DropdownMenuItem({
 	return (
 		<MenuPrimitive.Item
 			className={mcn(
-				"group/dropdown-menu-item relative flex cursor-default select-none items-center gap-1.5 rounded-nui-md px-1.5 py-1 text-sm outline-hidden focus:bg-nui-accent focus:text-nui-accent-foreground not-data-[variant=destructive]:focus:**:text-nui-accent-foreground data-disabled:pointer-events-none data-inset:pl-7 data-[variant=destructive]:text-nui-destructive data-disabled:opacity-50 data-[variant=destructive]:focus:bg-nui-destructive/10 data-[variant=destructive]:focus:text-nui-destructive dark:data-[variant=destructive]:focus:bg-nui-destructive/20 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[variant=destructive]:*:[svg]:text-nui-destructive",
+				"group/dropdown-menu-item relative flex cursor-default select-none items-center gap-1.5 rounded-nui-md px-1.5 py-1 text-sm outline-hidden focus:bg-nui-accent focus:text-nui-accent-foreground not-data-[variant=destructive]:focus:**:text-nui-accent-foreground data-disabled:pointer-events-none data-inset:ps-7 data-[variant=destructive]:text-nui-destructive data-disabled:opacity-50 data-[variant=destructive]:focus:bg-nui-destructive/10 data-[variant=destructive]:focus:text-nui-destructive dark:data-[variant=destructive]:focus:bg-nui-destructive/20 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[variant=destructive]:*:[svg]:text-nui-destructive",
 				className,
 			)}
 			data-inset={inset}
@@ -117,7 +117,7 @@ function DropdownMenuSubTrigger({
 	return (
 		<MenuPrimitive.SubmenuTrigger
 			className={mcn(
-				"flex cursor-default select-none items-center gap-1.5 rounded-nui-md px-1.5 py-1 text-sm outline-hidden focus:bg-nui-accent focus:text-nui-accent-foreground not-data-[variant=destructive]:focus:**:text-nui-accent-foreground data-open:bg-nui-accent data-popup-open:bg-nui-accent data-inset:pl-7 data-open:text-nui-accent-foreground data-popup-open:text-nui-accent-foreground [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+				"flex cursor-default select-none items-center gap-1.5 rounded-nui-md px-1.5 py-1 text-sm outline-hidden focus:bg-nui-accent focus:text-nui-accent-foreground not-data-[variant=destructive]:focus:**:text-nui-accent-foreground data-open:bg-nui-accent data-popup-open:bg-nui-accent data-inset:ps-7 data-open:text-nui-accent-foreground data-popup-open:text-nui-accent-foreground [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
 				className,
 			)}
 			data-inset={inset}
@@ -125,7 +125,7 @@ function DropdownMenuSubTrigger({
 			{...props}
 		>
 			{children}
-			<ChevronRightIcon className={'cn-rtl-flip ml-auto'} />
+			<ChevronRightIcon className={'ms-auto rtl:rotate-180'} />
 		</MenuPrimitive.SubmenuTrigger>
 	)
 }
@@ -133,7 +133,7 @@ function DropdownMenuSubTrigger({
 function DropdownMenuSubContent({
 	align = 'start',
 	alignOffset = -3,
-	side = 'right',
+	side = 'inline-end',
 	sideOffset = 0,
 	className,
 	...props
@@ -167,7 +167,7 @@ function DropdownMenuCheckboxItem({
 		<MenuPrimitive.CheckboxItem
 			checked={checked}
 			className={mcn(
-				"relative flex cursor-default select-none items-center gap-1.5 rounded-nui-md py-1 pr-8 pl-1.5 text-sm outline-hidden focus:bg-nui-accent focus:text-nui-accent-foreground focus:**:text-nui-accent-foreground data-disabled:pointer-events-none data-inset:pl-7 data-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+				"relative flex cursor-default select-none items-center gap-1.5 rounded-nui-md py-1 ps-1.5 pe-8 text-sm outline-hidden focus:bg-nui-accent focus:text-nui-accent-foreground focus:**:text-nui-accent-foreground data-disabled:pointer-events-none data-inset:ps-7 data-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
 				className,
 			)}
 			data-inset={inset}
@@ -176,7 +176,7 @@ function DropdownMenuCheckboxItem({
 		>
 			<span
 				className={
-					'pointer-events-none absolute right-2 flex items-center justify-center'
+					'pointer-events-none absolute inset-e-2 flex items-center justify-center'
 				}
 				data-slot={'dropdown-menu-checkbox-item-indicator'}
 			>
@@ -209,7 +209,7 @@ function DropdownMenuRadioItem({
 	return (
 		<MenuPrimitive.RadioItem
 			className={mcn(
-				"relative flex cursor-default select-none items-center gap-1.5 rounded-nui-md py-1 pr-8 pl-1.5 text-sm outline-hidden focus:bg-nui-accent focus:text-nui-accent-foreground focus:**:text-nui-accent-foreground data-disabled:pointer-events-none data-inset:pl-7 data-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+				"relative flex cursor-default select-none items-center gap-1.5 rounded-nui-md py-1 ps-1.5 pe-8 text-sm outline-hidden focus:bg-nui-accent focus:text-nui-accent-foreground focus:**:text-nui-accent-foreground data-disabled:pointer-events-none data-inset:ps-7 data-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
 				className,
 			)}
 			data-inset={inset}
@@ -218,7 +218,7 @@ function DropdownMenuRadioItem({
 		>
 			<span
 				className={
-					'pointer-events-none absolute right-2 flex items-center justify-center'
+					'pointer-events-none absolute inset-e-2 flex items-center justify-center'
 				}
 				data-slot={'dropdown-menu-radio-item-indicator'}
 			>
@@ -248,7 +248,7 @@ function DropdownMenuShortcut({ className, ...props }: ComponentProps<'span'>) {
 	return (
 		<span
 			className={mcn(
-				'ml-auto text-nui-muted-foreground text-xs tracking-widest group-focus/dropdown-menu-item:text-nui-accent-foreground',
+				'ms-auto text-nui-muted-foreground text-xs tracking-widest group-focus/dropdown-menu-item:text-nui-accent-foreground',
 				className,
 			)}
 			data-slot={'dropdown-menu-shortcut'}
