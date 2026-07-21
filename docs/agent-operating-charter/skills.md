@@ -17,8 +17,8 @@ truth.
 
 ### Styling And Stories
 
-- For repeated token-prefix adaptation and review work, use the project-local `theme-token-adapter` skill at
-  `.agents/skills/theme-token-adapter`.
+- For repeated token-prefix adaptation, shadcn registry-marker resolution, RTL/logical-motion conversion, and review
+  work, use the project-local `theme-token-adapter` skill at `.agents/skills/theme-token-adapter`.
 - For formatting long Tailwind class strings into readable grouped chunks without changing the styles, use the
   project-local `tailwind-class-formatter` skill at `.agents/skills/tailwind-class-formatter`.
 - For final project convention review and safe fixes beyond Biome, including JSX literal braces, rest-prop naming,

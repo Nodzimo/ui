@@ -3,6 +3,17 @@
 This reference is the compact working aid for `theme-token-adapter`. Do not duplicate the full token doctrine here; use
 `docs/agent-operating-charter` as the canonical source.
 
+## Contents
+
+- [Canonical Docs](#canonical-docs)
+- [Semantic Utility Prefixes](#semantic-utility-prefixes)
+- [Radius And Spacing](#radius-and-spacing)
+- [Logical Direction Utilities](#logical-direction-utilities)
+- [shadcn Registry Markers And Portal Motion](#shadcn-registry-markers-and-portal-motion)
+- [Directional Icon Use](#directional-icon-use)
+- [Ordinary Tailwind Utilities](#ordinary-tailwind-utilities)
+- [Useful Searches](#useful-searches)
+
 ## Canonical Docs
 
 - Token contract: `docs/agent-operating-charter/theme-token-contract.md`
@@ -119,6 +130,35 @@ data-[side=right]:slide-in-from-left-*
 data-[side=left]:slide-in-from-right-*
 ```
 
+## shadcn Registry Markers And Portal Motion
+
+Treat `cn-rtl-flip` as an upstream registry/CLI marker, not a runtime class or animation:
+
+```text
+cn-rtl-flip -> rtl:rotate-180
+```
+
+The shadcn registry template contains the marker, and its RTL transformer explicitly replaces it:
+
+- Registry usage:
+  <https://github.com/shadcn-ui/ui/blob/20442886c5cfb440441c35030462fbdf64838655/apps/v4/registry/bases/base/ui/dropdown-menu.tsx#L103-L129>
+- Marker declaration and logical slide mappings:
+  <https://github.com/shadcn-ui/ui/blob/20442886c5cfb440441c35030462fbdf64838655/packages/shadcn/src/utils/transformers/transform-rtl.ts#L71-L80>
+- Marker replacement:
+  <https://github.com/shadcn-ui/ui/blob/20442886c5cfb440441c35030462fbdf64838655/packages/shadcn/src/utils/transformers/transform-rtl.ts#L139-L151>
+- Logical `DropdownMenuSubContent` side mapping:
+  <https://github.com/shadcn-ui/ui/blob/20442886c5cfb440441c35030462fbdf64838655/packages/shadcn/src/utils/transformers/transform-rtl.ts#L82-L92>
+- Logical slide transformation:
+  <https://github.com/shadcn-ui/ui/blob/20442886c5cfb440441c35030462fbdf64838655/packages/shadcn/src/utils/transformers/transform-rtl.ts#L189-L201>
+
+Do not copy or define `.cn-rtl-flip`. Apply `rtl:rotate-180` only at a directional icon usage site. Keep popup
+`animate-in/out`, `fade-*`, `zoom-*`, and `slide-*` utilities backed by the existing `tw-animate-css` import.
+
+For a portaled popup using logical slide utilities, inspect the rendered element's computed `direction` in LTR and RTL.
+The current shadcn guide records a `tw-animate-css` caveat and recommends passing `dir` to portaled content when the
+direction is lost: <https://ui.shadcn.com/docs/rtl#animations>. Forward the effective direction only when needed; do not
+hardcode `dir='rtl'` or assume every Portal loses document direction.
+
 ## Directional Icon Use
 
 Generated icons are raw assets. Do not edit generated icon components to add RTL behavior.
@@ -167,6 +207,12 @@ Search for unprefixed raw shadcn variables:
 
 ```powershell
 rg -n -- "--(background|foreground|card|popover|primary|secondary|muted|accent|destructive|border|input|ring|radius|chart|sidebar)([^a-zA-Z0-9_-]|$)" src
+```
+
+Search for unresolved shadcn RTL markers and physical motion under logical side variants:
+
+```powershell
+rg -n "cn-rtl-flip|data-\[side=inline-(start|end)\]:slide-(in-from|out-to)-(left|right)" src
 ```
 
 Inspect matches before editing; documentation, examples, or comments can be false positives.

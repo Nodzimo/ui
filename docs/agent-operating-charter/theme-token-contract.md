@@ -68,24 +68,43 @@ For the research, rejected component-wrapper alternatives, selector rationale, a
 ### RTL And Logical Motion
 
 - For directional inline-axis layout, use logical Tailwind utilities such as `ps-*`, `pe-*`, `ms-*`, `me-*`,
-  `start-*`, `end-*`, `inset-s-*`, `inset-e-*`, `border-s-*`, `border-e-*`, `rounded-s-*`, and `rounded-e-*` instead
-  of physical utilities such as `pl-*`, `pr-*`, `left-*`, `right-*`, `border-l-*`, `border-r-*`, `rounded-l-*`, and
+  `start-*`, `end-*`, `inset-s-*`, `inset-e-*`, `border-s-*`, `border-e-*`, `rounded-s-*`, and `rounded-e-*` instead of
+  physical utilities such as `pl-*`, `pr-*`, `left-*`, `right-*`, `border-l-*`, `border-r-*`, `rounded-l-*`, and
   `rounded-r-*` unless the design intentionally targets a physical side.
 - Symmetric utilities such as `px-*`, `mx-*`, `inset-x-*`, `border-x-*`, and `rounded-*` are already direction-neutral.
 - For RTL-sensitive components, convert inline-axis physical animation utilities to logical equivalents when the side or
   placement is logical. For example, a popup using `side='inline-start'` or `side='inline-end'` should use logical
   animation classes such as `slide-in-from-end-*` or `slide-in-from-start-*`, while explicit physical sides such as
   `left` and `right` may keep physical animation classes.
+- Treat `cn-rtl-flip` in shadcn registry source as a generator marker, not a runtime class or animation. The official
+  shadcn RTL transformer replaces that marker with `rtl:rotate-180`; manually ported NUI source must perform the same
+  usage-site replacement for an inline-directional icon and must not ship `cn-rtl-flip`. The upstream registry source
+  and transformer preserve the evidence:
+  <https://github.com/shadcn-ui/ui/blob/20442886c5cfb440441c35030462fbdf64838655/apps/v4/registry/bases/base/ui/dropdown-menu.tsx#L103-L129>
+  and
+  <https://github.com/shadcn-ui/ui/blob/20442886c5cfb440441c35030462fbdf64838655/packages/shadcn/src/utils/transformers/transform-rtl.ts#L71-L80>.
+- Mirror shadcn's logical-motion transformation when porting registry code manually:
+  `data-[side=inline-start]:slide-in-from-right-*` becomes `slide-in-from-end-*`, and
+  `data-[side=inline-end]:slide-in-from-left-*` becomes `slide-in-from-start-*`. This is an install-time source
+  transformation, not an additional NUI animation layer. The same transformer explicitly converts
+  `DropdownMenuSubContent` from `side='right'` to `side='inline-end'`:
+  <https://github.com/shadcn-ui/ui/blob/20442886c5cfb440441c35030462fbdf64838655/packages/shadcn/src/utils/transformers/transform-rtl.ts#L82-L92>.
+  Keep `tw-animate-css` as the animation implementation; do not copy or invent a `.cn-rtl-flip` rule.
+- Portal-based overlays need an effective `direction` on the rendered popup for logical motion. The current shadcn RTL
+  guide records an upstream `tw-animate-css` caveat and recommends passing `dir` to portaled content when direction is
+  otherwise lost: <https://ui.shadcn.com/docs/rtl#animations>. Do not hardcode `dir='rtl'` or add a blanket workaround.
+  First inspect the popup's computed direction in both LTR and RTL; if the Portal loses the consumer direction, forward
+  the effective `dir` through the component's content/popup API and verify both modes.
 
 ### Spacing
 
 - The spacing scale is a public NUI rhythm layer, not Storybook-only display data. Define raw runtime variables
   `--nui-spacing-2xs` through `--nui-spacing-2xl` in `src/library.css`, then map Tailwind utilities through
   `--spacing-nui-2xs` through `--spacing-nui-2xl` inside the `@theme inline` block in `src/theme.css`.
-- Current NUI spacing tokens map to Tailwind spacing values `0.5`, `1`, `2`, `4`, `6`, `8`, and `12` respectively.
-  Use `--spacing()` in `src/library.css`, not handwritten `calc(var(--spacing) * n)`, because `--spacing()` is
-  Tailwind's native source function and compiles to the calc form. Keep comments beside the raw `--nui-spacing-*`
+- Current NUI spacing tokens map to Tailwind spacing values `0.5`, `1`, `2`, `4`, `6`, `8`, and `12` respectively. Use
+  `--spacing()` in `src/library.css`, not handwritten `calc(var(--spacing) * n)`, because `--spacing()` is Tailwind's
+  native source function and compiles to the calc form. Keep comments beside the raw `--nui-spacing-*`
   variables documenting the current pixel values.
 - Use NUI spacing utilities for reusable design-system rhythm such as standard gaps between sections, headings, cards,
-  and repeated UI groups. Do not replace incidental component tuning such as `px-2.5`, `gap-1.5`, `size-8`, or
-  one-off layout nudges unless the spacing is intentionally part of the shared rhythm contract.
+  and repeated UI groups. Do not replace incidental component tuning such as `px-2.5`, `gap-1.5`, `size-8`, or one-off
+  layout nudges unless the spacing is intentionally part of the shared rhythm contract.

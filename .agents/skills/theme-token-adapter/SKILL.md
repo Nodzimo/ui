@@ -37,8 +37,7 @@ Use `references/token-prefixing.md` for the compact mapping cheat sheet, RTL con
 2. Preserve behavior and structure before changing visual tokens.
     - Port copied components by adapting theme-facing classes, not by redesigning behavior.
     - Keep ordinary Tailwind layout, typography, sizing, and state utilities unchanged unless they encode a
-      design-system
-      token decision.
+      design-system token decision.
 
 3. Convert theme-facing styles to the NUI contract.
     - Prefix semantic color, radius, and design-system spacing utilities.
@@ -57,6 +56,10 @@ Use `references/token-prefixing.md` for the compact mapping cheat sheet, RTL con
       inline-directional.
     - Convert animation direction to logical forms when placement is logical.
     - Flip icons only at usage sites where the icon means inline direction.
+    - Resolve shadcn registry markers before shipping copied source. Replace `cn-rtl-flip` with the official generated
+      form `rtl:rotate-180`; do not create a runtime `.cn-rtl-flip` utility.
+    - For portaled overlays with logical slide utilities, verify the rendered popup receives the effective LTR/RTL
+      direction. Forward `dir` through content/popup props only when Portal inheritance loses it; never hardcode RTL.
 
 6. Respect stylesheet artifact boundaries.
     - Keep public Tailwind mappings and the class-based dark variant in `src/theme.css`.
@@ -73,6 +76,8 @@ Use `references/token-prefixing.md` for the compact mapping cheat sheet, RTL con
 
 7. Check for unprefixed theme tokens and artifact regressions.
     - Search changed source for unprefixed shadcn semantic utilities and raw variables.
+    - Search manually copied shadcn source for unresolved registry markers such as `cn-rtl-flip` and for physical slide
+      directions under logical `inline-start`/`inline-end` variants.
     - Run `bun run build:css` after token or stylesheet entrypoint changes.
     - Run `bun run storybook:build` after Storybook CSS, preview, docs, or story-only utility changes.
     - Inspect `dist/styles.css` and Storybook iframe CSS for the expected package/story utility split when source
