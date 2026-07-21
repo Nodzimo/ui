@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.5.4/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.5.5/schema.json",
 	"assist": {
 		"actions": {
 			"source": {
@@ -13,9 +13,15 @@
 			}
 		}
 	},
-	"css": { "parser": { "tailwindDirectives": true } },
+	"css": {
+		"parser": {
+			"tailwindDirectives": true
+		}
+	},
 	"html": {
-		"formatter": { "enabled": true }
+		"formatter": {
+			"enabled": true
+		}
 	},
 	"javascript": {
 		"formatter": {
@@ -24,14 +30,22 @@
 			"semicolons": "asNeeded"
 		}
 	},
-	"json": { "parser": { "allowComments": false } },
+	"json": {
+		"parser": {
+			"allowComments": false
+		}
+	},
 	"linter": {
 		"domains": {
 			"react": "recommended"
 		},
 		"rules": {
 			"nursery": {
-				"useSortedClasses": { "fix": "safe", "level": "error" }
+				"noNegationInEqualityCheck": "error",
+				"useSortedClasses": {
+					"fix": "safe",
+					"level": "error"
+				}
 			},
 			"style": {
 				"noUnusedTemplateLiteral": "error"
@@ -42,7 +56,9 @@
 		{
 			"assist": {
 				"actions": {
-					"source": { "useSortedKeys": "off" }
+					"source": {
+						"useSortedKeys": "off"
+					}
 				}
 			},
 			"includes": ["package.json"]
