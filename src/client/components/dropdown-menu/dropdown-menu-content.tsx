@@ -86,7 +86,7 @@ function DropdownMenuSubTrigger({
 				"flex cursor-default select-none items-center gap-1.5 rounded-nui-md px-1.5 py-1 text-sm outline-hidden focus:bg-nui-accent focus:text-nui-accent-foreground not-data-[variant=destructive]:focus:**:text-nui-accent-foreground data-open:bg-nui-accent data-popup-open:bg-nui-accent data-inset:ps-7 data-open:text-nui-accent-foreground data-popup-open:text-nui-accent-foreground [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
 				className,
 			)}
-			data-inset={inset}
+			data-inset={inset || undefined}
 			data-slot={'dropdown-menu-sub-trigger'}
 			{...restProps}
 		>

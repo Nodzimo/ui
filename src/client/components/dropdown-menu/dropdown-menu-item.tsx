@@ -26,7 +26,7 @@ function DropdownMenuItem({
 				"group/dropdown-menu-item relative flex cursor-default select-none items-center gap-1.5 rounded-nui-md px-1.5 py-1 text-sm outline-hidden focus:bg-nui-accent focus:text-nui-accent-foreground not-data-[variant=destructive]:focus:**:text-nui-accent-foreground data-disabled:pointer-events-none data-inset:ps-7 data-[variant=destructive]:text-nui-destructive data-disabled:opacity-50 data-[variant=destructive]:focus:bg-nui-destructive/10 data-[variant=destructive]:focus:text-nui-destructive dark:data-[variant=destructive]:focus:bg-nui-destructive/20 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[variant=destructive]:*:[svg]:text-nui-destructive",
 				className,
 			)}
-			data-inset={inset}
+			data-inset={inset || undefined}
 			data-slot={'dropdown-menu-item'}
 			data-variant={variant}
 			{...restProps}
@@ -52,7 +52,7 @@ function DropdownMenuCheckboxItem({
 				"relative flex cursor-default select-none items-center gap-1.5 rounded-nui-md py-1 ps-1.5 pe-8 text-sm outline-hidden focus:bg-nui-accent focus:text-nui-accent-foreground focus:**:text-nui-accent-foreground data-disabled:pointer-events-none data-inset:ps-7 data-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
 				className,
 			)}
-			data-inset={inset}
+			data-inset={inset || undefined}
 			data-slot={'dropdown-menu-checkbox-item'}
 			{...restProps}
 		>
@@ -98,7 +98,7 @@ function DropdownMenuRadioItem({
 				"relative flex cursor-default select-none items-center gap-1.5 rounded-nui-md py-1 ps-1.5 pe-8 text-sm outline-hidden focus:bg-nui-accent focus:text-nui-accent-foreground focus:**:text-nui-accent-foreground data-disabled:pointer-events-none data-inset:ps-7 data-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
 				className,
 			)}
-			data-inset={inset}
+			data-inset={inset || undefined}
 			data-slot={'dropdown-menu-radio-item'}
 			{...restProps}
 		>
