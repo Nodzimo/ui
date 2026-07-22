@@ -163,16 +163,6 @@ const meta = {
 		},
 	},
 	component: Select,
-	decorators: [
-		(Story) => {
-			return (
-				<div className={'flex justify-center'}>
-					<Story />
-				</div>
-			)
-		},
-	],
-	parameters: { layout: 'padded' },
 	render: ({
 		contentAlign,
 		contentAlignItemWithTrigger,
@@ -187,7 +177,7 @@ const meta = {
 			<Select items={ITEMS} {...restArgs}>
 				<SelectTrigger
 					aria-invalid={triggerAriaInvalid}
-					className={'w-full max-w-64'}
+					className={'w-64'}
 					size={triggerSize}
 				>
 					<SelectValue />
