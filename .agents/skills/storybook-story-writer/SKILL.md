@@ -50,6 +50,7 @@ Use `references/story-patterns.md` for compact story shape examples and control 
     - For story-only args, extend `ComponentProps<typeof Component>` and filter those args before rendering real
       component props.
     - Put shared baseline args in `meta.args`; override only story-specific args.
+    - Use human-readable multiword title segments such as `Dropdown Menu`.
     - Write semantic stories first, then important states, usage compositions, and comparison stories only for owned
       scales or documented patterns.
 
@@ -60,8 +61,12 @@ Use `references/story-patterns.md` for compact story shape examples and control 
     - Put shared Storybook table labels and separators in `src/storybook/constants.ts`.
     - Mark story-only controls clearly and keep their options serializable.
     - Keep root props under their real names and prefix child-part controls by owner.
+    - Trace same-named root and part states to their upstream owners before deciding whether each scope deserves a
+      control.
     - When one story control fans out to several parts, say `in this story` so the description does not misrepresent the
       real prop contract.
+    - Treat `table.defaultValue` as the API default and `meta.args` as the initial demo state; verify both
+      independently.
 
 5. Keep story-only code inside Storybook boundaries.
     - Use project-owned generated icons from `#core/icons` for story composition; do not add third-party icon packages

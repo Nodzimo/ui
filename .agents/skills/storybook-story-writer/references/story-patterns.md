@@ -113,6 +113,10 @@ const meta = {
 The `in this story` qualifier is mandatory when one story arg fans a real per-part prop out to several rendered parts.
 Do not rename the prop into an invented plural.
 
+The three disabled controls above are intentional Base UI Menu scopes. Root state propagates through the menu system,
+Trigger state belongs to one trigger, and Item state belongs to one action. They only appear equivalent in a closed
+single-trigger demo.
+
 For Base UI finite string unions, mirror runtime values and validate them against the upstream-derived type:
 
 ```ts
@@ -195,6 +199,7 @@ function ButtonPreviewRow({className, ...restProps}: ComponentProps<'div'>) {
 - Hiding a meaningful root prop because a child-part prop looks similar in one composition.
 - Presenting story-wide fan-out as the production behavior of one item prop.
 - Copying reference-story defaults, decorators, layout, or descriptions without checking the current component.
+- Treating initial `meta.args` as proof of the component's API defaults.
 - Component name repeated in every story name.
 - Direct implementation imports when local `index.ts` exposes the component.
 - TypeScript-only unions as Storybook control options.

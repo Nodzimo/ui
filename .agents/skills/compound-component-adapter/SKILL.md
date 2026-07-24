@@ -33,14 +33,16 @@ class formatting, or Storybook implementation into this skill.
 
 1. Inventory every root and part wrapper, its upstream primitive props, wrapper-owned props, defaults, and exported
    names.
-2. Derive props from upstream primitive namespaces. Compose only the extra contracts the wrapper really owns.
-3. Identify finite public values that consumers and Storybook need at runtime.
-4. Export one immutable runtime option constant and a derived or upstream-validated type for each meaningful finite
+2. When the same prop name exists at several scopes, trace each owner and any upstream state propagation in the
+   installed implementation. Do not infer equivalence from a simple closed demo.
+3. Derive props from upstream primitive namespaces. Compose only the extra contracts the wrapper really owns.
+4. Identify finite public values that consumers and Storybook need at runtime.
+5. Export one immutable runtime option constant and a derived or upstream-validated type for each meaningful finite
    contract.
-5. Keep upstream `undefined` in optional prop types but exclude it from explicit runtime option arrays.
-6. Normalize wrapper-owned presence-based boolean data attributes so `false` omits the attribute.
-7. Export intentional parts, types, and constants through the folder `index.ts`; keep indicators and helpers private.
-8. Run TypeScript verification before starting decomposition.
+6. Keep upstream `undefined` in optional prop types but exclude it from explicit runtime option arrays.
+7. Normalize wrapper-owned presence-based boolean data attributes so `false` omits the attribute.
+8. Export intentional parts, types, and constants through the folder `index.ts`; keep indicators and helpers private.
+9. Run TypeScript verification before starting decomposition.
 
 Do not introduce shared one-field prop helpers merely to remove repeated intersections. Do not reconstruct broad
 upstream unions or generics unless a real consumer boundary needs an owned narrower contract.

@@ -48,6 +48,10 @@ final code is known. Small components may combine adjacent passes only when the 
 - Adapt semantic colors, radii, and intentional design-system spacing to NUI tokens.
 - Leave structural Tailwind utilities and incidental component geometry unchanged unless a separate design decision owns
   the change.
+- Treat a transparent popup, missing destructive color, or another suddenly unstyled semantic surface as a
+  token-contract failure first. Copied utilities such as `bg-popover`, `text-popover-foreground`, and `text-destructive`
+  have no NUI meaning until the token pass maps them to the prefixed contract; this is not evidence that the Base UI
+  primitive or Storybook portal is broken.
 - Resolve install-time registry markers. `cn-rtl-flip` becomes `rtl:rotate-180` only at inline-directional icon usage
   sites.
 - Convert inline-axis spacing, positioning, radii, and logical-side motion deliberately. Verify portaled overlays in
@@ -90,6 +94,31 @@ Inspect the installed primitive declarations and official examples before assign
 Compound components may expose the same prop name at multiple scopes. For example, root, trigger, and item `disabled`
 states are separate contracts and must not be conflated.
 
+#### State Ownership: Dropdown Menu `disabled`
+
+Base UI Menu deliberately owns `disabled` at several scopes:
+
+| Owner   | Contract                                  | Practical use                                                          |
+|---------|-------------------------------------------|------------------------------------------------------------------------|
+| Root    | The whole menu system ignores interaction | Disable a feature or controlled/open menu regardless of active trigger |
+| Trigger | Only that trigger ignores interaction     | Disable one trigger while another trigger for the same menu remains    |
+| Item    | Only that action ignores interaction      | Keep the menu usable while making one action unavailable               |
+
+Root and Trigger look equivalent in the common closed, single-trigger composition because either prevents that button
+from opening the menu. They are not interchangeable contracts. Base UI supports
+[detached and multiple triggers](https://base-ui.com/react/components/menu#detached-triggers), and its installed
+implementation combines Root state with each Trigger and Item state. Root `disabled` therefore propagates through the
+menu, while Trigger `disabled` remains local to one trigger and Item `disabled` remains local to one action. Preserve
+all meaningful scopes in the public API and describe them explicitly in Storybook.
+
+This is an upstream contract, not an NUI extension. Verify it against the installed version's
+[Root API](https://base-ui.com/react/components/menu#root),
+[Trigger API](https://base-ui.com/react/components/menu#trigger), and
+[Item API](https://base-ui.com/react/components/menu#item). When propagation details matter, inspect the installed
+source rather than inferring behavior from a closed demo; Base UI 1.6.0 merges Root state in
+[`MenuTrigger`](https://github.com/mui/base-ui/blob/v1.6.0/packages/react/src/menu/trigger/MenuTrigger.tsx) and
+[`useMenuItem`](https://github.com/mui/base-ui/blob/v1.6.0/packages/react/src/menu/item/useMenuItem.ts).
+
 ### Presence-Based Boolean Attributes
 
 HTML `data-*` values are strings, and Tailwind presence selectors such as `data-inset:*` match whenever the attribute
@@ -103,6 +132,10 @@ data-inset={inset || undefined}
 
 Apply this normalization at the component boundary, not only in Storybook. Any consumer can pass `false`. Do not apply
 the rule to primitive boolean props such as `disabled`; pass those to the primitive and let it own their semantics.
+
+`inset` itself is intentional. It reserves inline-start space so an item without an icon can align with neighboring
+items that have icons. `true` should add that alignment space; `false` should render the ordinary item position. The NUI
+fix did not invent or remove the feature—it made the wrapper's public boolean toggle preserve both states correctly.
 
 ### Decomposition
 
@@ -139,19 +172,70 @@ compound story architecture.
 - Distinguish scope when names overlap, for example `Disables the whole menu` and `Disables only the trigger`.
 - Keep deliberate fixed exceptions explicit, such as a destructive logout item, and mention them briefly when a
   story-wide control otherwise suggests uniform behavior.
-- Derive defaults from component code or upstream documentation. Do not confuse the story's initial args with the API
-  default.
+- Derive defaults from component code or upstream documentation. `table.defaultValue` describes the real API default;
+  `meta.args` describes the initial demo. They may differ, but the difference must be deliberate and must not be copied
+  from another component. A visually convenient `contentSide`, `itemVariant`, or `triggerOpenOnHover` arg is not proof
+  of that prop's default.
 - Do not expect docgen to recover clean controls from generic or wrapped Base UI compound components. TypeScript types
   validate the story but disappear at runtime. Add explicit boolean controls, runtime options, table types, and default
-  summaries for the important documented surface.
+  summaries for the important documented surface. Storybook documents that ArgTypes come from static analysis and that
+  manually specified ArgTypes override inference; a missing `disabled` control does not by itself prove a bad component
+  type.
 - Do not add controls for every upstream prop. Controlled state callbacks, refs, arbitrary render props, and advanced
   behavior belong only when the story can explain and demonstrate them honestly.
-- Keep story layout minimal. Do not copy decorators or `layout: 'padded'` from another component unless the current
-  canvas requires them. Prefer fixed preview geometry over `h-full` workarounds when the component should center
-  naturally.
+- Use human-readable title segments for multiword components, for example
+  `Client/Components/Dropdown Menu`; keep export names technical and stable.
+- Keep story layout minimal. Storybook's default Canvas already centers the story. Do not copy decorators or
+  `layout: 'padded'` from another component unless the current canvas requires them. A centering decorator plus
+  `layout: 'padded'` changes the preview contract and can pin the component to the top instead of centering it.
+- Prefer fixed representative geometry such as `w-64` for a standalone Select trigger. A copied application-style
+  `w-full max-w-64` depends on a meaningful parent width; adding `padded`, `h-full`, or another wrapper to compensate
+  hides the wrong assumption instead of documenting the component. Story composition may set a useful popup width such
+  as Dropdown Menu's `w-44`, but that remains demo geometry rather than component API.
 - Import the component under test from its colocated `.` surface. Import supporting public components through the
-  intentional `#client` or `#core` barrel when the story is meant to exercise that public surface.
+  intentional `#client` or `#core` barrel when the story is meant to exercise that public surface. Colocated stories are
+  excluded from the published runtime build, so a supporting Button imported through `#client` does not leak the story
+  or the whole client barrel into the package artifact; it deliberately tests that barrel in Storybook. Prefer a
+  component-level internal path when focused work should avoid aggregate-barrel coupling.
 - Keep control descriptions as short UI fragments without terminal punctuation.
+
+Use official examples as an inventory, not as a story-count mandate. The shadcn
+[Select examples](https://ui.shadcn.com/docs/components/base/select) establish important visible states such as Disabled
+and Invalid; the shadcn
+[Dropdown Menu examples](https://ui.shadcn.com/docs/components/base/dropdown-menu) establish composition, submenus,
+shortcuts, checkbox/radio items, destructive actions, complex menus, and RTL. One representative compound story may
+cover several of these when its controls and composition remain honest. Do not expose advanced upstream props such as
+callbacks or controlled-state plumbing merely because they appear in the full API.
+
+### Reference Evidence
+
+- [shadcn Dropdown Menu](https://ui.shadcn.com/docs/components/base/dropdown-menu): source composition and visible
+  examples.
+- [shadcn Select](https://ui.shadcn.com/docs/components/base/select): source composition, positioning, Disabled, and
+  Invalid examples.
+- [shadcn RTL](https://ui.shadcn.com/docs/rtl): CLI logical-property transforms, `rtl:rotate-180`, logical animations,
+  and the portaled `dir` caveat.
+- [Base UI Menu](https://base-ui.com/react/components/menu): authoritative part ownership, defaults, multiple triggers,
+  and menu behavior.
+- [Base UI Select](https://base-ui.com/react/components/select): authoritative root/part props and defaults.
+- [Storybook ArgTypes](https://storybook.js.org/docs/api/arg-types): static-analysis inference and explicit override
+  behavior.
+
+### Completion Gate
+
+A complex port is ready only when one final audit confirms:
+
+- copied semantic utilities resolve through NUI tokens and no registry marker remains;
+- LTR and RTL layout, icon direction, popup motion, and Portal direction are intentional;
+- public parts derive from upstream contracts, meaningful finite values have runtime constants, and barrels expose only
+  the intended surface;
+- wrapper-owned presence booleans preserve both `true` and `false`;
+- decomposition has semantic modules without duplication or avoidable sibling cross-imports;
+- the representative story documents important root and part states with verified API defaults, honest story-only
+  fan-out, minimal preview geometry, and no accidental wrappers;
+- focused lint, TypeScript, export, dependency, Storybook, and visual checks appropriate to the touched passes succeed.
+
+This gate is a reusable audit, not permission to collapse the preceding passes into one commit.
 
 ### Commit Boundaries
 

@@ -16,6 +16,10 @@
 - Use `#lib` for shared utilities such as the class-name merge helper.
 - Use `#client` and `#core` when a story or internal integration should validate the public internal barrel.
 - Use specific imports such as `#client/components/button` for focused component work.
+- A named aggregate-barrel import in a colocated story does not change the published runtime artifact because
+  `*.stories.*` files are excluded from production entrypoints. It does make Storybook traverse that public barrel,
+  which is useful for integration coverage but can expose cycles or boundary leaks; choose it deliberately rather than
+  for path brevity.
 - Use `#core/icons` when core components need generated project-owned icons from another core area. Avoid importing
   icons through `#core`, because the aggregate barrel can create dependency cycles.
 - Inside one component folder, prefer relative imports such as `./button-variants`; do not route local implementation
@@ -23,7 +27,5 @@
 - Colocated stories and tests that sit beside a component folder `index.ts` may import the component through the local
   folder surface with `import { Button } from '.'`. This validates the component's local public API, avoids importing
   implementation files directly, and prevents IDE "import can be shortened" noise without suppressions.
-- Do not import from the public package name (`@nodzimo/ui`) inside this package's source. Public package
-  imports
-  are
+- Do not import from the public package name (`@nodzimo/ui`) inside this package's source. Public package imports are
   for consumers.

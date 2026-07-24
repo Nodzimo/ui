@@ -13,6 +13,19 @@ type ContentProps = Primitive.Popup.Props &
 
 Preserve the primitive contract. Add only wrapper-owned props.
 
+## State Ownership
+
+Inventory repeated prop names by owner before simplifying them:
+
+```text
+Root.disabled    -> whole compound system
+Trigger.disabled -> one trigger
+Item.disabled    -> one item
+```
+
+These scopes may look identical in a simple closed composition. Trace the installed primitive implementation for
+propagation and check official multiple-trigger or controlled examples before hiding, renaming, or merging them.
+
 ## Runtime Finite Values
 
 ```ts
@@ -36,7 +49,9 @@ Export the constant and type when both consumers and Storybook benefit. Do not a
 data-inset={inset || undefined}
 ```
 
-Use only for wrapper-owned presence-based `data-*` markers. Pass primitive props such as `disabled` unchanged.
+Use only for wrapper-owned presence-based `data-*` markers. Pass primitive props such as `disabled` unchanged. For
+`inset`, `true` intentionally reserves inline-start space for icon alignment and `false` must leave the ordinary item
+position.
 
 ## Decomposition Test
 

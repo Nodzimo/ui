@@ -40,6 +40,8 @@
   improvement.
 - Keep story export names short and stable because they form technical story ids. Use `name` only when the display name
   needs human-facing clarification or sentence casing, such as `Primary (default)` or `Icon sizes`.
+- Write human-readable multiword title segments, for example `Client/Components/Dropdown Menu`, instead of collapsing
+  the component name into `DropdownMenu`.
 - In comparison, story render functions, spread `args` before pinned props that define the comparison item, for example
   `<Button {...args} size='xs' />`. This lets controls adjust shared args while preventing controls from collapsing the
   whole comparison into one size or variant.
@@ -70,7 +72,9 @@
   prefer one realistic, highly interactive `Default` composition over separate stories for every internal part.
 - Keep root props under their real public names. Prefix only child-part story args by owner. If root, trigger, and item
   expose same-named states such as `disabled`, document each selected scope explicitly instead of hiding a real contract
-  or implying that the scopes are interchangeable.
+  or implying that the scopes are interchangeable. For Base UI Menu, Root disables the menu system, Trigger disables
+  only one trigger, and Item disables only one action; the distinction remains useful because one menu may have multiple
+  or detached triggers.
 - When a story-only arg deliberately fans one real item prop out to several rendered items, keep the singular
   prop-derived name and explain the fan-out briefly, for example `Applies to all items in this story`. Do not imply that
   one item prop controls its siblings in production.
@@ -79,11 +83,13 @@
   explicit `control`, defaults, descriptions, and runtime options for important states; do not distort the component API
   merely to improve docgen.
 - Derive control defaults from the component or upstream primitive, not from whichever value makes the demo look best.
-  Keep fixed story exceptions visible and describe them briefly when a story-wide control otherwise suggests uniform
-  behavior.
+  Treat `table.defaultValue` as API documentation and `meta.args` as the initial demo state. Keep fixed story exceptions
+  visible and describe them briefly when a story-wide control otherwise suggests uniform behavior.
 - Keep control descriptions as short interface fragments without terminal punctuation.
 - Do not copy `decorators`, `layout: 'padded'`, `h-full`, or preview sizing from a reference story without reproducing
-  the layout need. Prefer minimal fixed preview geometry that centers correctly in both Canvas and Docs.
+  the layout need. Storybook's default Canvas already centers ordinary stories. Prefer minimal fixed preview geometry,
+  such as a standalone Select trigger with `w-64`, over an application-style `w-full max-w-64` plus wrappers that only
+  compensate for the missing parent width.
 - Keep `undefined` in the prop type when an upstream prop is optional, but do not include `undefined` in Storybook
   control option arrays. Options represent explicit selectable values, not the absence of a prop. Numeric Base UI
   offsets such as `sideOffset` and `alignOffset` may accept functions upstream, but stories may use `control: 'number'`
