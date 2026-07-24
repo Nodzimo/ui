@@ -78,6 +78,7 @@ const SELECT_DEFAULTS = {
 	contentAlignOffset: 0,
 	contentSide: SELECT_CONTENT_SIDES[1],
 	contentSideOffset: 4,
+	disabled: false,
 	triggerAriaInvalid: false,
 	triggerSize: SELECT_TRIGGER_SIZES[0],
 } as const
@@ -99,6 +100,7 @@ const meta = {
 		contentAlignOffset: SELECT_DEFAULTS.contentAlignOffset,
 		contentSide: SELECT_DEFAULTS.contentSide,
 		contentSideOffset: SELECT_DEFAULTS.contentSideOffset,
+		disabled: SELECT_DEFAULTS.disabled,
 		triggerAriaInvalid: SELECT_DEFAULTS.triggerAriaInvalid,
 		triggerSize: SELECT_DEFAULTS.triggerSize,
 	},
@@ -143,6 +145,12 @@ const meta = {
 			control: 'number',
 			table: {
 				defaultValue: { summary: String(SELECT_DEFAULTS.contentSideOffset) },
+			},
+		},
+		disabled: {
+			control: 'boolean',
+			table: {
+				defaultValue: { summary: String(SELECT_DEFAULTS.disabled) },
 			},
 		},
 		triggerAriaInvalid: {

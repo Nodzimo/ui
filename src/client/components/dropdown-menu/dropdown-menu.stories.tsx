@@ -35,6 +35,7 @@ const DROPDOWN_MENU_DEFAULTS = {
 	contentAlignOffset: 0,
 	contentSide: DROPDOWN_MENU_CONTENT_SIDES[1],
 	contentSideOffset: 4,
+	disabled: false,
 	itemDisabled: false,
 	itemInset: false,
 	itemVariant: DROPDOWN_MENU_ITEM_VARIANTS[0],
@@ -60,6 +61,7 @@ const meta = {
 		contentAlignOffset: DROPDOWN_MENU_DEFAULTS.contentAlignOffset,
 		contentSide: DROPDOWN_MENU_DEFAULTS.contentSide,
 		contentSideOffset: DROPDOWN_MENU_DEFAULTS.contentSideOffset,
+		disabled: DROPDOWN_MENU_DEFAULTS.disabled,
 		itemDisabled: DROPDOWN_MENU_DEFAULTS.itemDisabled,
 		itemInset: DROPDOWN_MENU_DEFAULTS.itemInset,
 		itemVariant: DROPDOWN_MENU_DEFAULTS.itemVariant,
@@ -109,9 +111,18 @@ const meta = {
 				},
 			},
 		},
+		disabled: {
+			control: 'boolean',
+			description: 'Disables the whole menu',
+			table: {
+				defaultValue: {
+					summary: String(DROPDOWN_MENU_DEFAULTS.disabled),
+				},
+			},
+		},
 		itemDisabled: {
 			control: 'boolean',
-			description: 'Applies to all items',
+			description: 'Applies to all items in this story',
 			table: {
 				defaultValue: {
 					summary: String(DROPDOWN_MENU_DEFAULTS.itemDisabled),
@@ -120,7 +131,7 @@ const meta = {
 		},
 		itemInset: {
 			control: 'boolean',
-			description: 'Applies to all supported items',
+			description: 'Applies to all supported items in this story',
 			table: {
 				defaultValue: {
 					summary: String(DROPDOWN_MENU_DEFAULTS.itemInset),
@@ -129,7 +140,8 @@ const meta = {
 		},
 		itemVariant: {
 			control: 'select',
-			description: 'Applies to all items (Log out is always destructive)',
+			description:
+				'Applies to all items in this story (Log out is always destructive)',
 			options: DROPDOWN_MENU_ITEM_VARIANTS,
 			table: {
 				defaultValue: {
@@ -143,6 +155,7 @@ const meta = {
 		},
 		triggerDisabled: {
 			control: 'boolean',
+			description: 'Disables only the trigger',
 			table: {
 				defaultValue: {
 					summary: String(DROPDOWN_MENU_DEFAULTS.triggerDisabled),
