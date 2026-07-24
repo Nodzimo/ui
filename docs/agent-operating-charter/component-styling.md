@@ -46,7 +46,12 @@ See [NUI Link Foundation Decision](nui-link-foundation-decision.md) for the owne
 - Keep component public surfaces intentional. Do not export internal composition helpers merely because a copied source
   exports them; export subcomponents through a folder `index.ts` only when consumers should intentionally depend on
   them.
+- For complex shadcn/Base UI ports, follow the staged
+  [shadcn Component Adaptation](shadcn-component-adaptation.md) workflow. Keep token conversion, public API hardening,
+  decomposition, and Storybook work reviewable as separate concerns.
 
 ### Related Skills
 
 - Use the repo skill `.agents/skills/theme-token-adapter` for repeated token-prefix adaptation and review work.
+- Use `.agents/skills/compound-component-adapter` for public compound APIs and self-contained decomposition after
+  styling and RTL are stable.

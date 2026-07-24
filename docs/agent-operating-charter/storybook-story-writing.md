@@ -33,11 +33,11 @@
   as `Delete` for destructive actions or `Visit` for link-style actions.
 - For story-only args such as preview icons, extend the story args type with `ComponentProps<typeof Component>`. Expose
   a clearly described control such as `Story-only icon picker (this is not a Button prop!)`, and destructure unused
-  story-only args out of custom renders so they do not leak into the rendered component or DOM.
-  For icon-like story-only controls, keep control options as serializable string keys plus Storybook `mapping`; do not
-  put React components directly in `options`. It is acceptable if Storybook cannot reverse-map a React component default
-  back to the selected string option in the Controls UI; do not rewrite the arg to an `iconName` string only for that
-  cosmetic control-state improvement.
+  story-only args out of custom renders so they do not leak into the rendered component or DOM. For icon-like story-only
+  controls, keep control options as serializable string keys plus Storybook `mapping`; do not put React components
+  directly in `options`. It is acceptable if Storybook cannot reverse-map a React component default back to the selected
+  string option in the Controls UI; do not rewrite the arg to an `iconName` string only for that cosmetic control-state
+  improvement.
 - Keep story export names short and stable because they form technical story ids. Use `name` only when the display name
   needs human-facing clarification or sentence casing, such as `Primary (default)` or `Icon sizes`.
 - In comparison, story render functions, spread `args` before pinned props that define the comparison item, for example
@@ -66,6 +66,24 @@
 - For compound components, story args may represent the documented composition surface, not only the root component's
   direct props. Prefix child-part controls with the part name, such as `triggerSize`, `triggerAriaInvalid`,
   `contentSide`, `contentAlign`, `contentSideOffset`, and `contentAlignItemWithTrigger`.
+- Treat `Select` and `Dropdown Menu` as reference stories for complex compound components with one primary behavior:
+  prefer one realistic, highly interactive `Default` composition over separate stories for every internal part.
+- Keep root props under their real public names. Prefix only child-part story args by owner. If root, trigger, and item
+  expose same-named states such as `disabled`, document each selected scope explicitly instead of hiding a real contract
+  or implying that the scopes are interchangeable.
+- When a story-only arg deliberately fans one real item prop out to several rendered items, keep the singular
+  prop-derived name and explain the fan-out briefly, for example `Applies to all items in this story`. Do not imply that
+  one item prop controls its siblings in production.
+- Storybook's generic/wrapped Base UI docgen may omit even basic props such as `disabled`. A valid exported TypeScript
+  type and `satisfies Meta<...>` validate the story at compile time but do not create runtime control metadata. Add
+  explicit `control`, defaults, descriptions, and runtime options for important states; do not distort the component API
+  merely to improve docgen.
+- Derive control defaults from the component or upstream primitive, not from whichever value makes the demo look best.
+  Keep fixed story exceptions visible and describe them briefly when a story-wide control otherwise suggests uniform
+  behavior.
+- Keep control descriptions as short interface fragments without terminal punctuation.
+- Do not copy `decorators`, `layout: 'padded'`, `h-full`, or preview sizing from a reference story without reproducing
+  the layout need. Prefer minimal fixed preview geometry that centers correctly in both Canvas and Docs.
 - Keep `undefined` in the prop type when an upstream prop is optional, but do not include `undefined` in Storybook
   control option arrays. Options represent explicit selectable values, not the absence of a prop. Numeric Base UI
   offsets such as `sideOffset` and `alignOffset` may accept functions upstream, but stories may use `control: 'number'`

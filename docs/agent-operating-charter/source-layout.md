@@ -26,8 +26,7 @@
   generated barrels are an accepted workaround when WebStorm cannot understand generated re-export usage.
 - Hand-authored special icons that need a custom React API, such as the two-color `NodzimoSymbolIcon`, belong outside
   `src/core/icons/generated` and should not keep their source SVG under `assets/icons`, because `build:icons` treats
-  that
-  folder as SVGR input.
+  that folder as SVGR input.
 - `src/core/icons/index.ts` is the hand-authored icon public surface inside core and should re-export generated icon
   groups intentionally.
 - Storybook iconography pages are design-system showcase inventory, not colocated stories for individual icon
@@ -54,6 +53,9 @@ For import path rules, see [Internal Package Imports](internal-package-imports.m
   `src/client/components/button/button.tsx`, `button-variants.ts`, `button.stories.tsx`, and `index.ts`.
 - A component folder's `index.ts` is the local public surface for that component. Export only what other project code or
   consumers should intentionally depend on.
+- Decompose large compound components into self-contained semantic modules after their public API is stable. Target zero
+  sibling implementation cross-imports, but do not duplicate helpers or force unrelated parts together merely to reach
+  that target. See [shadcn Component Adaptation](shadcn-component-adaptation.md#decomposition).
 - Aggregate barrels such as `src/client/components/index.ts`, `src/client/index.ts`, and `src/core/index.ts` are for
   public package flow. Avoid using large aggregate barrels as the default internal dependency path when a concrete
   component entrypoint is clearer.

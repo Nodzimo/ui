@@ -15,10 +15,15 @@ truth.
   build output, or Next/RSC consumer compatibility, use the project-local `rsc-package-boundary-reviewer` skill at
   `.agents/skills/rsc-package-boundary-reviewer`.
 
-### Styling And Stories
+### Component Porting, Styling, And Stories
 
+- For an end-to-end shadcn/Base UI component port, follow
+  [shadcn Component Adaptation](shadcn-component-adaptation.md) and keep its passes reviewable.
 - For repeated token-prefix adaptation, shadcn registry-marker resolution, RTL/logical-motion conversion, and review
   work, use the project-local `theme-token-adapter` skill at `.agents/skills/theme-token-adapter`.
+- For public compound-part props, finite runtime option constants, wrapper-owned boolean data attributes, component
+  folder barrels, and self-contained semantic decomposition, use the project-local `compound-component-adapter` skill at
+  `.agents/skills/compound-component-adapter`.
 - For formatting long Tailwind class strings into readable grouped chunks without changing the styles, use the
   project-local `tailwind-class-formatter` skill at `.agents/skills/tailwind-class-formatter`.
 - For final project convention review and safe fixes beyond Biome, including JSX literal braces, rest-prop naming,

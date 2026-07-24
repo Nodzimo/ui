@@ -76,6 +76,43 @@ const meta = {
 }
 ```
 
+For compound components, keep root props real and prefix only child-part story args:
+
+```ts
+type MenuStoryArgs = MenuProps & {
+    itemDisabled: MenuItemProps['disabled']
+    triggerDisabled: MenuTriggerProps['disabled']
+}
+
+const meta = {
+    args: {
+        disabled: false,
+        itemDisabled: false,
+        triggerDisabled: false,
+    },
+    argTypes: {
+        disabled: {
+            control: 'boolean',
+            description: 'Disables the whole menu',
+            table: {defaultValue: {summary: 'false'}},
+        },
+        itemDisabled: {
+            control: 'boolean',
+            description: 'Applies to all items in this story',
+            table: {defaultValue: {summary: 'false'}},
+        },
+        triggerDisabled: {
+            control: 'boolean',
+            description: 'Disables only the trigger',
+            table: {defaultValue: {summary: 'false'}},
+        },
+    },
+}
+```
+
+The `in this story` qualifier is mandatory when one story arg fans a real per-part prop out to several rendered parts.
+Do not rename the prop into an invented plural.
+
 For Base UI finite string unions, mirror runtime values and validate them against the upstream-derived type:
 
 ```ts
@@ -155,6 +192,9 @@ function ButtonPreviewRow({className, ...restProps}: ComponentProps<'div'>) {
 ## Avoid
 
 - Story per prop value.
+- Hiding a meaningful root prop because a child-part prop looks similar in one composition.
+- Presenting story-wide fan-out as the production behavior of one item prop.
+- Copying reference-story defaults, decorators, layout, or descriptions without checking the current component.
 - Component name repeated in every story name.
 - Direct implementation imports when local `index.ts` exposes the component.
 - TypeScript-only unions as Storybook control options.

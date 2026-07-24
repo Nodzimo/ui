@@ -1,0 +1,4 @@
+interface:
+  display_name: "Compound Component Adapter"
+  short_description: "Harden compound component APIs and modules"
+  default_prompt: "Use $compound-component-adapter to harden this compound component public API and decompose it into self-contained modules."

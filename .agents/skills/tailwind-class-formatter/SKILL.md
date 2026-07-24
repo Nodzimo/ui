@@ -1,15 +1,14 @@
 ---
 name: tailwind-class-formatter
-description: Format long Tailwind class lists in Nodzimo UI React/TSX components into readable grouped chunks without changing visual behavior. Use when Codex is asked to clean up horizontal Tailwind className strings, split long mcn/cn/className/CVA class lists, make copied shadcn/Tailwind component styles readable, or apply the project's class grouping convention after token adaptation.
+description: Format long Tailwind class lists in Nodzimo UI React/TSX components into readable grouped chunks without changing visual behavior. Use when Codex is asked to clean up horizontal Tailwind className strings, split long mcn/cn/className/CVA class lists, make copied shadcn/Tailwind component styles readable, or apply the project's class grouping convention in a dedicated pass before or after token adaptation.
 ---
 
 # Tailwind Class Formatter
 
 ## Purpose
 
-Use this skill to turn unreadable Tailwind class strings into maintainable grouped class chunks. The skill fills the
-gap left by Biome and Tailwind: they can sort classes, but they do not split long class lists into readable project
-groups.
+Use this skill to turn unreadable Tailwind class strings into maintainable grouped class chunks. The skill fills the gap
+left by Biome and Tailwind: they can sort classes, but they do not split long class lists into readable project groups.
 
 This is a formatting and grouping skill only. It must preserve the exact style contract.
 

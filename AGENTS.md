@@ -46,8 +46,8 @@ See [docs/agent-operating-charter/code-style-conventions.md](docs/agent-operatin
 
 ## Skills
 
-Use the project-local skills for dependency review, token adaptation, Tailwind class formatting, style review, Storybook
-stories, design-system doctrine, and RSC/package-boundary work.
+Use the project-local skills for dependency review, token adaptation, compound component adaptation, Tailwind class
+formatting, style review, Storybook stories, design-system doctrine, and RSC/package-boundary work.
 
 See [docs/agent-operating-charter/skills.md](docs/agent-operating-charter/skills.md).
 
@@ -192,6 +192,14 @@ Component styles should use NUI-prefixed semantic tokens, CVA/class naming conve
 class formatting.
 
 See [docs/agent-operating-charter/component-styling.md](docs/agent-operating-charter/component-styling.md).
+
+## shadcn Component Adaptation
+
+Port shadcn/Base UI components through separate source, cleanup, token, RTL, public API, decomposition, Storybook, and
+verification passes, using Select and Dropdown Menu as quality references rather than copy templates.
+
+See
+[docs/agent-operating-charter/shadcn-component-adaptation.md](docs/agent-operating-charter/shadcn-component-adaptation.md).
 
 ## Select API
 

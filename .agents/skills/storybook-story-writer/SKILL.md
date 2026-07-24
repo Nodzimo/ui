@@ -16,6 +16,8 @@ Read only the files relevant to the touched surface:
 
 - Component story budgets, controls, CVA/docgen limits, story-only args, and CSF guidance:
   `docs/agent-operating-charter/storybook-story-writing.md`
+- For a complex shadcn/Base UI compound component, staged porting and Storybook handoff rules:
+  `docs/agent-operating-charter/shadcn-component-adaptation.md`
 - Storybook folders, addons, source globs, story sorting, and preview CSS entrypoint:
   `docs/agent-operating-charter/storybook-configuration.md`
 - Theme decorators, `wrapperBackground`, Docs theming, MDX theme bridge, and preview surface rules:
@@ -34,6 +36,8 @@ Use `references/story-patterns.md` for compact story shape examples and control 
     - Read the component implementation, local `index.ts`, variant files, types, and existing stories.
     - Confirm whether the component is core or client, and keep stories colocated with the component folder.
     - Import from the local folder surface, such as `import {Button} from '.'`, when `index.ts` exports the component.
+    - For compound components, confirm the public API and decomposition passes are complete before compensating in the
+      story.
 
 2. Classify the story-worthy API.
     - Identify owned semantic variants, sizes, states, interaction modes, and official composition patterns.
@@ -55,6 +59,9 @@ Use `references/story-patterns.md` for compact story shape examples and control 
       controls that docgen cannot infer reliably.
     - Put shared Storybook table labels and separators in `src/storybook/constants.ts`.
     - Mark story-only controls clearly and keep their options serializable.
+    - Keep root props under their real names and prefix child-part controls by owner.
+    - When one story control fans out to several parts, say `in this story` so the description does not misrepresent the
+      real prop contract.
 
 5. Keep story-only code inside Storybook boundaries.
     - Use project-owned generated icons from `#core/icons` for story composition; do not add third-party icon packages

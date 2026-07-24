@@ -10,6 +10,10 @@ description: Review, adapt, or validate Tailwind/React component styles against 
 Adapt component and stylesheet code to the NUI theme-token contract. Treat this skill as the procedural checklist; the
 architectural source of truth lives in `docs/agent-operating-charter`.
 
+For a full shadcn/Base UI component port, this skill owns only the theme and RTL passes. Read
+`docs/agent-operating-charter/shadcn-component-adaptation.md` and keep public API hardening, decomposition, and
+Storybook work in their later passes.
+
 ## Required Reading
 
 Read only the files relevant to the touched surface:
@@ -38,6 +42,7 @@ Use `references/token-prefixing.md` for the compact mapping cheat sheet, RTL con
     - Port copied components by adapting theme-facing classes, not by redesigning behavior.
     - Keep ordinary Tailwind layout, typography, sizing, and state utilities unchanged unless they encode a
       design-system token decision.
+    - Do not combine token replacement with class regrouping, public type/export changes, decomposition, or story work.
 
 3. Convert theme-facing styles to the NUI contract.
     - Prefix semantic color, radius, and design-system spacing utilities.

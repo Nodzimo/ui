@@ -27,6 +27,7 @@ Use focused skills when their surface is primary:
 
 - `tailwind-class-formatter` for long Tailwind class-list grouping.
 - `theme-token-adapter` for NUI token adaptation.
+- `compound-component-adapter` for public compound APIs and decomposition.
 - `storybook-story-writer` for Storybook architecture and controls.
 
 ## Boundaries
@@ -51,6 +52,8 @@ Apply these only when local intent is clear:
 - Derive unions from literal tables instead of duplicating string unions by hand.
 - Rename hand-authored `.tsx` files to `.ts` when they contain no JSX, and use `.tsx` when JSX is present.
 - Remove explicit `.ts` / `.tsx` extensions from local TypeScript imports when the resolver can resolve the module.
+- Mark partial Markdown snippets as `text` instead of `ts`, `tsx`, or another language when the snippet is not valid
+  standalone code.
 - Apply `tailwind-class-formatter` to long Tailwind class lists without changing class tokens.
 - Separate multiline declarations from neighboring declarations when they visually stick to one-line bindings.
 
@@ -70,7 +73,8 @@ Report these unless the correct change is obvious from local context:
 1. Inspect changed files and identify which conventions apply.
 2. Run or rely on Biome for its owned checks before spending review time on local conventions.
 3. Apply safe fixes only when intent is clear.
-4. Delegate Tailwind class grouping, token adaptation, and Storybook architecture to the focused skills when needed.
+4. Delegate Tailwind class grouping, token adaptation, compound API/decomposition, and Storybook architecture to the
+   focused skills when needed.
 5. For type/interface and export-style questions, fix obvious mismatches and report ambiguous candidates.
 6. Run the smallest relevant verification:
     - `bunx biome check <changed-files>` for style-only changes.
@@ -90,6 +94,7 @@ Report these unless the correct change is obvious from local context:
 - Long Tailwind class lists were delegated to `tailwind-class-formatter`.
 - `.ts` files do not contain JSX, and `.tsx` files are used when JSX is present.
 - TypeScript source imports omit `.ts` and `.tsx` extensions.
+- Markdown fence language tags describe valid standalone syntax; partial attributes and fragments use `text`.
 - Export style matches file shape.
 - Multiline declarations are visually separated when needed for scanning.
 - Raw SVG/HTML/MDX/CSS quote churn was not introduced.
