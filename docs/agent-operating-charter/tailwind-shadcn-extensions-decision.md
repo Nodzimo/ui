@@ -122,7 +122,7 @@ theme-token API.
 
 ### Verification Evidence
 
-The decision was verified against shadcn `4.16.0`, Tailwind CSS CLI `4.3.3`, and the installed Base UI `1.6.0`:
+The decision was verified against shadcn `4.16.0`, Tailwind CSS CLI `4.3.3`, and the installed Base UI `1.7.0`:
 
 - Official shadcn source, package export metadata, CLI documentation, and `eject` implementation agree on the same
   `tailwind.css` contract.

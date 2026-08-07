@@ -169,9 +169,11 @@ This is an upstream contract, not an NUI extension. Verify it against the instal
 [Root API](https://base-ui.com/react/components/menu#root),
 [Trigger API](https://base-ui.com/react/components/menu#trigger), and
 [Item API](https://base-ui.com/react/components/menu#item). When propagation details matter, inspect the installed
-source rather than inferring behavior from a closed demo; Base UI 1.6.0 merges Root state in
-[`MenuTrigger`](https://github.com/mui/base-ui/blob/v1.6.0/packages/react/src/menu/trigger/MenuTrigger.tsx) and
-[`useMenuItem`](https://github.com/mui/base-ui/blob/v1.6.0/packages/react/src/menu/item/useMenuItem.ts).
+source rather than inferring behavior from a closed demo. Base UI 1.7.0 fixed controlled-open disabled menus so Root
+state is resolved by Item, CheckboxItem, and RadioItem: interaction remains blocked, and each item now exposes the
+effective disabled render state and `data-disabled`. NUI's existing item styles therefore activate for Root-level
+disabled state without wrapper-owned propagation. See the upstream
+[disabled-state fix](https://github.com/mui/base-ui/pull/5363).
 
 ### Presence-Based Boolean Attributes
 
