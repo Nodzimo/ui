@@ -82,6 +82,10 @@
 ### Built JS Inspection
 
 - Inspect `dist/ui.js` and `dist/client.js` after build changes that affect React Compiler or entrypoints.
+- When Rolldown extracts code shared by the root and client entries into `dist/internal`, scanning `dist/ui.js` alone
+  does not cover the root execution graph. Follow relative chunk imports from `dist/ui.js` transitively and apply the
+  root/RSC-safe checks to every reachable internal chunk. Do not treat all `dist` JavaScript as one root graph because
+  `dist/client.js` legitimately contains Base UI and React Compiler runtime imports.
 - For root/RSC-safe output, inspect `dist/ui.js` for accidental client or third-party leaks:
   `rg -n "createContext|useContext|useState|useEffect|react/compiler-runtime|@base-ui/react|lucide-react|node_modules/lucide" dist/ui.js`.
 - Expected root output may import `react/jsx-runtime`, but must not import `react/compiler-runtime` or inline React

@@ -23,7 +23,7 @@ model here; use `docs/agent-operating-charter` as the canonical source.
   icon packages enter the root graph.
 - Prefer inline SVG or generated project-owned icons for core primitives.
 - Build when the change affects source boundaries or public artifacts.
-- Inspect `dist/ui.js` and root declarations after the build.
+- Inspect `dist/ui.js`, every relative internal chunk reachable from it, and root declarations after the build.
 
 ## Client Change Checklist
 
@@ -65,6 +65,9 @@ Inspect root output:
 ```powershell
 rg -n "createContext|useContext|useState|useEffect|react/compiler-runtime|@base-ui/react|lucide-react|node_modules/lucide" dist/ui.js
 ```
+
+If `dist/ui.js` imports relative chunks from `dist/internal`, apply the same scan to those chunks transitively. A direct
+entry-file scan is not sufficient when Rolldown has extracted shared code.
 
 Inspect client output:
 
