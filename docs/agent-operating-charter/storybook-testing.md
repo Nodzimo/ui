@@ -15,3 +15,4 @@
   dependency updates, run `bunx playwright install chromium` from the project terminal.
 - A `vitest.init()` deprecation warning seen while running Storybook visual/interaction tests can come from
   `@storybook/addon-vitest` internals. Do not rewrite local config only for that warning unless Storybook documents a
+  migration that applies to this project.

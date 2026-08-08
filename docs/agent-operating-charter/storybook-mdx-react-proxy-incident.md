@@ -28,3 +28,4 @@
   dynamic import path, remove the plugin and proxy together. Related public signals are Storybook issue
   https://github.com/storybookjs/storybook/issues/32604 and older addon-docs/MDX export issues such as
   https://github.com/storybookjs/storybook/issues/24792; neither is a perfect one-to-one match, so keep the local
+  diagnosis documented.
