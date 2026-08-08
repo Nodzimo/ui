@@ -1,7 +1,7 @@
 ## Storybook Addons And QA
 
-- Storybook's official backgrounds addon supports preset backgrounds, not a free global color picker. Avoid adding
-  stale third-party background/color-picker addons only for this feature; many are not maintained for current Storybook
+- Storybook's official backgrounds addon supports preset backgrounds, not a free global color picker. Avoid adding stale
+  third-party background/color-picker addons only for this feature; many are not maintained for current Storybook
   versions. If a real full-canvas color picker is needed later, prefer a small project-owned Storybook toolbar/global
   addon over layout hacks, `document.body` effects, or unsupported addons.
 - Use `storybook-addon-pseudo-states` for fixed CSS pseudo-class previews such as `hover` and `active`. Real component
@@ -23,3 +23,5 @@
 - Add explicit baseline `meta.args` for native or passthrough props when that makes Storybook Controls expose the prop
   correctly, for example `disabled: false`. CVA-derived variant unions still need explicit `argTypes.options` arrays
   because those unions are not available as runtime values.
+- Keep `tags: ['autodocs']` in the global Storybook preview unless the project intentionally changes its documentation
+  strategy.
