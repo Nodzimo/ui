@@ -2,7 +2,7 @@
 status: ready
 ---
 
-# Audit TypeScript compiler strictness and safeguards
+# Decide and adopt TypeScript strict mode across the package
 
 ## Context
 
@@ -11,18 +11,22 @@ do not enable the `strict` family of checks. The effective app configuration the
 `noImplicitAny` and `strictNullChecks` disabled. It also does not enable `noUncheckedSideEffectImports`.
 
 This may be an intentional compatibility choice or an inherited scaffold default, but the repository does not record the
-reason. Because the package publishes reusable React components and bundled public declarations, compiler strictness
-should be selected deliberately and verified against the complete build rather than copied from a template or enabled
-speculatively.
+reason. Because the package publishes reusable React components and bundled public declarations, `strict: true` should
+be the expected baseline: it prevents unsound public props and nullable states from escaping through the package's
+declarations to consumers. The decision must still be evidenced against the complete build rather than copied from a
+template or enabled speculatively.
 
 The existing TypeScript 7 incident is separate: this audit concerns compiler options on the current supported TypeScript
 6 toolchain and must not weaken declaration bundling to make stricter checks pass.
 
 ## Outcome
 
-- The effective compiler options for `tsconfig.app.json` and `tsconfig.node.json` are understood and intentional.
-- `strict` and relevant independent safeguards, including `noUncheckedSideEffectImports`, are accepted or rejected with
-  concrete repository evidence.
+- The effective compiler options for `tsconfig.app.json`, `tsconfig.node.json`, and any separately compiled Storybook
+  configuration are understood and intentional.
+- `strict: true` is enabled in every applicable configuration, or a narrow documented exception records why a specific
+  configuration cannot use it.
+- Relevant independent safeguards, including `noUncheckedSideEffectImports`, are accepted or rejected with concrete
+  repository evidence.
 - Any accepted options pass source type-checking, the Vite build, bundled declaration generation, Storybook, and package
   verification.
 - Any source errors exposed by stricter checks are resolved without weakening public types or adding blanket
@@ -31,12 +35,13 @@ The existing TypeScript 7 incident is separate: this audit concerns compiler opt
 
 ## Next step
 
-Capture the effective app and Node compiler settings with `tsc --showConfig`, then run non-persistent strictness trials
-against both configs. Classify every resulting diagnostic by compiler option and source area before proposing a focused
-configuration change.
+Capture each effective compiler configuration with `tsc --showConfig`, then run non-persistent `strict: true` trials.
+Classify every resulting diagnostic by compiler option and source area; resolve valid findings and propose only narrow,
+documented exceptions where strict mode is demonstrably incompatible.
 
 ## References
 
 - [Application TypeScript configuration](../tsconfig.app.json)
 - [Node TypeScript configuration](../tsconfig.node.json)
+- [Storybook TypeScript configuration](../.storybook/tsconfig.json)
 - [TypeScript 7 native compiler incident](../docs/agent-operating-charter/typescript-7-native-compiler-incident.md)
