@@ -5,9 +5,9 @@ import {
 	getDefaultClassNames,
 	type Locale,
 } from 'react-day-picker'
+import { Button, buttonVariants } from '#client/components/button'
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '#core/icons'
 import { mcn } from '#lib'
-import { Button, buttonVariants } from '../button'
 
 function Calendar({
 	className,
@@ -28,7 +28,7 @@ function Calendar({
 		<DayPicker
 			captionLayout={captionLayout}
 			className={mcn(
-				'group/calendar bg-background in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent p-2 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)]',
+				'group/calendar bg-nui-background in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent p-2 [--cell-radius:var(--radius-nui-md)] [--cell-size:--spacing(7)]',
 				String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
 				String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
 				className,
@@ -48,7 +48,7 @@ function Calendar({
 					'font-medium select-none',
 					captionLayout === 'label'
 						? 'cn-calendar-caption text-sm'
-						: 'cn-calendar-caption-label flex items-center gap-1 rounded-(--cell-radius) text-sm [&>svg]:size-3.5 [&>svg]:text-muted-foreground',
+						: 'cn-calendar-caption-label flex items-center gap-1 rounded-(--cell-radius) text-sm [&>svg]:size-3.5 [&>svg]:text-nui-muted-foreground',
 					defaultClassNames.caption_label,
 				),
 				day: mcn(
@@ -59,11 +59,11 @@ function Calendar({
 					defaultClassNames.day,
 				),
 				disabled: mcn(
-					'text-muted-foreground opacity-50',
+					'text-nui-muted-foreground opacity-50',
 					defaultClassNames.disabled,
 				),
 				dropdown: mcn(
-					'absolute inset-0 bg-popover opacity-0',
+					'absolute inset-0 bg-nui-popover opacity-0',
 					defaultClassNames.dropdown,
 				),
 				dropdown_root: mcn(
@@ -90,26 +90,26 @@ function Calendar({
 					defaultClassNames.nav,
 				),
 				outside: mcn(
-					'text-muted-foreground aria-selected:text-muted-foreground',
+					'text-nui-muted-foreground aria-selected:text-nui-muted-foreground',
 					defaultClassNames.outside,
 				),
 				range_end: mcn(
-					'relative isolate z-0 rounded-r-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:left-0 after:w-4 after:bg-muted',
+					'relative isolate z-0 rounded-r-(--cell-radius) bg-nui-muted after:absolute after:inset-y-0 after:left-0 after:w-4 after:bg-nui-muted',
 					defaultClassNames.range_end,
 				),
 				range_middle: mcn('rounded-none', defaultClassNames.range_middle),
 				range_start: mcn(
-					'relative isolate z-0 rounded-l-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:right-0 after:w-4 after:bg-muted',
+					'relative isolate z-0 rounded-l-(--cell-radius) bg-nui-muted after:absolute after:inset-y-0 after:right-0 after:w-4 after:bg-nui-muted',
 					defaultClassNames.range_start,
 				),
 				root: mcn('w-fit', defaultClassNames.root),
 				today: mcn(
-					'rounded-(--cell-radius) bg-muted text-foreground data-[selected=true]:rounded-none',
+					'rounded-(--cell-radius) bg-nui-muted text-nui-foreground data-[selected=true]:rounded-none',
 					defaultClassNames.today,
 				),
 				week: mcn('mt-2 flex w-full', defaultClassNames.week),
 				week_number: mcn(
-					'text-[0.8rem] text-muted-foreground select-none',
+					'text-[0.8rem] text-nui-muted-foreground select-none',
 					defaultClassNames.week_number,
 				),
 				week_number_header: mcn(
@@ -117,7 +117,7 @@ function Calendar({
 					defaultClassNames.week_number_header,
 				),
 				weekday: mcn(
-					'flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none',
+					'flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-nui-muted-foreground select-none',
 					defaultClassNames.weekday,
 				),
 				weekdays: mcn('flex', defaultClassNames.weekdays),
@@ -209,7 +209,7 @@ function CalendarDayButton({
 	return (
 		<Button
 			className={mcn(
-				'relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 font-normal leading-none data-[range-end=true]:rounded-(--cell-radius) data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-end=true]:bg-primary data-[range-middle=true]:bg-muted data-[range-start=true]:bg-primary data-[selected-single=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:text-foreground data-[range-start=true]:text-primary-foreground data-[selected-single=true]:text-primary-foreground group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 dark:hover:text-foreground [&>span]:text-xs [&>span]:opacity-70',
+				'relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 font-normal leading-none data-[range-end=true]:rounded-(--cell-radius) data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-end=true]:bg-nui-primary data-[range-middle=true]:bg-nui-muted data-[range-start=true]:bg-nui-primary data-[selected-single=true]:bg-nui-primary data-[range-end=true]:text-nui-primary-foreground data-[range-middle=true]:text-nui-foreground data-[range-start=true]:text-nui-primary-foreground data-[selected-single=true]:text-nui-primary-foreground group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-nui-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-nui-ring/50 dark:hover:text-nui-foreground [&>span]:text-xs [&>span]:opacity-70',
 				defaultClassNames.day,
 				className,
 			)}
