@@ -47,8 +47,8 @@ function Calendar({
 				caption_label: mcn(
 					'font-medium select-none',
 					captionLayout === 'label'
-						? 'cn-calendar-caption text-sm'
-						: 'cn-calendar-caption-label flex items-center gap-1 rounded-(--cell-radius) text-sm [&>svg]:size-3.5 [&>svg]:text-nui-muted-foreground',
+						? 'text-sm'
+						: 'flex items-center gap-1 rounded-(--cell-radius) text-sm [&>svg]:size-3.5 [&>svg]:text-nui-muted-foreground',
 					defaultClassNames.caption_label,
 				),
 				day: mcn(
@@ -67,7 +67,7 @@ function Calendar({
 					defaultClassNames.dropdown,
 				),
 				dropdown_root: mcn(
-					'cn-calendar-dropdown-root relative rounded-(--cell-radius)',
+					'relative rounded-(--cell-radius)',
 					defaultClassNames.dropdown_root,
 				),
 				dropdowns: mcn(

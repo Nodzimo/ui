@@ -20,6 +20,57 @@ The missing layer was initially easy to misdiagnose because three mechanisms app
 - `animate-in`, `fade-in-*`, `zoom-in-*`, and `slide-in-*` are supplied separately by `tw-animate-css`. State selection
   and animation implementation are different compiler responsibilities.
 
+### Registry Marker Transformation Pipeline
+
+Registry component files are templates consumed by the shadcn CLI, not necessarily the final source produced by
+`add`. The CLI applies its transformers in a defined order and runs generic cleanup last:
+
+```text
+import -> RSC -> CSS variables -> Tailwind prefix -> icons -> menu -> as-child -> RTL -> font -> cleanup
+```
+
+The final cleanup removes every `cn-*` token except `cn-font-heading`. Therefore, a residual `cn-*` class in manually
+ported NUI source is a defect until it has been classified; it is never evidence that `tailwind-extensions.css` needs a
+new runtime rule.
+
+| Registry marker                                                                                                                      | Upstream transform result                                                        | NUI porting action                                                                    |
+|--------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
+| `cn-rtl-flip`                                                                                                                        | `rtl:rotate-180`                                                                 | Replace at an inline-directional icon usage site.                                     |
+| `cn-font-heading`                                                                                                                    | `font-heading` only when the target supports `--font-heading`; otherwise removed | Replace with `font-nui-heading` under NUI's optional heading-font contract.           |
+| `cn-menu-target`                                                                                                                     | Removed, or `dark` for the CLI's inverted menu modes                             | Resolve only while porting the affected menu configuration; do not define CSS for it. |
+| `cn-menu-translucent`                                                                                                                | Removed, or expanded to the CLI's configured translucent-menu utility set        | Resolve only when that menu mode is deliberately supported and tested.                |
+| Any other `cn-*` token, including `cn-calendar`, `cn-calendar-caption`, `cn-calendar-caption-label`, and `cn-calendar-dropdown-root` | Removed by generic cleanup                                                       | Remove it. Do not create a NUI utility, selector, token, or extension for it.         |
+
+The Calendar template makes the distinction concrete: its caption and dropdown `cn-calendar-*` labels are inert cleanup
+markers, while its chevron `cn-rtl-flip` has a specific RTL replacement. NUI retains neither type verbatim. The latter
+becomes a real Tailwind utility; the former disappears.
+
+`src/tailwind-extensions.css` remains limited to upstream Tailwind compiler extensions such as `@custom-variant` and
+`@utility`. It does not and must not emulate CLI source transformations. Adding `.cn-*` definitions there would hide a
+bad port, publish template debris into compiled CSS, and diverge from shadcn's installed output.
+
+#### Required Marker Audit For Every Port
+
+1. Pin and record the selected upstream registry source and CLI revision when behavior is ambiguous.
+2. Inventory every marker before adaptation: `rg -o '\bcn-[a-z-]+\b' <copied-source>`.
+3. Apply the exact documented transform for `cn-rtl-flip`, `cn-font-heading`, or an applicable menu configuration.
+4. Remove all remaining `cn-*` tokens; do not infer behavior from their names or implement custom CSS for them.
+5. Before completing the pass, search the shipped component source for `\bcn-[a-z-]+\b`; it must have no matches.
+6. Run the focused source checks and CSS build. Treat a compiled stylesheet as verification of real Tailwind utilities,
+   not as a place to preserve template markers.
+
+The authoritative implementation is deliberately linked rather than copied into this record, because the CLI may change
+it. This audit references the current researched revision
+[`d4fc45b`](https://github.com/shadcn-ui/ui/tree/d4fc45b1fbabfccb7a6a4333d8004cf19481caa9):
+
+- [transformer order in
+  `dry-run.ts`](https://github.com/shadcn-ui/ui/blob/d4fc45b1fbabfccb7a6a4333d8004cf19481caa9/packages/shadcn/src/utils/dry-run.ts)
+- [generic marker cleanup](https://github.com/shadcn-ui/ui/blob/d4fc45b1fbabfccb7a6a4333d8004cf19481caa9/packages/shadcn/src/utils/transformers/transform-cleanup.ts)
+- [RTL marker and logical-layout transform](https://github.com/shadcn-ui/ui/blob/d4fc45b1fbabfccb7a6a4333d8004cf19481caa9/packages/shadcn/src/utils/transformers/transform-rtl.ts)
+- [conditional heading-font transform](https://github.com/shadcn-ui/ui/blob/d4fc45b1fbabfccb7a6a4333d8004cf19481caa9/packages/shadcn/src/utils/transformers/transform-font.ts)
+- [menu-mode transform](https://github.com/shadcn-ui/ui/blob/d4fc45b1fbabfccb7a6a4333d8004cf19481caa9/packages/shadcn/src/utils/transformers/transform-menu.ts)
+- [Calendar registry template](https://github.com/shadcn-ui/ui/blob/d4fc45b1fbabfccb7a6a4333d8004cf19481caa9/apps/v4/registry/bases/base/ui/calendar.tsx)
+
 ### Upstream Contract
 
 Since shadcn 4, `init` adds `@import "shadcn/tailwind.css"` to the configured global Tailwind stylesheet. The official

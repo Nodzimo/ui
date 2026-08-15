@@ -145,7 +145,19 @@ data-[side=left]:slide-in-from-right-*
 
 ## shadcn Registry Markers And Portal Motion
 
-Treat `cn-rtl-flip` as an upstream registry/CLI marker, not a runtime class or animation:
+Treat all `cn-*` names as upstream registry/CLI markers, not runtime classes. The generic cleanup transformer removes
+every marker except `cn-font-heading`; specific transformers handle RTL, font, and configured menu markers before
+cleanup. Use the full project procedure in
+`docs/agent-operating-charter/tailwind-shadcn-extensions-decision.md#registry-marker-transformation-pipeline`.
+
+| Marker family                                | NUI action                                                              |
+|----------------------------------------------|-------------------------------------------------------------------------|
+| `cn-rtl-flip`                                | Replace with `rtl:rotate-180` at an inline-directional icon usage site. |
+| `cn-font-heading`                            | Replace with `font-nui-heading`.                                        |
+| `cn-menu-target`, `cn-menu-translucent`      | Resolve only for the selected, tested menu configuration.               |
+| Any residual marker, such as `cn-calendar-*` | Remove it; never define CSS for it.                                     |
+
+Treat `cn-rtl-flip` specifically as an upstream registry/CLI marker, not a runtime class or animation:
 
 ```text
 cn-rtl-flip -> rtl:rotate-180
@@ -222,10 +234,10 @@ Search for unprefixed raw shadcn variables:
 rg -n -- "--(background|foreground|card|popover|primary|secondary|muted|accent|destructive|border|input|ring|radius|chart|sidebar)([^a-zA-Z0-9_-]|$)" src
 ```
 
-Search for unresolved shadcn RTL markers and physical motion under logical side variants:
+Search for unresolved shadcn registry markers and physical motion under logical side variants:
 
 ```powershell
-rg -n "cn-rtl-flip|data-\[side=inline-(start|end)\]:slide-(in-from|out-to)-(left|right)" src
+rg -n '\bcn-[a-z-]+\b|data-\[side=inline-(start|end)\]:slide-(in-from|out-to)-(left|right)' src
 ```
 
 Inspect matches before editing; documentation, examples, or comments can be false positives.

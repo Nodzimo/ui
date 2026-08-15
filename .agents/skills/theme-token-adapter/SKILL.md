@@ -27,6 +27,8 @@ Read only the files relevant to the touched surface:
 - Component composition and public surface rules: `docs/agent-operating-charter/component-styling.md`
 - Storybook theme surface and Docs canvas behavior: `docs/agent-operating-charter/storybook-theming-and-docs.md`
 - Verification commands and CSS artifact checks: `docs/agent-operating-charter/verification.md`
+- When copied shadcn source contains `cn-*`: `docs/agent-operating-charter/tailwind-shadcn-extensions-decision.md`,
+  especially its registry-marker transformation pipeline.
 
 Use `references/token-prefixing.md` for the compact mapping cheat sheet, RTL conversion examples, and useful searches.
 
@@ -44,29 +46,34 @@ Use `references/token-prefixing.md` for the compact mapping cheat sheet, RTL con
       design-system token decision.
     - Do not combine token replacement with class regrouping, public type/export changes, decomposition, or story work.
 
-3. Convert theme-facing styles to the NUI contract.
+3. Audit shadcn registry markers before treating copied classes as runtime styling.
+    - Inventory every `cn-*` token in the copied source.
+    - Apply only an exact documented CLI transformation (`cn-rtl-flip`, `cn-font-heading`, or an applicable menu mode).
+    - Remove every residual `cn-*` token. Do not add a CSS rule, Tailwind extension, or NUI token for a generic marker.
+
+4. Convert theme-facing styles to the NUI contract.
     - Prefix semantic color, radius, and design-system spacing utilities.
     - Keep raw runtime variables as `--nui-*`.
     - Keep Tailwind mappings as `--color-nui-*`, `--radius-nui-*`, and `--spacing-nui-*`.
     - For package-facing tokens, define the raw runtime variable in `src/library.css` and the matching `@theme inline`
       mapping in `src/theme.css` when Tailwind utilities are needed.
 
-4. Apply design doctrine when meaning changes.
+5. Apply design doctrine when meaning changes.
     - Read doctrine before changing color values, button variants, interactive-state styling, or semantic token meaning.
     - Prefer existing semantic roles before adding a new role.
     - Treat slash opacity values such as `/20`, `/50`, and `/80` as intensity conventions, not event-token names.
 
-5. Preserve RTL behavior.
+6. Preserve RTL behavior.
     - Convert physical inline-axis spacing, positioning, borders, and radii to logical utilities when the behavior is
       inline-directional.
     - Convert animation direction to logical forms when placement is logical.
     - Flip icons only at usage sites where the icon means inline direction.
-    - Resolve shadcn registry markers before shipping copied source. Replace `cn-rtl-flip` with the official generated
-      form `rtl:rotate-180`; do not create a runtime `.cn-rtl-flip` utility.
+    - Resolve registry markers through the documented audit. Replace `cn-rtl-flip` with the official generated form
+      `rtl:rotate-180`; do not create a runtime `.cn-*` utility.
     - For portaled overlays with logical slide utilities, verify the rendered popup receives the effective LTR/RTL
       direction. Forward `dir` through content/popup props only when Portal inheritance loses it; never hardcode RTL.
 
-6. Respect stylesheet artifact boundaries.
+7. Respect stylesheet artifact boundaries.
     - Keep public Tailwind mappings and the class-based dark variant in `src/theme.css`.
     - Keep raw runtime tokens, foundation classes, and shared CSS-first utility sources in `src/library.css`; import
       `./theme.css` there so library and Storybook builds use the public mapping source.
@@ -79,10 +86,10 @@ Use `references/token-prefixing.md` for the compact mapping cheat sheet, RTL con
     - Do not safelist the token utility matrix. Tailwind consumers import `@nodzimo/ui/theme.css` and generate their
       used color, radius, spacing, and variant forms through their own compiler.
 
-7. Check for unprefixed theme tokens and artifact regressions.
+8. Check for unprefixed theme tokens and artifact regressions.
     - Search changed source for unprefixed shadcn semantic utilities and raw variables.
-    - Search manually copied shadcn source for unresolved registry markers such as `cn-rtl-flip` and for physical slide
-      directions under logical `inline-start`/`inline-end` variants.
+    - Search manually copied shadcn source for every unresolved `cn-*` registry marker and for physical slide directions
+      under logical `inline-start`/`inline-end` variants.
     - Run `bun run build:css` after token or stylesheet entrypoint changes.
     - Run `bun run storybook:build` after Storybook CSS, preview, docs, or story-only utility changes.
     - Inspect `dist/styles.css` and Storybook iframe CSS for the expected package/story utility split when source

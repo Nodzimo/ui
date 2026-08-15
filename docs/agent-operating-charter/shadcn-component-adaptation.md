@@ -41,6 +41,10 @@ final code is known. Small components may combine adjacent passes only when the 
   without copying a file-level directive into every client module when the client entrypoint already owns it.
 - Preserve upstream behavior, DOM structure, defaults, accessibility, and composition before adapting project details.
 - Record the source version or link when upstream behavior is ambiguous.
+- Inventory every `cn-*` marker in copied registry source before styling it. A registry template is not the final CLI
+  output: apply a documented specific transformation where one exists, then remove every residual marker. Never add NUI
+  CSS for a marker merely because it appears in upstream source. See
+  [Tailwind shadcn Extensions Decision](tailwind-shadcn-extensions-decision.md#registry-marker-transformation-pipeline).
 - Do not assume a Base UI primitive's visible Root can match native pseudo-classes. Check its documented default element
   and state data attributes before preserving selectors such as `disabled:*`. Checkbox is the known case: its default
   Root is a `span`, so standalone disabled styling needs `data-disabled:*`, and an adjacent Label needs the
@@ -68,8 +72,8 @@ final code is known. Small components may combine adjacent passes only when the 
   token-contract failure first. Copied utilities such as `bg-popover`, `text-popover-foreground`, and `text-destructive`
   have no NUI meaning until the token pass maps them to the prefixed contract; this is not evidence that the Base UI
   primitive or Storybook portal is broken.
-- Resolve install-time registry markers. `cn-rtl-flip` becomes `rtl:rotate-180` only at inline-directional icon usage
-  sites.
+- Resolve install-time registry markers according to the complete CLI marker audit. In particular, `cn-rtl-flip` becomes
+  `rtl:rotate-180` only at inline-directional icon usage sites; generic labels such as `cn-calendar-*` are removed.
 - Convert inline-axis spacing, positioning, radii, and logical-side motion deliberately. Verify portaled overlays in
   both directions instead of assuming inherited `dir`.
 - Keep class regrouping separate from token replacement so reviewers can distinguish formatting from styling changes.
@@ -315,8 +319,8 @@ its diff can be reviewed without mentally separating unrelated concerns.
 ### Verification
 
 - After every pass, run the smallest relevant Biome and TypeScript checks.
-- After token or RTL changes, search for unprefixed semantic utilities, unresolved registry markers, and physical motion
-  under logical placement.
+- After token or RTL changes, search for unprefixed semantic utilities, every unresolved `cn-*` registry marker, and
+  physical motion under logical placement.
 - After public API or barrel changes, run the TypeScript build and inspect the local/aggregate export path.
 - When a port adds runtime imports or changes client/core exports, run the relevant package-boundary and build-output
   checks.
