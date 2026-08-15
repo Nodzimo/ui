@@ -52,10 +52,10 @@ function Calendar({
 					defaultClassNames.caption_label,
 				),
 				day: mcn(
-					'group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&:last-child[data-selected=true]_button]:rounded-r-(--cell-radius)',
+					'group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&:last-child[data-selected=true]_button]:rounded-e-(--cell-radius)',
 					restProps.showWeekNumber
-						? '[&:nth-child(2)[data-selected=true]_button]:rounded-l-(--cell-radius)'
-						: '[&:first-child[data-selected=true]_button]:rounded-l-(--cell-radius)',
+						? '[&:nth-child(2)[data-selected=true]_button]:rounded-s-(--cell-radius)'
+						: '[&:first-child[data-selected=true]_button]:rounded-s-(--cell-radius)',
 					defaultClassNames.day,
 				),
 				disabled: mcn(
@@ -94,12 +94,12 @@ function Calendar({
 					defaultClassNames.outside,
 				),
 				range_end: mcn(
-					'relative isolate z-0 rounded-r-(--cell-radius) bg-nui-muted after:absolute after:inset-y-0 after:left-0 after:w-4 after:bg-nui-muted',
+					'relative isolate z-0 rounded-e-(--cell-radius) bg-nui-muted after:absolute after:inset-y-0 after:start-0 after:w-4 after:bg-nui-muted',
 					defaultClassNames.range_end,
 				),
 				range_middle: mcn('rounded-none', defaultClassNames.range_middle),
 				range_start: mcn(
-					'relative isolate z-0 rounded-l-(--cell-radius) bg-nui-muted after:absolute after:inset-y-0 after:right-0 after:w-4 after:bg-nui-muted',
+					'relative isolate z-0 rounded-s-(--cell-radius) bg-nui-muted after:absolute after:inset-y-0 after:end-0 after:w-4 after:bg-nui-muted',
 					defaultClassNames.range_start,
 				),
 				root: mcn('w-fit', defaultClassNames.root),
@@ -128,7 +128,7 @@ function Calendar({
 					if (orientation === 'left') {
 						return (
 							<ChevronLeftIcon
-								className={mcn('cn-rtl-flip size-4', className)}
+								className={mcn('size-4 rtl:rotate-180', className)}
 								{...restProps}
 							/>
 						)
@@ -137,7 +137,7 @@ function Calendar({
 					if (orientation === 'right') {
 						return (
 							<ChevronRightIcon
-								className={mcn('cn-rtl-flip size-4', className)}
+								className={mcn('size-4 rtl:rotate-180', className)}
 								{...restProps}
 							/>
 						)
@@ -209,7 +209,7 @@ function CalendarDayButton({
 	return (
 		<Button
 			className={mcn(
-				'relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 font-normal leading-none data-[range-end=true]:rounded-(--cell-radius) data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-end=true]:bg-nui-primary data-[range-middle=true]:bg-nui-muted data-[range-start=true]:bg-nui-primary data-[selected-single=true]:bg-nui-primary data-[range-end=true]:text-nui-primary-foreground data-[range-middle=true]:text-nui-foreground data-[range-start=true]:text-nui-primary-foreground data-[selected-single=true]:text-nui-primary-foreground group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-nui-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-nui-ring/50 dark:hover:text-nui-foreground [&>span]:text-xs [&>span]:opacity-70',
+				'relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 font-normal leading-none data-[range-end=true]:rounded-(--cell-radius) data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-s-(--cell-radius) data-[range-end=true]:rounded-e-(--cell-radius) data-[range-end=true]:bg-nui-primary data-[range-middle=true]:bg-nui-muted data-[range-start=true]:bg-nui-primary data-[selected-single=true]:bg-nui-primary data-[range-end=true]:text-nui-primary-foreground data-[range-middle=true]:text-nui-foreground data-[range-start=true]:text-nui-primary-foreground data-[selected-single=true]:text-nui-primary-foreground group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-nui-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-nui-ring/50 dark:hover:text-nui-foreground [&>span]:text-xs [&>span]:opacity-70',
 				defaultClassNames.day,
 				className,
 			)}
