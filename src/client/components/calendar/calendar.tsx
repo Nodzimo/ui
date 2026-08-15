@@ -9,6 +9,34 @@ import { Button, buttonVariants } from '#client/components/button'
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '#core/icons'
 import { mcn } from '#lib'
 
+type CalendarProps = ComponentProps<typeof DayPicker> & {
+	buttonVariant?: ComponentProps<typeof Button>['variant']
+}
+
+type CalendarMode = NonNullable<CalendarProps['mode']>
+
+const CALENDAR_MODES = Object.freeze([
+	'single',
+	'multiple',
+	'range',
+] as const satisfies readonly CalendarMode[])
+
+type CalendarCaptionLayout = NonNullable<CalendarProps['captionLayout']>
+
+const CALENDAR_CAPTION_LAYOUTS = Object.freeze([
+	'label',
+	'dropdown',
+	'dropdown-months',
+	'dropdown-years',
+] as const satisfies readonly CalendarCaptionLayout[])
+
+type CalendarNavLayout = NonNullable<CalendarProps['navLayout']>
+
+const CALENDAR_NAV_LAYOUTS = Object.freeze([
+	'around',
+	'after',
+] as const satisfies readonly CalendarNavLayout[])
+
 function Calendar({
 	className,
 	classNames,
@@ -19,9 +47,7 @@ function Calendar({
 	formatters,
 	components,
 	...restProps
-}: ComponentProps<typeof DayPicker> & {
-	buttonVariant?: ComponentProps<typeof Button>['variant']
-}) {
+}: CalendarProps) {
 	const defaultClassNames = getDefaultClassNames()
 
 	return (
@@ -190,13 +216,17 @@ function Calendar({
 	)
 }
 
+type CalendarDayButtonProps = ComponentProps<typeof DayButton> & {
+	locale?: Partial<Locale>
+}
+
 function CalendarDayButton({
 	className,
 	day,
 	modifiers,
 	locale,
 	...restProps
-}: ComponentProps<typeof DayButton> & { locale?: Partial<Locale> }) {
+}: CalendarDayButtonProps) {
 	const defaultClassNames = getDefaultClassNames()
 	const ref = useRef<HTMLButtonElement>(null)
 
@@ -230,4 +260,15 @@ function CalendarDayButton({
 	)
 }
 
-export { Calendar, CalendarDayButton }
+export {
+	CALENDAR_CAPTION_LAYOUTS,
+	CALENDAR_MODES,
+	CALENDAR_NAV_LAYOUTS,
+	Calendar,
+	type CalendarCaptionLayout,
+	CalendarDayButton,
+	type CalendarDayButtonProps,
+	type CalendarMode,
+	type CalendarNavLayout,
+	type CalendarProps,
+}
