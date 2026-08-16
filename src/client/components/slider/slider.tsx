@@ -1,6 +1,33 @@
 import { Slider as SliderPrimitive } from '@base-ui/react/slider'
 import { mcn } from '#lib'
 
+type SliderProps = SliderPrimitive.Root.Props
+
+type SliderOrientation = NonNullable<SliderProps['orientation']>
+
+const SLIDER_ORIENTATIONS = Object.freeze([
+	'horizontal',
+	'vertical',
+] as const satisfies readonly SliderOrientation[])
+
+type SliderThumbAlignment = NonNullable<SliderProps['thumbAlignment']>
+
+const SLIDER_THUMB_ALIGNMENTS = Object.freeze([
+	'center',
+	'edge',
+	'edge-client-only',
+] as const satisfies readonly SliderThumbAlignment[])
+
+type SliderThumbCollisionBehavior = NonNullable<
+	SliderProps['thumbCollisionBehavior']
+>
+
+const SLIDER_THUMB_COLLISION_BEHAVIORS = Object.freeze([
+	'push',
+	'swap',
+	'none',
+] as const satisfies readonly SliderThumbCollisionBehavior[])
+
 function Slider({
 	className,
 	defaultValue,
@@ -8,7 +35,7 @@ function Slider({
 	min = 0,
 	max = 100,
 	...props
-}: SliderPrimitive.Root.Props) {
+}: SliderProps) {
 	const _values = Array.isArray(value)
 		? value
 		: Array.isArray(defaultValue)
@@ -59,4 +86,13 @@ function Slider({
 	)
 }
 
-export { Slider }
+export {
+	SLIDER_ORIENTATIONS,
+	SLIDER_THUMB_ALIGNMENTS,
+	SLIDER_THUMB_COLLISION_BEHAVIORS,
+	Slider,
+	type SliderOrientation,
+	type SliderProps,
+	type SliderThumbAlignment,
+	type SliderThumbCollisionBehavior,
+}
