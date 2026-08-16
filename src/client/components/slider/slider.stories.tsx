@@ -38,6 +38,7 @@ const meta = {
 			description: 'Initial value or values',
 			table: {
 				defaultValue: { summary: 'undefined' },
+				type: { summary: 'number | number[]' },
 			},
 		},
 		disabled: {
@@ -75,6 +76,7 @@ const meta = {
 		},
 		thumbAlignment: {
 			control: 'select',
+			description: 'Aligns thumbs with the control edges',
 			options: SLIDER_THUMB_ALIGNMENTS,
 			table: {
 				defaultValue: { summary: `'${SLIDER_DEFAULTS.thumbAlignment}'` },
@@ -86,6 +88,7 @@ const meta = {
 		},
 		thumbCollisionBehavior: {
 			control: 'select',
+			description: 'Controls how thumbs behave when they meet',
 			options: SLIDER_THUMB_COLLISION_BEHAVIORS,
 			table: {
 				defaultValue: {
