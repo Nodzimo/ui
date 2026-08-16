@@ -128,6 +128,10 @@
   the constants into `argTypes.options`. Use explicit Storybook table summaries such as `string union` or
   `component union` when Autodocs would otherwise show unclear types such as `unknown`, and put the concrete option list
   in `table.type.detail`. Revisit this only if CVA or Storybook gains reliable variant introspection.
+- A broad inherited prop type is not a mandate to create a normal control for every upstream or DOM property. Expose
+  only the meaningful documented surface; use component-owned runtime constants only for finite values that are useful
+  to ordinary consumers as well as Storybook. Calendar's DayPicker decisions are recorded in
+  [Calendar DayPicker Contract And Storybook Decision](calendar-day-picker-contract-decision.md).
 - Do not rely on `react-docgen-typescript` configuration as the primary solution for CVA variant controls. In this
   project, attempts to switch Storybook to `react-docgen-typescript` did not produce reliable controls and made prop
   extraction worse in the running Storybook.

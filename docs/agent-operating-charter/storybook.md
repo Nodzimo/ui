@@ -1,8 +1,7 @@
 ## Storybook
 
 Storybook is the project's component documentation, visual review, docs, QA, and optional testing surface. It is not
-part
-of the published library JS entrypoints.
+part of the published library JS entrypoints.
 
 - [Storybook Configuration](storybook-configuration.md): maintained addons, manager assets, Vite config, showcase
   folders, story sorting, and CSS entrypoint rules.
@@ -18,6 +17,8 @@ of the published library JS entrypoints.
   and local Windows host notes.
 - [Storybook Story Writing](storybook-story-writing.md): colocated story conventions, story budgets, runtime controls,
   CVA/docgen limitations, and CSF guidance.
+- [Calendar DayPicker Contract And Storybook Decision](calendar-day-picker-contract-decision.md): Calendar defaults,
+  disabled semantics, locale mapping, and representative-control boundaries.
 - [Storybook Deployment](storybook-deployment.md): public static deployment through Coolify/Nixpacks.
 
 Use the `storybook-story-writer` skill for writing or updating component stories, and
