@@ -2,7 +2,9 @@ import { Radio as RadioPrimitive } from '@base-ui/react/radio'
 import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group'
 import { mcn } from '#lib'
 
-function RadioGroup({ className, ...restProps }: RadioGroupPrimitive.Props) {
+type RadioGroupProps = RadioGroupPrimitive.Props
+
+function RadioGroup({ className, ...restProps }: RadioGroupProps) {
 	return (
 		<RadioGroupPrimitive
 			className={mcn('grid w-full gap-2', className)}
@@ -12,10 +14,9 @@ function RadioGroup({ className, ...restProps }: RadioGroupPrimitive.Props) {
 	)
 }
 
-function RadioGroupItem({
-	className,
-	...restProps
-}: RadioPrimitive.Root.Props) {
+type RadioGroupItemProps = RadioPrimitive.Root.Props
+
+function RadioGroupItem({ className, ...restProps }: RadioGroupItemProps) {
 	return (
 		<RadioPrimitive.Root
 			className={mcn(
@@ -46,4 +47,9 @@ function RadioGroupItem({
 	)
 }
 
-export { RadioGroup, RadioGroupItem }
+export {
+	RadioGroup,
+	RadioGroupItem,
+	type RadioGroupItemProps,
+	type RadioGroupProps,
+}
