@@ -33,13 +33,13 @@ function Slider({
 			>
 				<SliderPrimitive.Track
 					className={
-						'relative grow select-none overflow-hidden rounded-full bg-muted data-horizontal:h-1 data-vertical:h-full data-horizontal:w-full data-vertical:w-1'
+						'relative grow select-none overflow-hidden rounded-full bg-nui-muted data-horizontal:h-1 data-vertical:h-full data-horizontal:w-full data-vertical:w-1'
 					}
 					data-slot={'slider-track'}
 				>
 					<SliderPrimitive.Indicator
 						className={
-							'select-none bg-primary data-horizontal:h-full data-vertical:w-full'
+							'select-none bg-nui-primary data-horizontal:h-full data-vertical:w-full'
 						}
 						data-slot={'slider-range'}
 					/>
@@ -47,7 +47,7 @@ function Slider({
 				{Array.from({ length: _values.length }, (_, index) => (
 					<SliderPrimitive.Thumb
 						className={
-							'relative block size-3 shrink-0 select-none rounded-full border border-ring bg-white ring-ring/50 transition-[color,box-shadow] after:absolute after:-inset-2 hover:ring-3 focus-visible:outline-hidden focus-visible:ring-3 active:ring-3 disabled:pointer-events-none disabled:opacity-50'
+							'relative block size-3 shrink-0 select-none rounded-full border border-nui-ring bg-white ring-nui-ring/50 transition-[color,box-shadow] after:absolute after:-inset-2 hover:ring-3 focus-visible:outline-hidden focus-visible:ring-3 active:ring-3 disabled:pointer-events-none disabled:opacity-50'
 						}
 						data-slot={'slider-thumb'}
 						// biome-ignore lint/suspicious/noArrayIndexKey: Slider thumbs use their array position as identity
