@@ -4,26 +4,41 @@ import { Button } from '#client/components/button'
 import { XIcon } from '#core/icons'
 import { mcn } from '#lib'
 
-function Dialog({ ...props }: DialogPrimitive.Root.Props) {
+type DialogProps = DialogPrimitive.Root.Props
+
+type DialogModal = NonNullable<DialogProps['modal']>
+
+const DIALOG_MODAL_MODES = Object.freeze([
+	true,
+	false,
+	'trap-focus',
+] as const satisfies readonly DialogModal[])
+
+function Dialog({ ...props }: DialogProps) {
 	return <DialogPrimitive.Root data-slot={'dialog'} {...props} />
 }
 
-function DialogTrigger({ ...props }: DialogPrimitive.Trigger.Props) {
+type DialogTriggerProps = DialogPrimitive.Trigger.Props
+
+function DialogTrigger({ ...props }: DialogTriggerProps) {
 	return <DialogPrimitive.Trigger data-slot={'dialog-trigger'} {...props} />
 }
 
-function DialogPortal({ ...props }: DialogPrimitive.Portal.Props) {
+type DialogPortalProps = DialogPrimitive.Portal.Props
+
+function DialogPortal({ ...props }: DialogPortalProps) {
 	return <DialogPrimitive.Portal data-slot={'dialog-portal'} {...props} />
 }
 
-function DialogClose({ ...props }: DialogPrimitive.Close.Props) {
+type DialogCloseProps = DialogPrimitive.Close.Props
+
+function DialogClose({ ...props }: DialogCloseProps) {
 	return <DialogPrimitive.Close data-slot={'dialog-close'} {...props} />
 }
 
-function DialogOverlay({
-	className,
-	...restProps
-}: DialogPrimitive.Backdrop.Props) {
+type DialogOverlayProps = DialogPrimitive.Backdrop.Props
+
+function DialogOverlay({ className, ...restProps }: DialogOverlayProps) {
 	return (
 		<DialogPrimitive.Backdrop
 			className={mcn(
@@ -38,14 +53,16 @@ function DialogOverlay({
 	)
 }
 
+type DialogContentProps = DialogPrimitive.Popup.Props & {
+	showCloseButton?: boolean
+}
+
 function DialogContent({
 	className,
 	children,
 	showCloseButton = true,
 	...restProps
-}: DialogPrimitive.Popup.Props & {
-	showCloseButton?: boolean
-}) {
+}: DialogContentProps) {
 	return (
 		<DialogPortal>
 			<DialogOverlay />
@@ -82,7 +99,9 @@ function DialogContent({
 	)
 }
 
-function DialogHeader({ className, ...restProps }: ComponentProps<'div'>) {
+type DialogHeaderProps = ComponentProps<'div'>
+
+function DialogHeader({ className, ...restProps }: DialogHeaderProps) {
 	return (
 		<div
 			className={mcn('flex flex-col gap-2', className)}
@@ -92,14 +111,16 @@ function DialogHeader({ className, ...restProps }: ComponentProps<'div'>) {
 	)
 }
 
+type DialogFooterProps = ComponentProps<'div'> & {
+	showCloseButton?: boolean
+}
+
 function DialogFooter({
 	className,
 	showCloseButton = false,
 	children,
 	...restProps
-}: ComponentProps<'div'> & {
-	showCloseButton?: boolean
-}) {
+}: DialogFooterProps) {
 	return (
 		<div
 			className={mcn(
@@ -121,7 +142,9 @@ function DialogFooter({
 	)
 }
 
-function DialogTitle({ className, ...restProps }: DialogPrimitive.Title.Props) {
+type DialogTitleProps = DialogPrimitive.Title.Props
+
+function DialogTitle({ className, ...restProps }: DialogTitleProps) {
 	return (
 		<DialogPrimitive.Title
 			className={mcn(
@@ -134,10 +157,12 @@ function DialogTitle({ className, ...restProps }: DialogPrimitive.Title.Props) {
 	)
 }
 
+type DialogDescriptionProps = DialogPrimitive.Description.Props
+
 function DialogDescription({
 	className,
 	...restProps
-}: DialogPrimitive.Description.Props) {
+}: DialogDescriptionProps) {
 	return (
 		<DialogPrimitive.Description
 			className={mcn(
@@ -152,14 +177,26 @@ function DialogDescription({
 }
 
 export {
+	DIALOG_MODAL_MODES,
 	Dialog,
 	DialogClose,
+	type DialogCloseProps,
 	DialogContent,
+	type DialogContentProps,
 	DialogDescription,
+	type DialogDescriptionProps,
 	DialogFooter,
+	type DialogFooterProps,
 	DialogHeader,
+	type DialogHeaderProps,
+	type DialogModal,
 	DialogOverlay,
+	type DialogOverlayProps,
 	DialogPortal,
+	type DialogPortalProps,
+	type DialogProps,
 	DialogTitle,
+	type DialogTitleProps,
 	DialogTrigger,
+	type DialogTriggerProps,
 }
