@@ -27,7 +27,9 @@ function DialogOverlay({
 	return (
 		<DialogPrimitive.Backdrop
 			className={mcn(
-				'data-open:fade-in-0 data-closed:fade-out-0 fixed inset-0 isolate z-50 bg-black/10 duration-100 data-closed:animate-out data-open:animate-in supports-backdrop-filter:backdrop-blur-xs',
+				'fixed inset-0 isolate z-50 bg-black/10 duration-100',
+				'data-open:fade-in-0 data-closed:fade-out-0 data-closed:animate-out data-open:animate-in',
+				'supports-backdrop-filter:backdrop-blur-xs',
 				className,
 			)}
 			data-slot={'dialog-overlay'}
@@ -49,7 +51,11 @@ function DialogContent({
 			<DialogOverlay />
 			<DialogPrimitive.Popup
 				className={mcn(
-					'data-open:fade-in-0 data-open:zoom-in-95 data-closed:fade-out-0 data-closed:zoom-out-95 fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-nui-xl bg-nui-popover p-4 text-nui-popover-foreground text-sm outline-none ring-1 ring-nui-foreground/10 duration-100 data-closed:animate-out data-open:animate-in sm:max-w-sm',
+					'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)]',
+					'-translate-x-1/2 -translate-y-1/2 gap-4 p-4',
+					'rounded-nui-xl bg-nui-popover text-nui-popover-foreground text-sm outline-none ring-1 ring-nui-foreground/10',
+					'data-open:fade-in-0 data-open:zoom-in-95 data-closed:fade-out-0 data-closed:zoom-out-95 data-closed:animate-out data-open:animate-in',
+					'duration-100 sm:max-w-sm',
 					className,
 				)}
 				data-slot={'dialog-content'}
@@ -97,7 +103,9 @@ function DialogFooter({
 	return (
 		<div
 			className={mcn(
-				'-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-nui-xl border-t bg-nui-muted/50 p-4 sm:flex-row sm:justify-end',
+				'-mx-4 -mb-4 flex flex-col-reverse gap-2 p-4',
+				'rounded-b-nui-xl border-t bg-nui-muted/50',
+				'sm:flex-row sm:justify-end',
 				className,
 			)}
 			data-slot={'dialog-footer'}
@@ -133,7 +141,8 @@ function DialogDescription({
 	return (
 		<DialogPrimitive.Description
 			className={mcn(
-				'text-nui-muted-foreground text-sm *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-nui-foreground',
+				'text-nui-muted-foreground text-sm',
+				'*:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-nui-foreground',
 				className,
 			)}
 			data-slot={'dialog-description'}
