@@ -226,6 +226,15 @@ investigation.
 See
 [docs/agent-operating-charter/field-component-adaptation-decision.md](docs/agent-operating-charter/field-component-adaptation-decision.md).
 
+## Toast Component Adaptation Decision
+
+Toast provider versus root responsibilities, manager-backed public API, built-in status metadata, screen-reader
+priority, decomposition, and the representative interactive Storybook contract are recorded together to prevent
+repeating the adaptation investigation.
+
+See
+[docs/agent-operating-charter/toast-component-adaptation-decision.md](docs/agent-operating-charter/toast-component-adaptation-decision.md).
+
 ## Select API
 
 Select preserves the Base UI compound contract while exporting focused readonly option types for strict flat-option data
