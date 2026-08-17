@@ -41,7 +41,7 @@ function Toast({ className, ...restProps }: ToastPrimitive.Root.Props) {
 	return (
 		<ToastPrimitive.Root
 			className={mcn(
-				'group/toast pointer-events-auto absolute right-0 bottom-0 z-[calc(1000-var(--toast-index))] w-full origin-bottom select-none rounded-2xl border bg-popover text-popover-foreground shadow-lg outline-none will-change-transform focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',
+				'group/toast pointer-events-auto absolute right-0 bottom-0 z-[calc(1000-var(--toast-index))] w-full origin-bottom select-none rounded-nui-2xl border bg-nui-popover text-nui-popover-foreground shadow-lg outline-none will-change-transform focus-visible:border-nui-ring focus-visible:ring-[3px] focus-visible:ring-nui-ring/50',
 				'[--gap:0.75rem] [--height:var(--toast-frontmost-height,var(--toast-height))] [--offset-y:calc(var(--toast-offset-y)*-1+calc(var(--toast-index)*var(--gap)*-1)+var(--toast-swipe-movement-y))] [--peek:0.75rem] [--scale:calc(max(0,1-(var(--toast-index)*0.1)))] [--shrink:calc(1-var(--scale))]',
 				'transform-[translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-(var(--toast-index)*var(--peek))-(var(--shrink)*var(--height))))_scale(var(--scale))] h-(--height) [transition:transform_500ms_cubic-bezier(0.22,1,0.36,1),opacity_500ms,height_150ms]',
 				"after:absolute after:top-full after:left-0 after:h-[calc(var(--gap)+1px)] after:w-full after:content-['']",
@@ -96,7 +96,7 @@ function ToastDescription({
 }: ToastPrimitive.Description.Props) {
 	return (
 		<ToastPrimitive.Description
-			className={mcn('text-muted-foreground text-sm', className)}
+			className={mcn('text-nui-muted-foreground text-sm', className)}
 			data-slot={'toast-description'}
 			{...restProps}
 		/>
@@ -128,7 +128,7 @@ function ToastClose({
 		<ToastPrimitive.Close
 			aria-label={'Close toast'}
 			className={mcn(
-				"relative shrink-0 text-muted-foreground after:absolute after:-inset-2 after:content-[''] hover:text-foreground",
+				"relative shrink-0 text-nui-muted-foreground after:absolute after:-inset-2 after:content-[''] hover:text-nui-foreground",
 				className,
 			)}
 			data-slot={'toast-close'}
@@ -156,7 +156,9 @@ function ToastIcon({ type }: { type: string | undefined }) {
 	}
 
 	if (type === 'error') {
-		icon = <OctagonXIcon aria-hidden={'true'} className={'text-destructive'} />
+		icon = (
+			<OctagonXIcon aria-hidden={'true'} className={'text-nui-destructive'} />
+		)
 	}
 
 	if (type === 'loading') {
