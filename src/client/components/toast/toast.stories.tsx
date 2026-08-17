@@ -13,6 +13,7 @@ import {
 	Toaster,
 	type ToasterProps,
 	type ToastPriority,
+	type ToastProps,
 	type ToastType,
 	toast,
 } from '.'
@@ -21,15 +22,14 @@ const TOAST_DEFAULTS = {
 	limit: 3,
 	priority: TOAST_PRIORITIES[0],
 	timeout: 5_000,
-	type: TOAST_TYPES[0],
 } as const
 
 type ToastStoryArgs = ToasterProps & {
-	description: string
 	onShowToast: () => void
 	priority: ToastPriority
-	title: string
-	type: ToastType
+	type?: ToastType
+	title: ToastProps['toast']['title']
+	description: ToastProps['toast']['description']
 }
 
 const meta = {
@@ -40,7 +40,6 @@ const meta = {
 		priority: TOAST_DEFAULTS.priority,
 		timeout: TOAST_DEFAULTS.timeout,
 		title: 'Toast created',
-		type: TOAST_DEFAULTS.type,
 	},
 	argTypes: {
 		limit: {
@@ -70,7 +69,7 @@ const meta = {
 			description: 'Built-in icon and status for the new toast',
 			options: TOAST_TYPES,
 			table: {
-				defaultValue: { summary: `'${TOAST_DEFAULTS.type}'` },
+				defaultValue: { summary: 'undefined' },
 				type: {
 					detail: TOAST_TYPES.join(UNION_SEPARATOR),
 					summary: STRING_UNION_SUMMARY,
