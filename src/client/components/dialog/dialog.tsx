@@ -49,7 +49,7 @@ function DialogContent({
 			<DialogOverlay />
 			<DialogPrimitive.Popup
 				className={mcn(
-					'data-open:fade-in-0 data-open:zoom-in-95 data-closed:fade-out-0 data-closed:zoom-out-95 fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-popover-foreground text-sm outline-none ring-1 ring-foreground/10 duration-100 data-closed:animate-out data-open:animate-in sm:max-w-sm',
+					'data-open:fade-in-0 data-open:zoom-in-95 data-closed:fade-out-0 data-closed:zoom-out-95 fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-nui-xl bg-nui-popover p-4 text-nui-popover-foreground text-sm outline-none ring-1 ring-nui-foreground/10 duration-100 data-closed:animate-out data-open:animate-in sm:max-w-sm',
 					className,
 				)}
 				data-slot={'dialog-content'}
@@ -97,7 +97,7 @@ function DialogFooter({
 	return (
 		<div
 			className={mcn(
-				'-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 sm:flex-row sm:justify-end',
+				'-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-nui-xl border-t bg-nui-muted/50 p-4 sm:flex-row sm:justify-end',
 				className,
 			)}
 			data-slot={'dialog-footer'}
@@ -117,7 +117,7 @@ function DialogTitle({ className, ...restProps }: DialogPrimitive.Title.Props) {
 	return (
 		<DialogPrimitive.Title
 			className={mcn(
-				'cn-font-heading font-medium text-base leading-none',
+				'font-medium font-nui-heading text-base leading-none',
 				className,
 			)}
 			data-slot={'dialog-title'}
@@ -133,7 +133,7 @@ function DialogDescription({
 	return (
 		<DialogPrimitive.Description
 			className={mcn(
-				'text-muted-foreground text-sm *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',
+				'text-nui-muted-foreground text-sm *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-nui-foreground',
 				className,
 			)}
 			data-slot={'dialog-description'}
