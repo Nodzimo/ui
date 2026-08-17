@@ -25,6 +25,13 @@ const TOAST_TYPES = Object.freeze([
 	'loading',
 ] as const satisfies readonly ToastType[])
 
+type ToastPriority = NonNullable<ToastProps['toast']['priority']>
+
+const TOAST_PRIORITIES = Object.freeze([
+	'low',
+	'high',
+] as const satisfies readonly ToastPriority[])
+
 type ToastProviderProps = ToastPrimitive.Provider.Props
 
 function ToastProvider({ ...props }: ToastProviderProps) {
@@ -242,6 +249,7 @@ const useToastManager = ToastPrimitive.useToastManager
 
 export {
 	createToastManager,
+	TOAST_PRIORITIES,
 	TOAST_TYPES,
 	Toast,
 	ToastAction,
@@ -256,6 +264,7 @@ export {
 	type ToasterProps,
 	ToastPortal,
 	type ToastPortalProps,
+	type ToastPriority,
 	type ToastProps,
 	ToastProvider,
 	type ToastProviderProps,

@@ -1,5 +1,6 @@
 export {
 	createToastManager,
+	TOAST_PRIORITIES,
 	TOAST_TYPES,
 	Toast,
 	ToastAction,
@@ -14,6 +15,7 @@ export {
 	type ToasterProps,
 	ToastPortal,
 	type ToastPortalProps,
+	type ToastPriority,
 	type ToastProps,
 	ToastProvider,
 	type ToastProviderProps,
