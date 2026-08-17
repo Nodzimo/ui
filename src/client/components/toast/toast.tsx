@@ -13,18 +13,33 @@ import { mcn } from '#lib'
 
 const toast = ToastPrimitive.createToastManager()
 
-function ToastProvider({ ...props }: ToastPrimitive.Provider.Props) {
+type ToastProps = ToastPrimitive.Root.Props
+
+type ToastType = NonNullable<ToastProps['toast']['type']>
+
+const TOAST_TYPES = Object.freeze([
+	'success',
+	'info',
+	'warning',
+	'error',
+	'loading',
+] as const satisfies readonly ToastType[])
+
+type ToastProviderProps = ToastPrimitive.Provider.Props
+
+function ToastProvider({ ...props }: ToastProviderProps) {
 	return <ToastPrimitive.Provider {...props} />
 }
 
-function ToastPortal({ ...props }: ToastPrimitive.Portal.Props) {
+type ToastPortalProps = ToastPrimitive.Portal.Props
+
+function ToastPortal({ ...props }: ToastPortalProps) {
 	return <ToastPrimitive.Portal data-slot={'toast-portal'} {...props} />
 }
 
-function ToastViewport({
-	className,
-	...restProps
-}: ToastPrimitive.Viewport.Props) {
+type ToastViewportProps = ToastPrimitive.Viewport.Props
+
+function ToastViewport({ className, ...restProps }: ToastViewportProps) {
 	return (
 		<ToastPrimitive.Viewport
 			className={mcn(
@@ -37,7 +52,7 @@ function ToastViewport({
 	)
 }
 
-function Toast({ className, ...restProps }: ToastPrimitive.Root.Props) {
+function Toast({ className, ...restProps }: ToastProps) {
 	return (
 		<ToastPrimitive.Root
 			className={mcn(
@@ -64,10 +79,9 @@ function Toast({ className, ...restProps }: ToastPrimitive.Root.Props) {
 	)
 }
 
-function ToastContent({
-	className,
-	...restProps
-}: ToastPrimitive.Content.Props) {
+type ToastContentProps = ToastPrimitive.Content.Props
+
+function ToastContent({ className, ...restProps }: ToastContentProps) {
 	return (
 		<ToastPrimitive.Content
 			className={mcn(
@@ -80,7 +94,9 @@ function ToastContent({
 	)
 }
 
-function ToastTitle({ className, ...restProps }: ToastPrimitive.Title.Props) {
+type ToastTitleProps = ToastPrimitive.Title.Props
+
+function ToastTitle({ className, ...restProps }: ToastTitleProps) {
 	return (
 		<ToastPrimitive.Title
 			className={mcn('font-medium text-sm', className)}
@@ -90,10 +106,9 @@ function ToastTitle({ className, ...restProps }: ToastPrimitive.Title.Props) {
 	)
 }
 
-function ToastDescription({
-	className,
-	...restProps
-}: ToastPrimitive.Description.Props) {
+type ToastDescriptionProps = ToastPrimitive.Description.Props
+
+function ToastDescription({ className, ...restProps }: ToastDescriptionProps) {
 	return (
 		<ToastPrimitive.Description
 			className={mcn('text-nui-muted-foreground text-sm', className)}
@@ -103,11 +118,13 @@ function ToastDescription({
 	)
 }
 
+type ToastActionProps = ToastPrimitive.Action.Props
+
 function ToastAction({
 	className,
 	render = <Button size={'sm'} variant={'outline'} />,
 	...restProps
-}: ToastPrimitive.Action.Props) {
+}: ToastActionProps) {
 	return (
 		<ToastPrimitive.Action
 			className={mcn('shrink-0', className)}
@@ -118,12 +135,14 @@ function ToastAction({
 	)
 }
 
+type ToastCloseProps = ToastPrimitive.Close.Props
+
 function ToastClose({
 	className,
 	children,
 	render = <Button size={'icon-sm'} variant={'ghost'} />,
 	...restProps
-}: ToastPrimitive.Close.Props) {
+}: ToastCloseProps) {
 	return (
 		<ToastPrimitive.Close
 			aria-label={'Close toast'}
@@ -199,11 +218,13 @@ function ToastList() {
 	))
 }
 
+type ToasterProps = ToastPrimitive.Provider.Props
+
 function Toaster({
 	children,
 	toastManager = toast,
 	...restProps
-}: ToastPrimitive.Provider.Props) {
+}: ToasterProps) {
 	return (
 		<ToastProvider toastManager={toastManager} {...restProps}>
 			{children}
@@ -221,16 +242,28 @@ const useToastManager = ToastPrimitive.useToastManager
 
 export {
 	createToastManager,
+	TOAST_TYPES,
 	Toast,
 	ToastAction,
+	type ToastActionProps,
 	ToastClose,
+	type ToastCloseProps,
 	ToastContent,
+	type ToastContentProps,
 	ToastDescription,
+	type ToastDescriptionProps,
 	Toaster,
+	type ToasterProps,
 	ToastPortal,
+	type ToastPortalProps,
+	type ToastProps,
 	ToastProvider,
+	type ToastProviderProps,
 	ToastTitle,
+	type ToastTitleProps,
+	type ToastType,
 	ToastViewport,
+	type ToastViewportProps,
 	toast,
 	useToastManager,
 }
