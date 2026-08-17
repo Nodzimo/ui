@@ -5,7 +5,9 @@ import { Input } from '#client/components/input'
 import { Textarea } from '#core/components/textarea'
 import { mcn } from '#lib'
 
-function InputGroup({ className, ...restProps }: ComponentProps<'div'>) {
+type InputGroupProps = ComponentProps<'div'>
+
+function InputGroup({ className, ...restProps }: InputGroupProps) {
 	return (
 		// biome-ignore lint/a11y/useSemanticElements: Input groups combine a control with supplementary content
 		<div
@@ -50,11 +52,14 @@ const inputGroupAddonVariants = cva(
 	},
 )
 
+type InputGroupAddonProps = ComponentProps<'div'> &
+	VariantProps<typeof inputGroupAddonVariants>
+
 function InputGroupAddon({
 	className,
 	align = 'inline-start',
 	...restProps
-}: ComponentProps<'div'> & VariantProps<typeof inputGroupAddonVariants>) {
+}: InputGroupAddonProps) {
 	return (
 		// biome-ignore lint/a11y/useKeyWithClickEvents: The click only forwards focus to the grouped input
 		// biome-ignore lint/a11y/useSemanticElements: The addon groups arbitrary content and nested buttons
@@ -93,16 +98,21 @@ const inputGroupButtonVariants = cva(
 	},
 )
 
+type InputGroupButtonProps = Omit<
+	ComponentProps<typeof Button>,
+	'size' | 'type'
+> &
+	VariantProps<typeof inputGroupButtonVariants> & {
+		type?: 'button' | 'submit' | 'reset'
+	}
+
 function InputGroupButton({
 	className,
 	type = 'button',
 	variant = 'ghost',
 	size = 'xs',
 	...restProps
-}: Omit<ComponentProps<typeof Button>, 'size' | 'type'> &
-	VariantProps<typeof inputGroupButtonVariants> & {
-		type?: 'button' | 'submit' | 'reset'
-	}) {
+}: InputGroupButtonProps) {
 	return (
 		<Button
 			className={mcn(inputGroupButtonVariants({ size }), className)}
@@ -114,7 +124,9 @@ function InputGroupButton({
 	)
 }
 
-function InputGroupText({ className, ...restProps }: ComponentProps<'span'>) {
+type InputGroupTextProps = ComponentProps<'span'>
+
+function InputGroupText({ className, ...restProps }: InputGroupTextProps) {
 	return (
 		<span
 			className={mcn(
@@ -127,7 +139,9 @@ function InputGroupText({ className, ...restProps }: ComponentProps<'span'>) {
 	)
 }
 
-function InputGroupInput({ className, ...restProps }: ComponentProps<'input'>) {
+type InputGroupInputProps = ComponentProps<'input'>
+
+function InputGroupInput({ className, ...restProps }: InputGroupInputProps) {
 	return (
 		<Input
 			className={mcn(
@@ -142,10 +156,12 @@ function InputGroupInput({ className, ...restProps }: ComponentProps<'input'>) {
 	)
 }
 
+type InputGroupTextareaProps = ComponentProps<'textarea'>
+
 function InputGroupTextarea({
 	className,
 	...restProps
-}: ComponentProps<'textarea'>) {
+}: InputGroupTextareaProps) {
 	return (
 		<Textarea
 			className={mcn(
@@ -163,8 +179,14 @@ function InputGroupTextarea({
 export {
 	InputGroup,
 	InputGroupAddon,
+	type InputGroupAddonProps,
 	InputGroupButton,
+	type InputGroupButtonProps,
 	InputGroupInput,
+	type InputGroupInputProps,
+	type InputGroupProps,
 	InputGroupText,
 	InputGroupTextarea,
+	type InputGroupTextareaProps,
+	type InputGroupTextProps,
 }
