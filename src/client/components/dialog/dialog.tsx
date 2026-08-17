@@ -51,7 +51,7 @@ function DialogContent({
 			<DialogOverlay />
 			<DialogPrimitive.Popup
 				className={mcn(
-					'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)]',
+					'fixed inset-s-1/2 top-1/2 z-50 grid w-full max-w-[calc(100%-2rem)]',
 					'-translate-x-1/2 -translate-y-1/2 gap-4 p-4',
 					'rounded-nui-xl bg-nui-popover text-nui-popover-foreground text-sm outline-none ring-1 ring-nui-foreground/10',
 					'data-open:fade-in-0 data-open:zoom-in-95 data-closed:fade-out-0 data-closed:zoom-out-95 data-closed:animate-out data-open:animate-in',
@@ -67,7 +67,7 @@ function DialogContent({
 						data-slot={'dialog-close'}
 						render={
 							<Button
-								className={'absolute top-2 right-2'}
+								className={'absolute inset-e-2 top-2'}
 								size={'icon-sm'}
 								variant={'ghost'}
 							>
