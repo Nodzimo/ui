@@ -1,9 +1,13 @@
 export {
+	INPUT_GROUP_ADDON_ALIGNS,
+	INPUT_GROUP_BUTTON_SIZES,
 	InputGroup,
 	InputGroupAddon,
+	type InputGroupAddonAlign,
 	type InputGroupAddonProps,
 	InputGroupButton,
 	type InputGroupButtonProps,
+	type InputGroupButtonSize,
 	InputGroupInput,
 	type InputGroupInputProps,
 	type InputGroupProps,
