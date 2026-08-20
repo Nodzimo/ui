@@ -1,0 +1,22 @@
+import type { JSX } from 'react'
+
+const SvgSettings2Icon = (props: JSX.IntrinsicElements['svg']) => (
+	<svg
+		aria-hidden='true'
+		fill='none'
+		height='1em'
+		stroke='currentColor'
+		strokeLinecap='round'
+		strokeLinejoin='round'
+		strokeWidth={2}
+		viewBox='0 0 24 24'
+		width='1em'
+		xmlns='http://www.w3.org/2000/svg'
+		{...props}
+	>
+		<path d='M14 17H5M19 7h-9' />
+		<circle cx={17} cy={17} r={3} />
+		<circle cx={7} cy={7} r={3} />
+	</svg>
+)
+export default SvgSettings2Icon
