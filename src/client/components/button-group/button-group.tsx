@@ -6,7 +6,7 @@ import { Separator } from '#client/components/separator'
 import { mcn } from '#lib'
 
 const buttonGroupVariants = cva(
-	"flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-lg [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1",
+	"flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-e-nui-lg [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1",
 	{
 		defaultVariants: {
 			orientation: 'horizontal',
@@ -14,9 +14,9 @@ const buttonGroupVariants = cva(
 		variants: {
 			orientation: {
 				horizontal:
-					'*:data-slot:rounded-r-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-r-lg! [&>[data-slot]~[data-slot]]:rounded-l-none [&>[data-slot]~[data-slot]]:border-l-0',
+					'*:data-slot:rounded-e-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-e-nui-lg! [&>[data-slot]~[data-slot]]:rounded-s-none [&>[data-slot]~[data-slot]]:border-s-0',
 				vertical:
-					'flex-col *:data-slot:rounded-b-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-lg! [&>[data-slot]~[data-slot]]:rounded-t-none [&>[data-slot]~[data-slot]]:border-t-0',
+					'flex-col *:data-slot:rounded-b-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-nui-lg! [&>[data-slot]~[data-slot]]:rounded-t-none [&>[data-slot]~[data-slot]]:border-t-0',
 			},
 		},
 	},
@@ -49,7 +49,7 @@ function ButtonGroupText({
 		props: mergeProps<'div'>(
 			{
 				className: mcn(
-					"flex items-center gap-2 rounded-lg border bg-muted px-2.5 text-sm font-medium [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
+					"flex items-center gap-2 rounded-nui-lg border bg-nui-muted px-2.5 text-sm font-medium [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
 					className,
 				),
 			},
@@ -70,7 +70,7 @@ function ButtonGroupSeparator({
 	return (
 		<Separator
 			className={mcn(
-				'relative self-stretch bg-input data-horizontal:mx-px data-vertical:my-px data-vertical:h-auto data-horizontal:w-auto',
+				'relative self-stretch bg-nui-input data-horizontal:mx-px data-vertical:my-px data-vertical:h-auto data-horizontal:w-auto',
 				className,
 			)}
 			data-slot={'button-group-separator'}
