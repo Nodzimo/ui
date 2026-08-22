@@ -29,6 +29,7 @@ const {
 	SmartphoneIcon,
 	CameraIcon,
 	ChefHatIcon,
+	ScanEyeIcon,
 	BrushCleaningIcon,
 } = lucideIcons
 
@@ -43,6 +44,7 @@ const FILLABLE_ICONS = {
 	MoonIcon,
 	PauseIcon,
 	PlayIcon,
+	ScanEyeIcon,
 	Settings2Icon,
 	SmartphoneIcon,
 	SquareIcon,
