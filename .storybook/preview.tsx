@@ -43,6 +43,7 @@ const preview: Preview = {
 							'Token Discipline',
 							'Token Role Semantics',
 							'Button Action Hierarchy',
+							'Feedback Semantics',
 							'Theme Character Guardrails',
 							'Theme-Specific Values',
 							'References And Evidence',

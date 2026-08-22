@@ -50,7 +50,7 @@ function ToastViewport({ className, ...restProps }: ToastViewportProps) {
 	return (
 		<ToastPrimitive.Viewport
 			className={mcn(
-				'pointer-events-none fixed inset-x-4 bottom-4 z-50 mx-auto w-auto max-w-sm outline-none sm:inset-e-4 sm:inset-s-auto sm:mx-0 sm:w-full',
+				'pointer-events-none fixed inset-x-4 bottom-4 z-60 mx-auto w-auto max-w-sm outline-none sm:inset-e-4 sm:inset-s-auto sm:mx-0 sm:w-full',
 				className,
 			)}
 			data-slot={'toast-viewport'}
