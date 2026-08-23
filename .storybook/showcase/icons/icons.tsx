@@ -30,6 +30,9 @@ const {
 	CameraIcon,
 	ChefHatIcon,
 	ScanEyeIcon,
+	CircleEllipsisIcon,
+	SunMediumIcon,
+	SunDimIcon,
 	BrushCleaningIcon,
 } = lucideIcons
 
@@ -51,16 +54,21 @@ const FILLABLE_ICONS = {
 	StarIcon,
 	StepBackIcon,
 	StepForwardIcon,
+	SunDimIcon,
 	SunIcon,
+	SunMediumIcon,
 	Trash2Icon,
 } satisfies IconGroup
 
 const SPINNABLE_ICONS = {
+	CircleEllipsisIcon,
 	LoaderCircleIcon,
 	LoaderIcon,
 	LoaderPinwheelIcon,
 	SettingsIcon,
+	SunDimIcon,
 	SunIcon,
+	SunMediumIcon,
 } satisfies IconGroup
 
 const ICON_POSTFIXES = ['FlagIcon', 'Icon'] as const
