@@ -1,12 +1,6 @@
 export {
-	POPOVER_CONTENT_ALIGNS,
-	POPOVER_CONTENT_SIDES,
 	POPOVER_MODAL_MODES,
 	Popover,
-	PopoverContent,
-	type PopoverContentAlign,
-	type PopoverContentProps,
-	type PopoverContentSide,
 	PopoverDescription,
 	type PopoverDescriptionProps,
 	PopoverHeader,
@@ -18,3 +12,11 @@ export {
 	PopoverTrigger,
 	type PopoverTriggerProps,
 } from './popover'
+export {
+	POPOVER_CONTENT_ALIGNS,
+	POPOVER_CONTENT_SIDES,
+	PopoverContent,
+	type PopoverContentAlign,
+	type PopoverContentProps,
+	type PopoverContentSide,
+} from './popover-content'
