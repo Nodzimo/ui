@@ -14,7 +14,7 @@
 - `bun run build:icons` regenerates interface icons from `assets/icons` and flag icons from `assets/flags` through their
   focused SVGR profiles, then runs the repository-wide unsafe Biome fix flow. Inspect the complete worktree afterward;
   the formatting step is not restricted to generated output.
-- `bun run build` runs TypeScript project checks and Vite library build.
+- `bun run build` runs TypeScript project checks and the Vite library build.
 - `bun run build:ts` runs TypeScript project checks via `tsc --build`.
 - `bun run build:ts-watch` watches TypeScript project checks.
 - `bun run build:js` runs the Vite library build.

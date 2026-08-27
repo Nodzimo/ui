@@ -21,7 +21,8 @@ Read only the files relevant to the touched surface:
 - React Compiler scope: `docs/agent-operating-charter/react-compiler-boundary.md`
 - Icon generation and runtime icon safety: `docs/agent-operating-charter/icon-generation.md`
 - Known incidents: `docs/agent-operating-charter/rsc-boundary-incident-lucide-spinner.md` and
-  `docs/agent-operating-charter/client-bundle-incident-base-ui-select.md`
+  `docs/agent-operating-charter/client-bundle-incident-base-ui-select.md` and
+  `docs/agent-operating-charter/public-declaration-leak-incident-shadcn.md`
 - Verification commands and artifact checks: `docs/agent-operating-charter/verification.md`
 
 Use `references/rsc-package-boundaries.md` for compact task checklists and common inspection commands.
@@ -55,6 +56,10 @@ Use `references/rsc-package-boundaries.md` for compact task checklists and commo
     - Confirm root output stays free of client/runtime leaks.
     - Confirm client output keeps `"use client";` and does not inline third-party internals or CommonJS shims.
     - Confirm declaration topology stays rooted at `dist/ui.d.ts` and `dist/client.d.ts`.
+    - Verify both public `.d.ts` entrypoints from a real external TypeScript consumer; source `tsc --build` does not
+      validate that generated public declarations are parseable by a consumer. Treat leaked JSX, function bodies, or
+      other implementation syntax in `.d.ts` output as a package-blocking defect. See
+      `public-declaration-leak-incident-shadcn.md`.
 
 6. Escalate to Next/Turbopack consumer verification when root exports, externals, React Compiler scope, dependency
    metadata, or a consumer failure is involved.

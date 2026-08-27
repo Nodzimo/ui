@@ -146,6 +146,12 @@ type DropdownMenuContentProps = MenuPrimitive.Popup.Props &
   improve a real consumer boundary, as `SelectOption<Value>` and `SelectOptions<Value>` do.
 - Keep each part's props transparent. Do not extract a shared one-field helper such as `InsetProps` merely because
   `inset?: boolean` repeats across parts; introduce shared contracts only when consumers benefit from the shared name.
+- Treat shadcn's application-oriented `ComponentProps<typeof Button>` patterns as source input, not as an automatic
+  library-safe public type. At a NUI declaration boundary, local component values can make `unplugin-dts`/API Extractor
+  emit implementation syntax into a bundled `.d.ts`. Reuse the local component's explicit exported `ButtonProps` (or
+  equivalent `XxxProps`) contract instead. Keep `ComponentProps<typeof ...>` when the target is an external primitive or
+  a deliberate non-public implementation type, then verify the built declaration from an external consumer. See
+  [Public Declaration Leak Incident](public-declaration-leak-incident-shadcn.md).
 - Export the intended surface through the component folder `index.ts`, then verify aggregate client/core barrel flow.
 
 Inspect the installed primitive declarations and official examples before assigning defaults or state ownership.
@@ -322,6 +328,8 @@ its diff can be reviewed without mentally separating unrelated concerns.
 - After token or RTL changes, search for unprefixed semantic utilities, every unresolved `cn-*` registry marker, and
   physical motion under logical placement.
 - After public API or barrel changes, run the TypeScript build and inspect the local/aggregate export path.
+- After public API or barrel changes, inspect both bundled public declaration entrypoints from an external TypeScript
+  consumer. Source typechecking alone does not catch local React implementation leakage into `.d.ts` output.
 - When a port adds runtime imports or changes client/core exports, run the relevant package-boundary and build-output
   checks.
 - After decomposition, compare moved declarations and verify that sibling modules do not duplicate or cross-import

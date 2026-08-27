@@ -15,6 +15,7 @@ model here; use `docs/agent-operating-charter` as the canonical source.
 - Historical incidents:
     - `docs/agent-operating-charter/rsc-boundary-incident-lucide-spinner.md`
     - `docs/agent-operating-charter/client-bundle-incident-base-ui-select.md`
+    - `docs/agent-operating-charter/public-declaration-leak-incident-shadcn.md`
 
 ## Core Change Checklist
 
@@ -100,6 +101,13 @@ Expected declaration topology:
 - `dist/ui.d.ts`
 - `dist/client.d.ts`
 - no public `dist/src` declaration tree
+
+Verify both public declaration entrypoints from a real external TypeScript consumer after the declaration build. A
+passing
+`bun run build:ts` alone is not sufficient: declaration bundling can expose a private component implementation through a
+type query like `ComponentProps<typeof SomeComponent>`. Reject leaked JSX, function bodies, and executable
+implementation syntax in `.d.ts` output. See `public-declaration-leak-incident-shadcn.md` for the source, examples, and
+procedure.
 
 ## Consumer Verification
 

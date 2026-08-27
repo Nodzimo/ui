@@ -47,6 +47,9 @@ class formatting, or Storybook implementation into this skill.
 8. Normalize wrapper-owned presence-based boolean data attributes so `false` omits the attribute.
 9. Export intentional parts, types, and constants through the folder `index.ts`; keep indicators and helpers private.
 10. Run TypeScript verification before starting decomposition.
+11. After any public type or barrel change, verify the generated public declarations from a real external TypeScript
+    consumer; source TypeScript success does not prove that bundled consumer declarations contain types only. Apply the
+    local-component type-query rule in `public-declaration-leak-incident-shadcn.md`.
 
 Do not introduce shared one-field prop helpers merely to remove repeated intersections. Do not reconstruct broad
 upstream unions or generics unless a real consumer boundary needs an owned narrower contract. A public runtime list may

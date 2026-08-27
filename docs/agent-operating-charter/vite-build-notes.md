@@ -51,6 +51,11 @@ dts({
 
 - If API Extractor reports that `dist/client.d.ts` or `dist/ui.d.ts` does not exist, or if generated declarations appear
   under `dist/src`, inspect `unplugin-dts` root-dir inference before adding path rewrite hooks.
+- A successful source typecheck is not sufficient evidence for declaration correctness. A type query such as
+  `ComponentProps<typeof SomeComponent>` can cause a declaration bundler to emit a private component implementation,
+  including JSX, into a public `.d.ts` file. Prefer exported type contracts such as `SomeComponentProps[...]` at public
+  type boundaries, then validate both public entrypoints from a real external consumer after the declaration build. See
+  [Public Declaration Leak Incident](public-declaration-leak-incident-shadcn.md).
 - Keep `@microsoft/api-extractor` in `devDependencies`; it is build-time tooling for bundled declarations, not a runtime
   or peer dependency.
 - API Extractor may warn when its bundled TypeScript compiler is older than this project's TypeScript version. Treat
