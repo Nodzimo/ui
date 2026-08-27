@@ -2,13 +2,52 @@ import { Popover as PopoverPrimitive } from '@base-ui/react/popover'
 import type { ComponentProps } from 'react'
 import { mcn } from '#lib'
 
-function Popover({ ...props }: PopoverPrimitive.Root.Props) {
+type PopoverProps = PopoverPrimitive.Root.Props
+
+type PopoverModal = NonNullable<PopoverProps['modal']>
+
+const POPOVER_MODAL_MODES = Object.freeze([
+	true,
+	false,
+	'trap-focus',
+] as const satisfies readonly PopoverModal[])
+
+function Popover({ ...props }: PopoverProps) {
 	return <PopoverPrimitive.Root data-slot={'popover'} {...props} />
 }
 
-function PopoverTrigger({ ...props }: PopoverPrimitive.Trigger.Props) {
+type PopoverTriggerProps = PopoverPrimitive.Trigger.Props
+
+function PopoverTrigger({ ...props }: PopoverTriggerProps) {
 	return <PopoverPrimitive.Trigger data-slot={'popover-trigger'} {...props} />
 }
+
+type PopoverContentSide = NonNullable<PopoverPrimitive.Positioner.Props['side']>
+
+const POPOVER_CONTENT_SIDES = Object.freeze([
+	'top',
+	'bottom',
+	'left',
+	'right',
+	'inline-end',
+	'inline-start',
+] as const satisfies readonly PopoverContentSide[])
+
+type PopoverContentAlign = NonNullable<
+	PopoverPrimitive.Positioner.Props['align']
+>
+
+const POPOVER_CONTENT_ALIGNS = Object.freeze([
+	'start',
+	'center',
+	'end',
+] as const satisfies readonly PopoverContentAlign[])
+
+type PopoverContentProps = PopoverPrimitive.Popup.Props &
+	Pick<
+		PopoverPrimitive.Positioner.Props,
+		'align' | 'alignOffset' | 'side' | 'sideOffset'
+	>
 
 function PopoverContent({
 	className,
@@ -17,11 +56,7 @@ function PopoverContent({
 	side = 'bottom',
 	sideOffset = 4,
 	...restProps
-}: PopoverPrimitive.Popup.Props &
-	Pick<
-		PopoverPrimitive.Positioner.Props,
-		'align' | 'alignOffset' | 'side' | 'sideOffset'
-	>) {
+}: PopoverContentProps) {
 	return (
 		<PopoverPrimitive.Portal>
 			<PopoverPrimitive.Positioner
@@ -48,7 +83,9 @@ function PopoverContent({
 	)
 }
 
-function PopoverHeader({ className, ...restProps }: ComponentProps<'div'>) {
+type PopoverHeaderProps = ComponentProps<'div'>
+
+function PopoverHeader({ className, ...restProps }: PopoverHeaderProps) {
 	return (
 		<div
 			className={mcn('flex flex-col gap-0.5 text-sm', className)}
@@ -58,10 +95,9 @@ function PopoverHeader({ className, ...restProps }: ComponentProps<'div'>) {
 	)
 }
 
-function PopoverTitle({
-	className,
-	...restProps
-}: PopoverPrimitive.Title.Props) {
+type PopoverTitleProps = PopoverPrimitive.Title.Props
+
+function PopoverTitle({ className, ...restProps }: PopoverTitleProps) {
 	return (
 		<PopoverPrimitive.Title
 			className={mcn('font-medium', className)}
@@ -71,10 +107,12 @@ function PopoverTitle({
 	)
 }
 
+type PopoverDescriptionProps = PopoverPrimitive.Description.Props
+
 function PopoverDescription({
 	className,
 	...restProps
-}: PopoverPrimitive.Description.Props) {
+}: PopoverDescriptionProps) {
 	return (
 		<PopoverPrimitive.Description
 			className={mcn('text-nui-muted-foreground', className)}
@@ -85,10 +123,22 @@ function PopoverDescription({
 }
 
 export {
+	POPOVER_CONTENT_ALIGNS,
+	POPOVER_CONTENT_SIDES,
+	POPOVER_MODAL_MODES,
 	Popover,
 	PopoverContent,
+	type PopoverContentAlign,
+	type PopoverContentProps,
+	type PopoverContentSide,
 	PopoverDescription,
+	type PopoverDescriptionProps,
 	PopoverHeader,
+	type PopoverHeaderProps,
+	type PopoverModal,
+	type PopoverProps,
 	PopoverTitle,
+	type PopoverTitleProps,
 	PopoverTrigger,
+	type PopoverTriggerProps,
 }
