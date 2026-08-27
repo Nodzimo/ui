@@ -7,10 +7,20 @@
 - Avoid using `turbopack.root` as a workaround unless the parent folder is a real monorepo root with its own
   `package.json` and `node_modules`. Setting the root to the sibling parent can break Tailwind/PostCSS dependency
   resolution in the Next app.
-- Avoid `file:../ui` as a folder dependency with Bun on Windows. Bun can try to copy the whole working
-  directory, including `.git`, and fail with `EPERM`.
+- Avoid `file:../ui` as a folder dependency with Bun on Windows. Bun can try to copy the whole working directory,
+  including `.git`, and fail with `EPERM`.
 
 ### Preferred Consumer Flow
+
+- Preferred Vite SPA consumer flow before publication:
+    1. Build the library with `bun run build:all` and pack it with `bun run lib:pack`.
+    2. Install the fresh tarball in the Vite TypeScript consumer and reinstall it after each library rebuild.
+    3. Run the consumer's typecheck, not only its Vite build; Vite does not parse package `.d.ts` files as a type
+       consumer during a normal JavaScript build.
+    4. Import at least one core component from `@nodzimo/ui`, one affected client component from
+       `@nodzimo/ui/client`, and `@nodzimo/ui/styles.css`.
+    5. Treat any syntax error in `dist/ui.d.ts` or `dist/client.d.ts` as a package-blocking failure, even when the Vite
+       dev server and production bundle succeed.
 
 - Preferred Next/Turbopack consumer flow after publication:
     1. Publish a new package version from this project.
@@ -21,13 +31,13 @@
     5. In a Tailwind consumer global stylesheet, import `tailwindcss` first and `@nodzimo/ui/theme.css` second. See
        [Tailwind And Styles](tailwind-and-styles.md#consumer-tailwind-theme) for the complete CSS contract.
     6. When the product uses the complete NUI foundation, add
-       `nui-surface nui-boundaries nui-interactive nui-links` to the application root. Native anchors and Next.js
-       links inside that scope receive the shared link recipe without a React wrapper.
+       `nui-surface nui-boundaries nui-interactive nui-links` to the application root. Native anchors and Next.js links
+       inside that scope receive the shared link recipe without a React wrapper.
 
 ### Tarball Testing
 
 - Tarball testing remains useful before publishing a version:
     1. Run `bun run project:verify` in this project, or run `bun run lib:pack` after a fresh library build.
-    2. Install the generated `ui.tgz` in the Next consumer.
+    2. Install the generated `ui.tgz` in the Vite or Next consumer.
     3. Reinstall the tarball in the consumer after each library rebuild.
 - Keep generated `.tgz` archives out of git.

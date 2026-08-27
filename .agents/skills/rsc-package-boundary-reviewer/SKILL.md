@@ -63,6 +63,8 @@ Use `references/rsc-package-boundaries.md` for compact task checklists and commo
 
 6. Escalate to Next/Turbopack consumer verification when root exports, externals, React Compiler scope, dependency
    metadata, or a consumer failure is involved.
+    - For declaration or client-entry changes, verify a Vite TypeScript consumer as well as any framework-specific
+      consumer; a Vite build can succeed while its `tsc` consumer check fails on invalid `.d.ts` output.
     - Prefer tarball testing before publish and the published package after publish.
     - Treat SSG/static output as useful but not sufficient; artifact inspection still matters.
 

@@ -112,7 +112,9 @@ procedure.
 ## Consumer Verification
 
 Use tarball testing before publish and the published package after publish when root exports, dependency metadata,
-externals, React Compiler scope, or a Next/Turbopack failure is involved.
+externals, React Compiler scope, declaration output, or a consumer failure is involved. For declaration changes, a Vite
+TypeScript consumer is required in addition to any Next/Turbopack check because a Vite JavaScript build may succeed
+without parsing package `.d.ts` files.
 
 The consumer should import at least:
 
