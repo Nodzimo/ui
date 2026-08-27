@@ -5,12 +5,16 @@ import {
 	getDefaultClassNames,
 	type Locale,
 } from 'react-day-picker'
-import { Button, buttonVariants } from '#client/components/button'
+import {
+	Button,
+	type ButtonProps,
+	buttonVariants,
+} from '#client/components/button'
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '#core/icons'
 import { mcn } from '#lib'
 
 type CalendarProps = ComponentProps<typeof DayPicker> & {
-	buttonVariant?: ComponentProps<typeof Button>['variant']
+	buttonVariant?: ButtonProps['variant']
 }
 
 type CalendarMode = NonNullable<CalendarProps['mode']>

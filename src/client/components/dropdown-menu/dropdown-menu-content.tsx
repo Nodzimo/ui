@@ -1,5 +1,4 @@
 import { Menu as MenuPrimitive } from '@base-ui/react/menu'
-import type { ComponentProps } from 'react'
 import { ChevronRightIcon } from '#core/icons'
 import { mcn } from '#lib'
 
@@ -106,7 +105,7 @@ function DropdownMenuSubTrigger({
 	)
 }
 
-type DropdownMenuSubContentProps = ComponentProps<typeof DropdownMenuContent>
+type DropdownMenuSubContentProps = DropdownMenuContentProps
 
 function DropdownMenuSubContent({
 	align = 'start',

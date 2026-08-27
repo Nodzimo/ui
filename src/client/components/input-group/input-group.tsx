@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react'
-import { Button } from '#client/components/button'
+import { Button, type ButtonProps } from '#client/components/button'
 import { Input } from '#client/components/input'
 import { Textarea } from '#core/components/textarea'
 import { mcn } from '#lib'
@@ -65,10 +65,7 @@ function InputGroupAddon({
 	)
 }
 
-type InputGroupButtonProps = Omit<
-	ComponentProps<typeof Button>,
-	'size' | 'type'
-> & {
+type InputGroupButtonProps = Omit<ButtonProps, 'size' | 'type'> & {
 	size?: InputGroupButtonSize
 	type?: 'button' | 'submit' | 'reset'
 }
