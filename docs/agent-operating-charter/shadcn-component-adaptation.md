@@ -120,7 +120,8 @@ metadata, not narrowing or widening the component prop.
 
 Treat Storybook as the first demanding consumer, not the owner of the component API. If Storybook reveals that an
 important state or finite option is impossible to document cleanly, improve the public contract only when the same
-metadata is useful to ordinary TypeScript consumers.
+metadata is useful to ordinary TypeScript consumers. Before editing, use the compound adapter's public API workflow to
+inventory the complete upstream surface and explicitly classify promoted and upstream-only candidates.
 
 - Derive part props from the upstream primitive:
 

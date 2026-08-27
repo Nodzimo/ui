@@ -31,8 +31,10 @@ class formatting, or Storybook implementation into this skill.
 
 ## Public API Workflow
 
-1. Inventory every root and part wrapper, its upstream primitive props, wrapper-owned props, defaults, and exported
-   names.
+1. Before editing, inventory every root and part wrapper, its upstream primitive props, wrapper-owned props, defaults,
+   finite values, advanced capabilities, and intended exports. For each candidate, record one status: `export`,
+   `type-only`, `upstream-only`, or `wrapper-owned`, plus a one-line reason. Include deliberately upstream-only
+   capabilities so a narrow decision is not mistaken for a missed discovery.
 2. Preserve an existing copied wrapper contract before consulting the broader internal primitive contract. A simple
    wrapper declared with `ComponentProps<'input'>` must not be widened to primitive props merely because it renders that
    primitive.
@@ -40,21 +42,28 @@ class formatting, or Storybook implementation into this skill.
    installed implementation. Do not infer equivalence from a simple closed demo.
 4. For compound parts created by NUI, derive props from upstream primitive namespaces. Compose only the extra contracts
    the wrapper really owns.
-5. Identify finite public values that consumers and Storybook need at runtime.
+5. Identify finite public values that consumers and Storybook need at runtime, including useful upstream-only candidates
+   that may be promoted after evidence review.
 6. Export one immutable runtime option constant and a derived or upstream-validated type for each meaningful finite
    contract.
 7. Keep upstream `undefined` in optional prop types but exclude it from explicit runtime option arrays.
 8. Normalize wrapper-owned presence-based boolean data attributes so `false` omits the attribute.
 9. Export intentional parts, types, and constants through the folder `index.ts`; keep indicators and helpers private.
-10. Run TypeScript verification before starting decomposition.
-11. After any public type or barrel change, verify the generated public declarations from a real external TypeScript
+10. Keep each public type and finite table immediately above the component or part that owns it; keep exports grouped by
+    owning module.
+11. Run TypeScript verification before starting decomposition.
+12. After any public type or barrel change, verify the generated public declarations from a real external TypeScript
     consumer; source TypeScript success does not prove that bundled consumer declarations contain types only. Apply the
     local-component type-query rule in `public-declaration-leak-incident-shadcn.md`.
 
 Do not introduce shared one-field prop helpers merely to remove repeated intersections. Do not reconstruct broad
-upstream unions or generics unless a real consumer boundary needs an owned narrower contract. A public runtime list may
-describe an officially styled subset without replacing the broader prop union that remains the customization escape
-hatch.
+upstream unions or generics unless a real consumer boundary needs an owned narrower contract. A primitive generic is not
+enough evidence for a new NUI generic: the wrapper must model the generic behavior. A public runtime list may describe
+an officially styled subset without replacing the broader prop union that remains the customization escape hatch.
+
+Use this distinction when the source and primitive differ: Popover `modal` is a finite behavioral mode that can be
+promoted when Storybook and the Dialog precedent need it; Base UI `Payload` stays upstream-only when the wrapper does
+not model detached triggers, handles, or payload rendering. Record both decisions in the pre-edit inventory.
 
 ## Decomposition Workflow
 
