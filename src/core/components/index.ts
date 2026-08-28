@@ -1,4 +1,5 @@
 export * from './card'
+export * from './kbd'
 export * from './label'
 export * from './skeleton'
 export * from './spinner'
