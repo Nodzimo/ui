@@ -2,6 +2,7 @@ export {
 	DIALOG_MODAL_MODES,
 	Dialog,
 	DialogClose,
+	type DialogCloseProps,
 	DialogDescription,
 	type DialogDescriptionProps,
 	DialogFooter,

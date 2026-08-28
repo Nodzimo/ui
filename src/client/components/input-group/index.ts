@@ -17,4 +17,6 @@ export {
 	INPUT_GROUP_BUTTON_SIZES,
 	type InputGroupAddonAlign,
 	type InputGroupButtonSize,
+	inputGroupAddonVariants,
+	inputGroupButtonVariants,
 } from './input-group-variants'
