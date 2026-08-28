@@ -1,7 +1,9 @@
 import type { ComponentProps } from 'react'
 import { mcn } from '#lib'
 
-function Kbd({ className, ...restProps }: ComponentProps<'kbd'>) {
+type KbdProps = ComponentProps<'kbd'>
+
+function Kbd({ className, ...restProps }: KbdProps) {
 	return (
 		<kbd
 			className={mcn(
@@ -20,7 +22,9 @@ function Kbd({ className, ...restProps }: ComponentProps<'kbd'>) {
 	)
 }
 
-function KbdGroup({ className, ...restProps }: ComponentProps<'kbd'>) {
+type KbdGroupProps = ComponentProps<'kbd'>
+
+function KbdGroup({ className, ...restProps }: KbdGroupProps) {
 	return (
 		<kbd
 			className={mcn('inline-flex items-center gap-1', className)}
@@ -30,4 +34,4 @@ function KbdGroup({ className, ...restProps }: ComponentProps<'kbd'>) {
 	)
 }
 
-export { Kbd, KbdGroup }
+export { Kbd, KbdGroup, type KbdGroupProps, type KbdProps }
