@@ -35,6 +35,18 @@ This is a formatting and grouping skill only. It must preserve the exact style c
 Before editing, treat the original class list as source-of-truth data. After editing, verify that every original class
 still exists exactly once unless the original intentionally contained duplicates.
 
+## Mandatory Mechanical Preservation Gate
+
+Before editing, capture the exact current source as the baseline. After editing, mechanically compare the classes in
+each changed `className`, `mcn`, `cn`, and `cva` block with its baseline block. The comparison must preserve token
+counts, not merely set membership, and must report every missing or added token. Include named `group/*` and `peer/*`
+markers, `data-*` selectors, arbitrary selectors, animation utilities, and CSS variable references.
+
+Do not treat Biome, TypeScript, a visual diff, or a manual scan as proof that the style contract survived. Do not add a
+repository script for this gate: use the available shell or inspection tools for the current change. If a reliable
+mechanical comparison cannot be completed, stop the formatting pass and report it as unverified instead of claiming
+class preservation.
+
 ## When To Split
 
 - Keep short readable class values inline.
@@ -60,7 +72,9 @@ families. For the full order, family list, and examples, read `references/class-
 4. Keep static class chunks as literal strings so Tailwind source scanning still sees them.
 5. Keep caller `className` or override values last.
 6. Run the smallest relevant verification, usually `bunx biome check <changed-file>` or `bun run check:lint`.
-7. If the file already has automated class sorting, let Biome sort inside each string, then review that no class moved
+7. Run the mandatory mechanical preservation gate and confirm that every changed style block has identical token counts
+   before and after formatting.
+8. If the file already has automated class sorting, let Biome sort inside each string, then review that no class moved
    across a grouping boundary in a way that hurts readability.
 
 ## Review Checklist
@@ -71,4 +85,5 @@ families. For the full order, family list, and examples, read `references/class-
 - Static Tailwind classes remain statically discoverable in string literals.
 - Group boundaries follow visible prefixes first, then obvious base utility families.
 - `className` remains last in merge calls.
+- The mechanical before/after comparison reports no missing or added tokens in any changed style block.
 - The result reduces horizontal scrolling and improves diff review.

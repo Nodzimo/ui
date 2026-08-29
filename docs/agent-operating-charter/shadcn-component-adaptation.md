@@ -52,6 +52,11 @@ final code is known. Small components may combine adjacent passes only when the 
   [Base UI Checkbox State And Disabled Decision](checkbox-base-ui-state-and-disabled-decision.md).
 - Run formatting and local syntax cleanup as a mechanical pass. Do not silently rename classes, change defaults, or
   redesign the API while making copied code readable.
+- For every formatting or grouping pass, mechanically compare each changed style block before and after editing.
+  Preserve the complete token multiset, including named `group/*` and `peer/*` markers, `data-*` selectors, arbitrary
+  selectors, animations, and CSS variable references. Biome, TypeScript, and visual inspection do not prove style
+  preservation; if the comparison cannot be completed, the pass is unverified and must not be reported as complete. Use
+  an ephemeral shell or inspection command for the comparison; do not add a repository script for this requirement.
 - Prefer a canonical Tailwind scale utility such as `min-w-24` over an exactly equivalent arbitrary value when project
   tooling recognizes it. Do not convert incidental dimensions into NUI spacing tokens without a shared semantic role.
 - Keep component-local imports relative. Use internal package imports for cross-area dependencies and intentional
@@ -77,6 +82,8 @@ final code is known. Small components may combine adjacent passes only when the 
 - Convert inline-axis spacing, positioning, radii, and logical-side motion deliberately. Verify portaled overlays in
   both directions instead of assuming inherited `dir`.
 - Keep class regrouping separate from token replacement so reviewers can distinguish formatting from styling changes.
+- Treat the before/after token comparison as a completion gate for formatting and token passes. Report its result
+  briefly with the completed iteration instead of relying on a visual claim.
 
 ### Simple Wrapper API
 
