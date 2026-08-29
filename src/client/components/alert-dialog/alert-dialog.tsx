@@ -1,13 +1,17 @@
 import { AlertDialog as AlertDialogPrimitive } from '@base-ui/react/alert-dialog'
 import type { ComponentProps } from 'react'
-import { Button } from '#client/components/button'
+import { Button, type ButtonProps } from '#client/components/button'
 import { mcn } from '#lib'
 
-function AlertDialog({ ...props }: AlertDialogPrimitive.Root.Props) {
+type AlertDialogProps = AlertDialogPrimitive.Root.Props
+
+function AlertDialog({ ...props }: AlertDialogProps) {
 	return <AlertDialogPrimitive.Root data-slot={'alert-dialog'} {...props} />
 }
 
-function AlertDialogTrigger({ ...props }: AlertDialogPrimitive.Trigger.Props) {
+type AlertDialogTriggerProps = AlertDialogPrimitive.Trigger.Props
+
+function AlertDialogTrigger({ ...props }: AlertDialogTriggerProps) {
 	return (
 		<AlertDialogPrimitive.Trigger
 			data-slot={'alert-dialog-trigger'}
@@ -16,16 +20,20 @@ function AlertDialogTrigger({ ...props }: AlertDialogPrimitive.Trigger.Props) {
 	)
 }
 
-function AlertDialogPortal({ ...props }: AlertDialogPrimitive.Portal.Props) {
+type AlertDialogPortalProps = AlertDialogPrimitive.Portal.Props
+
+function AlertDialogPortal({ ...props }: AlertDialogPortalProps) {
 	return (
 		<AlertDialogPrimitive.Portal data-slot={'alert-dialog-portal'} {...props} />
 	)
 }
 
+type AlertDialogOverlayProps = AlertDialogPrimitive.Backdrop.Props
+
 function AlertDialogOverlay({
 	className,
 	...restProps
-}: AlertDialogPrimitive.Backdrop.Props) {
+}: AlertDialogOverlayProps) {
 	return (
 		<AlertDialogPrimitive.Backdrop
 			className={mcn(
@@ -42,13 +50,19 @@ function AlertDialogOverlay({
 	)
 }
 
+const ALERT_DIALOG_CONTENT_SIZES = Object.freeze(['default', 'sm'] as const)
+
+type AlertDialogContentSize = (typeof ALERT_DIALOG_CONTENT_SIZES)[number]
+
+type AlertDialogContentProps = AlertDialogPrimitive.Popup.Props & {
+	size?: AlertDialogContentSize
+}
+
 function AlertDialogContent({
 	className,
 	size = 'default',
 	...restProps
-}: AlertDialogPrimitive.Popup.Props & {
-	size?: 'default' | 'sm'
-}) {
+}: AlertDialogContentProps) {
 	return (
 		<AlertDialogPortal>
 			<AlertDialogOverlay />
@@ -71,7 +85,12 @@ function AlertDialogContent({
 	)
 }
 
-function AlertDialogHeader({ className, ...restProps }: ComponentProps<'div'>) {
+type AlertDialogHeaderProps = ComponentProps<'div'>
+
+function AlertDialogHeader({
+	className,
+	...restProps
+}: AlertDialogHeaderProps) {
 	return (
 		<div
 			className={mcn(
@@ -87,7 +106,12 @@ function AlertDialogHeader({ className, ...restProps }: ComponentProps<'div'>) {
 	)
 }
 
-function AlertDialogFooter({ className, ...restProps }: ComponentProps<'div'>) {
+type AlertDialogFooterProps = ComponentProps<'div'>
+
+function AlertDialogFooter({
+	className,
+	...restProps
+}: AlertDialogFooterProps) {
 	return (
 		<div
 			className={mcn(
@@ -104,7 +128,9 @@ function AlertDialogFooter({ className, ...restProps }: ComponentProps<'div'>) {
 	)
 }
 
-function AlertDialogMedia({ className, ...restProps }: ComponentProps<'div'>) {
+type AlertDialogMediaProps = ComponentProps<'div'>
+
+function AlertDialogMedia({ className, ...restProps }: AlertDialogMediaProps) {
 	return (
 		<div
 			className={mcn(
@@ -121,10 +147,9 @@ function AlertDialogMedia({ className, ...restProps }: ComponentProps<'div'>) {
 	)
 }
 
-function AlertDialogTitle({
-	className,
-	...restProps
-}: ComponentProps<typeof AlertDialogPrimitive.Title>) {
+type AlertDialogTitleProps = AlertDialogPrimitive.Title.Props
+
+function AlertDialogTitle({ className, ...restProps }: AlertDialogTitleProps) {
 	return (
 		<AlertDialogPrimitive.Title
 			className={mcn(
@@ -138,10 +163,12 @@ function AlertDialogTitle({
 	)
 }
 
+type AlertDialogDescriptionProps = AlertDialogPrimitive.Description.Props
+
 function AlertDialogDescription({
 	className,
 	...restProps
-}: ComponentProps<typeof AlertDialogPrimitive.Description>) {
+}: AlertDialogDescriptionProps) {
 	return (
 		<AlertDialogPrimitive.Description
 			className={mcn(
@@ -156,10 +183,12 @@ function AlertDialogDescription({
 	)
 }
 
+type AlertDialogActionProps = ButtonProps
+
 function AlertDialogAction({
 	className,
 	...restProps
-}: ComponentProps<typeof Button>) {
+}: AlertDialogActionProps) {
 	return (
 		<Button
 			className={mcn(className)}
@@ -169,13 +198,15 @@ function AlertDialogAction({
 	)
 }
 
+type AlertDialogCancelProps = AlertDialogPrimitive.Close.Props &
+	Pick<ButtonProps, 'variant' | 'size'>
+
 function AlertDialogCancel({
 	className,
 	variant = 'outline',
 	size = 'default',
 	...restProps
-}: AlertDialogPrimitive.Close.Props &
-	Pick<ComponentProps<typeof Button>, 'variant' | 'size'>) {
+}: AlertDialogCancelProps) {
 	return (
 		<AlertDialogPrimitive.Close
 			className={mcn(className)}
@@ -187,16 +218,30 @@ function AlertDialogCancel({
 }
 
 export {
+	ALERT_DIALOG_CONTENT_SIZES,
 	AlertDialog,
 	AlertDialogAction,
+	type AlertDialogActionProps,
 	AlertDialogCancel,
+	type AlertDialogCancelProps,
 	AlertDialogContent,
+	type AlertDialogContentProps,
+	type AlertDialogContentSize,
 	AlertDialogDescription,
+	type AlertDialogDescriptionProps,
 	AlertDialogFooter,
+	type AlertDialogFooterProps,
 	AlertDialogHeader,
+	type AlertDialogHeaderProps,
 	AlertDialogMedia,
+	type AlertDialogMediaProps,
 	AlertDialogOverlay,
+	type AlertDialogOverlayProps,
 	AlertDialogPortal,
+	type AlertDialogPortalProps,
+	type AlertDialogProps,
 	AlertDialogTitle,
+	type AlertDialogTitleProps,
 	AlertDialogTrigger,
+	type AlertDialogTriggerProps,
 }
