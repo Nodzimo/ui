@@ -50,7 +50,7 @@ function AlertDialogContent({
 			<AlertDialogOverlay />
 			<AlertDialogPrimitive.Popup
 				className={mcn(
-					'group/alert-dialog-content data-open:fade-in-0 data-open:zoom-in-95 data-closed:fade-out-0 data-closed:zoom-out-95 fixed top-1/2 left-1/2 z-50 grid w-full -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-popover-foreground outline-none ring-1 ring-foreground/10 duration-100 data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-closed:animate-out data-open:animate-in data-[size=default]:sm:max-w-sm',
+					'group/alert-dialog-content data-open:fade-in-0 data-open:zoom-in-95 data-closed:fade-out-0 data-closed:zoom-out-95 fixed top-1/2 left-1/2 z-50 grid w-full -translate-x-1/2 -translate-y-1/2 gap-4 rounded-nui-xl bg-nui-popover p-4 text-nui-popover-foreground outline-none ring-1 ring-nui-foreground/10 duration-100 data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-closed:animate-out data-open:animate-in data-[size=default]:sm:max-w-sm',
 					className,
 				)}
 				data-size={size}
@@ -78,7 +78,7 @@ function AlertDialogFooter({ className, ...restProps }: ComponentProps<'div'>) {
 	return (
 		<div
 			className={mcn(
-				'-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 group-data-[size=sm]/alert-dialog-content:grid group-data-[size=sm]/alert-dialog-content:grid-cols-2 sm:flex-row sm:justify-end',
+				'-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-nui-xl border-t bg-nui-muted/50 p-4 group-data-[size=sm]/alert-dialog-content:grid group-data-[size=sm]/alert-dialog-content:grid-cols-2 sm:flex-row sm:justify-end',
 				className,
 			)}
 			data-slot={'alert-dialog-footer'}
@@ -91,7 +91,7 @@ function AlertDialogMedia({ className, ...restProps }: ComponentProps<'div'>) {
 	return (
 		<div
 			className={mcn(
-				"mb-2 inline-flex size-10 items-center justify-center rounded-md bg-muted sm:group-data-[size=default]/alert-dialog-content:row-span-2 *:[svg:not([class*='size-'])]:size-6",
+				"mb-2 inline-flex size-10 items-center justify-center rounded-nui-md bg-nui-muted sm:group-data-[size=default]/alert-dialog-content:row-span-2 *:[svg:not([class*='size-'])]:size-6",
 				className,
 			)}
 			data-slot={'alert-dialog-media'}
@@ -107,7 +107,7 @@ function AlertDialogTitle({
 	return (
 		<AlertDialogPrimitive.Title
 			className={mcn(
-				'cn-font-heading font-medium text-base sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2',
+				'font-medium font-nui-heading text-base sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2',
 				className,
 			)}
 			data-slot={'alert-dialog-title'}
@@ -123,7 +123,7 @@ function AlertDialogDescription({
 	return (
 		<AlertDialogPrimitive.Description
 			className={mcn(
-				'text-balance text-muted-foreground text-sm md:text-pretty *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',
+				'text-balance text-nui-muted-foreground text-sm md:text-pretty *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-nui-foreground',
 				className,
 			)}
 			data-slot={'alert-dialog-description'}
