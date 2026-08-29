@@ -32,6 +32,7 @@ function Drawer({
 }) {
 	const hasSnapPoints = snapPoints != null && snapPoints.length > 0
 
+	// noinspection com.intellij.reactbuddy.ExhaustiveDepsInspection
 	const contextValue = useMemo(
 		() => ({ hasSnapPoints, modal, showSwipeHandle, swipeDirection }),
 		[hasSnapPoints, modal, showSwipeHandle, swipeDirection],
@@ -93,7 +94,7 @@ function DrawerSwipeHandle({ className, ...restProps }: ComponentProps<'div'>) {
 				'group-data-[swipe-direction=up]/drawer-popup:items-start group-data-[swipe-direction=down]/drawer-popup:items-end group-data-[swipe-axis=x]/drawer-popup:items-center',
 				'group-data-[swipe-direction=left]/drawer-popup:justify-start group-data-[swipe-direction=right]/drawer-popup:justify-end group-data-[swipe-axis=y]/drawer-popup:justify-center',
 				'group-data-nested-drawer-open/drawer-popup:opacity-0 group-data-nested-drawer-swiping/drawer-popup:opacity-100',
-				'group-data-[swipe-axis=x]/drawer-popup:after:h-[100px] group-data-[swipe-axis=y]/drawer-popup:after:h-1.5 group-data-[swipe-axis=x]/drawer-popup:after:w-1.5 group-data-[swipe-axis=y]/drawer-popup:after:w-[100px]',
+				'group-data-[swipe-axis=x]/drawer-popup:after:h-25 group-data-[swipe-axis=y]/drawer-popup:after:h-1.5 group-data-[swipe-axis=x]/drawer-popup:after:w-1.5 group-data-[swipe-axis=y]/drawer-popup:after:w-25',
 				className,
 			)}
 			data-slot={'drawer-swipe-handle'}
