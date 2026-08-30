@@ -2,11 +2,32 @@ import { Drawer as DrawerPrimitive } from '@base-ui/react/drawer'
 import { type ComponentProps, createContext, useContext, useMemo } from 'react'
 import { mcn } from '#lib'
 
+type DrawerProps = DrawerPrimitive.Root.Props & {
+	showSwipeHandle?: boolean
+}
+
+type DrawerModal = NonNullable<DrawerProps['modal']>
+
+const DRAWER_MODAL_MODES = Object.freeze([
+	true,
+	false,
+	'trap-focus',
+] as const satisfies readonly DrawerModal[])
+
+type DrawerSwipeDirection = NonNullable<DrawerProps['swipeDirection']>
+
+const DRAWER_SWIPE_DIRECTIONS = Object.freeze([
+	'up',
+	'right',
+	'down',
+	'left',
+] as const satisfies readonly DrawerSwipeDirection[])
+
 type DrawerContextProps = {
 	hasSnapPoints: boolean
-	modal: DrawerPrimitive.Root.Props['modal']
+	modal: DrawerProps['modal']
 	showSwipeHandle: boolean
-	swipeDirection: NonNullable<DrawerPrimitive.Root.Props['swipeDirection']>
+	swipeDirection: DrawerSwipeDirection
 }
 
 const DrawerContext = createContext<DrawerContextProps | null>(null)
@@ -27,9 +48,7 @@ function Drawer({
 	snapPoints,
 	swipeDirection = 'down',
 	...restProps
-}: DrawerPrimitive.Root.Props & {
-	showSwipeHandle?: boolean
-}) {
+}: DrawerProps) {
 	const hasSnapPoints = snapPoints != null && snapPoints.length > 0
 
 	// noinspection com.intellij.reactbuddy.ExhaustiveDepsInspection
@@ -51,22 +70,27 @@ function Drawer({
 	)
 }
 
-function DrawerTrigger({ ...props }: DrawerPrimitive.Trigger.Props) {
+type DrawerTriggerProps = DrawerPrimitive.Trigger.Props
+
+function DrawerTrigger({ ...props }: DrawerTriggerProps) {
 	return <DrawerPrimitive.Trigger data-slot={'drawer-trigger'} {...props} />
 }
 
-function DrawerPortal({ ...props }: DrawerPrimitive.Portal.Props) {
+type DrawerPortalProps = DrawerPrimitive.Portal.Props
+
+function DrawerPortal({ ...props }: DrawerPortalProps) {
 	return <DrawerPrimitive.Portal data-slot={'drawer-portal'} {...props} />
 }
 
-function DrawerClose({ ...props }: DrawerPrimitive.Close.Props) {
+type DrawerCloseProps = DrawerPrimitive.Close.Props
+
+function DrawerClose({ ...props }: DrawerCloseProps) {
 	return <DrawerPrimitive.Close data-slot={'drawer-close'} {...props} />
 }
 
-function DrawerOverlay({
-	className,
-	...restProps
-}: DrawerPrimitive.Backdrop.Props) {
+type DrawerOverlayProps = DrawerPrimitive.Backdrop.Props
+
+function DrawerOverlay({ className, ...restProps }: DrawerOverlayProps) {
 	return (
 		<DrawerPrimitive.Backdrop
 			className={mcn(
@@ -82,7 +106,12 @@ function DrawerOverlay({
 	)
 }
 
-function DrawerSwipeHandle({ className, ...restProps }: ComponentProps<'div'>) {
+type DrawerSwipeHandleProps = ComponentProps<'div'>
+
+function DrawerSwipeHandle({
+	className,
+	...restProps
+}: DrawerSwipeHandleProps) {
 	return (
 		<div
 			aria-hidden={'true'}
@@ -103,11 +132,13 @@ function DrawerSwipeHandle({ className, ...restProps }: ComponentProps<'div'>) {
 	)
 }
 
+type DrawerContentProps = DrawerPrimitive.Popup.Props
+
 function DrawerContent({
 	className,
 	children,
 	...restProps
-}: DrawerPrimitive.Popup.Props) {
+}: DrawerContentProps) {
 	const { hasSnapPoints, modal, showSwipeHandle, swipeDirection } = useDrawer()
 
 	const swipeAxis =
@@ -195,7 +226,9 @@ function DrawerContent({
 	)
 }
 
-function DrawerHeader({ className, ...restProps }: ComponentProps<'div'>) {
+type DrawerHeaderProps = ComponentProps<'div'>
+
+function DrawerHeader({ className, ...restProps }: DrawerHeaderProps) {
 	return (
 		<div
 			className={mcn(
@@ -208,7 +241,9 @@ function DrawerHeader({ className, ...restProps }: ComponentProps<'div'>) {
 	)
 }
 
-function DrawerFooter({ className, ...restProps }: ComponentProps<'div'>) {
+type DrawerFooterProps = ComponentProps<'div'>
+
+function DrawerFooter({ className, ...restProps }: DrawerFooterProps) {
 	return (
 		<div
 			className={mcn(
@@ -221,7 +256,9 @@ function DrawerFooter({ className, ...restProps }: ComponentProps<'div'>) {
 	)
 }
 
-function DrawerTitle({ className, ...restProps }: DrawerPrimitive.Title.Props) {
+type DrawerTitleProps = DrawerPrimitive.Title.Props
+
+function DrawerTitle({ className, ...restProps }: DrawerTitleProps) {
 	return (
 		<DrawerPrimitive.Title
 			className={mcn(
@@ -234,10 +271,12 @@ function DrawerTitle({ className, ...restProps }: DrawerPrimitive.Title.Props) {
 	)
 }
 
+type DrawerDescriptionProps = DrawerPrimitive.Description.Props
+
 function DrawerDescription({
 	className,
 	...restProps
-}: DrawerPrimitive.Description.Props) {
+}: DrawerDescriptionProps) {
 	return (
 		<DrawerPrimitive.Description
 			className={mcn(
@@ -251,15 +290,30 @@ function DrawerDescription({
 }
 
 export {
+	DRAWER_MODAL_MODES,
+	DRAWER_SWIPE_DIRECTIONS,
 	Drawer,
 	DrawerClose,
+	type DrawerCloseProps,
 	DrawerContent,
+	type DrawerContentProps,
 	DrawerDescription,
+	type DrawerDescriptionProps,
 	DrawerFooter,
+	type DrawerFooterProps,
 	DrawerHeader,
+	type DrawerHeaderProps,
+	type DrawerModal,
 	DrawerOverlay,
+	type DrawerOverlayProps,
 	DrawerPortal,
+	type DrawerPortalProps,
+	type DrawerProps,
+	type DrawerSwipeDirection,
 	DrawerSwipeHandle,
+	type DrawerSwipeHandleProps,
 	DrawerTitle,
+	type DrawerTitleProps,
 	DrawerTrigger,
+	type DrawerTriggerProps,
 }
