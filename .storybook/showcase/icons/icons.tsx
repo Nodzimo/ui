@@ -34,10 +34,13 @@ const {
 	SunMediumIcon,
 	SunDimIcon,
 	BrushCleaningIcon,
+	BugIcon,
+	CircleDashedIcon,
 } = lucideIcons
 
 const FILLABLE_ICONS = {
 	BrushCleaningIcon,
+	BugIcon,
 	CameraIcon,
 	CctvIcon,
 	ChefHatIcon,
@@ -61,6 +64,7 @@ const FILLABLE_ICONS = {
 } satisfies IconGroup
 
 const SPINNABLE_ICONS = {
+	CircleDashedIcon,
 	CircleEllipsisIcon,
 	LoaderCircleIcon,
 	LoaderIcon,
