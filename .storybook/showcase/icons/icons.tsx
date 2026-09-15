@@ -35,6 +35,7 @@ const {
 	SunDimIcon,
 	BrushCleaningIcon,
 	BugIcon,
+	CircleQuestionMarkIcon,
 	CircleDashedIcon,
 } = lucideIcons
 
@@ -66,6 +67,7 @@ const FILLABLE_ICONS = {
 const SPINNABLE_ICONS = {
 	CircleDashedIcon,
 	CircleEllipsisIcon,
+	CircleQuestionMarkIcon,
 	LoaderCircleIcon,
 	LoaderIcon,
 	LoaderPinwheelIcon,
