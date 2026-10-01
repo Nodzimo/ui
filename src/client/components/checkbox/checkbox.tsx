@@ -25,15 +25,17 @@ function Checkbox({ className, ...restProps }: CheckboxProps) {
 		>
 			<CheckboxPrimitive.Indicator
 				className={
-					'grid place-content-center text-current transition-none [&>svg]:size-3.5'
+					'group/checkbox-indicator grid place-content-center text-current transition-none [&>svg]:size-3.5'
 				}
 				data-slot={'checkbox-indicator'}
-				render={(props, state) => (
-					<span {...props}>
-						{state.indeterminate ? <MinusIcon /> : <CheckIcon />}
-					</span>
-				)}
-			/>
+			>
+				<CheckIcon
+					className={'group-data-indeterminate/checkbox-indicator:hidden'}
+				/>
+				<MinusIcon
+					className={'hidden group-data-indeterminate/checkbox-indicator:block'}
+				/>
+			</CheckboxPrimitive.Indicator>
 		</CheckboxPrimitive.Root>
 	)
 }
