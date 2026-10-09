@@ -1,1 +1,4 @@
-export { NodzimoSymbolIcon } from './nodzimo-symbol-icon'
+export {
+	NodzimoSymbolIcon,
+	type NodzimoSymbolIconProps,
+} from './nodzimo-symbol-icon'

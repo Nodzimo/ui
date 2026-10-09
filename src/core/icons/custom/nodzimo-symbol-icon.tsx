@@ -1,15 +1,15 @@
-import type { JSX } from 'react'
+import type { IconProps } from '../icon-types'
 
-type Props = {
+export type NodzimoSymbolIconProps = IconProps & {
 	leftColor?: string
 	rightColor?: string
-} & JSX.IntrinsicElements['svg']
+}
 
 export function NodzimoSymbolIcon({
 	leftColor = 'currentColor',
 	rightColor = leftColor,
 	...restProps
-}: Props) {
+}: NodzimoSymbolIconProps) {
 	return (
 		<svg
 			aria-hidden={true}
