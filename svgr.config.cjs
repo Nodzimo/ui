@@ -1,7 +1,7 @@
 const template = ({ componentName, jsx }, { tpl }) => tpl`
-import type { JSX } from 'react'
+import type { IconProps } from '../../icon-types'
 
-const ${componentName} = (props: JSX.IntrinsicElements['svg']) => ${jsx}
+const ${componentName} = (props: IconProps) => ${jsx}
 
 export default ${componentName}
 `

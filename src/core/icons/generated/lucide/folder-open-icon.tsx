@@ -1,6 +1,6 @@
-import type { JSX } from 'react'
+import type { IconProps } from '../../icon-types'
 
-const SvgFolderOpenIcon = (props: JSX.IntrinsicElements['svg']) => (
+const SvgFolderOpenIcon = (props: IconProps) => (
 	<svg
 		aria-hidden='true'
 		fill='none'

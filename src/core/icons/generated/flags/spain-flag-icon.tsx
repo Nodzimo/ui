@@ -1,6 +1,6 @@
-import type { JSX } from 'react'
+import type { IconProps } from '../../icon-types'
 
-const SvgSpainFlagIcon = (props: JSX.IntrinsicElements['svg']) => (
+const SvgSpainFlagIcon = (props: IconProps) => (
 	<svg
 		aria-hidden='true'
 		viewBox='0 0 640 480'

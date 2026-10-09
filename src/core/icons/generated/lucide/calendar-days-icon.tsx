@@ -1,6 +1,6 @@
-import type { JSX } from 'react'
+import type { IconProps } from '../../icon-types'
 
-const SvgCalendarDaysIcon = (props: JSX.IntrinsicElements['svg']) => (
+const SvgCalendarDaysIcon = (props: IconProps) => (
 	<svg
 		aria-hidden='true'
 		fill='none'

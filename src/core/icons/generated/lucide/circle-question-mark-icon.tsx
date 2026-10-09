@@ -1,6 +1,6 @@
-import type { JSX } from 'react'
+import type { IconProps } from '../../icon-types'
 
-const SvgCircleQuestionMarkIcon = (props: JSX.IntrinsicElements['svg']) => (
+const SvgCircleQuestionMarkIcon = (props: IconProps) => (
 	<svg
 		aria-hidden='true'
 		fill='none'

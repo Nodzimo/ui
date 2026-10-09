@@ -1,6 +1,6 @@
-import type { JSX } from 'react'
+import type { IconProps } from '../../icon-types'
 
-const SvgDownloadIcon = (props: JSX.IntrinsicElements['svg']) => (
+const SvgDownloadIcon = (props: IconProps) => (
 	<svg
 		aria-hidden='true'
 		fill='none'

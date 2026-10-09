@@ -1,6 +1,6 @@
-import type { JSX } from 'react'
+import type { IconProps } from '../../icon-types'
 
-const SvgOctagonXIcon = (props: JSX.IntrinsicElements['svg']) => (
+const SvgOctagonXIcon = (props: IconProps) => (
 	<svg
 		aria-hidden='true'
 		fill='none'
