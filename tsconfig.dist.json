@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"skipLibCheck": false,
+		"types": []
+	},
+	"extends": "./tsconfig.app.json",
+	"files": ["dist/ui.d.ts", "dist/client.d.ts"],
+	"include": []
+}
