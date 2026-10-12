@@ -23,6 +23,10 @@ dist
 
 # Custom
 /.idea/*
+!/.idea/codeStyles/
+/.idea/codeStyles/*
+!/.idea/codeStyles/Project.xml
+!/.idea/codeStyles/codeStyleConfig.xml
 !/.idea/dictionaries/
 !/.idea/dictionaries/**
 !/.idea/inspectionProfiles/
