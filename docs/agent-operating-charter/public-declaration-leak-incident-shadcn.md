@@ -1,186 +1,147 @@
-# Public Declaration Leak Incident: shadcn Component Type Queries
+# Public Declaration Leak Incident: Internal Import Resolution
 
-This incident records a library-boundary failure found after a Vite TypeScript consumer imported the published client
-declarations. It is distinct from the runtime React/RSC incidents: JavaScript bundles remained valid, while the bundled
-TypeScript declaration artifact became invalid source code.
+This record owns the declaration-only failure mechanism, its repair, and the distinction between public prop
+contracts and declaration bundling. The filename is retained for existing links. JavaScript behavior and the
+root/client runtime boundary did not change.
 
-## Summary
+## Symptoms And Earlier Adaptation
 
-The official shadcn Calendar source uses this application-oriented pattern:
+The earlier Calendar and Input Group investigation found a private Button implementation, including JSX, in
+`dist/client.d.ts`. The affected source reused the local component through `ComponentProps<typeof Button>`.
+The recorded source captures were `f1bd637` and `ba5e106` for Calendar on August 15, 2026, followed by `ad0c430`
+and `9bb3d73` for Input Group. Replacing those queries with exported `ButtonProps` removed that observed
+manifestation and established a useful named public contract.
 
-```text
-buttonVariant?: React.ComponentProps<typeof Button>['variant']
-```
-
-The pattern is valid in a shadcn application, where `Button` and `Calendar` remain application source and no public
-declaration rollup is emitted. It is unsafe as an unreviewed pattern at a publishable NUI declaration boundary. The NUI
-declaration bundler resolved a local component value and emitted part of its implementation into `dist/client.d.ts`,
-including JSX. A consuming TypeScript project then failed to parse the `.d.ts` file with syntax errors.
-
-The official source evidence is the [shadcn Base UI Calendar page](https://ui.shadcn.com/docs/components/base/calendar),
-which documents the `ComponentProps<typeof Button>` form in its source and changelog examples. This is not evidence that
-shadcn's application code is defective; it is evidence that source capture must be followed by a library declaration
-adaptation pass.
-
-## NUI Timeline
-
-The pattern entered this repository with the Calendar source capture:
+The later strict declaration check still found an invalid CVA implementation:
 
 ```text
-f1bd637 feat(calendar): add base component       2026-08-15
+export declare type ButtonProps = ButtonPrimitive.Props & VariantProps<typeof buttonVariants>;
+declare type ButtonProps_2 = ButtonPrimitive.Props & VariantProps<typeof buttonVariants_2>;
+declare const buttonVariants_2 = cva(...);
 ```
 
-It was retained while the public contract was extracted in:
+The real output included the full call, not the illustrative ellipsis. TypeScript reported `TS2304` for missing
+`cva` and `TS1254` for an executable initializer in an ambient declaration. Calendar, Input Group, and Alert Dialog
+reached the private duplicate contract.
+
+Both `ComponentProps<typeof Button>` and `VariantProps<typeof buttonVariants>` are valid TypeScript. CVA documents
+the latter and the official shadcn Base UI Button uses it. Neither construct is inherently incompatible with a
+library. The earlier explanation that a component type query necessarily causes leakage was too broad. The old
+build was not replayed, so identical root causes for both historical manifestations are not independently proven.
+
+## Confirmed Failure Mechanism
+
+The source import map deliberately points to source barrels:
 
 ```text
-ba5e106 feat(calendar): expose public API        2026-08-15
+#client/components/button -> src/client/components/button/index.ts
 ```
 
-The same class of pattern entered later through Input Group:
+TypeScript emitted correct intermediate Button declarations. However, an intermediate Input Group declaration
+retained `import { type ButtonProps } from '#client/components/button'`. Resolving that specifier from the emitted
+directory consulted `package.json#imports` and returned the original source barrel.
 
 ```text
-ad0c430 feat(client): add input group component  2026-08-17
-9bb3d73 feat(client): expose input group part types
+source components -> correct intermediate declarations
+    -> unchanged #client import resolves back to src
+    -> API Extractor sees declarations and implementations together
+    -> duplicate symbols and executable implementation in client.d.ts
 ```
 
-The public API commits did not invent a new runtime behavior. They made copied implementation types visible to the
-declaration bundler by placing them in exported prop aliases. The defect was latent until an external consumer parsed
-the published `dist/client.d.ts`.
+The missing integration was internal import conversion before declaration rollup. Source barrels, relative imports
+within an implementation area, component reuse, and separate core/client entrypoints did not need replacement.
+Declaration analysis must consume emitted declarations rather than re-enter `src`.
 
-## Failure Mechanism
+## Accepted Build Configuration
 
-`ComponentProps<typeof Button>` is not the same kind of dependency as `ButtonProps`:
+`vite.config.ts` derives `declarationPaths` from the existing `package.json#imports` map. Each string target becomes
+the single-element array expected by TypeScript `paths`. The full snippet belongs in
+[Vite Build Notes](vite-build-notes.md).
 
-```text
-ComponentProps<typeof Button>
-        ↓
-resolve the value symbol and call signature of local Button
-        ↓
-declaration bundler serializes the value-linked type
-        ↓
-private implementation can be copied into the declaration rollup
-```
+Pass this as `dts.compilerOptions.paths`, beside `rootDir: 'src'`. The plugin's default `pathsToAliases: true`
+performs the declaration import transformation; do not restate that default. These options are local to declaration
+generation. Source resolution and runtime imports remain unchanged.
 
-The failure does not pull `Button` into `dist/client.js`. It occurs only while producing the type artifact. The bad
-output looked conceptually like this:
+This is supported plugin path processing, not a hand-maintained second map or custom rewrite algorithm.
+`<string[]>` checks converted values and avoids `Object.fromEntries`' default `any` value type. The plugin checks the
+resulting compiler option, so an extra `CompilerOptions` import and `satisfies` layer are unnecessary.
 
-```text
-declare function Button_3(props: ButtonProps) {
-    return <ButtonPrimitive />
-}
+Git history records declaration generation in `4aedc1a` on May 10, 2026, the source import map in `65ebfe1` on
+May 12, and `bundleTypes` in `6148ad4` on May 15. The reviewed configuration history did not show a previously
+implemented alias conversion being removed. These dates establish integration order, not the first failing build.
 
-export type InputGroupButtonProps = Omit<
-    ComponentProps<typeof Button_3>,
-    'size' | 'type'
->
-```
+## Verification Evidence
 
-JSX and function bodies are illegal in a `.d.ts` file. A library's own `tsc --build` can still pass because it checks
-the source project rather than asking an independent consumer to parse the generated declaration rollup.
+The controlled investigation emitted declarations and invoked the installed API Extractor in memory. Source
+components and types were identical; only internal declaration import specifiers changed.
 
-An explicit public type alias has a different boundary:
+| Observation                                  | Unconverted internal imports | Relative declaration references |
+|----------------------------------------------|------------------------------|---------------------------------|
+| Project source files in declaration analysis | 10                           | 0                               |
+| Private duplicate ButtonProps                | Present                      | Absent                          |
+| Executable cva call                          | Present                      | Absent                          |
+| Strict declaration diagnostics               | TS2304, TS1254               | None                            |
 
-```ts
-import {Button, type ButtonProps} from '#client/components/button'
+The final plugin configuration passed the real `bun run build`, including `check:dist-types`, with `unplugin-dts`
+1.0.3, API Extractor 7.58.12, and TypeScript 6.0.3. JavaScript artifacts were byte-identical before and after the fix.
+A separate TypeScript check compared source and bundled `ButtonProps`, `CalendarProps`, `InputGroupButtonProps`,
+`AlertDialogActionProps`, and `AlertDialogCancelProps`; all matched. Nullable Button variants remained accepted and
+an unknown variant remained rejected.
 
-type InputGroupButtonProps = Omit<ButtonProps, 'size' | 'type'> & {
-    size?: InputGroupButtonSize
-    type?: 'button' | 'submit' | 'reset'
-}
-```
+Review of published `unplugin-dts` 1.1.2 did not establish automatic conversion of this import map. Nearby alias and
+declaration-graph fixes were not proof that upgrading alone repairs this case. The fix works on installed versions;
+dependency updates remain a separate review.
 
-`ButtonProps` is a type contract. The `import type` is erased from JavaScript, and declaration bundling can serialize
-the contract without traversing the local React function implementation. The public prop meaning is unchanged.
+## Public Type Contract Decision
 
-## Correct Library Rule
+Retain exported `ButtonProps` and reuse it in local components. Calendar uses `ButtonProps['variant']`; Input Group
+uses `Omit<ButtonProps, 'size' | 'type'>` with its additional options. This is intentional public API design, not a
+workaround to revert after fixing the build.
 
-At a public type boundary, do not derive a NUI component's props through the value of another local NUI React component:
+External primitives may use `ComponentProps<typeof Primitive>`, and local CVA helpers may use
+`VariantProps<typeof variants>`. Native element props, external contracts, and story-only argument extraction remain
+valid utility-type uses. Do not replace inferred variants with handwritten unions to hide resolution failures.
+Named props improve component reuse but cannot substitute for a correct declaration graph and artifact validation.
 
-```ts
-// Do not use for local NUI components in exported or declaration-reachable types.
-type Props = ComponentProps<typeof Button>
-```
+## Automatic Gate And Its Limits
 
-Use the component's explicit public prop contract instead:
+Source TypeScript, JavaScript, and Storybook checks passed without an obligatory check of generated declarations.
+Consumer `skipLibCheck: true` could also hide these ambient errors. Skill instructions and emitted `.d.ts` files
+were not an automatic build gate.
+The source configs also did not previously enable `strict`; enabling it now improves source verification but cannot
+check an artifact that is not an input to that source project.
 
-```ts
-type Props = ButtonProps
-```
+`check:dist-types` now runs `tsc --project tsconfig.dist.json` on both ready-built declaration entries with
+`skipLibCheck: false`. `build`, `build:all`, and `project:verify` invoke it after generation. Source checks retain
+`strict: true` with `skipLibCheck: true` so development tools' internal declarations do not block source verification.
+See [Verification](verification.md) for config responsibilities and [Scripts](scripts.md) for command ordering.
 
-This is not a ban on every `typeof` type query. Queries against native elements, external primitives, and external
-library declarations can remain appropriate when their contract is intentionally inherited. Review local component value
-queries specifically because the library owns and bundles those implementations.
+The gate checks declarations and reachable dependencies in the bundler/React environment. It does not prove tarball
+contents, export-map resolution in every consumer environment, runtime/RSC behavior, or unreachable files. Keep
+focused consumer and package checks. Standalone `build:js`, packing, and publishing do not acquire this guarantee.
 
-## Affected NUI Examples
+## Review Rules
 
-Calendar now uses:
+1. Preserve one source of truth for internal paths and follow [Internal Package Imports](internal-package-imports.md).
+2. Prefer named public props for local component reuse; do not blame valid utilities for resolver failures.
+3. Build declarations and run `check:dist-types` before accepting declaration or public type changes.
+4. Reject implementation bodies, JSX, executable calls, and source-only paths in public `.d.ts` output.
+5. When duplication returns, inspect intermediate declarations and resolved targets before changing components,
+   suppressing errors, patching generated output, or replacing the bundler.
+6. Compare public contracts and runtime artifacts after declaration-config changes; validate packed public imports
+   when exports or consumer integration are affected.
 
-```ts
-type CalendarProps = ComponentProps<typeof DayPicker> & {
-    buttonVariant?: ButtonProps['variant']
-}
-```
+## References
 
-`DayPicker` is an external primitive contract; `ButtonProps` is the local NUI contract.
-
-Input Group now uses:
-
-```ts
-type InputGroupButtonProps = Omit<ButtonProps, 'size' | 'type'> & {
-    size?: InputGroupButtonSize
-    type?: 'button' | 'submit' | 'reset'
-}
-```
-
-Dropdown Menu has a different, valid reuse case:
-
-```ts
-type DropdownMenuContentProps = MenuPrimitive.Popup.Props &
-    Pick<MenuPrimitive.Positioner.Props, 'align' | 'alignOffset' | 'side' | 'sideOffset'>
-
-type DropdownMenuSubContentProps = DropdownMenuContentProps
-```
-
-This is a type-to-type alias, not a value-to-type query and not a duplicated object definition. It keeps one canonical
-structural contract while giving the separately exported `SubContent` part a semantic public name. Its defaults differ
-at runtime, but its accepted prop shape is intentionally shared. If a future `SubContent`-only prop appears, the alias
-can be extended without duplicating the base contract.
-
-## Why Existing Checks Missed It
-
-- Source `tsc --build` validated the authoring project, not the generated public declaration text.
-- Vite validated JavaScript and did not parse `.d.ts` files as a consumer would.
-- Storybook compiled stories and runtime bundles, but Storybook is not a substitute for package declaration consumption.
-- Bundle scans correctly looked for React/RSC and CommonJS runtime leaks, but this incident was a type-artifact leak.
-- The original shadcn source was treated as an application implementation reference without a separate
-  publishable-library declaration review.
-
-The missing proof was an actual external TypeScript consumer check against the built package or tarball. A declaration
-file existing, being emitted, or being referenced by `exports.types` is not proof that it is valid consumer input.
-
-## Required Review Procedure
-
-For every new or adapted component, especially a component that reuses another NUI component:
-
-1. Search production source (excluding stories) for `ComponentProps<typeof`, `ComponentPropsWithRef<typeof`,
-   `ComponentRef<typeof`, `ReturnType<typeof`, and `Parameters<typeof`.
-2. Classify each target as native element, external primitive, local NUI component, or local helper.
-3. Replace local component value queries at exported/declaration-reachable boundaries with explicit exported `XxxProps`
-   contracts. Use `import type` for the contract.
-4. Build the library declarations through the real Vite/Rolldown declaration pipeline.
-5. Inspect `dist/ui.d.ts` and `dist/client.d.ts` as a real external consumer, preferably by running the current Vite
-   consumer's typecheck against a fresh package build or tarball.
-6. Reject any declaration containing implementation syntax: JSX, function bodies, executable statements, or private
-   local component implementations.
-7. Repeat the check after public API extraction, decomposition, barrel changes, and dependency or declaration-tooling
-   updates.
-
-The package-boundary audit must report this separately from JavaScript runtime leak checks. A clean `dist/ui.js` or
-`dist/client.js` does not prove that the corresponding declaration artifact is consumable.
-
-## Decision
-
-The NUI best practice is explicit public type contracts for local component reuse, with type-only imports where
-possible, plus external consumer verification of the generated declaration entrypoints. Do not patch generated `.d.ts`
-output, do not disable declaration bundling, and do not widen the rule into a blanket prohibition on all TypeScript
-`typeof` queries.
+- [TypeScript imports and self-name resolution](https://www.typescriptlang.org/docs/handbook/modules/reference.html#packagejson-imports-and-self-name-imports)
+- [unplugin-dts options](https://github.com/qmhc/unplugin-dts/blob/main/docs/en/options.md): compiler options and path
+  aliases
+- [unplugin-dts changelog](https://github.com/qmhc/unplugin-dts/blob/main/packages/unplugin-dts/CHANGELOG.md): the
+  reviewed
+  1.1.2 release includes nearby fixes, not an established automatic repair for this project's import map
+- [API Extractor declaration rollup](https://api-extractor.com/pages/setup/configure_rollup/)
+- [CVA TypeScript contracts](https://cva.style/getting-started/typescript/)
+- [shadcn Base UI Button source](https://github.com/shadcn-ui/ui/blob/main/apps/v4/registry/bases/base/ui/button.tsx)
+- [shadcn Base UI Calendar](https://ui.shadcn.com/docs/components/base/calendar)
+- [unplugin-dts issue #404](https://github.com/qmhc/unplugin-dts/issues/404): related duplicate-type/import symptoms,
+  not a verified reproduction of this project's import-map failure

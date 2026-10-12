@@ -27,8 +27,21 @@
   consumer story: Button and Select stories should continue to exercise icons through `#core`.
 - Inside one component folder, prefer relative imports such as `./button-variants`; do not route local implementation
   details through `#client` or `#core`.
+- Icons import their shared props directly from `icon-types.ts`, not from the barrel that re-exports the icons.
+  Use paths relative to the importing file, including generated files. A shorter alias is not a reason to add a reverse
+  dependency through an owning barrel.
 - Colocated stories and tests that sit beside a component folder `index.ts` may import the component through the local
   folder surface with `import { Button } from '.'`. This validates the component's local public API, avoids importing
   implementation files directly, and prevents IDE "import can be shortened" noise without suppressions.
 - Do not import from the public package name (`@nodzimo/ui`) inside this package's source. Public package imports are
   for consumers.
+
+### Declaration And IDE Integration
+
+- `vite.config.ts` derives declaration-only TypeScript `paths` from this import map so `unplugin-dts` can transform
+  internal specifiers before API Extractor rollup. Do not copy the map into a second maintained list or point
+  declaration analysis back at source implementations. See
+  [the declaration incident](public-declaration-leak-incident-shadcn.md).
+- Shared WebStorm import preferences preserve direct imports inside mapped areas while retaining alias use outside
+  them. Import-shortening diagnostics do not override these architecture rules or prevent component decomposition.
+  See [WebStorm Project Settings](webstorm-project-settings.md).

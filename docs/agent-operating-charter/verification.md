@@ -31,6 +31,10 @@
 
 ### Package Artifacts
 
+- Run `bun run check:dist-types` after declaration generation. It checks both public declaration files and their
+  reachable dependencies with `strict` enabled and `skipLibCheck` disabled. `build` and `build:all` include this gate;
+  `project:verify` invokes it immediately after `build:js`, before CSS, packing, and Storybook. Standalone `build:js`
+  generates declarations but does not run the gate.
 - After changing declaration excludes, Tailwind source detection, or package output names, inspect `bun pm pack
   --dry-run` and confirm Storybook-only files are not in the package unless intentionally kept.
 - After changing CSS exports or the package whitelist, confirm the pack contains `dist/styles.css` and exactly
@@ -40,15 +44,41 @@
   file list, access, and registry are expected.
 - After changing declaration bundling or package type exports, confirm `dist` contains `ui.d.ts` and
   `client.d.ts`, does not contain `dist/src`, and that `package.json` `exports.types` points at the bundled files.
-- After every declaration build, inspect both public `.d.ts` entrypoints as an external consumer. `bun run build:ts`
-  checks source types but does not prove that a consumer can parse generated declaration artifacts. Use a real consumer
-  typecheck (prefer the current Vite consumer or a tarball-installed fixture) and inspect the declaration text for
-  leaked implementation syntax such as JSX tags or function bodies.
+- The automatic declaration gate does not replace consumer checks when package exports, tarball contents, framework
+  resolution, or public contracts change. `bun run build:ts` checks source types, not generated output. Check packed
+  public imports in the relevant consumer and inspect declaration text for source-only imports or executable syntax.
   See [Public Declaration Leak Incident](public-declaration-leak-incident-shadcn.md).
 - For TypeScript 7 retry attempts, treat `bun run build:js` declaration bundling as the gate, not just
   `bun run build:ts`. The known blocker is documented in
   [TypeScript 7 Native Compiler Incident](typescript-7-native-compiler-incident.md).
 - Confirm `dist/styles.css` exists after `bun run build:all` when changing style build scripts or Tailwind setup.
+
+### TypeScript Check Boundaries
+
+- Root `tsconfig.json` selects the app and node projects. `tsconfig.app.json` checks source components and stories with
+  DOM/React and Vite resource globals; `tsconfig.node.json` checks Vite configuration and utility scripts with Node
+  globals. Both use `strict: true` and `skipLibCheck: true`.
+- `strict` enables the strict type-checking family; it does not override `skipLibCheck`. The latter skips semantic
+  checking of declaration files, not the project's implementation source. Keeping it enabled in app/node avoids
+  blocking source verification on declarations inside development tools such as Storybook, Vitest, or Babel.
+  TypeScript defaults `strict` and `skipLibCheck` to false; the explicit true values here express separate project
+  decisions, not compiler defaults. A scaffold's choice to enable `skipLibCheck` is not a reason to skip artifact
+  checks.
+- `tsconfig.dist.json` extends the app config, sets `skipLibCheck: false`, overrides `types` with an empty array to
+  remove Vite-specific globals, clears inherited `include`, and selects `dist/ui.d.ts` and `dist/client.d.ts` through
+  `files`. React and other dependency types remain available through declaration imports. Strict checking and
+  `noEmit` are inherited; do not duplicate those options or disable unused checks without a demonstrated need.
+- This is a check of already-generated artifacts, not another declaration generator. Missing artifacts and invalid
+  ambient declarations must produce a nonzero exit code. Its `.d.ts` dependency graph excludes development tooling
+  unless the public API actually references it; such a reference must be investigated rather than assumed harmless.
+- The check was verified to reject the invalid Button `cva` initializer with TS2304/TS1254 before the import-resolution
+  fix and pass afterward. Enabling strict app/node checks while disabling `skipLibCheck` there additionally exposed
+  tool declaration errors; restoring that source-only skip left the artifact gate fully active.
+
+References: [strict](https://www.typescriptlang.org/tsconfig/strict.html),
+[skipLibCheck](https://www.typescriptlang.org/tsconfig/skipLibCheck.html),
+[types](https://www.typescriptlang.org/tsconfig/types.html), and
+[config inheritance](https://www.typescriptlang.org/tsconfig/extends.html).
 
 ### CSS Artifacts
 

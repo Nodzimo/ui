@@ -154,11 +154,11 @@ type DropdownMenuContentProps = MenuPrimitive.Popup.Props &
   improve a real consumer boundary, as `SelectOption<Value>` and `SelectOptions<Value>` do.
 - Keep each part's props transparent. Do not extract a shared one-field helper such as `InsetProps` merely because
   `inset?: boolean` repeats across parts; introduce shared contracts only when consumers benefit from the shared name.
-- Treat shadcn's application-oriented `ComponentProps<typeof Button>` patterns as source input, not as an automatic
-  library-safe public type. At a NUI declaration boundary, local component values can make `unplugin-dts`/API Extractor
-  emit implementation syntax into a bundled `.d.ts`. Reuse the local component's explicit exported `ButtonProps` (or
-  equivalent `XxxProps`) contract instead. Keep `ComponentProps<typeof ...>` when the target is an external primitive or
-  a deliberate non-public implementation type, then verify the built declaration from an external consumer. See
+- Prefer the local component's explicit exported `ButtonProps` (or equivalent `XxxProps`) for local public contract
+  reuse. `ComponentProps<typeof ...>` is valid for external primitives and deliberate implementation/story extraction;
+  it is not inherently incompatible with libraries. The previous leakage exposed a declaration import-resolution
+  failure, so changing a type utility is not a substitute for fixing the emitted graph. Run `check:dist-types` after
+  building and verify packed public imports when consumer integration is affected. See
   [Public Declaration Leak Incident](public-declaration-leak-incident-shadcn.md).
 - Export the intended surface through the component folder `index.ts`, then verify aggregate client/core barrel flow.
 

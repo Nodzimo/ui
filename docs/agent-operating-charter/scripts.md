@@ -5,7 +5,11 @@
 - `bun run project:audit` is the main audit button. It runs TypeScript checks, Biome checks, dependency graph checks,
   and dependency update visibility checks.
 - `bun run project:verify` is the main full verification button. It installs dependencies, runs `project:audit`, builds
-  icons, builds JS/types, builds CSS, packs `ui.tgz`, and builds the public static Storybook.
+  icons, builds JS/types, checks generated declarations, builds CSS, packs `ui.tgz`, and builds the public static
+  Storybook. Keep `build:js` here because `project:audit` already runs `build:ts`; the declaration gate runs immediately
+  after `build:js` and stops the remaining chain on failure.
+- `project:audit` checks source and tools, not a fresh distribution. Do not add an artifact check there that would read
+  stale or absent `dist` files.
 
 ### Build Scripts
 
@@ -14,10 +18,11 @@
 - `bun run build:icons` regenerates interface icons from `assets/icons` and flag icons from `assets/flags` through their
   focused SVGR profiles, then runs the repository-wide unsafe Biome fix flow. Inspect the complete worktree afterward;
   the formatting step is not restricted to generated output.
-- `bun run build` runs TypeScript project checks and the Vite library build.
+- `bun run build` runs TypeScript project checks, the Vite library build, and `check:dist-types` in that order.
 - `bun run build:ts` runs TypeScript project checks via `tsc --build`.
 - `bun run build:ts-watch` watches TypeScript project checks.
-- `bun run build:js` runs the Vite library build.
+- `bun run build:js` runs the Vite library build, including declaration generation and rollup. As a low-level command
+  it does not run the separate declaration gate; use `build` for an automatically checked result.
 - `bun run build:js-watch` watches the Vite library build.
 - `bun run build:css` builds `src/styles.css` to minified `dist/styles.css`.
 - `bun run build:css-watch` watches and rebuilds the CSS output.
@@ -54,6 +59,9 @@
 - `bun run check:deps` runs dependency-cruiser against `src`.
 - `bun run check:deps-graph` generates `dependency-graph.svg` from dependency-cruiser output and requires Graphviz
   `dot`.
+- `bun run check:dist-types` runs `tsc --project tsconfig.dist.json` on ready-built public declarations, without
+  emitting
+  files. See [Verification](verification.md) for its strictness, inheritance, and consumer-check limits.
 - `bun run check:format` runs only Biome formatting.
 - `bun run check:fix` applies safe Biome fixes, formatting, and import organization.
 - `bun run check:fix-unsafe` applies unsafe Biome fixes intentionally.

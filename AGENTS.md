@@ -244,8 +244,8 @@ See [docs/agent-operating-charter/select-api.md](docs/agent-operating-charter/se
 
 ## Icon Generation
 
-Icon sources, generated components, naming, barrels, and Storybook galleries follow the project-owned SVG generation
-pipeline.
+Icon sources, generated components, public `Icon`/`IconProps` contracts, custom icon props, barrels, and Storybook
+galleries follow the project-owned SVG generation pipeline.
 
 See [docs/agent-operating-charter/icon-generation.md](docs/agent-operating-charter/icon-generation.md).
 
@@ -255,6 +255,12 @@ Vite and Rolldown build configuration should stay minimal, preserve package-boun
 output expectations intact.
 
 See [docs/agent-operating-charter/vite-build-notes.md](docs/agent-operating-charter/vite-build-notes.md).
+
+## Public Declaration Boundary
+
+Internal declaration imports must stay within the emitted declaration graph. The earlier shadcn type-query symptoms,
+the confirmed import-resolution failure, explicit prop contracts, and the automatic artifact check are recorded in
+[the public declaration incident](docs/agent-operating-charter/public-declaration-leak-incident-shadcn.md).
 
 ## TypeScript 7 Native Compiler Incident
 

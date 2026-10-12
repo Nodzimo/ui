@@ -102,12 +102,12 @@ Expected declaration topology:
 - `dist/client.d.ts`
 - no public `dist/src` declaration tree
 
-Verify both public declaration entrypoints from a real external TypeScript consumer after the declaration build. A
-passing
-`bun run build:ts` alone is not sufficient: declaration bundling can expose a private component implementation through a
-type query like `ComponentProps<typeof SomeComponent>`. Reject leaked JSX, function bodies, and executable
-implementation syntax in `.d.ts` output. See `public-declaration-leak-incident-shadcn.md` for the source, examples, and
-procedure.
+Run `bun run check:dist-types` after generation. Source `bun run build:ts` alone does not validate the artifacts.
+When duplication or implementation leakage appears, inspect whether intermediate internal imports resolve back into
+`src`; do not assume that a valid `ComponentProps` or `VariantProps` query is inherently unsafe. Reject leaked JSX,
+function bodies, executable calls, and source-only paths. Verify packed public entrypoints in an external consumer
+when exports or consumer integration change. See `public-declaration-leak-incident-shadcn.md` for the mechanism,
+evidence, and procedure.
 
 ## Consumer Verification
 

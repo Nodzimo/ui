@@ -36,12 +36,23 @@
   entrypoints instead of a `dist/src` tree.
 - Keep `rootDir` in the `dts(...)` plugin config, not in `tsconfig.app.json` only for declarations. The app tsconfig is
   shared by typechecking and has `noEmit`; the declaration emit root is a build-pipeline decision.
+- Derive declaration-only `compilerOptions.paths` from `package.json#imports`. The default `pathsToAliases` processing
+  rewrites internal imports before declaration rollup, preventing API Extractor from following the source import map
+  back into `src`. Keep the source map unchanged and avoid handwritten alias lists or custom regex rewrites.
 - The intended declaration config shape is:
 
 ```ts
+import dts from 'unplugin-dts/vite'
+import packageJson from './package.json' with {type: 'json'}
+
+const declarationPaths = Object.fromEntries<string[]>(
+    Object.entries(packageJson.imports).map(([specifier, target]) => [specifier, [target]]),
+)
+
 dts({
     bundleTypes: true,
     compilerOptions: {
+        paths: declarationPaths,
         rootDir: 'src',
     },
     exclude: '**/*.stories.*',
@@ -51,10 +62,11 @@ dts({
 
 - If API Extractor reports that `dist/client.d.ts` or `dist/ui.d.ts` does not exist, or if generated declarations appear
   under `dist/src`, inspect `unplugin-dts` root-dir inference before adding path rewrite hooks.
-- A successful source typecheck is not sufficient evidence for declaration correctness. A type query such as
-  `ComponentProps<typeof SomeComponent>` can cause a declaration bundler to emit a private component implementation,
-  including JSX, into a public `.d.ts` file. Prefer exported type contracts such as `SomeComponentProps[...]` at public
-  type boundaries, then validate both public entrypoints from a real external consumer after the declaration build. See
+- A successful source typecheck is not sufficient evidence for declaration correctness. Internal imports that resolve
+  from emitted declarations back into source can make the rollup contain private implementations. This is not an
+  inherent defect in `ComponentProps` or `VariantProps`. Prefer named public props for local component reuse and run
+  `bun run check:dist-types` against the final declarations; use consumer checks for export-map and package integration.
+  See
   [Public Declaration Leak Incident](public-declaration-leak-incident-shadcn.md).
 - Keep `@microsoft/api-extractor` in `devDependencies`; it is build-time tooling for bundled declarations, not a runtime
   or peer dependency.

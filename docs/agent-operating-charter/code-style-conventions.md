@@ -49,6 +49,12 @@
   only from a distant barrel. For example, export `mergeClassNames as mcn` from the helper module, then let the local
   barrel re-export `mcn`.
 
+### CLI Options
+
+- Use a tool's long named option when available, such as `tsc --project` rather than `tsc -p`. Positional file and
+  directory operands remain positional. Keep a short option only when the tool has no equivalent long form, and
+  document that exception where the command is maintained.
+
 ### Literal Tables
 
 - Use module-scope `UPPER_SNAKE_CASE` for intentional immutable tables, mappings, defaults, and finite option lists.

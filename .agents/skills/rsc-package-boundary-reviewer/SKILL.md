@@ -53,6 +53,8 @@ Use `references/rsc-package-boundaries.md` for compact task checklists and commo
     - Use `bun run project:verify` before publish/tarball-ready decisions.
 
 5. Inspect built artifacts after boundary-affecting changes.
+    - Run `bun run check:dist-types` after declaration generation; `build` and `project:verify` already include it.
+      Source `build:ts` alone does not check emitted artifacts. Do not put the artifact gate in a source-only audit.
     - Confirm root output stays free of client/runtime leaks.
     - Confirm client output keeps `"use client";` and does not inline third-party internals or CommonJS shims.
     - Confirm declaration topology stays rooted at `dist/ui.d.ts` and `dist/client.d.ts`.
@@ -60,6 +62,9 @@ Use `references/rsc-package-boundaries.md` for compact task checklists and commo
       validate that generated public declarations are parseable by a consumer. Treat leaked JSX, function bodies, or
       other implementation syntax in `.d.ts` output as a package-blocking defect. See
       `public-declaration-leak-incident-shadcn.md`.
+    - If the rollup duplicates local symbols or includes implementation syntax, inspect whether intermediate `#...`
+      imports resolve back into `src`. Preserve source conventions and fix declaration path processing before
+      rewriting valid component or CVA type utilities. Derive paths from the existing import map.
 
 6. Escalate to Next/Turbopack consumer verification when root exports, externals, React Compiler scope, dependency
    metadata, or a consumer failure is involved.

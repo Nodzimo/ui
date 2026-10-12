@@ -35,12 +35,44 @@
 - SVGR overwrites and creates output but does not prune components whose source SVG was removed or renamed. Delete the
   corresponding stale generated file, or the affected generated category, before regeneration and verify its generated
   `index.ts`. Never hand-edit generated component content.
-- Keep the custom SVGR component template while this project uses SVGR 8 with Babel 8. SVGR 8 has no newer stable, beta,
-  or alpha line for Babel 8 support, and its default TypeScript output can lose the generic in
+- Keep the custom SVGR component template while this project uses the inspected SVGR 8/Babel 8 toolchain. Its default
+  TypeScript output was observed to lose the generic in
   `SVGProps<SVGSVGElement>` when generated through the mixed Babel 7/8 toolchain. The template is the narrow fix: it
-  changes only the generated component props type to `JSX.IntrinsicElements['svg']`, which React types define as the
-  intrinsic `<svg>` props shape. This preserves strict SVG prop typing without a post-generation string rewrite,
+  uses the shared `IconProps` contract, based on React's `JSX.IntrinsicElements['svg']`, instead of emitting that
+  generic form. This preserves strict SVG prop typing without a post-generation string rewrite,
   patching `node_modules`, downgrading Babel, or changing runtime output.
+
+### Public Icon Type Contract
+
+- `src/core/icons/icon-types.ts` owns `IconProps = JSX.IntrinsicElements['svg']` and
+  `Icon = (props: IconProps) => JSX.Element`. Export both with `export type` through the icon barrel and root
+  `@nodzimo/ui` entrypoint. Keep this contract beside its icon domain, not in a general-purpose type collection.
+- `IconProps` describes ordinary SVG props, including React 19's SVG ref prop. `Icon` describes the current plain
+  function-component shape shared by generated and compatible custom icons. It intentionally does not promise every
+  possible React component representation; revisit it if the library changes that shape.
+- Use public `Icon` for icon maps and component-valued props. Do not derive a general icon type from an arbitrary
+  concrete component such as `typeof FilmIcon`, or substitute an upstream Lucide runtime component type for these
+  project-owned SVG functions.
+- SVGR's shared template emits `import type { IconProps } from '../../icon-types'` and annotates the component props
+  with `IconProps`. The import is relative to each generated output file, not to the root config file. Current
+  `generated/lucide` and `generated/flags` folders have the same depth; adding a category at another depth requires
+  adapting and verifying its template import.
+- Keep that type import direct. Routing an icon through the barrel that re-exports it adds an unnecessary reverse
+  dependency in the source type graph. The import is erased from JavaScript and does not bundle React or the type file.
+- Custom icons do not participate in regeneration. Extend `IconProps` in their own modules and export named public
+  props through their folder barrel. `NodzimoSymbolIconProps` adds optional `leftColor` and `rightColor`; callers can
+  use the component or its specific props independently. A separate props alias for each generated icon is unnecessary
+  because their contract is identical.
+- Import-only type changes must leave generated JavaScript unchanged. Verification covered the generated icon set,
+  compatibility of the custom symbol with `Icon`, SVG ref props, rejection of invalid SVG props, and strict checking
+  of the bundled root declaration. Re-run focused checks when the contract or generator changes; public types must
+  not depend on unpublished source paths.
+
+The template owns component generation, while `icon-types.ts` owns the SVG contract. This avoids independently
+maintained definitions without introducing runtime wrappers or dependencies. See the
+[SVGR custom template API](https://react-svgr.com/docs/custom-templates/),
+[React SVG components](https://react.dev/reference/react-dom/components/common#svg-components), and
+[declaration boundary decision](public-declaration-leak-incident-shadcn.md).
 
 ### Flag Source Decision
 

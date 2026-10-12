@@ -2,9 +2,39 @@
 
 ### Shared Settings
 
-- The project intentionally shares selected WebStorm settings under `.idea`: dictionaries, inspection profiles, and
-  scopes. Keep `.idea` sharing narrow and do not commit workspace state, shelves, local run history, or user-specific
-  IDE files.
+- The project intentionally shares selected WebStorm settings under `.idea`: dictionaries, inspection profiles,
+  scopes, two project code-style files, and the Tailwind language-server exclusion. Keep sharing narrow; do not commit
+  workspace state, shelves, local run history, or user-specific IDE files.
+
+### Project Import Preferences
+
+- `.idea/codeStyles/Project.xml` sets TypeScript `USE_PATH_MAPPING` to `DIFFERENT_PATHS`, shown in the IDE as **Use path
+  mappings from tsconfig.json -> Only in files outside specified paths**. This covers TypeScript and TSX;
+  it does not introduce a second source import map or alter compiler/build resolution.
+- `.idea/codeStyles/codeStyleConfig.xml` sets `USE_PER_PROJECT_SETTINGS: true`. The project scheme applies to this
+  repository independently of an IDE-level scheme that may retain **Always**. The stored preferred IDE scheme is a
+  fallback, not the active scheme when project settings are enabled.
+- `.gitignore` allows only `Project.xml` and `codeStyleConfig.xml` within `codeStyles`; other generated style files
+  remain ignored. Share the import preference rather than exporting unrelated personal formatting settings.
+- Keep `ES6PreferShortImport` enabled. It suggests shorter imports but does not establish that a barrel dependency is
+  architecturally appropriate. Direct imports inside an implementation area must not be replaced by imports through
+  that area's own aggregate barrel merely to shorten the path.
+- The investigation found repeated suggestions to replace generated icons' direct `IconProps` imports with
+  `#core/icons`. Applying the project import preference removed the warnings in the maintainer's full inspection after
+  restarting WebStorm, without source changes, per-file comments, or disabling the inspection for implementation scopes.
+- Validate both diagnostics and auto-import behavior after changing this setting: direct local part/type imports,
+  imports from another component's public folder surface, and Storybook imports. A clean inspection is not proof of an
+  acyclic graph or a safe core/client boundary; keep dependency and package checks.
+- If an existing IDE session does not pick up shared settings, confirm the **Project** scheme is selected and reopen
+  the project before adding suppressions. New or regenerated icons should need no manual settings changes.
+
+References: [JetBrains import-style configuration](https://blog.jetbrains.com/webstorm/2020/07/configuring-the-style-of-imports-in-javascript-and-typescript/),
+[project code-style schemes](https://www.jetbrains.com/help/webstorm/configuring-code-style.html),
+[inspection definition](https://www.jetbrains.com/help/inspectopedia/ES6PreferShortImport.html), and
+[WEB-38719](https://youtrack.jetbrains.com/projects/WEB/issues/WEB-38719/Irritating-Import-can-be-shortened-inspection).
+The issue's later comment identifies the accepted mode. Read the complete relevant discussion before claiming that
+only suppression is available. Scoped inspection exclusions remain a fallback for demonstrated false positives,
+not the first response when a supported preference resolves the mismatch.
 
 ### Inspection Scopes
 
