@@ -13,6 +13,13 @@ const runtimePackageNames = [
 	...Object.keys(peerDependencies),
 ]
 
+const declarationPaths = Object.fromEntries<string[]>(
+	Object.entries(packageJson.imports).map(([specifier, target]) => [
+		specifier,
+		[target],
+	]),
+)
+
 function isExternalRuntimeImport(importId: string) {
 	return runtimePackageNames.some((packageName) => {
 		return importId === packageName || importId.startsWith(`${packageName}/`)
@@ -45,7 +52,10 @@ export default defineConfig({
 		}),
 		dts({
 			bundleTypes: true,
-			compilerOptions: { rootDir: 'src' },
+			compilerOptions: {
+				paths: declarationPaths,
+				rootDir: 'src',
+			},
 			exclude: '**/*.stories.*',
 			tsconfigPath: 'tsconfig.app.json',
 		}),
