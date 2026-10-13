@@ -19,9 +19,9 @@
 - Keep `ES6PreferShortImport` enabled. It suggests shorter imports but does not establish that a barrel dependency is
   architecturally appropriate. Direct imports inside an implementation area must not be replaced by imports through
   that area's own aggregate barrel merely to shorten the path.
-- The investigation found repeated suggestions to replace generated icons' direct `IconProps` imports with
-  `#core/icons`. Applying the project import preference removed the warnings in the maintainer's full inspection after
-  restarting WebStorm, without source changes, per-file comments, or disabling the inspection for implementation scopes.
+- The project preference resolves repeated suggestions to replace generated icons' direct `IconProps` imports with
+  `#core/icons`. A full project inspection confirmed that those warnings disappear without source changes, per-file
+  comments, or disabling the inspection for implementation scopes.
 - Validate both diagnostics and auto-import behavior after changing this setting: direct local part/type imports,
   imports from another component's public folder surface, and Storybook imports. A clean inspection is not proof of an
   acyclic graph or a safe core/client boundary; keep dependency and package checks.
@@ -32,9 +32,8 @@ References: [JetBrains import-style configuration](https://blog.jetbrains.com/we
 [project code-style schemes](https://www.jetbrains.com/help/webstorm/configuring-code-style.html),
 [inspection definition](https://www.jetbrains.com/help/inspectopedia/ES6PreferShortImport.html), and
 [WEB-38719](https://youtrack.jetbrains.com/projects/WEB/issues/WEB-38719/Irritating-Import-can-be-shortened-inspection).
-The issue's later comment identifies the accepted mode. Read the complete relevant discussion before claiming that
-only suppression is available. Scoped inspection exclusions remain a fallback for demonstrated false positives,
-not the first response when a supported preference resolves the mismatch.
+The issue's later comment identifies the accepted mode. Scoped inspection exclusions remain a fallback for
+demonstrated false positives when supported import preferences do not resolve the mismatch.
 
 ### Inspection Scopes
 

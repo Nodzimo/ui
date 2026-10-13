@@ -13,6 +13,15 @@
   behind each recommendation, challenge weak naming or architecture, and treat disagreement as a way to clarify the
   better solution rather than as a reason to soften the critique.
 
+### Source Evidence
+
+- Inspect the primary source behind a recommendation, including later issue comments, linked fixes, and applicable
+  release details. Do not treat a search excerpt or the opening issue description as the complete answer.
+- State what was actually verified and distinguish it from inference. If a source or part of a discussion cannot be
+  inspected, disclose that limit rather than claiming that no solution exists.
+- Prefer a supported setting or API over custom processing or suppression when it satisfies the project contract.
+  Verify the chosen integration instead of presenting a documented option as proof that it works locally.
+
 ### Project Code Style
 
 - Preserve project style: tabs, single quotes, no semicolons, named exports.
@@ -39,6 +48,13 @@ For story-specific controls guidance, see [Storybook Story Writing](storybook-st
 
 ### Markdown Documentation
 
+- Preserve durable contracts, confirmed causes, decisions, necessary alternatives, and meaningful verification
+  evidence. Do not record fruitless searches, routine investigation chronology, personal details, named private
+  consumers, machine-specific paths, or transient dependency reviews without an adopted decision.
+- Keep versioned provenance or incident timelines only when they are necessary to reproduce a failure, identify
+  vendored source, or explain the accepted decision. Routine work history belongs in Git, not permanent guidance.
+- Keep technical decisions in their owning document and agent conduct rules in the operating charter. Do not add
+  admonitions about a particular conversation to component, build, or IDE documentation.
 - When writing Markdown documentation, use a language-tagged fenced code block only for snippets that are syntactically
   valid as that language on their own. Use `text` for partial JSX attributes, JSON fragments, placeholder syntax, or
   other illustrative snippets that IDE inspections would parse as broken code.

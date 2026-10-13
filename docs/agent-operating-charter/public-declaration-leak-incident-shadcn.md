@@ -1,16 +1,14 @@
 # Public Declaration Leak Incident: Internal Import Resolution
 
 This record owns the declaration-only failure mechanism, its repair, and the distinction between public prop
-contracts and declaration bundling. The filename is retained for existing links. JavaScript behavior and the
-root/client runtime boundary did not change.
+contracts and declaration bundling. JavaScript behavior and the root/client runtime boundary did not change.
 
 ## Symptoms And Earlier Adaptation
 
 The earlier Calendar and Input Group investigation found a private Button implementation, including JSX, in
 `dist/client.d.ts`. The affected source reused the local component through `ComponentProps<typeof Button>`.
-The recorded source captures were `f1bd637` and `ba5e106` for Calendar on August 15, 2026, followed by `ad0c430`
-and `9bb3d73` for Input Group. Replacing those queries with exported `ButtonProps` removed that observed
-manifestation and established a useful named public contract.
+Replacing those queries with exported `ButtonProps` removed that observed manifestation and established a useful
+named public contract.
 
 The later strict declaration check still found an invalid CVA implementation:
 
@@ -26,8 +24,8 @@ reached the private duplicate contract.
 
 Both `ComponentProps<typeof Button>` and `VariantProps<typeof buttonVariants>` are valid TypeScript. CVA documents
 the latter and the official shadcn Base UI Button uses it. Neither construct is inherently incompatible with a
-library. The earlier explanation that a component type query necessarily causes leakage was too broad. The old
-build was not replayed, so identical root causes for both historical manifestations are not independently proven.
+library. A component type query does not inherently cause implementation leakage. The confirmed resolution failure
+below explains the CVA leak; it does not establish the cause of every earlier declaration symptom.
 
 ## Confirmed Failure Mechanism
 
@@ -64,11 +62,7 @@ generation. Source resolution and runtime imports remain unchanged.
 
 This is supported plugin path processing, not a hand-maintained second map or custom rewrite algorithm.
 `<string[]>` checks converted values and avoids `Object.fromEntries`' default `any` value type. The plugin checks the
-resulting compiler option, so an extra `CompilerOptions` import and `satisfies` layer are unnecessary.
-
-Git history records declaration generation in `4aedc1a` on May 10, 2026, the source import map in `65ebfe1` on
-May 12, and `bundleTypes` in `6148ad4` on May 15. The reviewed configuration history did not show a previously
-implemented alias conversion being removed. These dates establish integration order, not the first failing build.
+resulting compiler option.
 
 ## Verification Evidence
 
@@ -82,15 +76,11 @@ components and types were identical; only internal declaration import specifiers
 | Executable cva call                          | Present                      | Absent                          |
 | Strict declaration diagnostics               | TS2304, TS1254               | None                            |
 
-The final plugin configuration passed the real `bun run build`, including `check:dist-types`, with `unplugin-dts`
-1.0.3, API Extractor 7.58.12, and TypeScript 6.0.3. JavaScript artifacts were byte-identical before and after the fix.
+The final plugin configuration passed the real `bun run build`, including `check:dist-types`. JavaScript artifacts
+were byte-identical before and after the fix.
 A separate TypeScript check compared source and bundled `ButtonProps`, `CalendarProps`, `InputGroupButtonProps`,
 `AlertDialogActionProps`, and `AlertDialogCancelProps`; all matched. Nullable Button variants remained accepted and
 an unknown variant remained rejected.
-
-Review of published `unplugin-dts` 1.1.2 did not establish automatic conversion of this import map. Nearby alias and
-declaration-graph fixes were not proof that upgrading alone repairs this case. The fix works on installed versions;
-dependency updates remain a separate review.
 
 ## Public Type Contract Decision
 
@@ -136,9 +126,6 @@ focused consumer and package checks. Standalone `build:js`, packing, and publish
 - [TypeScript imports and self-name resolution](https://www.typescriptlang.org/docs/handbook/modules/reference.html#packagejson-imports-and-self-name-imports)
 - [unplugin-dts options](https://github.com/qmhc/unplugin-dts/blob/main/docs/en/options.md): compiler options and path
   aliases
-- [unplugin-dts changelog](https://github.com/qmhc/unplugin-dts/blob/main/packages/unplugin-dts/CHANGELOG.md): the
-  reviewed
-  1.1.2 release includes nearby fixes, not an established automatic repair for this project's import map
 - [API Extractor declaration rollup](https://api-extractor.com/pages/setup/configure_rollup/)
 - [CVA TypeScript contracts](https://cva.style/getting-started/typescript/)
 - [shadcn Base UI Button source](https://github.com/shadcn-ui/ui/blob/main/apps/v4/registry/bases/base/ui/button.tsx)

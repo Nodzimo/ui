@@ -24,6 +24,9 @@ See [docs/agent-operating-charter/stack.md](docs/agent-operating-charter/stack.m
 Project work should stay concise, explicit, scoped, and aligned with the established code style and documentation
 conventions.
 
+Before recommending a source-backed change, read the supporting primary source and the relevant issue discussion
+through its latest comments. Distinguish documented behavior, verified results, and inference.
+
 See [docs/agent-operating-charter/collaboration.md](docs/agent-operating-charter/collaboration.md).
 
 ## Change Management
