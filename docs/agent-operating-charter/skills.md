@@ -6,6 +6,11 @@ references belong in skill
 when removing duplicated skill text, first verify that any unique project fact is preserved in the proper source of
 truth.
 
+### Session Documentation
+
+- To document completed session work and reconcile durable knowledge before handoff or clearing the chat, use
+  `document-work` at `.agents/skills/document-work`. It includes coverage, consistency, and navigation review.
+
 ### Dependency And Package Boundary
 
 - For pre-update dependency research from `bun outdated`, post-update changelog review, breaking-change triage, or
