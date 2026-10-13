@@ -8,8 +8,20 @@ truth.
 
 ### Session Documentation
 
-- To document completed session work and reconcile durable knowledge before handoff or clearing the chat, use
-  `document-work` at `.agents/skills/document-work`. It includes coverage, consistency, and navigation review.
+- To document completed session work before handoff or clearing the chat, use
+  [document-work](../../.agents/skills/document-work/SKILL.md). Invoke it with:
+
+```text
+Use $document-work to document the work completed in this session.
+```
+
+- The skill owns the repeatable procedure, including coverage of committed work and review from work to documentation
+  and from documentation to implementation. The
+  repository's [documentation policy](collaboration.md#markdown-documentation)
+  owns local editorial requirements; do not maintain a second procedure here.
+- Keep the skill portable: it discovers the repository's documentation owners, conventions, and relevant checks rather
+  than depending on this project's stack or directory layout. Its completion report states whether important knowledge
+  still depends on the conversation and identifies any missing context or unresolved decisions.
 
 ### Dependency And Package Boundary
 
