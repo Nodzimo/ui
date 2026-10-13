@@ -2,57 +2,38 @@
 status: ready
 ---
 
-# Resolve Button Group variant decomposition and import inspection mismatch
+# Decide whether to extract Button Group variants
 
 ## Context
 
 `ButtonGroup` is currently kept in one implementation module. Its orientation class map and `buttonGroupVariants` are
 local to `button-group.tsx`, which is valid and keeps the small compound component self-contained.
 
-During an attempted decomposition, the variant recipe was moved to `button-group-variants.ts` and imported into
-`button-group.tsx` through a relative sibling path:
+The import-shortening diagnostic is resolved through the shared
+[WebStorm import preference](../docs/agent-operating-charter/webstorm-project-settings.md#project-import-preferences).
+It no longer blocks decomposition and does not require another IDE investigation or suppression.
 
-```ts
-import {
-    type ButtonGroupOrientation,
-    buttonGroupVariants,
-} from './button-group-variants'
-```
-
-The IDE reported an `Import can be shortened` warning for this Button Group import, while the equivalent
-`InputGroup` import from `./input-group-variants` did not report a warning. The exact inspection owner and resolver
-reason were not established. The warning may be an IDE inspection rather than Biome, but that must be proven rather than
-assumed.
-
-The attempted split was reverted. No decomposition should be reintroduced until the warning and the repository import
-contract are understood. The investigation must compare the two components' files, local barrels, aggregate barrels,
-package `imports` mappings, IDE resolver behavior, and Biome/TypeScript diagnostics from a clean reproducible state.
+The remaining decision is whether extracting the orientation contract and variant recipe into
+`button-group-variants.ts` improves ownership and readability enough to justify another module. Compare the current
+inline structure with Input Group's extracted recipe using the existing component and import conventions. Keeping the
+recipe inline is a valid outcome when extraction has no concrete benefit.
 
 ## Outcome
 
 This record is complete when:
 
-- the exact diagnostic source, inspection/rule name, and trigger are identified;
-- `ButtonGroup` and `InputGroup` decomposition attempts are compared with their local barrels and package import map;
-- the correct import form is decided using the repository internal-import contract, not an IDE suggestion alone;
 - the decision states whether the variant recipe should remain inline or move to `button-group-variants.ts`;
-- any accepted IDE-only warning has a narrow documented reason or an appropriate scoped suppression, while Biome,
-  TypeScript, dependency-cruiser, and declaration generation remain clean;
-- the final structure has no avoidable sibling implementation cross-imports and preserves the intended public exports;
-- the decision and any durable rule are moved into the relevant project documentation, and this backlog record is
-  deleted with the completing change.
-
-## Current workaround
-
-Keep `ButtonGroup` variants inline in `button-group.tsx`. Do not change the relative import to an aggregate `#client`
-barrel merely to satisfy an unexplained IDE inspection; project guidance prefers relative imports for implementation
-details inside one component folder.
+- any extraction uses direct relative imports inside the component folder, avoids unnecessary implementation
+  cross-imports, and preserves the intended public exports;
+- any implementation change passes Biome, TypeScript, dependency-cruiser, and generated declaration checks;
+- any new durable rule is moved into its owning documentation, and this record is deleted when the structural decision
+  is completed. If the current structure is retained, record the reason in the completing commit or pull request.
 
 ## Next step
 
-Reproduce the warning after a clean indexing cycle, capture the exact inspection identifier and suggested replacement,
-then compare it with `InputGroup` using the same IDE, Biome, TypeScript, and dependency-graph commands. Only after that
-comparison propose the smallest correct decomposition or a documented decision to keep the file monolithic.
+Compare the size, ownership, and reuse of the Button Group orientation map, runtime options, and CVA recipe with
+Input Group's extracted variant module. Propose extraction only if it removes concrete complexity without introducing
+unnecessary cross-imports or changing public contracts.
 
 ## References
 
