@@ -11,6 +11,9 @@ Preserve the useful results of the requested session in repository documentation
 current contract, its reasons, supporting evidence, and remaining work without the conversation. Complete the writing
 and the coverage review in one invocation; do not wait for a separate request to check for omissions.
 
+The primary output is durable project knowledge for future agents and maintainers. Follow local language and editorial
+policy. Separate end-user guides, translations, and release notes remain separate tasks unless explicitly requested.
+
 This skill is portable. Discover the current repository's instructions, documentation owners, language, naming, and
 verification tools. Do not assume a stack, a `docs/` layout, a particular Git host, another checkout, or a global tool.
 
@@ -39,8 +42,8 @@ questions. For each topic, track its evidence, owning document, and disposition:
 exclude, or unresolved. Keep this working inventory out of permanent documentation unless it is itself useful there.
 
 Distinguish implemented decisions from proposals, superseded approaches, unverified explanations, and deferred work.
-Preserve unresolved consequential questions in the repository's existing tracking mechanism when in scope, or report
-them explicitly at handoff; do not present them as accepted guidance.
+Route accepted decisions to permanent guidance and remaining work to the repository's tracking mechanism. Do not
+present proposals or unresolved questions as accepted guidance.
 
 ### 2. Select Durable Knowledge
 
@@ -79,12 +82,29 @@ Edit the source of generated documentation, following local policy. Do not hand-
 copies of the same contract. Update obsolete guidance wherever the affected concept is referenced, using targeted
 searches for old names, commands, paths, assumptions, and prior workarounds.
 
-### 4. Verify In Both Directions
+### 4. Preserve Remaining Work
+
+When the inventory contains meaningful remaining work, read the repository's backlog or issue-tracking contract and
+only the related records. Follow its admission, authorization, format, and lifecycle rules; do not assume a `backlog/`
+directory, invent a parallel tracker, or copy one project's rules into this skill.
+
+- Capture agreed deferred work when local admission and authorization requirements are satisfied. Preserve enough
+  context, evidence, intended outcome, and next action to resume without the chat.
+- Update related existing records instead of creating duplicates. Remove or close completed records according to local
+  policy, preserving useful conclusions in their permanent owner and retaining independently unresolved scope.
+- Propose new agent-discovered concerns for approval when required. An observation, exploratory idea, or incidental
+  discussion does not establish accepted work. Recording a task does not authorize executing it.
+
+If a consequential item cannot be saved within the authorized scope, identify the exact item and the required decision
+at handoff. Do not bury future work in permanent guidance or treat a final chat message as durable preservation.
+
+### 5. Verify In Both Directions
 
 Perform a separate review after writing:
 
 - **Work to docs:** revisit the session inventory. Every retained topic has an accurate, discoverable owner; every
-  exclusion has a defensible reason; important unresolved questions remain visible.
+  exclusion has a defensible reason; consequential remaining work has a resumable record or an explicit preservation
+  gap.
 - **Docs to reality:** compare changed guidance with the implementation, configuration, public API, and actual check
   results. Search related documents for contradictions and stale references. Confirm that the text distinguishes the
   current state from historical symptoms and proposed work.
@@ -99,14 +119,19 @@ limit. Correct findings and repeat the affected checks before handoff.
 ## Completion And Report
 
 Finish when useful session results are covered, updated guidance matches the current state, affected navigation is
-valid, obsolete contradictions are removed, and consequential unresolved items are explicit.
+valid, obsolete contradictions are removed, and consequential remaining work is durably preserved. If missing context
+or authorization prevents that result, complete the permitted work and report the specific preservation gap.
 
 Report briefly:
 
 - what knowledge was preserved and where;
 - what consistency and navigation checks were performed;
-- any remaining gap or unresolved decision.
+- where remaining work is recorded, and any preservation gap or unresolved decision.
+
+When requested, propose a commit message for the actual changes using local conventions. Do not create a commit.
 
 State that the chat can be cleared only when the coverage review found no remaining dependency on the available
-conversation for important project knowledge. Bound that conclusion to the reviewed session and disclose missing
-context. Do not promise perfect recall, universal correctness, or completeness beyond what was inspected.
+conversation for important project knowledge, including consequential remaining work. A pending task does not prevent
+clearing the chat if its context and next step are saved; an important item reported only in chat does. Bound the
+conclusion to the reviewed session and disclose missing context. Do not promise perfect recall, universal correctness,
+or completeness beyond what was inspected.
